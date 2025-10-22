@@ -2,11 +2,10 @@ import { FC } from 'react';
 import Head from 'next/head';
 import { Box } from '@wraft/ui';
 
+import PageHeader from 'components/common/PageHeader';
+import { Repository } from 'components/Repository';
 import { PageInner } from 'common/Atoms';
-
-import PageHeader from '../../components/common/PageHeader';
-import Page from '../../components/common/PageFrame';
-import { Repository } from '../../components/Repository';
+import Page from 'common/PageFrame';
 
 const RepositoryIndex: FC = () => {
   return (

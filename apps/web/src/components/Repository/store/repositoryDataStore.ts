@@ -38,6 +38,7 @@ interface RepositoryDataActions {
   // Data management
   setItems: (items: StorageItem[]) => void;
   addItem: (item: StorageItem) => void;
+  addItems: (items: StorageItem[]) => void;
   updateItem: (id: string, updates: Partial<StorageItem>) => void;
   removeItem: (id: string) => void;
   clearItems: () => void;
@@ -112,6 +113,14 @@ export const useRepositoryDataStore = create<RepositoryDataStore>()(
         addItem: (item) =>
           set((state) => {
             state.items.push(item);
+          }),
+
+        addItems: (items) =>
+          set((state) => {
+            // Filter out duplicates based on item id
+            const existingIds = new Set(state.items.map((item) => item.id));
+            const newItems = items.filter((item) => !existingIds.has(item.id));
+            state.items.push(...newItems);
           }),
 
         updateItem: (id, updates) =>
@@ -235,7 +244,6 @@ export const useRepositoryDataStore = create<RepositoryDataStore>()(
             state.folderCache.clear();
           }),
 
-        // Utility actions
         reset: () => set(initialState),
       })),
     ),

@@ -221,6 +221,13 @@ const initialState: RepositoryState = {
 // STORE CREATION
 // ============================================================================
 
+/**
+ * @deprecated This store is legacy and will be removed in a future version.
+ * Use the focused stores instead:
+ * - repositoryDataStore for data operations
+ * - repositoryUIStore for UI state
+ * - uploadStore for upload functionality
+ */
 export const useRepositoryStore = create<RepositoryStore>()(
   devtools(
     subscribeWithSelector(

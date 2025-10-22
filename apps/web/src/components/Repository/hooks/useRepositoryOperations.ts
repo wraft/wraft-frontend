@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 
-import { fetchAPI, postAPI, deleteAPI } from 'utils/models';
+import { fetchAPI, postAPI, deleteAPI, putAPI } from 'utils/models';
 
 import { ApiResponse } from '../types';
 import { useRepositoryDataStore } from '../store/repositoryDataStore';
@@ -25,6 +25,8 @@ export const useRepositoryOperations = (currentFolderId: string | null) => {
     addItem,
     removeItem,
   } = useRepositoryDataStore();
+
+  console.log('test items in useRepositoryOperations', items);
 
   // UI store actions
   const { closeDeleteModal, closeNewFolderModal, closeUploadModal } =
@@ -177,7 +179,7 @@ export const useRepositoryOperations = (currentFolderId: string | null) => {
   const renameItem = useCallback(
     async (itemId: string, newName: string) => {
       try {
-        const response = await postAPI(`storage/items/${itemId}/rename`, {
+        const response = await putAPI(`storage/items/${itemId}/rename`, {
           new_name: newName,
         });
 

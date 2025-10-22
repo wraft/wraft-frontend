@@ -25,22 +25,27 @@ interface GoogleDriveDrawerProps {
   isOpen: boolean;
   onClose: () => void;
   currentFolderId: string | null;
+  onRepositoryRefresh?: () => void;
 }
 
 export const GoogleDriveDrawer: React.FC<GoogleDriveDrawerProps> = ({
   isOpen,
   onClose,
   currentFolderId,
+  onRepositoryRefresh: _onRepositoryRefresh,
 }) => {
   const {
     files,
     isLoading,
+    isLoadingMore,
     error,
     hasConnection,
     currentFolder,
     currentFolderName,
     folderStack,
+    hasMoreFiles,
     fetchFiles,
+    loadMoreFiles,
     syncFileToRepository,
     syncMultipleFiles,
     navigateToFolder,
@@ -122,10 +127,14 @@ export const GoogleDriveDrawer: React.FC<GoogleDriveDrawerProps> = ({
 
       if (result.success > 0 && result.failed === 0) {
         toast.success(`Successfully imported ${result.success} files!`);
+        // Files have been automatically added to repository store, no need to refresh
+        console.log('Files synced successfully:', result.data);
       } else if (result.success > 0 && result.failed > 0) {
         toast.success(
           `Imported ${result.success} files. ${result.failed} failed.`,
         );
+        // Successfully imported files have been automatically added to repository store
+        console.log('Files synced successfully:', result.data);
       } else {
         toast.error(`Failed to import ${result.failed} files.`);
       }
@@ -160,10 +169,10 @@ export const GoogleDriveDrawer: React.FC<GoogleDriveDrawerProps> = ({
         size: file.file_size?.toString(),
       };
 
-      const success = await syncFileToRepository(driveFile);
-      if (success) {
-        // Optionally refresh the repository to show the new file
-        // This would require a callback from the parent component
+      const result = await syncFileToRepository(driveFile);
+      if (result.success) {
+        // File has been automatically added to repository store, no need to refresh
+        console.log('File synced successfully:', result.data);
       }
     } finally {
       setSyncingFiles((prev) => {
@@ -269,297 +278,338 @@ export const GoogleDriveDrawer: React.FC<GoogleDriveDrawerProps> = ({
   }
 
   return (
-    <Drawer
-      open={isOpen}
-      placement="right"
-      withBackdrop={true}
-      hideOnInteractOutside={true}>
-      <Drawer.Header>
-        <Flex align="center" justify="space-between" w="100%">
-          <Flex align="center" gap="sm">
-            {currentFolder && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => {
-                  setSelectedFiles(new Set());
-                  navigateBack();
-                }}
-                title={
-                  folderStack.length > 0
-                    ? `Back to ${folderStack[folderStack.length - 1]?.name}`
-                    : 'Back to root'
-                }>
-                <ArrowLeftIcon size={16} />
-              </Button>
-            )}
-            <Flex direction="column" align="start">
-              <Drawer.Title>Google Drive Files</Drawer.Title>
+    <>
+      <style>
+        {`
+          @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+          }
+        `}
+      </style>
+      <Drawer
+        open={isOpen}
+        placement="right"
+        withBackdrop={true}
+        hideOnInteractOutside={true}>
+        <Drawer.Header>
+          <Flex align="center" justify="space-between" w="100%">
+            <Flex align="center" gap="sm">
               {currentFolder && (
-                <Flex align="center" gap="xs" mt="1" justify="center">
-                  <Text fontSize="xs" style={{ color: '#6b7280' }}>
-                    <HomeIcon width={10} height={10} />
-                  </Text>
-                  {folderStack.map((folder) => (
-                    <React.Fragment key={folder.id}>
-                      <Text fontSize="xs" style={{ color: '#6b7280' }}>
-                        /
-                      </Text>
-                      <Text fontSize="xs" style={{ color: '#6b7280' }}>
-                        {folder.name}
-                      </Text>
-                    </React.Fragment>
-                  ))}
-                  {currentFolderName && (
-                    <>
-                      <Text fontSize="xs" style={{ color: '#6b7280' }}>
-                        /
-                      </Text>
-                      <Text
-                        fontSize="xs"
-                        fontWeight="medium"
-                        style={{ color: '#374151' }}>
-                        {currentFolderName}
-                      </Text>
-                    </>
-                  )}
-                </Flex>
-              )}
-            </Flex>
-          </Flex>
-
-          <Flex align="center" gap="xs">
-            {selectableFiles.length > 0 && (
-              <>
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={handleSelectAll}
+                  onClick={() => {
+                    setSelectedFiles(new Set());
+                    navigateBack();
+                  }}
                   title={
-                    allSelectableSelected ? 'Deselect all' : 'Select all files'
-                  }
-                  disabled={isLoading}>
-                  {allSelectableSelected ? (
-                    <Square size={16} />
-                  ) : (
-                    <CheckSquare size={16} />
-                  )}
-                  <Text as="span" ml="1" fontSize="xs">
-                    {allSelectableSelected ? 'None' : 'All'}
-                  </Text>
+                    folderStack.length > 0
+                      ? `Back to ${folderStack[folderStack.length - 1]?.name}`
+                      : 'Back to root'
+                  }>
+                  <ArrowLeftIcon size={16} />
                 </Button>
-                {someSelected && (
+              )}
+              <Flex direction="column" align="start">
+                <Drawer.Title>Google Drive Files</Drawer.Title>
+                {currentFolder && (
+                  <Flex align="center" gap="xs" mt="1" justify="center">
+                    <Text fontSize="xs" style={{ color: '#6b7280' }}>
+                      <HomeIcon width={10} height={10} />
+                    </Text>
+                    {folderStack.map((folder) => (
+                      <React.Fragment key={folder.id}>
+                        <Text fontSize="xs" style={{ color: '#6b7280' }}>
+                          /
+                        </Text>
+                        <Text fontSize="xs" style={{ color: '#6b7280' }}>
+                          {folder.name}
+                        </Text>
+                      </React.Fragment>
+                    ))}
+                    {currentFolderName && (
+                      <>
+                        <Text fontSize="xs" style={{ color: '#6b7280' }}>
+                          /
+                        </Text>
+                        <Text
+                          fontSize="xs"
+                          fontWeight="medium"
+                          style={{ color: '#374151' }}>
+                          {currentFolderName}
+                        </Text>
+                      </>
+                    )}
+                  </Flex>
+                )}
+              </Flex>
+            </Flex>
+
+            <Flex align="center" gap="xs">
+              {selectableFiles.length > 0 && (
+                <>
                   <Button
-                    variant="primary"
+                    variant="ghost"
                     size="sm"
-                    onClick={handleBulkImport}
-                    disabled={isImporting || isLoading}
-                    title={`Import ${selectedFiles.size} selected files`}>
-                    <ArrowSquareInIcon size={16} />
+                    onClick={handleSelectAll}
+                    title={
+                      allSelectableSelected
+                        ? 'Deselect all'
+                        : 'Select all files'
+                    }
+                    disabled={isLoading}>
+                    {allSelectableSelected ? (
+                      <Square size={16} />
+                    ) : (
+                      <CheckSquare size={16} />
+                    )}
                     <Text as="span" ml="1" fontSize="xs">
-                      Import ({selectedFiles.size})
+                      {allSelectableSelected ? 'None' : 'All'}
                     </Text>
                   </Button>
-                )}
-              </>
-            )}
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => fetchFiles(currentFolder || undefined)}
-              disabled={isLoading}
-              title="Refresh files">
-              <ArrowsClockwise size={16} />
-            </Button>
-            <Button
-              variant="ghost"
-              onClick={onClose}
-              style={{ padding: '8px' }}>
-              ✕
-            </Button>
-          </Flex>
-        </Flex>
-      </Drawer.Header>
-
-      <Box
-        p="4"
-        w="100%"
-        maxW="600px"
-        h="calc(100vh - 80px)"
-        style={{ overflowY: 'auto' }}>
-        {error && (
-          <Box
-            p="4"
-            mb="4"
-            style={{
-              border: '1px solid #ef4444',
-              borderRadius: '8px',
-              backgroundColor: '#fef2f2',
-            }}>
-            <Text style={{ color: '#991b1b' }}>{error}</Text>
-          </Box>
-        )}
-
-        {isImporting && (
-          <Box
-            p="4"
-            mb="4"
-            style={{
-              border: '1px solid #3b82f6',
-              borderRadius: '8px',
-              backgroundColor: '#eff6ff',
-            }}>
-            <Flex align="center" gap="2">
-              <ArrowsClockwise
-                size={16}
-                style={{
-                  color: '#3b82f6',
-                  animation: 'spin 1s linear infinite',
-                }}
-              />
-              <Text style={{ color: '#1e40af' }}>
-                Importing {selectedFiles.size} files to repository...
-              </Text>
-            </Flex>
-          </Box>
-        )}
-
-        {isLoading && files.length === 0 ? (
-          <Flex justify="center" align="center" h="200px">
-            <Flex direction="column" align="center" gap="4">
-              <Text style={{ color: '#6b7280' }}>
-                Loading Google Drive files...
-              </Text>
-            </Flex>
-          </Flex>
-        ) : files.length === 0 ? (
-          <Flex justify="center" align="center" h="200px">
-            <Text style={{ color: '#6b7280' }}>
-              No files found in Google Drive
-            </Text>
-          </Flex>
-        ) : (
-          <Flex direction="column" px="md">
-            {files.map((file) => (
-              <Box
-                key={file.id}
-                p="md"
-                borderBottom="1px solid"
-                borderColor="border"
-                transition="all 0.2s"
-                cursor={file.is_folder ? 'pointer' : 'default'}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = '#d1d5db';
-                  e.currentTarget.style.backgroundColor = '#f9fafb';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = '#e5e7eb';
-                  e.currentTarget.style.backgroundColor = 'transparent';
-                }}>
-                <Flex justify="space-between" align="start">
-                  <Flex align="center" gap="md" flex="1" minWidth="0">
-                    {!file.is_folder && (
-                      <Checkbox
-                        checked={selectedFiles.has(file.id)}
-                        onChange={(e) =>
-                          handleSelectFile(file.id, e.target.checked)
-                        }
-                        disabled={isImporting}
-                      />
-                    )}
-                    <Box flexShrink={0}>{getFileIcon(file)}</Box>
-
-                    <Flex direction="column" flex="1" minWidth="0">
-                      <Text
-                        fontWeight="heading"
-                        lines={1}
-                        onClick={() => handleFolderClick(file)}
-                        onMouseEnter={
-                          file.is_folder
-                            ? (e) => {
-                                e.currentTarget.style.textDecoration =
-                                  'underline';
-                              }
-                            : undefined
-                        }
-                        onMouseLeave={
-                          file.is_folder
-                            ? (e) => {
-                                e.currentTarget.style.textDecoration = 'none';
-                              }
-                            : undefined
-                        }>
-                        {file.name}
+                  {someSelected && (
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      onClick={handleBulkImport}
+                      disabled={isImporting || isLoading}
+                      title={`Import ${selectedFiles.size} selected files`}>
+                      <ArrowSquareInIcon size={16} />
+                      <Text as="span" ml="1" fontSize="xs">
+                        Import ({selectedFiles.size})
                       </Text>
+                    </Button>
+                  )}
+                </>
+              )}
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => fetchFiles(currentFolder || undefined)}
+                disabled={isLoading}
+                title="Refresh files">
+                <ArrowsClockwise size={16} />
+              </Button>
+              <Button
+                variant="ghost"
+                onClick={onClose}
+                style={{ padding: '8px' }}>
+                ✕
+              </Button>
+            </Flex>
+          </Flex>
+        </Drawer.Header>
 
-                      <Flex align="center" gap="xs" color="text-secondary">
-                        <Text fontSize="xs" color="text-secondary">
-                          {formatDate(file.modified)}
-                        </Text>
-                        {!file.is_folder && file.file_size && (
-                          <>
-                            <Text color="text-secondary">•</Text>
-                            <Text fontSize="xs" color="text-secondary">
-                              {formatFileSize(file.file_size)}
-                            </Text>
-                          </>
-                        )}
-                        {file.mime_type && (
-                          <>
-                            <Text color="text-secondary">•</Text>
-                            <Text fontSize="xs" color="text-secondary">
-                              {file.mime_type.split('/')[1]?.toUpperCase() ||
-                                'FILE'}
-                            </Text>
-                          </>
-                        )}
-                      </Flex>
-                    </Flex>
-                  </Flex>
+        <Box
+          p="4"
+          w="100%"
+          maxW="600px"
+          h="calc(100vh - 80px)"
+          style={{ overflowY: 'auto' }}>
+          {error && (
+            <Box
+              p="4"
+              mb="4"
+              style={{
+                border: '1px solid #ef4444',
+                borderRadius: '8px',
+                backgroundColor: '#fef2f2',
+              }}>
+              <Text style={{ color: '#991b1b' }}>{error}</Text>
+            </Box>
+          )}
 
-                  <Flex align="center" gap="2" style={{ flexShrink: '0' }}>
-                    {file.metadata?.web_view_link && (
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() =>
-                          window.open(file.metadata.web_view_link, '_blank')
-                        }
-                        title="Open in Google Drive">
-                        <ArrowSquareOut size={16} />
-                      </Button>
-                    )}
-
-                    {!file.is_folder && (
-                      <Button
-                        variant="secondary"
-                        size="sm"
-                        onClick={() => handleSync(file)}
-                        disabled={syncingFiles.has(file.id)}
-                        title="Sync to Repository">
-                        <ArrowSquareInIcon size={16} />
-                        {syncingFiles.has(file.id) && (
-                          <Text as="span" ml="1" fontSize="xs">
-                            Syncing...
-                          </Text>
-                        )}
-                      </Button>
-                    )}
-                  </Flex>
-                </Flex>
-              </Box>
-            ))}
-
-            {isLoading && files.length > 0 && (
-              <Flex justify="center" p="4">
-                <Text fontSize="sm" style={{ color: '#6b7280' }}>
-                  Loading more...
+          {isImporting && (
+            <Box
+              p="4"
+              mb="4"
+              style={{
+                border: '1px solid #3b82f6',
+                borderRadius: '8px',
+                backgroundColor: '#eff6ff',
+              }}>
+              <Flex align="center" gap="2">
+                <ArrowsClockwise
+                  size={16}
+                  style={{
+                    color: '#3b82f6',
+                    animation: 'spin 1s linear infinite',
+                  }}
+                />
+                <Text style={{ color: '#1e40af' }}>
+                  Importing {selectedFiles.size} files to repository...
                 </Text>
               </Flex>
-            )}
-          </Flex>
-        )}
-      </Box>
-    </Drawer>
+            </Box>
+          )}
+
+          {/* Pagination Info */}
+          {files.length > 0 && (
+            <Box p="2" mb="2" style={{ borderBottom: '1px solid #e5e7eb' }}>
+              <Text fontSize="xs" color="gray.900">
+                Showing {files.length} files
+                {hasMoreFiles && ' (more available)'}
+              </Text>
+            </Box>
+          )}
+
+          {isLoading && files.length === 0 ? (
+            <Flex justify="center" align="center" h="200px">
+              <Flex direction="column" align="center" gap="4">
+                <Text color="gray.900">Loading Google Drive files...</Text>
+              </Flex>
+            </Flex>
+          ) : files.length === 0 ? (
+            <Flex justify="center" align="center" h="200px">
+              <Text color="gray.900">No files found in Google Drive</Text>
+            </Flex>
+          ) : (
+            <Flex direction="column" px="md">
+              {files.map((file) => (
+                <Box
+                  key={file.id}
+                  p="md"
+                  borderBottom="1px solid"
+                  borderColor="border"
+                  transition="all 0.2s"
+                  cursor={file.is_folder ? 'pointer' : 'default'}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = '#d1d5db';
+                    e.currentTarget.style.backgroundColor = '#f9fafb';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = '#e5e7eb';
+                    e.currentTarget.style.backgroundColor = 'transparent';
+                  }}>
+                  <Flex justify="space-between" align="start">
+                    <Flex align="center" gap="md" flex="1" minWidth="0">
+                      {!file.is_folder && (
+                        <Checkbox
+                          checked={selectedFiles.has(file.id)}
+                          onChange={(e) =>
+                            handleSelectFile(file.id, e.target.checked)
+                          }
+                          disabled={isImporting}
+                        />
+                      )}
+                      <Box flexShrink={0}>{getFileIcon(file)}</Box>
+
+                      <Flex direction="column" flex="1" minWidth="0">
+                        <Text
+                          fontWeight="heading"
+                          lines={1}
+                          onClick={() => handleFolderClick(file)}
+                          onMouseEnter={
+                            file.is_folder
+                              ? (e) => {
+                                  e.currentTarget.style.textDecoration =
+                                    'underline';
+                                }
+                              : undefined
+                          }
+                          onMouseLeave={
+                            file.is_folder
+                              ? (e) => {
+                                  e.currentTarget.style.textDecoration = 'none';
+                                }
+                              : undefined
+                          }>
+                          {file.name}
+                        </Text>
+
+                        <Flex align="center" gap="xs" color="text-secondary">
+                          <Text fontSize="xs" color="text-secondary">
+                            {formatDate(file.modified)}
+                          </Text>
+                          {!file.is_folder && file.file_size && (
+                            <>
+                              <Text color="text-secondary">•</Text>
+                              <Text fontSize="xs" color="text-secondary">
+                                {formatFileSize(file.file_size)}
+                              </Text>
+                            </>
+                          )}
+                          {file.mime_type && (
+                            <>
+                              <Text color="text-secondary">•</Text>
+                              <Text fontSize="xs" color="text-secondary">
+                                {file.mime_type.split('/')[1]?.toUpperCase() ||
+                                  'FILE'}
+                              </Text>
+                            </>
+                          )}
+                        </Flex>
+                      </Flex>
+                    </Flex>
+
+                    <Flex align="center" gap="2" style={{ flexShrink: '0' }}>
+                      {file.metadata?.web_view_link && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() =>
+                            window.open(file.metadata.web_view_link, '_blank')
+                          }
+                          title="Open in Google Drive">
+                          <ArrowSquareOut size={16} />
+                        </Button>
+                      )}
+
+                      {!file.is_folder && (
+                        <Button
+                          variant="secondary"
+                          size="sm"
+                          onClick={() => handleSync(file)}
+                          disabled={syncingFiles.has(file.id)}
+                          title="Sync to Repository">
+                          <ArrowSquareInIcon size={16} />
+                          {syncingFiles.has(file.id) && (
+                            <Text as="span" ml="1" fontSize="xs">
+                              Syncing...
+                            </Text>
+                          )}
+                        </Button>
+                      )}
+                    </Flex>
+                  </Flex>
+                </Box>
+              ))}
+
+              {/* Load More Button */}
+              {hasMoreFiles && !isLoadingMore && (
+                <Flex justify="center" p="4">
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={loadMoreFiles}
+                    disabled={isLoading || isImporting}>
+                    Load More Files
+                  </Button>
+                </Flex>
+              )}
+
+              {/* Loading More Indicator */}
+              {isLoadingMore && (
+                <Flex justify="center" p="4">
+                  <Flex align="center" gap="2">
+                    <ArrowsClockwise
+                      size={16}
+                      style={{
+                        color: '#6b7280',
+                        animation: 'spin 1s linear infinite',
+                      }}
+                    />
+                    <Text fontSize="sm" style={{ color: '#6b7280' }}>
+                      Loading more files...
+                    </Text>
+                  </Flex>
+                </Flex>
+              )}
+            </Flex>
+          )}
+        </Box>
+      </Drawer>
+    </>
   );
 };

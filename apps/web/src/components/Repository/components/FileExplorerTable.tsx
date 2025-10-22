@@ -9,13 +9,13 @@ import {
   Table,
 } from '@wraft/ui';
 import {
-  FileText,
-  Folder,
-  PencilSimple,
-  Trash,
-  Download,
-  Share,
-  DotsThreeVertical,
+  FileTextIcon,
+  FolderIcon,
+  PencilSimpleIcon,
+  TrashIcon,
+  DownloadIcon,
+  ShareIcon,
+  DotsThreeVerticalIcon,
 } from '@phosphor-icons/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'react-hot-toast';
@@ -29,7 +29,7 @@ export const RepositoryTable: React.FC<{
   items: StorageItem[];
   onItemClick: (item: StorageItem) => void;
   onNewFolder: () => void;
-  onRename: (item: StorageItem, newName: string) => void;
+  onRename: (item: StorageItem) => void;
   onDelete: (item: StorageItem) => void;
   onDownload?: (item: StorageItem) => void;
   onShare?: (item: StorageItem) => void;
@@ -111,13 +111,14 @@ export const RepositoryTable: React.FC<{
     [selectedItems],
   );
 
-  const handleRename = useCallback(
-    async (item: StorageItem, newName: string) => {
+  const handleInlineRename = useCallback(
+    async (item: StorageItem) => {
       try {
-        await onRename(item, newName);
+        // For inline rename, we need to trigger the rename modal
+        // First set the item to rename, then open the modal
+        onRename(item);
         setEditingItem(null);
         setEditValue('');
-        toast.success('Item renamed successfully');
       } catch (error) {
         toast.error('Failed to rename item');
       }
@@ -157,10 +158,10 @@ export const RepositoryTable: React.FC<{
         return (
           <Flex alignItems="center" gap="xs">
             {item.is_folder ? (
-              <Folder size={16} color="var(--theme-ui-colors-gray-900)" />
+              <FolderIcon size={16} color="var(--theme-ui-colors-gray-900)" />
             ) : (
               <IconFrame color="gray.900">
-                <FileText size={16} />
+                <FileTextIcon size={16} />
               </IconFrame>
             )}
             <Text fontSize="sm">
@@ -169,10 +170,10 @@ export const RepositoryTable: React.FC<{
                   type="text"
                   value={editValue}
                   onChange={(e) => setEditValue(e.target.value)}
-                  onBlur={() => handleRename(item, editValue)}
+                  onBlur={() => handleInlineRename(item)}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
-                      handleRename(item, editValue);
+                      handleInlineRename(item);
                     } else if (e.key === 'Escape') {
                       setEditingItem(null);
                       setEditValue('');
@@ -227,7 +228,7 @@ export const RepositoryTable: React.FC<{
         <Text fontSize="sm">
           {row.original.is_folder
             ? '-'
-            : formatFileSize(row.original.file_size || 0)}
+            : formatFileSize(row.original.size || 0)}
         </Text>
       ),
     },
@@ -252,33 +253,29 @@ export const RepositoryTable: React.FC<{
                 variant="ghost"
                 size="xs"
                 onClick={() => onDownload(item)}>
-                <Download size={16} />
+                <DownloadIcon size={16} />
               </Button>
             )}
             {!item.is_folder && onShare && (
               <Button variant="ghost" size="xs" onClick={() => onShare(item)}>
-                <Share size={16} />
+                <ShareIcon size={16} />
               </Button>
             )}
             <DropdownMenu.Provider>
               <DropdownMenu.Trigger>
                 <Button variant="ghost" size="xs">
-                  <DotsThreeVertical size={16} />
+                  <DotsThreeVerticalIcon size={16} />
                 </Button>
               </DropdownMenu.Trigger>
               <DropdownMenu>
-                <DropdownMenu.Item
-                  onClick={() => {
-                    setEditingItem(item);
-                    setEditValue(item.display_name || item.name);
-                  }}>
-                  <PencilSimple size={16} />
+                <DropdownMenu.Item onClick={() => onRename(item)}>
+                  <PencilSimpleIcon size={16} />
                   <Text>Rename</Text>
                 </DropdownMenu.Item>
                 <DropdownMenu.Item
                   onClick={() => onDelete(item)}
                   className="text-red-500">
-                  <Trash size={16} />
+                  <TrashIcon size={16} />
                   <Text>Delete</Text>
                 </DropdownMenu.Item>
               </DropdownMenu>
@@ -315,7 +312,7 @@ export const RepositoryTable: React.FC<{
                     variant="secondary"
                     size="sm"
                     onClick={handleBulkDownload}>
-                    <Download size={16} />
+                    <DownloadIcon size={16} />
                     <Text>Download</Text>
                   </Button>
                 )}
@@ -323,7 +320,7 @@ export const RepositoryTable: React.FC<{
                   variant="secondary"
                   size="sm"
                   onClick={handleBulkDelete}>
-                  <Trash size={16} />
+                  <TrashIcon size={16} />
                   <Text>Delete</Text>
                 </Button>
                 <Button

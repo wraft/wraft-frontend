@@ -44,7 +44,7 @@ export interface DriveFolder {
 
 export interface DriveListResponse {
   files: DriveFile[];
-  nextPageToken?: string;
+  next_page_token?: string;
 }
 
 /**
@@ -271,7 +271,7 @@ export async function downloadFile(
 export async function syncFiles(
   fileIds: string[],
   folder_id: string | null,
-): Promise<boolean> {
+): Promise<any> {
   try {
     const response: any = await postAPI('clouds/google/import', {
       file_ids: fileIds,
@@ -293,7 +293,7 @@ export async function listFolders(
     pageToken?: string;
     pageSize?: number;
   } = {},
-): Promise<{ folders: DriveFolder[]; nextPageToken?: string }> {
+): Promise<{ folders: DriveFolder[]; next_page_token?: string }> {
   try {
     const queryParams = new URLSearchParams();
 
@@ -309,7 +309,7 @@ export async function listFolders(
 
     const response = (await fetchAPI(endpoint)) as {
       folders: DriveFolder[];
-      nextPageToken?: string;
+      next_page_token?: string;
     };
     return response;
   } catch (error) {
@@ -327,7 +327,7 @@ export async function searchFolders(
     pageToken?: string;
     pageSize?: number;
   } = {},
-): Promise<{ folders: DriveFolder[]; nextPageToken?: string }> {
+): Promise<{ folders: DriveFolder[]; next_page_token?: string }> {
   try {
     const queryParams = new URLSearchParams({ q: query });
 
@@ -337,7 +337,7 @@ export async function searchFolders(
 
     const response = (await fetchAPI(
       `clouds/google/folders/search?${queryParams.toString()}`,
-    )) as { folders: DriveFolder[]; nextPageToken?: string };
+    )) as { folders: DriveFolder[]; next_page_token?: string };
     return response;
   } catch (error) {
     console.error('Error searching folders:', error);

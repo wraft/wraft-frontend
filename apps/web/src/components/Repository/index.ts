@@ -36,5 +36,5 @@ export * from './utils';
 // Services
 export * from './services';
 
-// Store
-export { useRepositoryStore } from './store/repositoryStore';
+// Stores (new focused architecture)
+export * from './store';

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Box, Text, Flex, Button, Modal, Drawer } from '@wraft/ui';
 import {
@@ -30,7 +30,17 @@ import { useFileDetails } from '../hooks/useFileDetails';
 import { useRepositoryActions } from '../hooks/useRepositoryActions';
 import { useItemOperations } from '../hooks/useItemOperations';
 import { useUrlSync } from '../hooks/useUrlSync';
-import { useIsNewFolderModalOpen } from '../store/repositoryStore';
+import {
+  useRepositoryItems,
+  useCurrentFolder,
+  useBreadcrumbs,
+  useIsLoading as useRepositoryDataLoading,
+} from '../store/repositoryDataStore';
+import {
+  useIsNewFolderModalOpen,
+  useItemToDelete,
+  useItemToRename,
+} from '../store/repositoryUIStore';
 import { RepositorySetup } from './RepositorySetup';
 import { EmptyRepository } from './EmptyRepository';
 import { StorageItemDetails as StorageItemDetailsComponent } from './StorageItemDetails';
@@ -61,18 +71,24 @@ const RepositoryComponent: React.FC = React.memo(() => {
     checkSetup,
   } = useRepositorySetup();
 
+  // Get data from repositoryDataStore
+  const items = useRepositoryItems();
+  const currentFolder = useCurrentFolder();
+  const breadcrumbsRepository = useBreadcrumbs();
+  const isRepositoryDataLoading = useRepositoryDataLoading();
+
+  // Get operations from useRepository hook
   const {
-    items,
     createFolder,
     deleteFolder,
     deleteFile,
     refreshContents,
-    currentFolder,
-    breadcrumbs: breadcrumbsRepository,
     uploadFile,
     renameItem,
     isLoading: isRepositoryLoading,
   } = useRepository(currentFolderId);
+
+  console.log('test abc [items]', items);
 
   // File details hook
   const {
@@ -109,6 +125,8 @@ const RepositoryComponent: React.FC = React.memo(() => {
 
   // Modal state hooks
   const isNewFolderModalOpen = useIsNewFolderModalOpen();
+  const itemToDelete = useItemToDelete();
+  const itemToRename = useItemToRename();
 
   // Item operations hook
   const { handleDelete, handleNewFolder, handleUpload, handleRename } =
@@ -118,11 +136,10 @@ const RepositoryComponent: React.FC = React.memo(() => {
       deleteFile,
       uploadFile,
       renameItem,
-      selectedItemDetails,
     });
 
   // Sync the Zustand store with the repository setup status
-  React.useEffect(() => {
+  useEffect(() => {
     setIsSetup(isSetupFromHook);
   }, [isSetupFromHook, setIsSetup]);
 
@@ -195,8 +212,8 @@ const RepositoryComponent: React.FC = React.memo(() => {
 
   // Memoized loading state
   const isAnyLoading = useMemo(
-    () => isSetupLoading || isRepositoryLoading,
-    [isSetupLoading, isRepositoryLoading],
+    () => isSetupLoading || isRepositoryLoading || isRepositoryDataLoading,
+    [isSetupLoading, isRepositoryLoading, isRepositoryDataLoading],
   );
 
   const handleToggleDrawerExpand = () => {
@@ -262,6 +279,8 @@ const RepositoryComponent: React.FC = React.memo(() => {
     );
   }
 
+  console.log('test abc [isDeleteModalOpen]', isDeleteModalOpen);
+
   // Repository is set up, show content
   return (
     <Box>
@@ -324,10 +343,10 @@ const RepositoryComponent: React.FC = React.memo(() => {
         open={isDeleteModalOpen}
         onClose={closeDeleteModal}>
         <>
-          {selectedItemDetails && (
+          {itemToDelete && (
             <ConfirmDelete
               title="Delete Item"
-              text={`Are you sure you want to delete '${selectedItemDetails.name}'?`}
+              text={`Are you sure you want to delete '${itemToDelete.name}'?`}
               setOpen={closeDeleteModal}
               onConfirmDelete={handleDeleteConfirm}
             />
@@ -339,9 +358,11 @@ const RepositoryComponent: React.FC = React.memo(() => {
         isOpen={isRenameModalOpen}
         onClose={closeRenameModal}
         onConfirm={handleRenameSubmit}
-        currentName={selectedItemDetails?.name || ''}
+        currentName={itemToRename?.name || itemToRename?.display_name || ''}
         itemType={
-          selectedItemDetails?.item_type === 'folder' ? 'folder' : 'file'
+          itemToRename?.item_type === 'folder' || itemToRename?.is_folder
+            ? 'folder'
+            : 'file'
         }
       />
 
@@ -566,6 +587,7 @@ const RepositoryComponent: React.FC = React.memo(() => {
         isOpen={isGoogleDriveDrawerOpen}
         onClose={() => setIsGoogleDriveDrawerOpen(false)}
         currentFolderId={currentFolderId}
+        onRepositoryRefresh={refreshContents}
       />
     </Box>
   );

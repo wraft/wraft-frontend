@@ -1,9 +1,14 @@
-// Export new focused stores
+// ============================================================================
+// NEW FOCUSED STORES (Use these for new development)
+// ============================================================================
 export * from './repositoryDataStore';
 export * from './repositoryUIStore';
 export * from './uploadStore';
 
-// Legacy store for backward compatibility
+// ============================================================================
+// LEGACY STORE (Deprecated - will be removed in future version)
+// ============================================================================
+// @deprecated Use focused stores instead: repositoryDataStore, repositoryUIStore, uploadStore
 export { useRepositoryStore } from './repositoryStore';
 
 // Re-export commonly used selectors for backward compatibility

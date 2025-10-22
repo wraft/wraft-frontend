@@ -3,37 +3,44 @@ import { useCallback } from 'react';
 import { fetchAPI } from 'utils/models';
 
 import { StorageItemDetails } from '../types';
-import { useRepositoryStore } from '../store/repositoryStore';
+import { useRepositoryDataStore } from '../store/repositoryDataStore';
+import { useRepositoryUIStore } from '../store/repositoryUIStore';
 
 export const useFileDetails = () => {
-  // Zustand selectors
-  const selectedItemDetails = useRepositoryStore(
+  // UI Store selectors
+  const selectedItemDetails = useRepositoryUIStore(
     (state) => state.selectedItemDetails,
   );
-  const fileDetailsLoading = useRepositoryStore(
+  const fileDetailsLoading = useRepositoryUIStore(
     (state) => state.fileDetailsLoading,
   );
-  const fileDetailsError = useRepositoryStore(
+  const fileDetailsError = useRepositoryUIStore(
     (state) => state.fileDetailsError,
   );
-  const itemCache = useRepositoryStore((state) => state.itemCache);
 
-  // Zustand actions
-  const setFileDetailsLoading = useRepositoryStore(
+  // Data Store selectors (for cache)
+  const itemCache = useRepositoryDataStore((state) => state.itemCache);
+
+  // UI Store actions
+  const setFileDetailsLoading = useRepositoryUIStore(
     (state) => state.setFileDetailsLoading,
   );
-  const setFileDetailsError = useRepositoryStore(
+  const setFileDetailsError = useRepositoryUIStore(
     (state) => state.setFileDetailsError,
   );
-  const setSelectedItemDetails = useRepositoryStore(
+  const setSelectedItemDetails = useRepositoryUIStore(
     (state) => state.setSelectedItemDetails,
   );
-  const cacheItem = useRepositoryStore((state) => state.cacheItem);
-  const getCachedItem = useRepositoryStore((state) => state.getCachedItem);
-  const openItemDetails = useRepositoryStore((state) => state.openItemDetails);
-  const closeItemDetails = useRepositoryStore(
+  const openItemDetails = useRepositoryUIStore(
+    (state) => state.openItemDetails,
+  );
+  const closeItemDetails = useRepositoryUIStore(
     (state) => state.closeItemDetails,
   );
+
+  // Data Store actions (for cache)
+  const cacheItem = useRepositoryDataStore((state) => state.cacheItem);
+  const getCachedItem = useRepositoryDataStore((state) => state.getCachedItem);
 
   const loadFileDetails = useCallback(
     async (itemId: string) => {

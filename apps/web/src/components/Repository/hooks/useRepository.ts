@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 
-import { fetchAPI, postAPI, deleteAPI } from 'utils/models';
+import { fetchAPI, postAPI, deleteAPI, putAPI } from 'utils/models';
 
 import {
   StorageItem,
@@ -8,8 +8,18 @@ import {
   BreadcrumbItem,
   CurrentFolder,
 } from '../types';
+import { useRepositoryDataStore } from '../store/repositoryDataStore';
 
 export const useRepository = (currentFolderId: string | null) => {
+  // Get store actions for syncing data
+  const {
+    setItems: setStoreItems,
+    setBreadcrumbs: setStoreBreadcrumbs,
+    setCurrentFolder: setStoreCurrentFolder,
+    setLoading: setStoreLoading,
+    setError: setStoreError,
+  } = useRepositoryDataStore();
+
   const [items, setItems] = useState<StorageItem[]>([]);
   const [breadcrumbs, setBreadcrumbs] = useState<BreadcrumbItem[]>([]);
   const [currentFolder, setCurrentFolder] = useState<CurrentFolder | null>(
@@ -31,7 +41,9 @@ export const useRepository = (currentFolderId: string | null) => {
 
     try {
       setIsLoading(true);
+      setStoreLoading(true);
       setError(null);
+      setStoreError(null);
       lastFolderIdRef.current = currentFolderId;
 
       const url = currentFolderId
@@ -46,22 +58,36 @@ export const useRepository = (currentFolderId: string | null) => {
       setItems(data);
       setBreadcrumbs(apiBreadcrumbs);
       setCurrentFolder(current_folder || null);
+
+      // Sync with store
+      setStoreItems(data);
+      setStoreBreadcrumbs(apiBreadcrumbs);
+      setStoreCurrentFolder(current_folder || null);
     } catch (err: any) {
       // Don't set error if request was aborted
       if (err.name === 'AbortError') {
         return;
       }
 
-      setError(
+      const errorMessage =
         err instanceof Error
-          ? err
-          : new Error('Failed to fetch repository contents'),
-      );
+          ? err.message
+          : 'Failed to fetch repository contents';
+
+      setError(err instanceof Error ? err : new Error(errorMessage));
+      setStoreError(errorMessage);
+
       setItems([]);
       setBreadcrumbs([]);
       setCurrentFolder(null);
+
+      // Sync empty state with store
+      setStoreItems([]);
+      setStoreBreadcrumbs([]);
+      setStoreCurrentFolder(null);
     } finally {
       setIsLoading(false);
+      setStoreLoading(false);
     }
   }, [currentFolderId]);
 
@@ -157,7 +183,7 @@ export const useRepository = (currentFolderId: string | null) => {
   const renameItem = useCallback(
     async (itemId: string, newName: string) => {
       try {
-        const response = await postAPI(`storage/items/${itemId}/rename`, {
+        const response = await putAPI(`storage/items/${itemId}/rename`, {
           new_name: newName,
         });
 

@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 
 import { StorageItem } from '../types';
 import { useRepositoryActions } from './useRepositoryActions';
+import { useItemToDelete, useItemToRename } from '../store/repositoryUIStore';
 
 interface UseItemOperationsProps {
   createFolder: (name: string) => Promise<any>;
@@ -12,7 +13,6 @@ interface UseItemOperationsProps {
     options: { migrateToWraft: boolean },
   ) => Promise<void>;
   renameItem: (itemId: string, newName: string) => Promise<boolean>;
-  selectedItemDetails: any;
 }
 
 export const useItemOperations = ({
@@ -21,7 +21,6 @@ export const useItemOperations = ({
   deleteFile,
   uploadFile,
   renameItem,
-  selectedItemDetails,
 }: UseItemOperationsProps) => {
   const {
     setLoading,
@@ -32,66 +31,37 @@ export const useItemOperations = ({
     closeUploadModal,
   } = useRepositoryActions();
 
+  // Get the items from the UI store
+  const itemToDelete = useItemToDelete();
+  const itemToRename = useItemToRename();
+
   const handleDelete = useCallback(async () => {
-    if (!selectedItemDetails) return;
+    if (!itemToDelete) return;
 
     try {
       setLoading(true);
 
       // Optimistic update - immediately remove from UI
-      removeItem(selectedItemDetails.id);
+      removeItem(itemToDelete.id);
 
-      if (selectedItemDetails.item_type === 'folder') {
-        await deleteFolder(selectedItemDetails.id);
+      if (
+        itemToDelete.item_type === 'folder' ||
+        itemToDelete.type === 'folder'
+      ) {
+        await deleteFolder(itemToDelete.id);
       } else {
-        await deleteFile(selectedItemDetails.id);
+        await deleteFile(itemToDelete.id);
       }
       // No need to call refreshContents() - deleteFolder/deleteFile handle it internally
     } catch (err) {
-      // Revert optimistic update on error - convert StorageItemDetails back to StorageItem
-      const storageItem: StorageItem = {
-        id: selectedItemDetails.id,
-        name: selectedItemDetails.name,
-        display_name: selectedItemDetails.display_name,
-        type: selectedItemDetails.item_type,
-        size: selectedItemDetails.size,
-        modified: selectedItemDetails.updated_at,
-        path: selectedItemDetails.path,
-        mime_type: selectedItemDetails.mime_type,
-        file_extension: selectedItemDetails.file_extension,
-        is_folder: selectedItemDetails.is_folder,
-        item_type: selectedItemDetails.item_type,
-        status: '',
-        version: selectedItemDetails.version_number,
-        filename: {
-          file_name: selectedItemDetails.name,
-          updated_at: selectedItemDetails.updated_at,
-        },
-        description: null,
-        title: selectedItemDetails.name,
-        metadata: selectedItemDetails.metadata,
-        url: '',
-        file_size: selectedItemDetails.size,
-        processed: selectedItemDetails.content_extracted,
-        version_name: null,
-        storage_key: selectedItemDetails.path,
-        content_extracted: selectedItemDetails.content_extracted,
-        thumbnail_generated: selectedItemDetails.thumbnail_generated,
-        download_count: selectedItemDetails.download_count,
-        last_accessed_at: selectedItemDetails.last_accessed_at,
-        inserted_at: selectedItemDetails.inserted_at,
-        updated_at: selectedItemDetails.updated_at,
-        assets: selectedItemDetails.assets,
-        repository_id: selectedItemDetails.repository_id,
-        parent_id: selectedItemDetails.parent_id || undefined,
-      };
-      addItem(storageItem);
+      // Revert optimistic update on error - add the item back
+      addItem(itemToDelete);
     } finally {
       setLoading(false);
       closeDeleteModal();
     }
   }, [
-    selectedItemDetails,
+    itemToDelete,
     deleteFolder,
     deleteFile,
     setLoading,
@@ -218,12 +188,12 @@ export const useItemOperations = ({
 
   const handleRename = useCallback(
     async (newName: string) => {
-      if (!selectedItemDetails) return;
+      if (!itemToRename) return false;
 
-      const success = await renameItem(selectedItemDetails.id, newName);
+      const success = await renameItem(itemToRename.id, newName);
       return success;
     },
-    [selectedItemDetails, renameItem],
+    [itemToRename, renameItem],
   );
 
   return {

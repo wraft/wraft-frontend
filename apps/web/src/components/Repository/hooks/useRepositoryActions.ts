@@ -1,46 +1,55 @@
-import { useRepositoryStore } from '../store/repositoryStore';
+import { useRepositoryUIStore } from '../store/repositoryUIStore';
+import { useRepositoryDataStore } from '../store/repositoryDataStore';
 
 export const useRepositoryActions = () => {
-  // Modal state selectors
-  const isRenameModalOpen = useRepositoryStore(
+  // Modal state selectors from UI store
+  const isRenameModalOpen = useRepositoryUIStore(
     (state) => state.isRenameModalOpen,
   );
-  const isItemDetailsOpen = useRepositoryStore(
+  const isItemDetailsOpen = useRepositoryUIStore(
     (state) => state.isItemDetailsOpen,
   );
-  const isDeleteModalOpen = useRepositoryStore(
+  const isDeleteModalOpen = useRepositoryUIStore(
     (state) => state.isDeleteModalOpen,
   );
-  const isUploadModalOpen = useRepositoryStore(
+  const isUploadModalOpen = useRepositoryUIStore(
     (state) => state.isUploadModalOpen,
   );
 
-  // Action selectors - use individual selectors to prevent new object creation
-  const openNewFolderModal = useRepositoryStore(
+  // Action selectors from UI store - use individual selectors to prevent new object creation
+  const openNewFolderModal = useRepositoryUIStore(
     (state) => state.openNewFolderModal,
   );
-  const closeNewFolderModal = useRepositoryStore(
+  const closeNewFolderModal = useRepositoryUIStore(
     (state) => state.closeNewFolderModal,
   );
-  const openUploadModal = useRepositoryStore((state) => state.openUploadModal);
-  const closeUploadModal = useRepositoryStore(
+  const openUploadModal = useRepositoryUIStore(
+    (state) => state.openUploadModal,
+  );
+  const closeUploadModal = useRepositoryUIStore(
     (state) => state.closeUploadModal,
   );
-  const openDeleteModal = useRepositoryStore((state) => state.openDeleteModal);
-  const closeDeleteModal = useRepositoryStore(
+  const openDeleteModal = useRepositoryUIStore(
+    (state) => state.openDeleteModal,
+  );
+  const closeDeleteModal = useRepositoryUIStore(
     (state) => state.closeDeleteModal,
   );
-  const openRenameModal = useRepositoryStore((state) => state.openRenameModal);
-  const closeRenameModal = useRepositoryStore(
+  const openRenameModal = useRepositoryUIStore(
+    (state) => state.openRenameModal,
+  );
+  const closeRenameModal = useRepositoryUIStore(
     (state) => state.closeRenameModal,
   );
-  const closeItemDetails = useRepositoryStore(
+  const closeItemDetails = useRepositoryUIStore(
     (state) => state.closeItemDetails,
   );
-  const setLoading = useRepositoryStore((state) => state.setLoading);
-  const setIsSetup = useRepositoryStore((state) => state.setIsSetup);
-  const addItem = useRepositoryStore((state) => state.addItem);
-  const removeItem = useRepositoryStore((state) => state.removeItem);
+
+  // Data store actions
+  const setLoading = useRepositoryDataStore((state) => state.setLoading);
+  const setIsSetup = useRepositoryDataStore((state) => state.setIsSetup);
+  const addItem = useRepositoryDataStore((state) => state.addItem);
+  const removeItem = useRepositoryDataStore((state) => state.removeItem);
 
   return {
     // Modal states

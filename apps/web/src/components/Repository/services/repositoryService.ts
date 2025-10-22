@@ -1,4 +1,4 @@
-import { fetchAPI, postAPI, deleteAPI } from 'utils/models';
+import { fetchAPI, postAPI, deleteAPI, putAPI } from 'utils/models';
 
 import { StorageItem, ApiResponse, StorageItemDetails } from '../types';
 
@@ -56,7 +56,7 @@ export class RepositoryService {
   }
 
   static async renameItem(itemId: string, newName: string): Promise<any> {
-    return await postAPI(`storage/items/${itemId}/rename`, {
+    return await putAPI(`storage/items/${itemId}/rename`, {
       new_name: newName,
     });
   }

@@ -2,6 +2,8 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 
 import { fetchAPI, putAPI } from 'utils/models';
 
+import { useRepositoryDataStore } from '../store/repositoryDataStore';
+
 interface RepositoryData {
   id: string;
   name: string;
@@ -29,6 +31,14 @@ interface SetupRepositoryData {
 }
 
 export const useRepositorySetup = () => {
+  // Get store actions for syncing
+  const {
+    setIsSetup: setStoreIsSetup,
+    setRepositories: setStoreRepositories,
+    setLoading: setStoreLoading,
+    setError: setStoreError,
+  } = useRepositoryDataStore();
+
   const [isSetup, setIsSetup] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -40,7 +50,9 @@ export const useRepositorySetup = () => {
 
     try {
       setIsLoading(true);
+      setStoreLoading(true);
       setError(null);
+      setStoreError(null);
 
       const response = (await fetchAPI('repository/check')) as {
         data: RepositoryData[];
@@ -52,34 +64,49 @@ export const useRepositorySetup = () => {
 
       setIsSetup(hasRepositories);
       setRepositories(repositoryData || []);
+
+      // Sync with store
+      setStoreIsSetup(hasRepositories);
+      setStoreRepositories(repositoryData || []);
+
       hasCheckedRef.current = true;
     } catch (err: any) {
-      setError(err.message || 'Failed to check repository setup status');
+      const errorMessage =
+        err.message || 'Failed to check repository setup status';
+      setError(errorMessage);
+      setStoreError(errorMessage);
     } finally {
       setIsLoading(false);
+      setStoreLoading(false);
     }
-  }, []);
+  }, [setStoreLoading, setStoreError, setStoreIsSetup, setStoreRepositories]);
 
   const setupRepository = useCallback(
     async (data: SetupRepositoryData = {}) => {
       try {
         setIsLoading(true);
+        setStoreLoading(true);
         setError(null);
+        setStoreError(null);
 
         await putAPI('repository/setup', data);
         setIsSetup(true);
+        setStoreIsSetup(true);
         hasCheckedRef.current = true;
 
         // Refresh the repository list after setup
         await checkSetup();
       } catch (err: any) {
-        setError(err.message || 'Failed to setup repository');
+        const errorMessage = err.message || 'Failed to setup repository';
+        setError(errorMessage);
+        setStoreError(errorMessage);
         throw err;
       } finally {
         setIsLoading(false);
+        setStoreLoading(false);
       }
     },
-    [checkSetup],
+    [checkSetup, setStoreLoading, setStoreError, setStoreIsSetup],
   );
 
   const resetSetup = useCallback(() => {

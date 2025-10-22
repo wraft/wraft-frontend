@@ -9,6 +9,7 @@ import {
   syncFiles,
 } from '../components/GoogleDrive/googleDriveClient';
 import { StorageItem } from '../types';
+import { useRepositoryDataStore } from '../store/repositoryDataStore';
 
 interface FolderBreadcrumb {
   id: string;
@@ -18,20 +19,25 @@ interface FolderBreadcrumb {
 interface GoogleDriveRepositoryState {
   files: StorageItem[];
   isLoading: boolean;
+  isLoadingMore: boolean;
   error: string | null;
   hasConnection: boolean;
   currentFolder: string | null;
   currentFolderName: string | null;
   folderStack: FolderBreadcrumb[];
   nextPageToken: string | null;
+  hasMoreFiles: boolean;
 }
 
 interface GoogleDriveRepositoryActions {
   fetchFiles: (folderId?: string, pageToken?: string) => Promise<void>;
-  syncFileToRepository: (driveFile: DriveFile) => Promise<boolean>;
+  loadMoreFiles: () => Promise<void>;
+  syncFileToRepository: (
+    driveFile: DriveFile,
+  ) => Promise<{ success: boolean; data?: StorageItem }>;
   syncMultipleFiles: (
     driveFiles: DriveFile[],
-  ) => Promise<{ success: number; failed: number }>;
+  ) => Promise<{ success: number; failed: number; data?: StorageItem[] }>;
   navigateToFolder: (folderId: string, folderName?: string) => void;
   navigateToRoot: () => void;
   navigateBack: () => void;
@@ -50,13 +56,18 @@ export const useGoogleDriveRepository = (
   const [state, setState] = useState<GoogleDriveRepositoryState>({
     files: [],
     isLoading: false,
+    isLoadingMore: false,
     error: null,
     hasConnection: false,
     currentFolder: null,
     currentFolderName: null,
     folderStack: [],
     nextPageToken: null,
+    hasMoreFiles: false,
   });
+
+  // Get repository store actions
+  const { addItem, addItems } = useRepositoryDataStore();
 
   useEffect(() => {
     checkConnection();
@@ -68,6 +79,8 @@ export const useGoogleDriveRepository = (
 
     return;
   }, []);
+
+  console.log('useGoogleDriveRepository[files]', state);
 
   /**
    * Convert Google Drive file to StorageItem format
@@ -126,7 +139,12 @@ export const useGoogleDriveRepository = (
 
   const fetchFiles = useCallback(
     async (folderId?: string, pageToken?: string) => {
-      setState((prev) => ({ ...prev, isLoading: true, error: null }));
+      setState((prev) => ({
+        ...prev,
+        isLoading: !pageToken, // Only show main loading for initial load
+        isLoadingMore: !!pageToken, // Show loading more for pagination
+        error: null,
+      }));
 
       try {
         const options: any = {
@@ -152,9 +170,11 @@ export const useGoogleDriveRepository = (
               ? [...prev.files, ...convertedFiles]
               : convertedFiles,
             isLoading: false,
+            isLoadingMore: false,
             currentFolder: folderId,
             currentFolderName: prev.currentFolderName, // Keep existing folder name
-            nextPageToken: response.nextPageToken || null,
+            nextPageToken: response.next_page_token || null,
+            hasMoreFiles: !!response.next_page_token,
           }));
         } else {
           // Root folder query - exclude files that are in folders
@@ -172,9 +192,11 @@ export const useGoogleDriveRepository = (
               ? [...prev.files, ...convertedFiles]
               : convertedFiles,
             isLoading: false,
+            isLoadingMore: false,
             currentFolder: null,
             currentFolderName: null,
-            nextPageToken: response.nextPageToken || null,
+            nextPageToken: response.next_page_token || null,
+            hasMoreFiles: !!response.next_page_token,
           }));
         }
       } catch (error) {
@@ -183,11 +205,25 @@ export const useGoogleDriveRepository = (
           ...prev,
           error: 'Failed to fetch Google Drive files',
           isLoading: false,
+          isLoadingMore: false,
         }));
       }
     },
     [],
   );
+
+  const loadMoreFiles = useCallback(async () => {
+    if (!state.nextPageToken || state.isLoadingMore) {
+      return;
+    }
+
+    await fetchFiles(state.currentFolder || undefined, state.nextPageToken);
+  }, [
+    fetchFiles,
+    state.nextPageToken,
+    state.isLoadingMore,
+    state.currentFolder,
+  ]);
 
   const navigateToFolder = useCallback(
     async (folderId: string, folderName?: string) => {
@@ -229,11 +265,13 @@ export const useGoogleDriveRepository = (
   const navigateToRoot = useCallback(async () => {
     console.log('navigateToRoot');
 
-    // Clear folder stack when going to root
+    // Clear folder stack and pagination state when going to root
     setState((prev) => ({
       ...prev,
       folderStack: [],
       currentFolderName: null,
+      nextPageToken: null,
+      hasMoreFiles: false,
     }));
 
     try {
@@ -258,11 +296,13 @@ export const useGoogleDriveRepository = (
       const parentFolder = currentStack[currentStack.length - 1];
       console.log('Going back to parent folder:', parentFolder);
 
-      // Update state to remove current folder from stack
+      // Update state to remove current folder from stack and reset pagination
       setState((prev) => ({
         ...prev,
         folderStack: prev.folderStack.slice(0, -1), // Remove last item
         currentFolderName: parentFolder.name,
+        nextPageToken: null,
+        hasMoreFiles: false,
       }));
 
       try {
@@ -281,6 +321,8 @@ export const useGoogleDriveRepository = (
         ...prev,
         folderStack: [],
         currentFolderName: null,
+        nextPageToken: null,
+        hasMoreFiles: false,
       }));
 
       try {
@@ -296,42 +338,59 @@ export const useGoogleDriveRepository = (
   }, [fetchFiles, state.folderStack]);
 
   const syncFileToRepository = useCallback(
-    async (driveFile: DriveFile): Promise<boolean> => {
+    async (
+      driveFile: DriveFile,
+    ): Promise<{ success: boolean; data?: StorageItem }> => {
       // Don't sync folders
       if (driveFile.mimeType === 'application/vnd.google-apps.folder') {
         toast.error('Cannot sync folders to repository');
-        return false;
+        return { success: false };
       }
 
       try {
         toast.loading(`Syncing ${driveFile.name} to repository...`);
 
         // Call backend API to sync the file
-        const success = await syncFiles([driveFile.id], currentFolderId);
+        const response = await syncFiles([driveFile.id], currentFolderId);
 
-        if (!success) {
+        console.log('test response', response);
+
+        if (!response || (typeof response === 'boolean' && !response)) {
           throw new Error('Failed to sync file');
         }
 
         toast.dismiss();
         toast.success(`${driveFile.name} synced to repository successfully!`);
-        return true;
+
+        // If response contains data, add it to the repository store
+        if (
+          response.storage_items &&
+          Array.isArray(response.storage_items) &&
+          response.storage_items.length > 0
+        ) {
+          const syncedItem = response.storage_items[0];
+          console.log('test syncedItem', syncedItem);
+          addItem(syncedItem);
+          return { success: true, data: syncedItem };
+        }
+
+        return { success: true };
       } catch (error) {
         toast.dismiss();
         console.error('Error syncing file:', error);
         toast.error(
           `Failed to sync ${driveFile.name}: ${error instanceof Error ? error.message : 'Unknown error'}`,
         );
-        return false;
+        return { success: false };
       }
     },
-    [],
+    [currentFolderId, addItem],
   );
 
   const syncMultipleFiles = useCallback(
     async (
       driveFiles: DriveFile[],
-    ): Promise<{ success: number; failed: number }> => {
+    ): Promise<{ success: number; failed: number; data?: StorageItem[] }> => {
       console.log('syncMultipleFiles[driveFiles]', driveFiles);
 
       // Filter out folders
@@ -346,6 +405,7 @@ export const useGoogleDriveRepository = (
 
       let successCount = 0;
       let failedCount = 0;
+      let syncedItems: StorageItem[] = [];
 
       try {
         // Extract file IDs for bulk sync
@@ -353,11 +413,18 @@ export const useGoogleDriveRepository = (
         console.log('syncMultipleFiles[fileIds]', validFiles);
 
         // Call backend API to sync multiple files
-        const success = await syncFiles(fileIds, currentFolderId);
-        console.log('syncMultipleFiles[success]', success);
+        const response = await syncFiles(fileIds, currentFolderId);
+        console.log('syncMultipleFiles[response]', response);
 
-        if (success) {
+        if (response && (response === true || response.success !== false)) {
           successCount = validFiles.length;
+
+          // If response contains data, add items to the repository store
+          if (response.storage_items && Array.isArray(response.storage_items)) {
+            syncedItems = response.storage_items;
+            // Use addItems for bulk import instead of adding one by one
+            addItems(syncedItems);
+          }
         } else {
           failedCount = validFiles.length;
         }
@@ -368,14 +435,15 @@ export const useGoogleDriveRepository = (
 
       console.log('syncMultipleFiles[successCount]', successCount);
 
-      return { success: successCount, failed: failedCount };
+      return { success: successCount, failed: failedCount, data: syncedItems };
     },
-    [],
+    [currentFolderId, addItems],
   );
 
   return {
     ...state,
     fetchFiles,
+    loadMoreFiles,
     syncFileToRepository,
     syncMultipleFiles,
     navigateToFolder,
