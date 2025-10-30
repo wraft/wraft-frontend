@@ -37,12 +37,12 @@ export const NewFolderModal: React.FC<NewFolderModalProps> = ({
 
   return (
     <Modal open={isOpen} onClose={onClose} ariaLabel="Create new folder">
-      <Box p="4">
-        <Text as="h3" mb="3">
+      <Box px="md">
+        <Text as="h3" mb="lg">
           Create New Folder
         </Text>
-        <form onSubmit={handleSubmit(handleFormSubmit)}>
-          <Box mb="4">
+        <Box as="form" onSubmit={handleSubmit(handleFormSubmit)} w="360px">
+          <Box mb="md">
             <Label htmlFor="folderName">Folder Name</Label>
             <Input
               id="folderName"
@@ -56,20 +56,20 @@ export const NewFolderModal: React.FC<NewFolderModalProps> = ({
               placeholder="Enter folder name"
             />
             {errors.name && (
-              <Text color="error" fontSize="sm" mt="1">
+              <Text color="error" fontSize="sm" mt="sm">
                 {errors.name.message}
               </Text>
             )}
           </Box>
-          <Flex gap="3">
+          <Flex gap="sm" mt="sm">
             <Button type="submit" disabled={isSubmitting}>
               {isSubmitting ? 'Creating...' : 'Create Folder'}
             </Button>
-            <Button variant="tertiary" onClick={onClose} type="button">
+            <Button variant="secondary" onClick={onClose} type="button">
               Cancel
             </Button>
           </Flex>
-        </form>
+        </Box>
       </Box>
     </Modal>
   );

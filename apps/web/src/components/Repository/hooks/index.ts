@@ -1,5 +1,4 @@
 // Export new consolidated hooks
-export { useRepositoryOperations } from './useRepositoryOperations';
 export { useFileDetailsConsolidated } from './useFileDetailsConsolidated';
 
 // Core repository hooks
@@ -15,3 +14,5 @@ export { useFolderNavigation } from './useFolderNavigation';
 export { useRepositoryActions } from './useRepositoryActions';
 export { useItemOperations } from './useItemOperations';
 export { useUrlSync } from './useUrlSync';
+export { useStorageQuota } from './useStorageQuota';
+export { useSearch } from './useSearch';

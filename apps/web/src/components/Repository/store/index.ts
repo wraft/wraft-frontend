@@ -6,10 +6,9 @@ export * from './repositoryUIStore';
 export * from './uploadStore';
 
 // ============================================================================
-// LEGACY STORE (Deprecated - will be removed in future version)
+// LEGACY STORE (Deprecated - removed)
 // ============================================================================
-// @deprecated Use focused stores instead: repositoryDataStore, repositoryUIStore, uploadStore
-export { useRepositoryStore } from './repositoryStore';
+// The legacy repositoryStore has been removed. Use focused stores instead.
 
 // Re-export commonly used selectors for backward compatibility
 export {

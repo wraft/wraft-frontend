@@ -1,16 +1,17 @@
 import React, { useState, useMemo } from 'react';
 import { Box, Button, Text, Flex, Drawer, Checkbox } from '@wraft/ui';
 import {
-  ArrowSquareOut,
   ArrowsClockwise,
   FolderIcon,
   ImageIcon,
   FileTextIcon,
   FileIcon,
   ArrowLeftIcon,
-  CheckSquare,
-  Square,
   ArrowSquareInIcon,
+  SquareIcon,
+  CheckSquareIcon,
+  ArrowsClockwiseIcon,
+  ArrowSquareOutIcon,
 } from '@phosphor-icons/react';
 import toast from 'react-hot-toast';
 import { HomeIcon } from '@wraft/icon';
@@ -68,6 +69,8 @@ export const GoogleDriveDrawer: React.FC<GoogleDriveDrawerProps> = ({
       selectableFiles.every((file) => selectedFiles.has(file.id)),
     [selectableFiles, selectedFiles],
   );
+
+  console.log('allSelectableSelected', allSelectableSelected);
 
   const someSelected = useMemo(() => selectedFiles.size > 0, [selectedFiles]);
 
@@ -251,23 +254,22 @@ export const GoogleDriveDrawer: React.FC<GoogleDriveDrawerProps> = ({
         hideOnInteractOutside={true}>
         <Drawer.Header>
           <Drawer.Title>Google Drive Files</Drawer.Title>
-          <Button variant="ghost" onClick={onClose} style={{ padding: '8px' }}>
+          <Button variant="ghost" onClick={onClose}>
             ✕
           </Button>
         </Drawer.Header>
 
         <Box p="4" w="100%" maxW="600px">
           <Box
-            p="4"
-            style={{
-              border: '1px solid #f59e0b',
-              borderRadius: '8px',
-              backgroundColor: '#fef3c7',
-            }}>
-            <Text fontWeight="bold" style={{ color: '#92400e' }}>
+            p="md"
+            border="1px solid"
+            borderColor="yellow.300"
+            borderRadius="md"
+            bg="yellow.50">
+            <Text fontWeight="bold" color="yellow.900">
               No Google Drive Connection
             </Text>
-            <Text fontSize="sm" mt="2" style={{ color: '#a16207' }}>
+            <Text fontSize="sm" mt="2" color="#a16207">
               Please connect your Google Drive account in the Integrations
               section first.
             </Text>
@@ -279,14 +281,6 @@ export const GoogleDriveDrawer: React.FC<GoogleDriveDrawerProps> = ({
 
   return (
     <>
-      <style>
-        {`
-          @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-          }
-        `}
-      </style>
       <Drawer
         open={isOpen}
         placement="right"
@@ -313,30 +307,28 @@ export const GoogleDriveDrawer: React.FC<GoogleDriveDrawerProps> = ({
               )}
               <Flex direction="column" align="start">
                 <Drawer.Title>Google Drive Files</Drawer.Title>
+
                 {currentFolder && (
                   <Flex align="center" gap="xs" mt="1" justify="center">
-                    <Text fontSize="xs" style={{ color: '#6b7280' }}>
+                    <Text fontSize="xs" color="text-secondary">
                       <HomeIcon width={10} height={10} />
                     </Text>
                     {folderStack.map((folder) => (
                       <React.Fragment key={folder.id}>
-                        <Text fontSize="xs" style={{ color: '#6b7280' }}>
+                        <Text fontSize="xs" color="text-secondary">
                           /
                         </Text>
-                        <Text fontSize="xs" style={{ color: '#6b7280' }}>
+                        <Text fontSize="xs" color="text-secondary">
                           {folder.name}
                         </Text>
                       </React.Fragment>
                     ))}
                     {currentFolderName && (
                       <>
-                        <Text fontSize="xs" style={{ color: '#6b7280' }}>
+                        <Text fontSize="xs" color="text-secondary">
                           /
                         </Text>
-                        <Text
-                          fontSize="xs"
-                          fontWeight="medium"
-                          style={{ color: '#374151' }}>
+                        <Text fontSize="xs" fontWeight="medium" color="#374151">
                           {currentFolderName}
                         </Text>
                       </>
@@ -347,76 +339,65 @@ export const GoogleDriveDrawer: React.FC<GoogleDriveDrawerProps> = ({
             </Flex>
 
             <Flex align="center" gap="xs">
-              {selectableFiles.length > 0 && (
-                <>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={handleSelectAll}
-                    title={
-                      allSelectableSelected
-                        ? 'Deselect all'
-                        : 'Select all files'
-                    }
-                    disabled={isLoading}>
-                    {allSelectableSelected ? (
-                      <Square size={16} />
-                    ) : (
-                      <CheckSquare size={16} />
-                    )}
-                    <Text as="span" ml="1" fontSize="xs">
-                      {allSelectableSelected ? 'None' : 'All'}
-                    </Text>
-                  </Button>
-                  {someSelected && (
-                    <Button
-                      variant="primary"
-                      size="sm"
-                      onClick={handleBulkImport}
-                      disabled={isImporting || isLoading}
-                      title={`Import ${selectedFiles.size} selected files`}>
-                      <ArrowSquareInIcon size={16} />
-                      <Text as="span" ml="1" fontSize="xs">
-                        Import ({selectedFiles.size})
-                      </Text>
-                    </Button>
-                  )}
-                </>
-              )}
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => fetchFiles(currentFolder || undefined)}
                 disabled={isLoading}
                 title="Refresh files">
-                <ArrowsClockwise size={16} />
+                <ArrowsClockwiseIcon size={16} />
               </Button>
-              <Button
-                variant="ghost"
-                onClick={onClose}
-                style={{ padding: '8px' }}>
+              <Button variant="ghost" onClick={onClose}>
                 ✕
               </Button>
             </Flex>
           </Flex>
         </Drawer.Header>
 
-        <Box
-          p="4"
-          w="100%"
-          maxW="600px"
-          h="calc(100vh - 80px)"
-          style={{ overflowY: 'auto' }}>
+        <Flex
+          align="center"
+          justify="space-between"
+          mx="xl"
+          borderBottom="1px solid"
+          borderColor="border">
+          {selectableFiles.length > 0 && (
+            <>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleSelectAll}
+                title={
+                  allSelectableSelected ? 'Select all files' : 'Deselect all'
+                }
+                disabled={isLoading}>
+                {allSelectableSelected ? (
+                  <CheckSquareIcon size={16} />
+                ) : (
+                  <SquareIcon size={16} />
+                )}
+                <Text as="span" ml="sm">
+                  {allSelectableSelected ? 'None' : 'All'}
+                </Text>
+              </Button>
+            </>
+          )}
+          {files.length > 0 && (
+            <Text fontSize="xs" color="gray.900">
+              Showing {files.length} files
+              {hasMoreFiles && ' (more available)'}
+            </Text>
+          )}
+        </Flex>
+
+        <Box p="md" px="xl" w="540px" h="calc(100vh - 80px)" overflowY="auto">
           {error && (
             <Box
-              p="4"
-              mb="4"
-              style={{
-                border: '1px solid #ef4444',
-                borderRadius: '8px',
-                backgroundColor: '#fef2f2',
-              }}>
-              <Text style={{ color: '#991b1b' }}>{error}</Text>
+              p="md"
+              mb="md"
+              border="1px solid"
+              borderColor="red.300"
+              borderRadius="md">
+              <Text color="red.500">{error}</Text>
             </Box>
           )}
 
@@ -424,20 +405,13 @@ export const GoogleDriveDrawer: React.FC<GoogleDriveDrawerProps> = ({
             <Box
               p="4"
               mb="4"
-              style={{
-                border: '1px solid #3b82f6',
-                borderRadius: '8px',
-                backgroundColor: '#eff6ff',
-              }}>
+              border="1px solid"
+              borderColor="blue.300"
+              borderRadius="md"
+              bg="blue.50">
               <Flex align="center" gap="2">
-                <ArrowsClockwise
-                  size={16}
-                  style={{
-                    color: '#3b82f6',
-                    animation: 'spin 1s linear infinite',
-                  }}
-                />
-                <Text style={{ color: '#1e40af' }}>
+                <ArrowsClockwiseIcon size={16} color="blue.500" />
+                <Text color="blue.900">
                   Importing {selectedFiles.size} files to repository...
                 </Text>
               </Flex>
@@ -445,14 +419,6 @@ export const GoogleDriveDrawer: React.FC<GoogleDriveDrawerProps> = ({
           )}
 
           {/* Pagination Info */}
-          {files.length > 0 && (
-            <Box p="2" mb="2" style={{ borderBottom: '1px solid #e5e7eb' }}>
-              <Text fontSize="xs" color="gray.900">
-                Showing {files.length} files
-                {hasMoreFiles && ' (more available)'}
-              </Text>
-            </Box>
-          )}
 
           {isLoading && files.length === 0 ? (
             <Flex justify="center" align="center" h="200px">
@@ -460,12 +426,12 @@ export const GoogleDriveDrawer: React.FC<GoogleDriveDrawerProps> = ({
                 <Text color="gray.900">Loading Google Drive files...</Text>
               </Flex>
             </Flex>
-          ) : files.length === 0 ? (
+          ) : files.length === 0 && !error ? (
             <Flex justify="center" align="center" h="200px">
               <Text color="gray.900">No files found in Google Drive</Text>
             </Flex>
           ) : (
-            <Flex direction="column" px="md">
+            <Flex direction="column">
               {files.map((file) => (
                 <Box
                   key={file.id}
@@ -530,20 +496,11 @@ export const GoogleDriveDrawer: React.FC<GoogleDriveDrawerProps> = ({
                               </Text>
                             </>
                           )}
-                          {file.mime_type && (
-                            <>
-                              <Text color="text-secondary">•</Text>
-                              <Text fontSize="xs" color="text-secondary">
-                                {file.mime_type.split('/')[1]?.toUpperCase() ||
-                                  'FILE'}
-                              </Text>
-                            </>
-                          )}
                         </Flex>
                       </Flex>
                     </Flex>
 
-                    <Flex align="center" gap="2" style={{ flexShrink: '0' }}>
+                    <Flex align="center" gap="md" flexShrink="0">
                       {file.metadata?.web_view_link && (
                         <Button
                           variant="ghost"
@@ -552,7 +509,7 @@ export const GoogleDriveDrawer: React.FC<GoogleDriveDrawerProps> = ({
                             window.open(file.metadata.web_view_link, '_blank')
                           }
                           title="Open in Google Drive">
-                          <ArrowSquareOut size={16} />
+                          <ArrowSquareOutIcon size={16} />
                         </Button>
                       )}
 
@@ -593,14 +550,8 @@ export const GoogleDriveDrawer: React.FC<GoogleDriveDrawerProps> = ({
               {isLoadingMore && (
                 <Flex justify="center" p="4">
                   <Flex align="center" gap="2">
-                    <ArrowsClockwise
-                      size={16}
-                      style={{
-                        color: '#6b7280',
-                        animation: 'spin 1s linear infinite',
-                      }}
-                    />
-                    <Text fontSize="sm" style={{ color: '#6b7280' }}>
+                    <ArrowsClockwiseIcon size={16} color="gray.900" />
+                    <Text fontSize="sm" color="gray.900">
                       Loading more files...
                     </Text>
                   </Flex>
@@ -609,6 +560,20 @@ export const GoogleDriveDrawer: React.FC<GoogleDriveDrawerProps> = ({
             </Flex>
           )}
         </Box>
+        <Flex flexShrink="0" px="xl" py="md" gap="sm">
+          <Button variant="secondary" onClick={onClose}>
+            Cancel
+          </Button>
+          {someSelected && (
+            <Button
+              onClick={handleBulkImport}
+              disabled={isImporting || isLoading}
+              title={`Import ${selectedFiles.size} selected files`}>
+              <ArrowSquareInIcon size={16} />
+              Import ({selectedFiles.size})
+            </Button>
+          )}
+        </Flex>
       </Drawer>
     </>
   );

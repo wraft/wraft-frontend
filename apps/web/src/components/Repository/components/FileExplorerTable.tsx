@@ -248,35 +248,26 @@ export const RepositoryTable: React.FC<{
         const item = row.original;
         return (
           <Flex gap="xs" justifyContent="flex-end">
-            {!item.is_folder && onDownload && (
-              <Button
-                variant="ghost"
-                size="xs"
-                onClick={() => onDownload(item)}>
-                <DownloadIcon size={16} />
-              </Button>
-            )}
-            {!item.is_folder && onShare && (
-              <Button variant="ghost" size="xs" onClick={() => onShare(item)}>
-                <ShareIcon size={16} />
-              </Button>
-            )}
             <DropdownMenu.Provider>
               <DropdownMenu.Trigger>
                 <Button variant="ghost" size="xs">
-                  <DotsThreeVerticalIcon size={16} />
+                  <DotsThreeVerticalIcon size={14} />
                 </Button>
               </DropdownMenu.Trigger>
               <DropdownMenu>
                 <DropdownMenu.Item onClick={() => onRename(item)}>
-                  <PencilSimpleIcon size={16} />
-                  <Text>Rename</Text>
+                  <PencilSimpleIcon size={14} />
+                  <Text ml="sm">Rename</Text>
                 </DropdownMenu.Item>
-                <DropdownMenu.Item
-                  onClick={() => onDelete(item)}
-                  className="text-red-500">
+                {!item.is_folder && onDownload && (
+                  <DropdownMenu.Item onClick={() => onDownload(item)}>
+                    <DownloadIcon size={14} />
+                    <Text ml="sm">Download</Text>
+                  </DropdownMenu.Item>
+                )}
+                <DropdownMenu.Item onClick={() => onDelete(item)}>
                   <TrashIcon size={16} />
-                  <Text>Delete</Text>
+                  <Text ml="sm">Delete</Text>
                 </DropdownMenu.Item>
               </DropdownMenu>
             </DropdownMenu.Provider>

@@ -2,33 +2,32 @@ import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 
 import { fetchAPI, postAPI, deleteAPI, putAPI } from 'utils/models';
 
-import {
-  StorageItem,
-  ApiResponse,
-  BreadcrumbItem,
-  CurrentFolder,
-} from '../types';
+import { ApiResponse } from '../types';
 import { useRepositoryDataStore } from '../store/repositoryDataStore';
+import { useRepositoryUIStore } from '../store/repositoryUIStore';
 
 export const useRepository = (currentFolderId: string | null) => {
-  // Get store actions for syncing data
-  const {
-    setItems: setStoreItems,
-    setBreadcrumbs: setStoreBreadcrumbs,
-    setCurrentFolder: setStoreCurrentFolder,
-    setLoading: setStoreLoading,
-    setError: setStoreError,
-  } = useRepositoryDataStore();
-
-  const [items, setItems] = useState<StorageItem[]>([]);
-  const [breadcrumbs, setBreadcrumbs] = useState<BreadcrumbItem[]>([]);
-  const [currentFolder, setCurrentFolder] = useState<CurrentFolder | null>(
-    null,
-  );
   const [error, setError] = useState<Error | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const lastFolderIdRef = useRef<string | null>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
+
+  // Data store actions
+  const {
+    items,
+    breadcrumbs,
+    currentFolder,
+    setItems,
+    setBreadcrumbs,
+    setCurrentFolder,
+    setLoading,
+    setError: setDataError,
+    addItem,
+    removeItem,
+  } = useRepositoryDataStore();
+
+  const { closeDeleteModal, closeNewFolderModal, closeUploadModal } =
+    useRepositoryUIStore();
 
   const fetchContents = useCallback(async () => {
     // Cancel previous request if it exists
@@ -41,9 +40,8 @@ export const useRepository = (currentFolderId: string | null) => {
 
     try {
       setIsLoading(true);
-      setStoreLoading(true);
       setError(null);
-      setStoreError(null);
+      setDataError(null);
       lastFolderIdRef.current = currentFolderId;
 
       const url = currentFolderId
@@ -54,15 +52,9 @@ export const useRepository = (currentFolderId: string | null) => {
 
       const { data, breadcrumbs: apiBreadcrumbs, current_folder } = response;
 
-      // Set the unified items directly - no transformation needed
       setItems(data);
       setBreadcrumbs(apiBreadcrumbs);
       setCurrentFolder(current_folder || null);
-
-      // Sync with store
-      setStoreItems(data);
-      setStoreBreadcrumbs(apiBreadcrumbs);
-      setStoreCurrentFolder(current_folder || null);
     } catch (err: any) {
       // Don't set error if request was aborted
       if (err.name === 'AbortError') {
@@ -71,25 +63,23 @@ export const useRepository = (currentFolderId: string | null) => {
 
       const errorMessage =
         err instanceof Error
-          ? err.message
-          : 'Failed to fetch repository contents';
-
-      setError(err instanceof Error ? err : new Error(errorMessage));
-      setStoreError(errorMessage);
-
+          ? err
+          : new Error('Failed to fetch repository contents');
+      setError(errorMessage);
+      setDataError(errorMessage.message);
       setItems([]);
       setBreadcrumbs([]);
       setCurrentFolder(null);
-
-      // Sync empty state with store
-      setStoreItems([]);
-      setStoreBreadcrumbs([]);
-      setStoreCurrentFolder(null);
     } finally {
       setIsLoading(false);
-      setStoreLoading(false);
     }
-  }, [currentFolderId]);
+  }, [
+    currentFolderId,
+    setItems,
+    setBreadcrumbs,
+    setCurrentFolder,
+    setDataError,
+  ]);
 
   const createFolder = useCallback(
     async (name: string) => {
@@ -112,7 +102,6 @@ export const useRepository = (currentFolderId: string | null) => {
 
         return response;
       } catch (err) {
-        // Remove all console.error statements
         console.error(err);
       }
     },
@@ -126,7 +115,7 @@ export const useRepository = (currentFolderId: string | null) => {
         // Immediately refresh contents after deleting folder
         await fetchContents();
       } catch (err) {
-        // Remove all console.error statements
+        console.error(err);
       }
     },
     [fetchContents],
@@ -139,7 +128,7 @@ export const useRepository = (currentFolderId: string | null) => {
         // Immediately refresh contents after deleting file
         await fetchContents();
       } catch (err) {
-        // Remove all console.error statements
+        console.error(err);
       }
     },
     [fetchContents],
@@ -173,11 +162,14 @@ export const useRepository = (currentFolderId: string | null) => {
         // Immediately refresh contents after upload
         await fetchContents();
       } catch (err) {
-        setError(err instanceof Error ? err : new Error('An error occurred'));
+        const errorMessage =
+          err instanceof Error ? err : new Error('An error occurred');
+        setError(errorMessage);
+        setDataError(errorMessage.message);
         throw err;
       }
     },
-    [currentFolderId, fetchContents],
+    [currentFolderId, fetchContents, setDataError],
   );
 
   const renameItem = useCallback(
@@ -193,7 +185,7 @@ export const useRepository = (currentFolderId: string | null) => {
         }
         return true;
       } catch (err) {
-        // Remove all console.error statements
+        console.error(err);
         return false;
       }
     },
@@ -303,21 +295,30 @@ export const useRepository = (currentFolderId: string | null) => {
     if (fallbackBreadcrumbs.length > 0 && breadcrumbs.length === 0) {
       setBreadcrumbs(fallbackBreadcrumbs);
     }
-  }, [fallbackBreadcrumbs, breadcrumbs.length]);
+  }, [fallbackBreadcrumbs, breadcrumbs.length, setBreadcrumbs]);
 
   return {
-    // Unified items array - no transformation needed
+    // Data
     items,
     breadcrumbs: combinedBreadcrumbs,
     currentFolder,
-    // Common
     error,
     isLoading,
+
+    // Operations
     createFolder,
     deleteFolder,
     deleteFile,
     uploadFile,
     renameItem,
     refreshContents: fetchContents,
+
+    // Store actions for optimistic updates
+    addItem,
+    removeItem,
+    setLoading,
+    closeDeleteModal,
+    closeNewFolderModal,
+    closeUploadModal,
   };
 };

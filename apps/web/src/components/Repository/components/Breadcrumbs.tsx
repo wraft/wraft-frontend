@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, Button, Flex } from '@wraft/ui';
-import { CaretRight, House } from '@phosphor-icons/react';
+import { CaretRightIcon, HouseIcon } from '@phosphor-icons/react';
 
 import { IconFrame } from 'common/Atoms';
 
@@ -22,8 +22,9 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = React.memo(
           aria-label="Go to Home"
           tabIndex={0}>
           <IconFrame>
-            <House size={14} />
+            <HouseIcon size={14} />
           </IconFrame>
+          home
         </Button>
         {items.map((item, index) => {
           const isLastItem = index === items.length - 1;
@@ -31,10 +32,9 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = React.memo(
           return (
             <Flex key={item.id} alignItems="center" gap="xs">
               <IconFrame>
-                <CaretRight size={13} />
+                <CaretRightIcon size={13} />
               </IconFrame>
               {isLastItem ? (
-                // Current folder - non-clickable, different styling
                 <Text
                   as="span"
                   fontSize="sm"
@@ -45,7 +45,6 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = React.memo(
                   {item.name}
                 </Text>
               ) : (
-                // Navigable breadcrumb item
                 <Button
                   variant="ghost"
                   size="xs"

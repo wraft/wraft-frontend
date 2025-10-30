@@ -108,13 +108,15 @@ export const useItemOperations = ({
           last_accessed_at: null,
           inserted_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
-          assets: [],
+          asset: undefined,
         };
 
         // Optimistic update - immediately add to UI
         addItem(optimisticFolder);
 
-        await createFolder(data.name);
+        const ss = await createFolder(data.name);
+
+        console.log('working', ss);
         // No need to call refreshContents() - createFolder handles it internally
       } catch (err) {
         // Revert optimistic update on error
@@ -165,7 +167,7 @@ export const useItemOperations = ({
           last_accessed_at: null,
           inserted_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
-          assets: [],
+          asset: undefined,
         }));
 
         // Optimistic update - immediately add to UI

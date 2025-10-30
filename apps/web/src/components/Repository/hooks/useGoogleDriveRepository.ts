@@ -129,8 +129,8 @@ export const useGoogleDriveRepository = (
       last_accessed_at: null,
       inserted_at: driveFile.createdTime,
       updated_at: driveFile.modifiedTime,
-      assets: driveFile.thumbnailLink
-        ? [{ url: driveFile.thumbnailLink }]
+      asset: driveFile.thumbnailLink
+        ? { url: driveFile.thumbnailLink }
         : undefined,
       repository_id: 'google_drive',
       parent_id: driveFile.parents?.[0] || undefined,
@@ -203,7 +203,8 @@ export const useGoogleDriveRepository = (
         console.error('Error fetching Google Drive files:', error);
         setState((prev) => ({
           ...prev,
-          error: 'Failed to fetch Google Drive files',
+          error:
+            'Unable to retrieve Google Drive files. Ensure that the integration is active or reconnect your Google Drive account.',
           isLoading: false,
           isLoadingMore: false,
         }));

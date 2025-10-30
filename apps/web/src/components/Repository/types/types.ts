@@ -40,7 +40,7 @@ export interface StorageItem {
   last_accessed_at: string | null;
   inserted_at: string;
   updated_at: string;
-  assets?: Array<{ url: string }>;
+  asset?: { url: string };
   repository_id?: string;
   parent_id?: string;
 }
@@ -71,7 +71,7 @@ export interface StorageItemDetails {
   metadata: Record<string, any>;
   classification_level: string;
   depth_level: number;
-  assets: Array<{ url: string }>;
+  asset?: { url: string };
 }
 
 // ============================================================================

@@ -34,3 +34,5 @@ export { default as EmptyFileExplorer } from './EmptyFileExplorer';
 
 // Utility components
 export { default as DocumentScanner } from './DocumentScanner';
+export { StorageQuotaDisplay } from './StorageQuotaDisplay';
+export { SearchBar } from './SearchBar';

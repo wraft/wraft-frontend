@@ -14,15 +14,18 @@ import {
   FileTextIcon,
   CloudArrowDownIcon,
 } from '@phosphor-icons/react';
+import toast from 'react-hot-toast';
 
 import ConfirmDelete from 'common/ConfirmDelete';
 import { FileDropZone } from 'common/FileDropZone';
 
 import Breadcrumbs from './Breadcrumbs';
 import { RepositoryTable } from './FileExplorerTable';
+import { ListView } from './ListView';
+import { ViewToggle, ViewType } from './ViewToggle';
 import { NewFolderModal } from './NewFolderModal';
 import { RenameModal } from './RenameModal';
-import { StorageItem } from '../types';
+import { StorageItem, StorageItemDetails } from '../types';
 import { useRepository } from '../hooks/useRepository';
 import { useRepositorySetup } from '../hooks/useRepositorySetup';
 import { useFolderNavigation } from '../hooks/useFolderNavigation';
@@ -30,6 +33,7 @@ import { useFileDetails } from '../hooks/useFileDetails';
 import { useRepositoryActions } from '../hooks/useRepositoryActions';
 import { useItemOperations } from '../hooks/useItemOperations';
 import { useUrlSync } from '../hooks/useUrlSync';
+import { useSearch } from '../hooks/useSearch';
 import {
   useRepositoryItems,
   useCurrentFolder,
@@ -47,6 +51,9 @@ import { StorageItemDetails as StorageItemDetailsComponent } from './StorageItem
 import { RepositoryErrorBoundary } from './RepositoryErrorBoundary';
 import { RepositorySetupSection } from './RepositorySetupSection';
 import { GoogleDriveDrawer } from './GoogleDriveDrawer';
+import { StorageQuotaDisplay } from './StorageQuotaDisplay';
+import { SearchBar, SearchFilters } from './SearchBar';
+import { RepositoryService } from '../services/repositoryService';
 
 const RepositoryComponent: React.FC = React.memo(() => {
   const router = useRouter();
@@ -57,6 +64,7 @@ const RepositoryComponent: React.FC = React.memo(() => {
   const [isRepositorySetupModalOpen, setIsRepositorySetupModalOpen] =
     useState(false);
   const [isGoogleDriveDrawerOpen, setIsGoogleDriveDrawerOpen] = useState(false);
+  const [currentView, setCurrentView] = useState<ViewType>('table');
 
   // Custom hooks
   const { currentFolderId, navigateToFolder, navigateToRoot } =
@@ -122,6 +130,17 @@ const RepositoryComponent: React.FC = React.memo(() => {
 
   // URL synchronization hook
   const { handleItemClick, handleCloseItemDetails } = useUrlSync();
+
+  // Search hook
+  const {
+    search,
+    clearSearch,
+    isSearchActive,
+    results: searchResults,
+    isSearching,
+    error: searchError,
+    totalResults,
+  } = useSearch();
 
   // Modal state hooks
   const isNewFolderModalOpen = useIsNewFolderModalOpen();
@@ -202,19 +221,52 @@ const RepositoryComponent: React.FC = React.memo(() => {
     [setupRepository, refreshContents],
   );
 
-  const handleDownload = useCallback(async (_itemId: string) => {
-    // TODO: Implement download functionality
-  }, []);
+  const handleDownload = useCallback(
+    async (item: StorageItem | StorageItemDetails) => {
+      console.log('test [handleDownload]', item);
+      try {
+        await RepositoryService.downloadFile(item);
+      } catch (error) {
+        toast.error('Failed to download file');
+      }
+    },
+    [],
+  );
 
-  const handleShare = useCallback(async (_item: any) => {
-    // TODO: Implement share functionality
-  }, []);
+  const handleShare = useCallback(
+    async (item: StorageItem | StorageItemDetails) => {
+      // TODO: Implement share functionality
+      console.log('Share item:', item.id);
+    },
+    [],
+  );
 
   // Memoized loading state
   const isAnyLoading = useMemo(
-    () => isSetupLoading || isRepositoryLoading || isRepositoryDataLoading,
-    [isSetupLoading, isRepositoryLoading, isRepositoryDataLoading],
+    () =>
+      isSetupLoading ||
+      isRepositoryLoading ||
+      isRepositoryDataLoading ||
+      isSearching,
+    [isSetupLoading, isRepositoryLoading, isRepositoryDataLoading, isSearching],
   );
+
+  // Handle search
+  const handleSearch = useCallback(
+    async (query: string, filters: SearchFilters) => {
+      await search(query, filters);
+    },
+    [search],
+  );
+
+  const handleClearSearch = useCallback(() => {
+    clearSearch();
+  }, [clearSearch]);
+
+  // Determine which items to display
+  const displayItems = useMemo(() => {
+    return isSearchActive ? searchResults : items;
+  }, [isSearchActive, searchResults, items]);
 
   const handleToggleDrawerExpand = () => {
     setIsDrawerExpanded(!isDrawerExpanded);
@@ -279,58 +331,129 @@ const RepositoryComponent: React.FC = React.memo(() => {
     );
   }
 
-  console.log('test abc [isDeleteModalOpen]', isDeleteModalOpen);
+  console.log('test [breadcrumbsRepository]', breadcrumbsRepository);
 
   // Repository is set up, show content
   return (
     <Box>
-      <Flex justify="space-between" align="center" mb="4">
+      <Flex justify="space-between" align="center" mb="lg">
         <Breadcrumbs
           items={breadcrumbsRepository}
           onNavigate={handleBreadcrumbClick}
         />
         <Flex gap="sm" alignItems="center">
           <Button
-            variant="ghost"
+            variant="secondary"
             size="sm"
             onClick={openNewFolderModal}
             disabled={isAnyLoading}>
             <FolderSimplePlusIcon weight="regular" size={16} />
+            New Folder
           </Button>
           <Button
-            variant="ghost"
+            variant="secondary"
             size="sm"
             onClick={openUploadModal}
             disabled={isAnyLoading}>
             <UploadSimpleIcon weight="regular" size={16} />
+            Upload Files
           </Button>
 
           <Button
-            variant="ghost"
+            variant="secondary"
             size="sm"
             onClick={() => setIsGoogleDriveDrawerOpen(true)}
             title="Google Drive Files">
             <CloudArrowDownIcon weight="regular" size={16} />
+            Google Drive Files
           </Button>
+          <ViewToggle
+            currentView={currentView}
+            onViewChange={setCurrentView}
+            disabled={isAnyLoading}
+          />
         </Flex>
       </Flex>
 
-      {!items.length && (
+      <Box mb="lg">
+        <SearchBar
+          onSearch={handleSearch}
+          onClear={handleClearSearch}
+          isLoading={isSearching}
+        />
+      </Box>
+
+      {/* Search Bar */}
+
+      {/* Search Results Info */}
+      {isSearchActive && (
+        <Box mb="md">
+          <Flex justify="space-between" align="center">
+            <Text fontSize="sm" color="text-secondary">
+              {isSearching
+                ? 'Searching...'
+                : `Found ${totalResults} result${totalResults !== 1 ? 's' : ''}`}
+            </Text>
+            {searchError && (
+              <Text fontSize="sm" color="error">
+                {searchError}
+              </Text>
+            )}
+          </Flex>
+        </Box>
+      )}
+
+      {!displayItems.length && !isSearchActive && (
         <EmptyRepository
           onNewFolder={openNewFolderModal}
           onUpload={openUploadModal}
         />
       )}
 
-      {items.length > 0 && (
-        <RepositoryTable
-          items={items}
-          onItemClick={(item) => handleItemClick(item, navigateToFolder)}
-          onDelete={handleDeleteItem}
-          onRename={openRenameModal}
-          onNewFolder={openNewFolderModal}
-        />
+      {/* No search results */}
+      {isSearchActive && !displayItems.length && !isSearching && (
+        <Box textAlign="center" py="xl">
+          <Text fontSize="lg" color="text-secondary" mb="sm">
+            No results found
+          </Text>
+          <Text fontSize="sm" color="text-secondary">
+            Try adjusting your search terms or filters
+          </Text>
+        </Box>
       )}
+
+      {displayItems.length > 0 && (
+        <>
+          {currentView === 'table' ? (
+            <RepositoryTable
+              items={displayItems}
+              onItemClick={(item) => handleItemClick(item, navigateToFolder)}
+              onDelete={handleDeleteItem}
+              onRename={openRenameModal}
+              onNewFolder={openNewFolderModal}
+              onDownload={handleDownload}
+              onShare={handleShare}
+              isLoading={isAnyLoading}
+            />
+          ) : (
+            <ListView
+              items={displayItems}
+              onItemClick={(item) => handleItemClick(item, navigateToFolder)}
+              onDelete={handleDeleteItem}
+              onRename={openRenameModal}
+              onNewFolder={openNewFolderModal}
+              onDownload={handleDownload}
+              onShare={handleShare}
+              isLoading={isAnyLoading}
+            />
+          )}
+        </>
+      )}
+
+      {/* Storage Quota Display */}
+      <Box mt="lg">
+        <StorageQuotaDisplay />
+      </Box>
 
       <NewFolderModal
         isOpen={isNewFolderModalOpen}
@@ -438,7 +561,7 @@ const RepositoryComponent: React.FC = React.memo(() => {
               <>
                 <Button
                   variant="secondary"
-                  onClick={handleShare}
+                  onClick={() => handleShare(selectedItemDetails)}
                   title="Share file"
                   size="sm">
                   <ShareIcon size={16} />
@@ -455,7 +578,7 @@ const RepositoryComponent: React.FC = React.memo(() => {
                 </Button>
                 <Button
                   variant="secondary"
-                  onClick={() => handleDownload(selectedItemDetails.id)}
+                  onClick={() => handleDownload(selectedItemDetails)}
                   title="Download file"
                   size="sm">
                   <DownloadIcon size={16} />

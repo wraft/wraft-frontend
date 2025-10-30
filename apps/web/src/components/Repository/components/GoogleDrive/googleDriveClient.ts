@@ -47,6 +47,13 @@ export interface DriveListResponse {
   next_page_token?: string;
 }
 
+export interface DriveStorageQuota {
+  limit: string;
+  usage: string;
+  usageInDrive: string;
+  usageInDriveTrash: string;
+}
+
 /**
  * Get authorization URL from server
  */
@@ -135,6 +142,21 @@ export async function revokeToken(accessToken: string): Promise<boolean> {
   } catch (error) {
     console.error('Error revoking token:', error);
     return false;
+  }
+}
+
+/**
+ * Get Google Drive storage quota information
+ */
+export async function getStorageQuota(): Promise<DriveStorageQuota> {
+  try {
+    const response = (await fetchAPI(
+      'clouds/google/quota',
+    )) as DriveStorageQuota;
+    return response;
+  } catch (error) {
+    console.error('Error getting storage quota:', error);
+    throw error;
   }
 }
 
