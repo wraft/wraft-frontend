@@ -170,13 +170,13 @@ const TabularData: React.FC<{ item: any }> = ({ item }) => {
 
 // Preview component with proper file handling
 const PreviewView: React.FC<{ item: any }> = ({ item }) => {
-  // Get the file URL from assets array
+  // Get the file URL from asset
   const fileUrl = useMemo(() => {
-    if (item.assets && item.assets.length > 0) {
-      return item.assets[0].url;
+    if (item.asset && item.asset.url) {
+      return item.asset.url;
     }
     return null;
-  }, [item.assets]);
+  }, [item.asset]);
 
   if (!fileUrl) {
     return (
@@ -328,9 +328,8 @@ export const StorageItemDetails: React.FC<StorageItemDetailsProps> = ({
   const canPreview =
     isFile &&
     itemData.content_extracted &&
-    itemData.assets &&
-    itemData.assets.length > 0 &&
-    itemData.assets[0].url;
+    itemData.asset &&
+    itemData.asset.url;
 
   // const handleToggleExpand = () => {
   //   onToggleExpand?.();

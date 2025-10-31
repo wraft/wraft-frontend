@@ -40,7 +40,6 @@ export const RepositoryTable: React.FC<{
   onRename,
   onDelete,
   onDownload,
-  onShare,
   isLoading = false,
 }) => {
   const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());

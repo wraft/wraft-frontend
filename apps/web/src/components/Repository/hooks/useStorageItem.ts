@@ -34,7 +34,7 @@ interface StorageItemDetails {
   last_accessed_at: string | null;
   inserted_at: string;
   updated_at: string;
-  assets: any[];
+  asset?: { url: string };
   repository_id?: string;
   parent_id?: string;
 }

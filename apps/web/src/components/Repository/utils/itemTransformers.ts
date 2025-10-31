@@ -45,7 +45,7 @@ export const toDetailedItem = (item: StorageItem) => ({
   last_accessed_at: item.last_accessed_at || null,
   inserted_at: item.inserted_at || item.modified,
   updated_at: item.updated_at || item.modified,
-  assets: item.assets || [],
+  asset: item.asset || null,
 });
 
 /**
