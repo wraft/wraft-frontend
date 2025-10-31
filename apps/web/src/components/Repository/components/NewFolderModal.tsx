@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { Box, Flex, Button, Text, Modal, Label } from '@wraft/ui';
-import { Input } from 'theme-ui';
+import { Box, Flex, Button, Text, Modal, Field, InputText } from '@wraft/ui';
 import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
+
+import { validateFolderName } from '../utils/validationUtils';
 
 interface NewFolderModalProps {
   isOpen: boolean;
@@ -17,6 +19,7 @@ export const NewFolderModal: React.FC<NewFolderModalProps> = ({
   const {
     register,
     handleSubmit,
+    setError,
     reset,
     formState: { errors },
   } = useForm<{ name: string }>();
@@ -28,8 +31,11 @@ export const NewFolderModal: React.FC<NewFolderModalProps> = ({
       await onSubmit(data);
       reset();
       onClose();
-    } catch (error) {
-      console.error('Error creating folder:', error);
+    } catch (error: any) {
+      setError('name', {
+        type: 'manual',
+        message: 'Folder already exists',
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -43,23 +49,18 @@ export const NewFolderModal: React.FC<NewFolderModalProps> = ({
         </Text>
         <Box as="form" onSubmit={handleSubmit(handleFormSubmit)} w="360px">
           <Box mb="md">
-            <Label htmlFor="folderName">Folder Name</Label>
-            <Input
-              id="folderName"
-              {...register('name', {
-                required: 'Folder name is required',
-                minLength: {
-                  value: 2,
-                  message: 'Folder name must be at least 2 characters',
-                },
-              })}
-              placeholder="Enter folder name"
-            />
-            {errors.name && (
-              <Text color="error" fontSize="sm" mt="sm">
-                {errors.name.message}
-              </Text>
-            )}
+            <Field label="Folder Name" required error={errors?.name?.message}>
+              <InputText
+                {...register('name', {
+                  required: 'Folder name is required',
+                  validate: (value: string) => {
+                    const validation = validateFolderName(value);
+                    return validation.isValid || validation.error;
+                  },
+                })}
+                placeholder="Enter folder name"
+              />
+            </Field>
           </Box>
           <Flex gap="sm" mt="sm">
             <Button type="submit" disabled={isSubmitting}>

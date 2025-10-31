@@ -97,12 +97,12 @@ export const useRepository = (currentFolderId: string | null) => {
 
         const response = await postAPI('storage/folder', formData);
 
-        // Immediately refresh contents after creating folder
         await fetchContents();
 
         return response;
       } catch (err) {
-        console.error(err);
+        console.error('Error creating folder:', err);
+        throw err;
       }
     },
     [currentFolder, fetchContents],
@@ -112,10 +112,11 @@ export const useRepository = (currentFolderId: string | null) => {
     async (folderId: string) => {
       try {
         await deleteAPI(`storage/items/${folderId}`);
-        // Immediately refresh contents after deleting folder
         await fetchContents();
       } catch (err) {
-        console.error(err);
+        console.error('Error deleting folder:', err);
+        // Re-throw the error so it can be handled by the calling code
+        throw err;
       }
     },
     [fetchContents],
@@ -125,10 +126,11 @@ export const useRepository = (currentFolderId: string | null) => {
     async (fileId: string) => {
       try {
         await deleteAPI(`storage/items/${fileId}`);
-        // Immediately refresh contents after deleting file
         await fetchContents();
       } catch (err) {
-        console.error(err);
+        console.error('Error deleting file:', err);
+        // Re-throw the error so it can be handled by the calling code
+        throw err;
       }
     },
     [fetchContents],
@@ -159,7 +161,6 @@ export const useRepository = (currentFolderId: string | null) => {
 
         await Promise.all(uploadPromises);
 
-        // Immediately refresh contents after upload
         await fetchContents();
       } catch (err) {
         const errorMessage =

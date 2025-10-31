@@ -74,18 +74,15 @@ const RepositoryComponent: React.FC = React.memo(() => {
     isSetup: isSetupFromHook,
     isLoading: isSetupLoading,
     error: setupError,
-    // repositories,
     setupRepository,
     checkSetup,
   } = useRepositorySetup();
 
-  // Get data from repositoryDataStore
   const items = useRepositoryItems();
   const currentFolder = useCurrentFolder();
   const breadcrumbsRepository = useBreadcrumbs();
   const isRepositoryDataLoading = useRepositoryDataLoading();
 
-  // Get operations from useRepository hook
   const {
     createFolder,
     deleteFolder,
@@ -98,7 +95,6 @@ const RepositoryComponent: React.FC = React.memo(() => {
 
   console.log('test abc [items]', items);
 
-  // File details hook
   const {
     selectedItemDetails,
     fileDetailsLoading,
@@ -107,7 +103,6 @@ const RepositoryComponent: React.FC = React.memo(() => {
     // clearFileDetails,
   } = useFileDetails();
 
-  // Repository actions hook
   const {
     isRenameModalOpen,
     isItemDetailsOpen,
@@ -128,10 +123,8 @@ const RepositoryComponent: React.FC = React.memo(() => {
     // removeItem,
   } = useRepositoryActions();
 
-  // URL synchronization hook
   const { handleItemClick, handleCloseItemDetails } = useUrlSync();
 
-  // Search hook
   const {
     search,
     clearSearch,
@@ -142,12 +135,10 @@ const RepositoryComponent: React.FC = React.memo(() => {
     totalResults,
   } = useSearch();
 
-  // Modal state hooks
   const isNewFolderModalOpen = useIsNewFolderModalOpen();
   const itemToDelete = useItemToDelete();
   const itemToRename = useItemToRename();
 
-  // Item operations hook
   const { handleDelete, handleNewFolder, handleUpload, handleRename } =
     useItemOperations({
       createFolder,
@@ -157,7 +148,6 @@ const RepositoryComponent: React.FC = React.memo(() => {
       renameItem,
     });
 
-  // Sync the Zustand store with the repository setup status
   useEffect(() => {
     setIsSetup(isSetupFromHook);
   }, [isSetupFromHook, setIsSetup]);
@@ -215,7 +205,6 @@ const RepositoryComponent: React.FC = React.memo(() => {
   const handleSetupRepository = useCallback(
     async (data: { name: string; description?: string }) => {
       await setupRepository(data);
-      // After setup, refresh contents to load the repository
       await refreshContents();
     },
     [setupRepository, refreshContents],
@@ -241,7 +230,6 @@ const RepositoryComponent: React.FC = React.memo(() => {
     [],
   );
 
-  // Memoized loading state
   const isAnyLoading = useMemo(
     () =>
       isSetupLoading ||
@@ -251,7 +239,6 @@ const RepositoryComponent: React.FC = React.memo(() => {
     [isSetupLoading, isRepositoryLoading, isRepositoryDataLoading, isSearching],
   );
 
-  // Handle search
   const handleSearch = useCallback(
     async (query: string, filters: SearchFilters) => {
       await search(query, filters);
@@ -263,7 +250,6 @@ const RepositoryComponent: React.FC = React.memo(() => {
     clearSearch();
   }, [clearSearch]);
 
-  // Determine which items to display
   const displayItems = useMemo(() => {
     return isSearchActive ? searchResults : items;
   }, [isSearchActive, searchResults, items]);
@@ -272,7 +258,6 @@ const RepositoryComponent: React.FC = React.memo(() => {
     setIsDrawerExpanded(!isDrawerExpanded);
   };
 
-  // Show loading state while checking setup
   if (isSetupLoading) {
     return (
       <Box>
@@ -283,7 +268,6 @@ const RepositoryComponent: React.FC = React.memo(() => {
     );
   }
 
-  // Show setup error if there's an issue
   if (setupError) {
     return (
       <Box>
@@ -305,7 +289,6 @@ const RepositoryComponent: React.FC = React.memo(() => {
     );
   }
 
-  // Show repository setup if not set up
   if (!isSetupFromHook) {
     return (
       <Box>
@@ -314,7 +297,6 @@ const RepositoryComponent: React.FC = React.memo(() => {
           isLoading={isAnyLoading}
         />
 
-        {/* Repository Setup Modal */}
         <Modal
           ariaLabel="Setup Repository"
           open={isRepositorySetupModalOpen}
@@ -333,7 +315,6 @@ const RepositoryComponent: React.FC = React.memo(() => {
 
   console.log('test [breadcrumbsRepository]', breadcrumbsRepository);
 
-  // Repository is set up, show content
   return (
     <Box>
       <Flex justify="space-between" align="center" mb="lg">
@@ -383,9 +364,6 @@ const RepositoryComponent: React.FC = React.memo(() => {
         />
       </Box>
 
-      {/* Search Bar */}
-
-      {/* Search Results Info */}
       {isSearchActive && (
         <Box mb="md">
           <Flex justify="space-between" align="center">
@@ -410,7 +388,6 @@ const RepositoryComponent: React.FC = React.memo(() => {
         />
       )}
 
-      {/* No search results */}
       {isSearchActive && !displayItems.length && !isSearching && (
         <Box textAlign="center" py="xl">
           <Text fontSize="lg" color="text-secondary" mb="sm">
@@ -489,7 +466,6 @@ const RepositoryComponent: React.FC = React.memo(() => {
         }
       />
 
-      {/* Upload Drawer */}
       <Drawer
         open={isUploadModalOpen}
         placement="right"
@@ -544,7 +520,6 @@ const RepositoryComponent: React.FC = React.memo(() => {
         </Box>
       </Drawer>
 
-      {/* Item Details Drawer */}
       <Drawer
         open={isItemDetailsOpen}
         placement="right"
@@ -607,7 +582,6 @@ const RepositoryComponent: React.FC = React.memo(() => {
         </Drawer.Header>
 
         {isDrawerExpanded ? (
-          // Expanded layout with centered viewer and floating toolbar
           <Box
             w="80%"
             h="calc(100vh - 80px)"
@@ -615,7 +589,6 @@ const RepositoryComponent: React.FC = React.memo(() => {
             mx="auto"
             overflow="hidden">
             <Flex h="100%" position="relative">
-              {/* Main content area - centered like DocumentContentBlock */}
               <Box
                 flex="1"
                 overflowY="auto"
@@ -635,7 +608,6 @@ const RepositoryComponent: React.FC = React.memo(() => {
                 </Box>
               </Box>
 
-              {/* Floating toolbar on the right */}
               <Box
                 position="absolute"
                 right="md"
@@ -690,7 +662,6 @@ const RepositoryComponent: React.FC = React.memo(() => {
             </Flex>
           </Box>
         ) : (
-          // Normal drawer layout
           <Box p="md" w="600px" overflowY="auto" h="calc(100vh - 80px)">
             <StorageItemDetailsComponent
               item={selectedItemDetails}
@@ -705,7 +676,6 @@ const RepositoryComponent: React.FC = React.memo(() => {
         )}
       </Drawer>
 
-      {/* Google Drive Drawer */}
       <GoogleDriveDrawer
         isOpen={isGoogleDriveDrawerOpen}
         onClose={() => setIsGoogleDriveDrawerOpen(false)}

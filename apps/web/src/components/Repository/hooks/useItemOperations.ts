@@ -31,7 +31,6 @@ export const useItemOperations = ({
     closeUploadModal,
   } = useRepositoryActions();
 
-  // Get the items from the UI store
   const itemToDelete = useItemToDelete();
   const itemToRename = useItemToRename();
 
@@ -41,7 +40,6 @@ export const useItemOperations = ({
     try {
       setLoading(true);
 
-      // Optimistic update - immediately remove from UI
       removeItem(itemToDelete.id);
 
       if (
@@ -52,9 +50,7 @@ export const useItemOperations = ({
       } else {
         await deleteFile(itemToDelete.id);
       }
-      // No need to call refreshContents() - deleteFolder/deleteFile handle it internally
     } catch (err) {
-      // Revert optimistic update on error - add the item back
       addItem(itemToDelete);
     } finally {
       setLoading(false);
@@ -72,12 +68,13 @@ export const useItemOperations = ({
 
   const handleNewFolder = useCallback(
     async (data: { name: string }, currentFolder?: any) => {
+      const tempId = `temp-${Date.now()}`;
+
       try {
         setLoading(true);
 
-        // Create optimistic folder item
         const optimisticFolder: StorageItem = {
-          id: `temp-${Date.now()}`, // Temporary ID
+          id: tempId,
           name: data.name,
           display_name: data.name,
           type: 'folder',
@@ -111,19 +108,15 @@ export const useItemOperations = ({
           asset: undefined,
         };
 
-        // Optimistic update - immediately add to UI
         addItem(optimisticFolder);
 
-        const ss = await createFolder(data.name);
-
-        console.log('working', ss);
-        // No need to call refreshContents() - createFolder handles it internally
+        await createFolder(data.name);
+        closeNewFolderModal();
       } catch (err) {
-        // Revert optimistic update on error
-        removeItem(`temp-${Date.now()}`);
+        removeItem(tempId);
+        throw err;
       } finally {
         setLoading(false);
-        closeNewFolderModal();
       }
     },
     [createFolder, setLoading, closeNewFolderModal, addItem, removeItem],
@@ -134,7 +127,6 @@ export const useItemOperations = ({
       try {
         setLoading(true);
 
-        // Create optimistic file items
         const optimisticFiles: StorageItem[] = fileList.map((file, index) => ({
           id: `temp-upload-${Date.now()}-${index}`,
           name: file.name,
@@ -170,14 +162,11 @@ export const useItemOperations = ({
           asset: undefined,
         }));
 
-        // Optimistic update - immediately add to UI
         optimisticFiles.forEach((file) => addItem(file));
 
         await uploadFile(fileList, options);
-        // No need to call refreshContents() - uploadFile handles it internally
         closeUploadModal();
       } catch (err) {
-        // Revert optimistic updates on error
         fileList.forEach((_, index) => {
           removeItem(`temp-upload-${Date.now()}-${index}`);
         });

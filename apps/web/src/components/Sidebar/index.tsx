@@ -37,11 +37,32 @@ const Sidebar = (props: any) => {
     useState<boolean>(false);
   const router = useRouter();
   const mobileMenuDrawer = useDrawer();
-  const { permissions } = useAuth();
+  const { permissions, userProfile } = useAuth();
+
+  const filterMenuByFeatures = (menuList: any[]) => {
+    return menuList
+      .map((section) => ({
+        ...section,
+        menus: section.menus.filter((menu: any) => {
+          if (
+            menu.path === '/repository' &&
+            userProfile?.features?.repository === false
+          ) {
+            return false;
+          }
+          return true;
+        }),
+      }))
+      .filter((section) => section.menus.length > 0);
+  };
+
+  const filteredMenuList = userProfile?.features
+    ? filterMenuByFeatures(Menulist)
+    : Menulist;
 
   const mainMenuList = permissions
-    ? checkSubRoutePermission(Menulist, permissions)
-    : Menulist;
+    ? checkSubRoutePermission(filteredMenuList, permissions)
+    : filteredMenuList;
 
   const {
     theme: { rawColors },
