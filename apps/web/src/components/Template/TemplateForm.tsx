@@ -388,7 +388,7 @@ const TemplateEditor = () => {
                 />
               </Field>
 
-              {selectedVariant && selectedVariant.fields && !templateId && (
+              {selectedVariant && selectedVariant.fields && (
                 <Controller
                   control={control}
                   name="variant"
@@ -398,25 +398,35 @@ const TemplateEditor = () => {
                       hint="The variant type cannot be modified once saved. Please select the correct one."
                       required
                       error={errors?.variant?.message}>
-                      <Search
-                        itemToString={(item: any) => item && item.name}
-                        name={name}
-                        placeholder="Search Variant"
-                        minChars={0}
-                        value={value}
-                        onChange={(variant: any) => {
-                          if (variant?.id) {
-                            onChange(variant);
-                            fetchContentTypeDetails(variant?.id);
-                          }
-                        }}
-                        renderItem={(item: any) => (
-                          <Box>
-                            <Text>{item.name}</Text>
-                          </Box>
-                        )}
-                        search={onSearchVariants}
-                      />
+                      {templateId ? (
+                        <InputText
+                          value={value?.name || selectedVariant?.name || ''}
+                          readOnly
+                          disabled
+                          placeholder="Variant (cannot be changed)"
+                        />
+                      ) : (
+                        <Search
+                          itemToString={(item: any) => item && item.name}
+                          name={name}
+                          placeholder="Search Variant"
+                          minChars={0}
+                          value={value}
+                          onChange={(variant: any) => {
+                            if (variant?.id) {
+                              onChange(variant);
+                              fetchContentTypeDetails(variant?.id);
+                            }
+                          }}
+                          renderItem={(item: any) => (
+                            <Box>
+                              <Text>{item.name}</Text>
+                            </Box>
+                          )}
+                          search={onSearchVariants}
+                          disabled={!!templateId}
+                        />
+                      )}
                     </Field>
                   )}
                 />

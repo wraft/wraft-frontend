@@ -1,5 +1,6 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import Head from 'next/head';
+import router from 'next/router';
 import { Flex } from '@wraft/ui';
 import { Drawer, useDrawer, Button } from '@wraft/ui';
 import { Plus } from '@phosphor-icons/react';
@@ -28,6 +29,14 @@ const Index: FC = () => {
   const handleInviteSuccess = () => {
     setRefresh((prev) => prev + 1);
   };
+
+  useEffect(() => {
+    if (currentOrg === 'Personal') {
+      router.replace('/404');
+    }
+  }, [currentOrg]);
+
+  if (currentOrg === 'Personal') return null;
 
   return (
     (currentOrg !== 'Personal' || '') && (

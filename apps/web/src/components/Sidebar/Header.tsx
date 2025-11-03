@@ -3,9 +3,10 @@ import { useRouter } from 'next/router';
 import NavLink from 'next/link';
 import { Button, DropdownMenu, Box, Flex, Text, Modal } from '@wraft/ui';
 import toast from 'react-hot-toast';
-import { CaretDown, Gear, Plus } from '@phosphor-icons/react';
+import { CaretDownIcon, GearIcon, PlusIcon } from '@phosphor-icons/react';
 
 import NotificationDropdown from 'components/Notification/NotificationDropdown';
+import { useNotificationSidebarMode } from 'hooks/useNotificationSidebarMode';
 import DefaultAvatar from 'common/DefaultAvatar';
 import { IconFrame } from 'common/Atoms';
 import { useAuth } from 'contexts/AuthContext';
@@ -20,6 +21,7 @@ const Header = ({
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [createdId, setCreatedId] = useState<string>();
+  const { clearNotificationSidebarMode } = useNotificationSidebarMode();
 
   const router = useRouter();
   const { organisations, userProfile, login } = useAuth();
@@ -69,7 +71,7 @@ const Header = ({
                         lines={1}>
                         {userProfile?.currentOrganisation?.name}
                       </Text>
-                      <CaretDown size={12} />
+                      <CaretDownIcon size={12} />
                     </Flex>
                   </Flex>
                 )}
@@ -102,7 +104,12 @@ const Header = ({
                       </Box>
                     </Flex>
                     <NavLink href={`/manage/workspace`}>
-                      <Gear size={18} weight="bold" color="#777" />
+                      <GearIcon
+                        size={18}
+                        weight="bold"
+                        color="#777"
+                        onClick={clearNotificationSidebarMode}
+                      />
                     </NavLink>
                   </>
                 )}
@@ -136,7 +143,7 @@ const Header = ({
 
               <DropdownMenu.Item>
                 <Button variant="ghost" onClick={() => setIsOpen(true)}>
-                  <Plus size={16} />
+                  <PlusIcon size={16} />
                   Create or join a workspace
                 </Button>
               </DropdownMenu.Item>
@@ -152,7 +159,7 @@ const Header = ({
             size="xs"
             onClick={toggleCreateDocument}>
             <IconFrame color="icon">
-              <Plus size={14} />
+              <PlusIcon size={14} />
             </IconFrame>
           </Button>
         </Flex>

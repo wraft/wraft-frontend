@@ -2,14 +2,21 @@ import { FC } from 'react';
 import Head from 'next/head';
 import { Flex } from '@wraft/ui';
 
-import { workspaceLinks } from '@constants/menuLinks';
 import NotificationSettings from 'components/Notification/NotificationSettings';
+import { useNotificationSidebarMode } from 'hooks/useNotificationSidebarMode';
 import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
 import ManageSidebar from 'common/ManageSidebar';
 import { PageInner } from 'common/Atoms';
+import { useAuth } from 'contexts/AuthContext';
 
 const WorkspaceNotificationSettings: FC = () => {
+  const { userProfile } = useAuth();
+  const currentOrganisation = userProfile?.currentOrganisation;
+  const { itemsForSidebar } = useNotificationSidebarMode(
+    currentOrganisation?.name,
+  );
+
   return (
     <>
       <Head>
@@ -29,7 +36,7 @@ const WorkspaceNotificationSettings: FC = () => {
         />
         <PageInner>
           <Flex gap="xl">
-            <ManageSidebar items={workspaceLinks} />
+            <ManageSidebar items={itemsForSidebar} />
             <NotificationSettings />
           </Flex>
         </PageInner>

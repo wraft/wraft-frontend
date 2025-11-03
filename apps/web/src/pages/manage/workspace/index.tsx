@@ -6,7 +6,7 @@ import toast from 'react-hot-toast';
 import { Input, Label } from 'theme-ui';
 import { Box, Field, Flex, InputText, Text, Button, Modal } from '@wraft/ui';
 
-import { PersonalWorkspaceLinks, workspaceLinks } from '@constants/menuLinks';
+import { useNotificationSidebarMode } from 'hooks/useNotificationSidebarMode';
 import ManageSidebar from 'common/ManageSidebar';
 import DefaultAvatar from 'common/DefaultAvatar';
 import Page from 'common/PageFrame';
@@ -58,6 +58,7 @@ const Index: FC = () => {
 
   const orgId = userProfile?.organisation_id || null;
   const currentOrg = userProfile?.currentOrganisation || null;
+  const { itemsForSidebar } = useNotificationSidebarMode(currentOrg?.name);
 
   const [previewSource, setPreviewSource] = useState<string | undefined | null>(
     undefined,
@@ -235,13 +236,7 @@ const Index: FC = () => {
 
         <PageInner>
           <Flex gap="xl" flex={1}>
-            <ManageSidebar
-              items={
-                currentOrg?.name !== 'Personal' || ''
-                  ? workspaceLinks
-                  : PersonalWorkspaceLinks
-              }
-            />
+            <ManageSidebar items={itemsForSidebar} />
             <Flex
               bg="background-primary"
               direction="column"

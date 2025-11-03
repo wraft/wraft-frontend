@@ -1,5 +1,6 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { Spinner } from '@wraft/ui';
 import { MagnifyingGlassIcon, PlusIcon } from '@phosphor-icons/react';
 import { Button, Flex, Box, InputText, Drawer, useDrawer } from '@wraft/ui';
@@ -22,6 +23,16 @@ const Index: FC = () => {
   const { userProfile } = useAuth();
   const roleDrawer = useDrawer();
   const { hasPermission } = usePermission();
+  const router = useRouter();
+  const currentOrg = userProfile?.currentOrganisation?.name;
+
+  useEffect(() => {
+    if (currentOrg === 'Personal') {
+      router.replace('/404');
+    }
+  }, [currentOrg, router]);
+
+  if (currentOrg === 'Personal') return null;
 
   return (
     (userProfile?.currentOrganisation?.name !== 'Personal' || '') && (

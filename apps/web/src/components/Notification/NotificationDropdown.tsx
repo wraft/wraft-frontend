@@ -11,7 +11,7 @@ import {
 } from '@wraft/ui';
 import { BellIcon, CheckIcon, GearIcon } from '@phosphor-icons/react';
 
-import { useNotifications } from '@hooks/useNotifications';
+import { useNotifications } from 'hooks/useNotifications';
 import { IconFrame } from 'common/Atoms';
 import { TimeAgo } from 'common/Atoms';
 import { useSocket } from 'contexts/SocketContext';
@@ -47,9 +47,11 @@ const NotificationDropdown: React.FC<NotificationDropdownProps> = ({
   const handleViewAll = () => {
     router.push('/notifications');
   };
-
   const handleSettingsClick = () => {
-    router.push('/manage/workspace/notification-settings');
+    router.push({
+      pathname: '/manage/workspace/notification-settings',
+      query: { from: 'notifications' },
+    });
   };
 
   return (

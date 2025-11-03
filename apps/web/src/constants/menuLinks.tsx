@@ -55,11 +55,6 @@ export const PersonalWorkspaceLinks: menuLinksProps[] = [
     path: '/manage/workspace',
     permissions: ['workspace.update', 'workspace.delete', 'workspace.invite'],
   },
-  {
-    name: 'Fields',
-    path: '/manage/fields',
-    permissions: ['workspace.update', 'workspace.delete', 'workspace.invite'],
-  },
 ];
 
 export const workspaceLinks: menuLinksProps[] = [
@@ -171,3 +166,9 @@ export const workspaceMenu: menuLinksProps[] = [
       ]
     : []),
 ];
+
+export const NOTIFICATION_LINK_NAMES = ['General', 'Notification'];
+
+export const notificationSidebarLinks: menuLinksProps[] = workspaceLinks.filter(
+  (link) => NOTIFICATION_LINK_NAMES.includes(link.name),
+);

@@ -354,9 +354,9 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
     return false;
   };
 
-  const onSearchLayouts = async () => {
+  const onSearchLayouts = async (query: string) => {
     try {
-      const response: any = await fetchAPI('layouts');
+      const response: any = await fetchAPI(`layouts?name=${query}`);
 
       if (!response || !response.layouts) {
         throw new Error('Invalid response structure');
@@ -369,9 +369,9 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
     }
   };
 
-  const onSearchFlows = async () => {
+  const onSearchFlows = async (query: string) => {
     try {
-      const response: any = await fetchAPI('flows');
+      const response: any = await fetchAPI(`flows?name=${query}`);
 
       if (!response || !response.flows) {
         throw new Error('Invalid response structure');
@@ -389,9 +389,9 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
     }
   };
 
-  const onSearchThemes = async () => {
+  const onSearchThemes = async (query: string) => {
     try {
-      const response: any = await fetchAPI('themes');
+      const response: any = await fetchAPI(`themes?name=${query}`);
 
       if (!response || !response.themes) {
         throw new Error('Invalid response structure');

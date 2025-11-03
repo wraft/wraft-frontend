@@ -1,5 +1,6 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { Flex } from '@wraft/ui';
 
 import { workspaceLinks } from '@constants/menuLinks';
@@ -12,8 +13,19 @@ import { useAuth } from 'contexts/AuthContext';
 
 const Index: FC = () => {
   const { userProfile } = useAuth();
+  const router = useRouter();
+  const currentOrg = userProfile?.currentOrganisation?.name;
+
+  useEffect(() => {
+    if (currentOrg === 'Personal') {
+      router.replace('/404');
+    }
+  }, [currentOrg, router]);
+
+  if (currentOrg === 'Personal') return null;
+
   return (
-    (userProfile?.currentOrganisation?.name !== 'Personal' || '') && (
+    userProfile?.currentOrganisation?.name !== 'Personal' && (
       <>
         <Head>
           <title>Permission | Wraft</title>
