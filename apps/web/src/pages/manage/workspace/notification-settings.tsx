@@ -3,11 +3,6 @@ import Head from 'next/head';
 import { Flex } from '@wraft/ui';
 import { useNotificationSidebarMode } from 'hooks/useNotificationSidebarMode';
 
-import {
-  workspaceLinks,
-  PersonalWorkspaceLinks,
-  notificationSidebarLinks,
-} from '@constants/menuLinks';
 import NotificationSettings from 'components/Notification/NotificationSettings';
 import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
