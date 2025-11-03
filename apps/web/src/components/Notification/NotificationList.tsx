@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { Avatar, Pagination, Box, Text, Flex } from '@wraft/ui';
 import styled from '@xstyled/emotion';
 
-import useNotifications from '@hooks/useNotifications';
+import useNotifications from 'hooks/useNotifications';
 import { TimeAgo } from 'common/Atoms';
 
 import {

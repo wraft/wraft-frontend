@@ -6,7 +6,7 @@
     "paths": {
       "common/*": ["components/common/*"],
       "@constants/*": ["constants/*"],
-      "@hooks/*": ["hooks/*"]
+      "hooks/*": ["hooks/*"]
     },
 
     "lib": ["dom", "es2017"],

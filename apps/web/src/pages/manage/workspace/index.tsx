@@ -5,8 +5,8 @@ import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Input, Label } from 'theme-ui';
 import { Box, Field, Flex, InputText, Text, Button, Modal } from '@wraft/ui';
-import { useNotificationSidebarMode } from 'hooks/useNotificationSidebarMode';
 
+import { useNotificationSidebarMode } from 'hooks/useNotificationSidebarMode';
 import ManageSidebar from 'common/ManageSidebar';
 import DefaultAvatar from 'common/DefaultAvatar';
 import Page from 'common/PageFrame';

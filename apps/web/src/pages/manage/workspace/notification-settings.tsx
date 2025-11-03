@@ -1,9 +1,9 @@
 import { FC } from 'react';
 import Head from 'next/head';
 import { Flex } from '@wraft/ui';
-import { useNotificationSidebarMode } from 'hooks/useNotificationSidebarMode';
 
 import NotificationSettings from 'components/Notification/NotificationSettings';
+import { useNotificationSidebarMode } from 'hooks/useNotificationSidebarMode';
 import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
 import ManageSidebar from 'common/ManageSidebar';
