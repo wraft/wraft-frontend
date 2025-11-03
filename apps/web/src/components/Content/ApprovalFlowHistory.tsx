@@ -9,13 +9,13 @@ interface Log {
   total_entries: number;
 }
 
-const WorkflowStep = ({ username, description, createDate, isLast }: any) => (
+const WorkflowStep = ({ description, createDate, isLast }: any) => (
   <Flex position="relative" gap="sm" align="self-start" py="md">
     {!isLast && (
       <Box
         position="absolute"
-        left="8px"
-        top="28px"
+        left="3px"
+        top="22px"
         w="2px"
         h="100%"
         bg="gray.300"
@@ -24,28 +24,21 @@ const WorkflowStep = ({ username, description, createDate, isLast }: any) => (
 
     <Box pt="xs" position="relative" zIndex="1">
       <Box
-        w="18px"
-        h="18px"
+        w="8px"
+        h="8px"
         borderRadius="full"
         bg="gray.600"
         display="flex"
         alignItems="center"
-        justifyContent="center"></Box>
+        justifyContent="center"
+      />
     </Box>
-
-    <Flex justify="space-between" flexGrow={1}>
-      <Box>
-        <Text>{description}</Text>
-        <Text color="gray.900" py="xs">
-          {username}
-        </Text>
-      </Box>
-      <Box>
-        <Text color="gray.900" fontSize="xs" whiteSpace="nowrap">
-          {format(new Date(createDate), 'MMM dd, yyyy • h:mm a')}
-        </Text>
-      </Box>
-    </Flex>
+    <Box>
+      <Text>{description}</Text>
+      <Text color="text-secondary" fontSize="xs" whiteSpace="nowrap">
+        {format(new Date(createDate), 'MMM dd, yyyy • h:mm a')}
+      </Text>
+    </Box>
   </Flex>
 );
 
@@ -54,6 +47,7 @@ const ApprovalFlowHistory = ({ id }: any) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalEntries, setTotalEntries] = useState(0);
+  const [pageSize] = useState(15);
   const [isLoadingMore, setIsLoadingMore] = useState<boolean>(false);
   const [hasMore, setHasMore] = useState(false);
 
@@ -65,7 +59,7 @@ const ApprovalFlowHistory = ({ id }: any) => {
     }
 
     try {
-      const query = `page=${page}&sort=inserted_at_desc&page_size=9`;
+      const query = `page=${page}&sort=inserted_at_desc&page_size=${pageSize}`;
       const data = (await fetchAPI(`contents/${id}/logs?${query}`)) as Log;
 
       const newEntries = data?.entries || [];
@@ -109,7 +103,11 @@ const ApprovalFlowHistory = ({ id }: any) => {
     );
   }
   if (!isLoading && entries.length === 0) {
-    return <Text> No Approval History</Text>;
+    return (
+      <Box p="sm">
+        <Text color="text-secondary">No Approval History</Text>
+      </Box>
+    );
   }
   return (
     <Box>
@@ -117,8 +115,7 @@ const ApprovalFlowHistory = ({ id }: any) => {
         <WorkflowStep
           key={index}
           createDate={item?.inserted_at}
-          username={`${item?.actor?.name}`}
-          description={`${item?.message}`}
+          description={item?.message}
           isLast={index === entries.length - 1}
         />
       ))}
@@ -139,8 +136,8 @@ const ApprovalFlowHistory = ({ id }: any) => {
           </Button>
         </Flex>
       )}
-      {totalEntries > 9 && (
-        <Text fontSize="sm" color="gray.600" textAlign="center" mt="xs">
+      {totalEntries > pageSize && (
+        <Text fontSize="sm" color="text-secondary" textAlign="center" mt="xs">
           Showing {entries.length} of {totalEntries} entries
         </Text>
       )}
