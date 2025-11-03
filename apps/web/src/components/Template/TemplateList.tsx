@@ -4,16 +4,21 @@ import { useRouter } from 'next/router';
 import { Pagination, DropdownMenu, Table, Box, Flex, Text } from '@wraft/ui';
 import { ThreeDotIcon } from '@wraft/icon';
 import toast from 'react-hot-toast';
-import { Plus } from '@phosphor-icons/react';
+import { Plus, Download } from '@phosphor-icons/react';
 import { Button } from '@wraft/ui';
 
 import { PageInner, TimeAgo, VariantLine } from 'common/Atoms';
 import PageHeader from 'common/PageHeader';
 import { fetchAPI, postAPI } from 'utils/models';
+import api from 'utils/models';
 import { IField } from 'utils/types/content';
 import { usePermission } from 'utils/permissions';
 
-const columns = ({ onCloneTemplete, hasPermission }: any) => [
+const columns = ({
+  onCloneTemplete,
+  onDownloadTemplate,
+  hasPermission,
+}: any) => [
   {
     id: 'title',
     header: 'Name',
@@ -75,6 +80,13 @@ const columns = ({ onCloneTemplete, hasPermission }: any) => [
               </DropdownMenu.Item>
               <DropdownMenu.Item onClick={() => onCloneTemplete(row.original)}>
                 Clone
+              </DropdownMenu.Item>
+              <DropdownMenu.Item
+                onClick={() => onDownloadTemplate(row.original)}>
+                <Flex alignItems="center" gap="xs">
+                  <Download size={14} />
+                  Download
+                </Flex>
               </DropdownMenu.Item>
             </DropdownMenu>
           )}
@@ -153,6 +165,32 @@ const TemplateList = () => {
     }
   };
 
+  const onDownloadTemplate = async (template: any) => {
+    try {
+      const response = await api.post(
+        `/template_assets/${template.id}/export`,
+        {},
+        { responseType: 'blob' },
+      );
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      const filename = `${template.title || 'template'}.zip`;
+
+      link.href = url;
+      link.setAttribute('download', filename);
+      document.body.appendChild(link);
+      link.click();
+
+      link.remove();
+      window.URL.revokeObjectURL(url);
+
+      toast.success('Template downloaded successfully!');
+    } catch (error) {
+      toast.error('Failed to download template.');
+    }
+  };
+
   return (
     <Box minHeight="100%" bg="background-secondary">
       <PageHeader title="Templates" desc="Content Templates for Variants">
@@ -171,7 +209,11 @@ const TemplateList = () => {
           <Table
             data={templates}
             isLoading={isLoading}
-            columns={columns({ onCloneTemplete, hasPermission })}
+            columns={columns({
+              onCloneTemplete,
+              onDownloadTemplate,
+              hasPermission,
+            })}
             skeletonRows={10}
             emptyMessage="No template has been created yet."
           />

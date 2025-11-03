@@ -55,14 +55,12 @@ const Pane = styled.divBox`
 
 const Block = ({ title, icon, desc, clean }: BlockProps) => (
   <FlexStyled isClean={clean}>
-    <Flex alignItems="center" gap="xs">
-      <Pane color="">{icon}</Pane>
-      <Text lineHeight={1} m={0}>
-        {title}
-      </Text>
+    <Flex alignItems="center" gap="sm">
+      <Pane>{icon}</Pane>
+      <Text lineHeight={1}>{title}</Text>
     </Flex>
     {desc && (
-      <Text fontSize="sm" lineHeight={1} m={0} color="gray.800">
+      <Text fontSize="sm" color="gray.900">
         {desc}
       </Text>
     )}
@@ -81,11 +79,7 @@ const BlockSection = ({ data }: any) => {
       typeof value === 'number' ||
       typeof value === 'boolean'
     ) {
-      return (
-        <Text key={keyPrefix} m="0" fontSize="sm" color="text-secondary">
-          {String(value)}
-        </Text>
-      );
+      return <Text key={keyPrefix}>{String(value)}</Text>;
     }
 
     if (Array.isArray(value)) {
@@ -96,10 +90,10 @@ const BlockSection = ({ data }: any) => {
       ));
     }
 
-    if (typeof value === 'object') {
+    if (typeof value === 'object' && value !== null) {
       return Object.entries(value).map(([subKey, subVal]) => (
         <Flex key={`${keyPrefix}-${subKey}`} gap="sm" mb="sm">
-          <Text fontWeight="heading" fontSize="sm" m="0">
+          <Text fontWeight="heading" fontSize="sm">
             {formatKey(subKey)}:
           </Text>
           <Box>{renderValue(subVal, `${keyPrefix}-${subKey}`)}</Box>
@@ -113,12 +107,10 @@ const BlockSection = ({ data }: any) => {
   const root = typeof data === 'object' ? data : { Value: data };
 
   return (
-    <Box px="sm" py="sm">
+    <Box py="md" px="lg">
       {Object.entries(root).map(([key, value]) => (
-        <Flex key={key} gap="sm" mb="sm">
-          <Text fontWeight="heading" fontSize="sm" m="0">
-            {formatKey(key)}:
-          </Text>
+        <Flex key={key} gap="md" mb="sm">
+          <Text color="text-secondary">{formatKey(key)}:</Text>
           <Box>{renderValue(value, key)}</Box>
         </Flex>
       ))}
@@ -156,26 +148,19 @@ const ImportedList = ({ items }: ImportedListProps) => (
       items.map((item, _i) => (
         <List
           key={item.id}
-          px={3}
-          py={2}
+          px="md"
+          py="sm"
           display="flex"
-          borderWidth={0}
           borderColor="border"
-          borderBottomWidth={1}>
-          <Box pl={1} flex={1} display="flex">
+          borderBottom="solid 1px">
+          <Box pl="sm" flex={1} display="flex">
             <Link
               href={`/${pathMapping[item.item_type as keyof typeof pathMapping]}/${item.id}`}>
-              <Text fontSize="sm" lineHeight={1} m={0} color={'gray.1200'}>
+              <Text fontSize="sm" color={'gray.1200'}>
                 {item.title || item.name}
               </Text>
             </Link>
-            <x.span
-              fontSize="xs"
-              lineHeight={1}
-              m={0}
-              ml="auto"
-              mr={3}
-              color={'gray.1100'}>
+            <x.span fontSize="xs" ml="auto" mr="md" color={'gray.1100'}>
               {item.item_type}
             </x.span>
           </Box>

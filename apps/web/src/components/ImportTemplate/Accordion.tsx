@@ -1,5 +1,5 @@
 import styled from '@xstyled/emotion';
-import { CaretDown } from '@phosphor-icons/react';
+import { CaretDownIcon } from '@phosphor-icons/react';
 import { Box } from '@wraft/ui';
 
 interface AccordionProps {
@@ -18,11 +18,20 @@ const Accordion = ({ header, children, error = false }: AccordionProps) => (
   <Box
     as="details"
     alignItems="center"
-    bg={error === true ? 'red.100' : 'gray.100'}>
-    <Header display="flex" as="summary" borderBottom={0} cursor="pointer">
+    mb="md"
+    border="1px solid"
+    borderColor={error === true ? 'red.400' : 'background-primary'}
+    bg={error === true ? 'red.100' : 'background-primary'}>
+    <Header
+      display="flex"
+      as="summary"
+      borderBottom={0}
+      cursor="pointer"
+      py="xs"
+      px="sm">
       {header}
       <Box mr="md" mt="sm">
-        <CaretDown size={16} />
+        <CaretDownIcon size={16} />
       </Box>
     </Header>
     <Box border="solid 1px" borderColor="border" borderBottom={0}>

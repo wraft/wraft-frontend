@@ -93,6 +93,12 @@ function ImporterApp() {
    */
 
   const importNow = (id: string, _onDone?: any) => {
+    if (!formData) {
+      handleNext();
+      setActionState({ state: ActionState.COMPLETED });
+      return;
+    }
+
     // setActionState(RUNNING);
     setActionState({
       state: ActionState.IMPORTING,
@@ -166,14 +172,21 @@ function ImporterApp() {
   };
 
   /**
-   * Upload Assets
-   * @param data
+   * Handle Uploads
+   * @param data Asset
+   * @param source "upload" | "url"
    */
-  const addUploads = (data: Asset) => {
+  const addUploads = (data: Asset, source: 'upload' | 'url' = 'upload') => {
     setAssets((prevArray) => [...prevArray, data]);
-    handleNext();
-  };
 
+    if (source === 'url') {
+      setImported(data as any);
+      setCurrentStep(3);
+      setActionState({ state: ActionState.COMPLETED });
+    } else {
+      handleNext();
+    }
+  };
   const onChangeStep = (step: any) => {
     setCurrentStep(step.id);
   };
