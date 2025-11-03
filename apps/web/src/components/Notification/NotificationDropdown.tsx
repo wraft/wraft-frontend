@@ -47,9 +47,11 @@ const NotificationDropdown: React.FC<NotificationDropdownProps> = ({
   const handleViewAll = () => {
     router.push('/notifications');
   };
-
   const handleSettingsClick = () => {
-    router.push('/manage/workspace/notification-settings');
+    router.push({
+      pathname: '/manage/workspace/notification-settings',
+      query: { from: 'notifications' },
+    });
   };
 
   return (

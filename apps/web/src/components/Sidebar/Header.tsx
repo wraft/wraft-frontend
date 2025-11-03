@@ -4,6 +4,7 @@ import NavLink from 'next/link';
 import { Button, DropdownMenu, Box, Flex, Text, Modal } from '@wraft/ui';
 import toast from 'react-hot-toast';
 import { CaretDown, Gear, Plus } from '@phosphor-icons/react';
+import { useNotificationSidebarMode } from 'hooks/useNotificationSidebarMode';
 
 import NotificationDropdown from 'components/Notification/NotificationDropdown';
 import DefaultAvatar from 'common/DefaultAvatar';
@@ -20,6 +21,7 @@ const Header = ({
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [createdId, setCreatedId] = useState<string>();
+  const { clearNotificationSidebarMode } = useNotificationSidebarMode();
 
   const router = useRouter();
   const { organisations, userProfile, login } = useAuth();
@@ -102,7 +104,12 @@ const Header = ({
                       </Box>
                     </Flex>
                     <NavLink href={`/manage/workspace`}>
-                      <Gear size={18} weight="bold" color="#777" />
+                      <Gear
+                        size={18}
+                        weight="bold"
+                        color="#777"
+                        onClick={clearNotificationSidebarMode}
+                      />
                     </NavLink>
                   </>
                 )}
