@@ -86,11 +86,11 @@ const Dropzone = ({
       borderColor="gray.400"
       p="xl">
       <Box mb="xl" display="flex" justifyContent="center">
-        <Box w="100%" maxWidth="600px">
+        <Box w="100%">
           <Box
             border="1px dashed"
-            borderColor={isDragReject ? 'error' : 'neutral.200'}
-            borderRadius="4px"
+            borderColor={isDragReject ? 'error' : 'border'}
+            borderRadius="sm"
             bg={isDragActive ? 'grayA35' : 'transparent'}
             transition="all 0.2s ease">
             <Box
@@ -100,7 +100,7 @@ const Dropzone = ({
               flexDirection="column"
               justifyContent="center"
               alignItems="center"
-              borderRadius="4px"
+              borderRadius="sm"
               h="100%"
               py="40px"
               px="md"
@@ -219,7 +219,7 @@ const Dropzone = ({
       </Box>
 
       <Flex alignItems="center" mb="lg" justifyContent="center">
-        <Box flex="1" maxWidth="600px" display="flex" alignItems="center">
+        <Box flex="1" display="flex" alignItems="center">
           <Box flex={1} h="1px" bg="border" />
           <Text fontSize="sm" fontWeight="medium" px="md">
             OR
@@ -229,9 +229,7 @@ const Dropzone = ({
       </Flex>
 
       <Box display="flex" justifyContent="center">
-        <Box w="100%" maxWidth="600px">
-          {onUpload && <UrlUploader onUpload={onUpload} />}
-        </Box>
+        <Box w="100%">{onUpload && <UrlUploader onUpload={onUpload} />}</Box>
       </Box>
     </Box>
   );

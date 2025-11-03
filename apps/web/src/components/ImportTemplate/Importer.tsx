@@ -17,7 +17,6 @@ export interface IAlert {
   inner?: any;
 }
 
-// { children, inner }: IPage
 export const ImporterPage = () => {
   return (
     <Box>
