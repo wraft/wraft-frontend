@@ -64,7 +64,7 @@ const RepositoryComponent: React.FC = React.memo(() => {
   const [isRepositorySetupModalOpen, setIsRepositorySetupModalOpen] =
     useState(false);
   const [isGoogleDriveDrawerOpen, setIsGoogleDriveDrawerOpen] = useState(false);
-  const [currentView, setCurrentView] = useState<ViewType>('table');
+  const [currentView, setCurrentView] = useState<ViewType>('list');
 
   // Custom hooks
   const { currentFolderId, navigateToFolder, navigateToRoot } =
@@ -92,8 +92,6 @@ const RepositoryComponent: React.FC = React.memo(() => {
     renameItem,
     isLoading: isRepositoryLoading,
   } = useRepository(currentFolderId);
-
-  console.log('test abc [items]', items);
 
   const {
     selectedItemDetails,
@@ -212,7 +210,6 @@ const RepositoryComponent: React.FC = React.memo(() => {
 
   const handleDownload = useCallback(
     async (item: StorageItem | StorageItemDetails) => {
-      console.log('test [handleDownload]', item);
       try {
         await RepositoryService.downloadFile(item);
       } catch (error) {

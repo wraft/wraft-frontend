@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Flex, Button, Text, Modal, Field, InputText } from '@wraft/ui';
 import { useForm } from 'react-hook-form';
-import toast from 'react-hot-toast';
 
 import { validateFolderName } from '../utils/validationUtils';
 

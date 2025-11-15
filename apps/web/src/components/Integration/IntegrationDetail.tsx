@@ -181,8 +181,6 @@ export const IntegrationDetail: FC<IntegrationDetailProps> = ({
     //           expires_at: result.tokens.expiry_date,
     //         };
 
-    //         googleDriveStorage.save(config);
-
     //         setEnabled(true);
     //         setUserInfo({
     //           email: config.user_email,

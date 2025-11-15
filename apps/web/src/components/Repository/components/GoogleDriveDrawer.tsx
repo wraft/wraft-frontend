@@ -1,7 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { Box, Button, Text, Flex, Drawer, Checkbox } from '@wraft/ui';
 import {
-  ArrowsClockwise,
   FolderIcon,
   ImageIcon,
   FileTextIcon,

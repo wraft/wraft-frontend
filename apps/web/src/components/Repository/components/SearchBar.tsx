@@ -6,7 +6,6 @@ import {
   FunnelIcon,
   CaretDownIcon,
 } from '@phosphor-icons/react';
-import { ArrowArcLeftIcon } from '@phosphor-icons/react/dist/ssr';
 
 import { IconFrame } from 'common/Atoms';
 

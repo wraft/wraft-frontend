@@ -14,7 +14,6 @@ import {
   PencilSimpleIcon,
   TrashIcon,
   DownloadIcon,
-  ShareIcon,
   DotsThreeVerticalIcon,
 } from '@phosphor-icons/react';
 import { motion, AnimatePresence } from 'framer-motion';

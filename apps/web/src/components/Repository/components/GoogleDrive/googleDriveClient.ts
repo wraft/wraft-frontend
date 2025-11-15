@@ -419,29 +419,3 @@ export interface GoogleDriveIntegrationConfig {
   user_name: string;
   expires_at?: number;
 }
-
-export const googleDriveStorage = {
-  save: (_config: GoogleDriveIntegrationConfig): void => {
-    // localStorage functionality removed
-    console.warn(
-      'Google Drive storage save operation disabled - localStorage removed',
-    );
-  },
-
-  load: (): GoogleDriveIntegrationConfig | null => {
-    // localStorage functionality removed
-    return null;
-  },
-
-  remove: (): void => {
-    // localStorage functionality removed
-    console.warn(
-      'Google Drive storage remove operation disabled - localStorage removed',
-    );
-  },
-
-  isExpired: (config: GoogleDriveIntegrationConfig): boolean => {
-    if (!config.expires_at) return false;
-    return Date.now() >= config.expires_at;
-  },
-};
