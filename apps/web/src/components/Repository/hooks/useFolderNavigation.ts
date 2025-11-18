@@ -1,27 +1,25 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useEffect, useCallback, useRef } from 'react';
 import { useRouter } from 'next/router';
 
 export const useFolderNavigation = () => {
   const router = useRouter();
-  const [currentFolderId, setCurrentFolderId] = useState<string | null>(null);
   const urlUpdateTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const isInitializedRef = useRef(false);
 
   // Debounced URL update function
   const debouncedUrlUpdate = useCallback(
-    (folderId: string | null) => {
+    (fId: string | null) => {
       if (urlUpdateTimeoutRef.current) {
         clearTimeout(urlUpdateTimeoutRef.current);
       }
 
       urlUpdateTimeoutRef.current = setTimeout(() => {
-        if (folderId) {
+        if (fId) {
           router.push(
             {
               pathname: router.pathname,
               query: {
                 ...router.query,
-                folderId,
+                folderId: fId,
               },
             },
             undefined,
@@ -43,23 +41,9 @@ export const useFolderNavigation = () => {
     [router],
   );
 
-  // Initialize folder ID from URL on mount
-  useEffect(() => {
-    if (!isInitializedRef.current) {
-      const { folderId: _urlFolderId } = router.query;
-      if (_urlFolderId) {
-        setCurrentFolderId(_urlFolderId as string);
-      } else {
-        setCurrentFolderId(null);
-      }
-      isInitializedRef.current = true;
-    }
-  }, [router.query]);
-
   const navigateToFolder = useCallback(
-    (folderId: string | null) => {
-      setCurrentFolderId(folderId);
-      debouncedUrlUpdate(folderId);
+    (fId: string | null) => {
+      debouncedUrlUpdate(fId);
     },
     [debouncedUrlUpdate],
   );
@@ -68,7 +52,6 @@ export const useFolderNavigation = () => {
     navigateToFolder(null);
   }, [navigateToFolder]);
 
-  // Cleanup timeout on unmount
   useEffect(() => {
     return () => {
       if (urlUpdateTimeoutRef.current) {
@@ -78,7 +61,6 @@ export const useFolderNavigation = () => {
   }, []);
 
   return {
-    currentFolderId,
     navigateToFolder,
     navigateToRoot,
   };

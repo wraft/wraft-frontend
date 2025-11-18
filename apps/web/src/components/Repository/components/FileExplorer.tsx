@@ -66,9 +66,11 @@ const RepositoryComponent: React.FC = React.memo(() => {
   const [isGoogleDriveDrawerOpen, setIsGoogleDriveDrawerOpen] = useState(false);
   const [currentView, setCurrentView] = useState<ViewType>('list');
 
+  const rawFolderId = router.query?.folderId;
+  const currentFolderId: string | null =
+    typeof rawFolderId === 'string' ? rawFolderId : null;
   // Custom hooks
-  const { currentFolderId, navigateToFolder, navigateToRoot } =
-    useFolderNavigation();
+  const { navigateToFolder, navigateToRoot } = useFolderNavigation();
 
   const {
     isSetup: isSetupFromHook,
@@ -309,8 +311,6 @@ const RepositoryComponent: React.FC = React.memo(() => {
       </Box>
     );
   }
-
-  console.log('test [breadcrumbsRepository]', breadcrumbsRepository);
 
   return (
     <Box>

@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { Box, Flex, Text, Button, Checkbox } from '@wraft/ui';
-import { UploadSimple, FileText, X } from '@phosphor-icons/react';
+import { UploadSimpleIcon, XIcon, FileTextIcon } from '@phosphor-icons/react';
 import { Accept, useDropzone, FileRejection } from 'react-dropzone';
 
 import PdfViewer from 'common/PdfViewer';
@@ -138,9 +138,8 @@ export const FileDropZone: React.FC<FileDropZoneProps> = ({
             : undefined,
       }));
       setUploadedFiles(newUploadedFiles);
-      onDrop(acceptedFiles, { migrateToWraft });
     },
-    [onDrop, handleFileRejection, migrateToWraft],
+    [handleFileRejection],
   );
 
   const { getRootProps, getInputProps, isDragActive, isDragReject } =
@@ -196,145 +195,159 @@ export const FileDropZone: React.FC<FileDropZoneProps> = ({
 
   // Main drop area UI
   return (
-    <Box
-      {...getRootProps()}
-      border="1px dashed"
-      borderColor={isDragReject ? 'error' : isDragActive ? 'primary' : 'border'}
-      borderRadius="md"
-      p="xl"
-      bg={isDragActive ? 'grayA35' : 'white'}
-      className={className}
-      style={style}
-      tabIndex={0}
-      aria-label="File upload dropzone"
-      minHeight="200px"
-      display="flex"
-      flexDirection="column"
-      justifyContent="center"
-      alignItems="center"
-      outline="none">
-      <input {...getInputProps()} />
-      <Flex
-        direction="column"
-        align="center"
-        gap="md"
-        style={{ width: '100%' }}>
-        <Box
-          h="64px"
-          w="64px"
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          borderRadius="full"
-          bg="primary-light"
-          color="primary">
-          <UploadSimple size={32} weight="bold" />
-        </Box>
-        <Text fontSize="lg" fontWeight="medium">
-          Drop files here or click to browse
-        </Text>
-        <Text fontSize="sm" color="text-secondary">
-          Supports PDF, Word, Excel, PowerPoint, and text files
-        </Text>
-        {error && (
-          <Text color="error" mt="sm">
-            {error}
-          </Text>
-        )}
-        {uploadedFiles.length > 0 && !noChange && (
-          <Box style={{ width: '100%', maxWidth: 400, marginTop: '1rem' }}>
-            {uploadedFiles.map((file) => (
-              <Flex
-                key={file.id}
-                alignItems="center"
-                gap="sm"
-                p="sm"
-                borderBottom={
-                  file.id !== uploadedFiles[uploadedFiles.length - 1].id
-                    ? '1px solid'
-                    : 'none'
-                }
-                borderColor="border">
-                <FileText size={20} />
-                <Box flex={1} minWidth={0}>
-                  <Text fontWeight="medium">{file.name}</Text>
-                  <Text fontSize="sm" color="text-secondary">
-                    {formatFileSize(file.size)}
-                  </Text>
-                </Box>
-                <Button
-                  variant="ghost"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleRemoveFile(file.id);
-                  }}
-                  style={{ padding: '4px' }}
-                  aria-label={`Remove ${file.name}`}>
-                  <X size={20} />
-                </Button>
-              </Flex>
-            ))}
-          </Box>
-        )}
-        {uploadedFiles.some((file) => file.type === 'application/pdf') && (
-          <Box
-            border="1px solid"
-            borderColor="border"
-            borderRadius="md"
-            p="md"
-            maxHeight="300px"
-            overflowY="auto"
-            style={{ width: '100%', maxWidth: 400, marginTop: '1rem' }}>
-            <Text fontSize="sm" fontWeight="medium" mb="sm">
-              PDF Preview
-            </Text>
-            {uploadedFiles.map(
-              (file) =>
-                file.type === 'application/pdf' &&
-                file.preview && (
-                  <Box key={file.id} mb="md">
-                    <PdfViewer url={file.preview} pageNumber={1} />
-                  </Box>
-                ),
-            )}
-          </Box>
-        )}
-        {progress !== undefined && progress > 0 && !noChange && (
-          <Box style={{ marginTop: '1rem', width: '100%', maxWidth: 400 }}>
-            <ProgressBar progress={progress} />
-          </Box>
-        )}
-        <Flex alignItems="center" gap="sm" mt="md">
-          <Checkbox
-            checked={migrateToWraft}
-            onChange={(e) => setMigrateToWraft(e.target.checked)}
-            aria-label="Enable Migrate to Wraft Document"
-          />
-          <Text fontSize="sm">Enable Migrate to Wraft Document</Text>
-        </Flex>
+    <>
+      <Box
+        {...getRootProps()}
+        border="1px dashed"
+        borderColor={
+          isDragReject ? 'error' : isDragActive ? 'primary' : 'border'
+        }
+        borderRadius="md"
+        p="xl"
+        bg={isDragActive ? 'grayA35' : 'white'}
+        className={className}
+        style={style}
+        tabIndex={0}
+        aria-label="File upload dropzone"
+        minHeight="200px"
+        display="flex"
+        flexDirection="column"
+        justifyContent="center"
+        alignItems="center"
+        outline="none">
         <Flex
-          gap="sm"
-          justifyContent="flex-end"
-          mt="md"
-          style={{ width: '100%', maxWidth: 400 }}>
-          <Button
-            variant="secondary"
-            onClick={handleCancel}
-            disabled={isLoading}>
-            Cancel
-          </Button>
-          <Button
-            variant="primary"
-            onClick={handleUpload}
-            disabled={uploadedFiles.length === 0 || isLoading}
-            loading={isLoading}>
-            {isLoading
-              ? 'Uploading...'
-              : `Upload${uploadedFiles.length > 0 ? ` (${uploadedFiles.length})` : ''}`}
-          </Button>
+          direction="column"
+          align="center"
+          gap="md"
+          style={{ width: '100%' }}>
+          {uploadedFiles.length === 0 && (
+            <>
+              <Flex direction="column" align="center" gap="md">
+                <input {...getInputProps()} />
+                <Box
+                  h="64px"
+                  w="64px"
+                  display="flex"
+                  justifyContent="center"
+                  alignItems="center"
+                  borderRadius="full"
+                  bg="primary-light"
+                  color="primary">
+                  <UploadSimpleIcon size={32} weight="bold" />
+                </Box>
+                <Text fontSize="lg" fontWeight="medium">
+                  Drop files here or click to browse
+                </Text>
+                <Text fontSize="sm" color="text-secondary">
+                  Supports PDF, Word, Excel, PowerPoint, and text files
+                </Text>
+              </Flex>
+            </>
+          )}
+          {error && (
+            <Text color="error" mt="sm">
+              {error}
+            </Text>
+          )}
+          {uploadedFiles.length > 0 && !noChange && (
+            <Box style={{ width: '100%', maxWidth: 400, marginTop: '1rem' }}>
+              {uploadedFiles.map((file) => (
+                <Flex
+                  key={file.id}
+                  alignItems="center"
+                  gap="sm"
+                  p="sm"
+                  borderBottom={
+                    file.id !== uploadedFiles[uploadedFiles.length - 1].id
+                      ? '1px solid'
+                      : 'none'
+                  }
+                  borderColor="border">
+                  <FileTextIcon size={20} />
+                  <Box flex={1} minWidth={0}>
+                    <Text fontWeight="medium">{file.name}</Text>
+                    <Text fontSize="sm" color="text-secondary">
+                      {formatFileSize(file.size)}
+                    </Text>
+                  </Box>
+                  <Button
+                    variant="ghost"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleRemoveFile(file.id);
+                    }}
+                    style={{ padding: '4px' }}
+                    aria-label={`Remove ${file.name}`}>
+                    <XIcon size={20} />
+                  </Button>
+                </Flex>
+              ))}
+            </Box>
+          )}
+          {uploadedFiles.length > 0 && (
+            <Flex alignItems="left" gap="sm" mt="md">
+              <Checkbox
+                checked={migrateToWraft}
+                onChange={(e) => setMigrateToWraft(e.target.checked)}
+                aria-label="Enable Migrate to Wraft Document"
+              />
+              <Text fontSize="sm">Enable Migrate to Wraft Document</Text>
+            </Flex>
+          )}
+          {uploadedFiles.some((file) => file.type === 'application/pdf') && (
+            <Box
+              border="1px solid"
+              borderColor="border"
+              borderRadius="md"
+              p="md"
+              maxHeight="300px"
+              overflowY="auto"
+              style={{ width: '100%', maxWidth: 400, marginTop: '1rem' }}>
+              <Text fontSize="sm" fontWeight="medium" mb="sm">
+                PDF Preview
+              </Text>
+              {uploadedFiles.map(
+                (file) =>
+                  file.type === 'application/pdf' &&
+                  file.preview && (
+                    <Box key={file.id} mb="md">
+                      <PdfViewer url={file.preview} pageNumber={1} />
+                    </Box>
+                  ),
+              )}
+            </Box>
+          )}
+          {progress !== undefined && progress > 0 && !noChange && (
+            <Box style={{ marginTop: '1rem', width: '100%', maxWidth: 400 }}>
+              <ProgressBar progress={progress} />
+            </Box>
+          )}
         </Flex>
+      </Box>
+      <Flex gap="sm" justifyContent="flex-end" mt="md">
+        <Button
+          variant="secondary"
+          onClick={(e) => {
+            e.stopPropagation();
+            handleCancel();
+          }}
+          disabled={isLoading}>
+          Cancel
+        </Button>
+        <Button
+          variant="primary"
+          onClick={(e) => {
+            e.stopPropagation();
+            handleUpload();
+          }}
+          disabled={uploadedFiles.length === 0 || isLoading}
+          loading={isLoading}>
+          {isLoading
+            ? 'Uploading...'
+            : `Upload${uploadedFiles.length > 0 ? ` (${uploadedFiles.length})` : ''}`}
+        </Button>
       </Flex>
-    </Box>
+    </>
   );
 };
 

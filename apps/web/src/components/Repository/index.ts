@@ -18,7 +18,6 @@ export {
   EmptyRepository,
   EmptyFileExplorer,
   DocumentScanner,
-  // New focused components
   FileToolbar,
   FileList,
   ModalManager,

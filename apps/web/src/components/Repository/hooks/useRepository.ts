@@ -12,6 +12,8 @@ export const useRepository = (currentFolderId: string | null) => {
   const lastFolderIdRef = useRef<string | null>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
 
+  console.log('test [currentFolderId]', currentFolderId);
+
   // Data store actions
   const {
     items,
