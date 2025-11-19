@@ -10,6 +10,7 @@ import ManageSidebar from 'common/ManageSidebar';
 import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
 import DescriptionLinker from 'common/DescriptionLinker';
+import { PageInner } from 'common/Atoms';
 import { useAuth } from 'contexts/AuthContext';
 import { usePermission } from 'utils/permissions';
 
@@ -74,18 +75,18 @@ const WebhooksPage = () => {
               </Button>
             )}
           </PageHeader>
-
-          <Flex gap="md" my="md" px="md">
-            <ManageSidebar items={workspaceLinks} />
-            <Flex direction="column" flex={1} minWidth="556px">
-              <SimpleWebhookList
-                key={refreshKey}
-                onEdit={handleEdit}
-                onRefresh={handleRefresh}
-              />
+          <PageInner>
+            <Flex gap="xl">
+              <ManageSidebar items={workspaceLinks} />
+              <Flex direction="column" flex={1} minWidth="556px">
+                <SimpleWebhookList
+                  key={refreshKey}
+                  onEdit={handleEdit}
+                  onRefresh={handleRefresh}
+                />
+              </Flex>
             </Flex>
-          </Flex>
-
+          </PageInner>
           <Drawer
             open={isCreateDrawerOpen}
             store={createDrawer}
