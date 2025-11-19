@@ -33,20 +33,26 @@ interface TimeAgoProps {
  * <TimeAgo time="2024-03-20T10:00:00Z" short />
  */
 export const TimeAgo = (props: TimeAgoProps) => {
-  const utc_time = new Date(props.time);
+  // Ensure UTC timestamps without 'Z' suffix are treated as UTC
+  let timeString = props.time;
+  if (
+    typeof props.time === 'string' &&
+    !props.time.endsWith('Z') &&
+    props.time.includes('T')
+  ) {
+    timeString = props.time + 'Z';
+  }
+
+  const date = new Date(timeString);
   const showAgo = props.ago ? true : false;
-  const offset_time_minutes = utc_time.getTimezoneOffset();
-  const local_time = new Date(
-    utc_time.getTime() - offset_time_minutes * 60 * 1000,
-  );
   const now = new Date();
 
-  const timeDifferenceInMs = now.getTime() - local_time.getTime();
+  const timeDifferenceInMs = now.getTime() - date.getTime();
 
   const timed =
     timeDifferenceInMs > 24 * 60 * 60 * 1000
-      ? format(local_time, 'MMM dd, yyyy')
-      : formatDistanceStrict(local_time, now, { addSuffix: showAgo || false });
+      ? format(date, 'MMM dd, yyyy')
+      : formatDistanceStrict(date, now, { addSuffix: showAgo || false });
 
   return <Text mt={props?.short ? 0 : 0}>{timed}</Text>;
 };

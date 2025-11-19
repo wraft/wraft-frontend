@@ -30,7 +30,7 @@ const formatDistanceLocale: Record<
 };
 
 /**
- * Convert UTC date to local date
+ * Display relative or absolute time from a timestamp
  */
 interface TimeAgoProps {
   time?: any;
@@ -51,9 +51,14 @@ export const TimeAgo = (props: TimeAgoProps) => {
     );
   }
 
-  const utc_time = new Date(time);
+  let timeString = time;
+  if (typeof time === 'string' && !time.endsWith('Z') && time.includes('T')) {
+    timeString = time + 'Z';
+  }
 
-  if (isNaN(utc_time.getTime())) {
+  const date = new Date(timeString);
+
+  if (isNaN(date.getTime())) {
     return (
       <Text fontSize={props.fontSize || 'sm2'} opacity="0.8">
         Invalid date
@@ -61,19 +66,15 @@ export const TimeAgo = (props: TimeAgoProps) => {
     );
   }
 
-  const offset_time_minutes = utc_time.getTimezoneOffset();
-  const local_time = new Date(
-    utc_time.getTime() - offset_time_minutes * 60 * 1000,
-  );
   const now = new Date();
   const fontSize = props.fontSize || 'sm2';
 
-  const timeDifferenceInMs = now.getTime() - local_time.getTime();
+  const timeDifferenceInMs = now.getTime() - date.getTime();
 
   const timed =
     timeDifferenceInMs > 24 * 60 * 60 * 1000
-      ? format(local_time, 'MMM dd, yyyy')
-      : formatDistanceToNowStrict(local_time, {
+      ? format(date, 'MMM dd, yyyy')
+      : formatDistanceToNowStrict(date, {
           addSuffix: showAgo || false,
           locale: {
             formatDistance: (token, count) =>

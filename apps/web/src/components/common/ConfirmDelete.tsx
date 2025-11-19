@@ -26,17 +26,10 @@ const ConfirmDelete = ({
           <CloseIcon color="#2C3641" />
         </Box>
       </Flex>
-      <Box maxWidth="342px" borderTop="1px solid" borderColor="border" py="sm">
-        <Text>{text}</Text>
+      <Box minWidth="342px" maxWidth="560px" py="lg">
+        <Text lineHeight="1.6">{text}</Text>
       </Box>
-      <Flex gap="sm" py="sm">
-        <Button
-          danger
-          onClick={
-            inputValue ? () => onConfirmDelete(inputValue) : onConfirmDelete
-          }>
-          Confirm
-        </Button>
+      <Flex gap="sm" py="sm" justify="flex-end">
         <Button
           onClick={() => {
             setOpen(false);
@@ -46,6 +39,13 @@ const ConfirmDelete = ({
           }}
           variant="tertiary">
           Cancel
+        </Button>
+        <Button
+          danger
+          onClick={
+            inputValue ? () => onConfirmDelete(inputValue) : onConfirmDelete
+          }>
+          Confirm
         </Button>
       </Flex>
     </>

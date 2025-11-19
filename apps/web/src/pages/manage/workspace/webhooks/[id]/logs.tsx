@@ -2,11 +2,16 @@ import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { Box, Flex, Text, Table, Pagination, Button, Grid } from '@wraft/ui';
-import { ArrowLeft, CheckCircle, XCircle, Clock } from '@phosphor-icons/react';
+import {
+  ArrowLeftIcon,
+  CheckCircleIcon,
+  XCircleIcon,
+  ClockIcon,
+} from '@phosphor-icons/react';
 import toast from 'react-hot-toast';
 
 import { webhookApi } from 'components/Webhook/webhookApi';
-import { TimeAgo } from 'common/Atoms';
+import { PageInner, TimeAgo } from 'common/Atoms';
 import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
 import DescriptionLinker from 'common/DescriptionLinker';
@@ -98,13 +103,13 @@ const WebhookLogsPage: React.FC = () => {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'success':
-        return <CheckCircle size={16} color="green" />;
+        return <CheckCircleIcon size={16} color="green" />;
       case 'failed':
-        return <XCircle size={16} color="red" />;
+        return <XCircleIcon size={16} color="red" />;
       case 'pending':
-        return <Clock size={16} color="orange" />;
+        return <ClockIcon size={16} color="orange" />;
       default:
-        return <Clock size={16} color="gray" />;
+        return <ClockIcon size={16} color="gray" />;
     }
   };
 
@@ -241,137 +246,139 @@ const WebhookLogsPage: React.FC = () => {
             variant="secondary"
             size="sm"
             onClick={() => router.push('/manage/workspace/webhooks')}>
-            <ArrowLeft size={16} />
+            <ArrowLeftIcon size={16} />
             Back to Webhooks
           </Button>
         </PageHeader>
 
-        <Box p="md" mt="md">
-          {webhook && (
-            <Box mb="lg" p="md" bg="gray.50" borderRadius="md">
-              <Text fontWeight="heading" mb="xs" fontSize="lg">
-                {webhook.name}
-              </Text>
-              <Text fontSize="sm" color="gray.800" mb="xs">
-                {webhook.url}
-              </Text>
-              <Flex alignItems="center" gap="xs">
+        <PageInner>
+          <Box p="md" mt="md">
+            {webhook && (
+              <Box mb="lg" p="md" bg="gray.50" borderRadius="md">
+                <Text fontWeight="heading" mb="xs" fontSize="lg">
+                  {webhook.name}
+                </Text>
+                <Text fontSize="sm" color="gray.800" mb="xs">
+                  {webhook.url}
+                </Text>
+                <Flex alignItems="center" gap="xs">
+                  <Box
+                    w="8px"
+                    h="8px"
+                    borderRadius="50%"
+                    bg={webhook.is_active ? 'green.800' : 'gray.400'}
+                  />
+                  <Text fontSize="sm">
+                    {webhook.is_active ? 'Active' : 'Inactive'}
+                  </Text>
+                </Flex>
+              </Box>
+            )}
+
+            {stats && !isStatsLoading && (
+              <Grid gap="md" templateColumns="repeat(4, 1fr)" mb="lg">
                 <Box
-                  w="8px"
-                  h="8px"
-                  borderRadius="50%"
-                  bg={webhook.is_active ? 'green.800' : 'gray.400'}
+                  p="md"
+                  bg="white"
+                  borderRadius="md"
+                  border="1px solid"
+                  borderColor="gray.200">
+                  <Text fontSize="sm" color="gray.800" mb="xs">
+                    Total Triggers
+                  </Text>
+                  <Text fontSize="xl" fontWeight="heading">
+                    {stats.total_requests}
+                  </Text>
+                </Box>
+                <Box
+                  p="md"
+                  bg="white"
+                  borderRadius="md"
+                  border="1px solid"
+                  borderColor="gray.200">
+                  <Text fontSize="sm" color="gray.800" mb="xs">
+                    Success Rate
+                  </Text>
+                  <Text fontSize="xl" fontWeight="heading" color="green.800">
+                    {stats.success_rate}%
+                  </Text>
+                </Box>
+                <Box
+                  p="md"
+                  bg="white"
+                  borderRadius="md"
+                  border="1px solid"
+                  borderColor="gray.200">
+                  <Text fontSize="sm" color="gray.800" mb="xs">
+                    Failed Triggers
+                  </Text>
+                  <Text fontSize="xl" fontWeight="heading" color="red.600">
+                    {stats.failed_requests}
+                  </Text>
+                </Box>
+                <Box
+                  p="md"
+                  bg="white"
+                  borderRadius="md"
+                  border="1px solid"
+                  borderColor="gray.200">
+                  <Text fontSize="sm" color="gray.800" mb="xs">
+                    Avg Response Time
+                  </Text>
+                  <Text fontSize="xl" fontWeight="heading">
+                    {Number(stats.average_response_time_ms).toFixed(2)}ms
+                  </Text>
+                </Box>
+              </Grid>
+            )}
+
+            <Flex gap="sm" mb="md">
+              <Button
+                size="sm"
+                variant={statusFilter === undefined ? 'primary' : 'secondary'}
+                onClick={() => handleStatusFilter(undefined)}>
+                All
+              </Button>
+              <Button
+                size="sm"
+                variant={statusFilter === 'success' ? 'primary' : 'secondary'}
+                onClick={() => handleStatusFilter('success')}>
+                Success
+              </Button>
+              <Button
+                size="sm"
+                variant={statusFilter === 'failed' ? 'primary' : 'secondary'}
+                onClick={() => handleStatusFilter('failed')}>
+                Failed
+              </Button>
+              <Button
+                size="sm"
+                variant={statusFilter === 'pending' ? 'primary' : 'secondary'}
+                onClick={() => handleStatusFilter('pending')}>
+                Pending
+              </Button>
+            </Flex>
+
+            <Table
+              data={logs}
+              columns={columns}
+              isLoading={isLoading}
+              emptyMessage="No webhook logs found."
+              skeletonRows={10}
+            />
+
+            {pageMeta && pageMeta.total_pages > 1 && (
+              <Box mt="md">
+                <Pagination
+                  totalPage={pageMeta.total_pages}
+                  initialPage={currentPage}
+                  onPageChange={handlePageChange}
+                  totalEntries={pageMeta.total_entries}
                 />
-                <Text fontSize="sm">
-                  {webhook.is_active ? 'Active' : 'Inactive'}
-                </Text>
-              </Flex>
-            </Box>
-          )}
-
-          {stats && !isStatsLoading && (
-            <Grid gap="md" templateColumns="repeat(4, 1fr)" mb="lg">
-              <Box
-                p="md"
-                bg="white"
-                borderRadius="md"
-                border="1px solid"
-                borderColor="gray.200">
-                <Text fontSize="sm" color="gray.800" mb="xs">
-                  Total Triggers
-                </Text>
-                <Text fontSize="xl" fontWeight="heading">
-                  {stats.total_requests}
-                </Text>
               </Box>
-              <Box
-                p="md"
-                bg="white"
-                borderRadius="md"
-                border="1px solid"
-                borderColor="gray.200">
-                <Text fontSize="sm" color="gray.800" mb="xs">
-                  Success Rate
-                </Text>
-                <Text fontSize="xl" fontWeight="heading" color="green.800">
-                  {stats.success_rate}%
-                </Text>
-              </Box>
-              <Box
-                p="md"
-                bg="white"
-                borderRadius="md"
-                border="1px solid"
-                borderColor="gray.200">
-                <Text fontSize="sm" color="gray.800" mb="xs">
-                  Failed Triggers
-                </Text>
-                <Text fontSize="xl" fontWeight="heading" color="red.600">
-                  {stats.failed_requests}
-                </Text>
-              </Box>
-              <Box
-                p="md"
-                bg="white"
-                borderRadius="md"
-                border="1px solid"
-                borderColor="gray.200">
-                <Text fontSize="sm" color="gray.800" mb="xs">
-                  Avg Response Time
-                </Text>
-                <Text fontSize="xl" fontWeight="heading">
-                  {Number(stats.average_response_time_ms).toFixed(2)}ms
-                </Text>
-              </Box>
-            </Grid>
-          )}
-
-          <Flex gap="sm" mb="md">
-            <Button
-              size="sm"
-              variant={statusFilter === undefined ? 'primary' : 'secondary'}
-              onClick={() => handleStatusFilter(undefined)}>
-              All
-            </Button>
-            <Button
-              size="sm"
-              variant={statusFilter === 'success' ? 'primary' : 'secondary'}
-              onClick={() => handleStatusFilter('success')}>
-              Success
-            </Button>
-            <Button
-              size="sm"
-              variant={statusFilter === 'failed' ? 'primary' : 'secondary'}
-              onClick={() => handleStatusFilter('failed')}>
-              Failed
-            </Button>
-            <Button
-              size="sm"
-              variant={statusFilter === 'pending' ? 'primary' : 'secondary'}
-              onClick={() => handleStatusFilter('pending')}>
-              Pending
-            </Button>
-          </Flex>
-
-          <Table
-            data={logs}
-            columns={columns}
-            isLoading={isLoading}
-            emptyMessage="No webhook logs found."
-            skeletonRows={10}
-          />
-
-          {pageMeta && pageMeta.total_pages > 1 && (
-            <Box mt="md">
-              <Pagination
-                totalPage={pageMeta.total_pages}
-                initialPage={currentPage}
-                onPageChange={handlePageChange}
-                totalEntries={pageMeta.total_entries}
-              />
-            </Box>
-          )}
-        </Box>
+            )}
+          </Box>
+        </PageInner>
       </Page>
     </>
   );

@@ -8,6 +8,7 @@ import {
   MoneyIcon,
   StorefrontIcon,
   LightningIcon,
+  KeyIcon,
 } from '@phosphor-icons/react';
 
 import { envConfig } from 'utils/env';
@@ -98,6 +99,11 @@ export const workspaceLinks: menuLinksProps[] = [
     path: '/manage/workspace/webhooks',
     permissions: ['webhook.show', 'webhook.manage'],
   },
+  {
+    name: 'API Keys',
+    path: '/manage/workspace/api-keys',
+    permissions: ['api_key.show', 'api_key.manage'],
+  },
 ];
 
 export const userSettingsLinks: menuLinksProps[] = [
@@ -145,6 +151,13 @@ export const workspaceMenu: menuLinksProps[] = [
     path: '/manage/workspace/webhooks',
     desc: 'Manage Webhooks',
     permissions: ['webhook.show', 'webhook.manage'],
+  },
+  {
+    name: 'API Keys',
+    icon: <KeyIcon size={32} weight="thin" />,
+    path: '/manage/workspace/api-keys',
+    desc: 'Manage API Keys for Integrations',
+    permissions: ['api_key.show', 'api_key.manage'],
   },
   {
     name: 'Import',
