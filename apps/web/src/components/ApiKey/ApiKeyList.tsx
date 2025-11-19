@@ -127,12 +127,6 @@ const ApiKeyList: React.FC<ApiKeyListProps> = ({
     }
   };
 
-  const handleCopyKey = (keyPrefix: string) => {
-    const displayKey = formatApiKey(keyPrefix);
-    navigator.clipboard.writeText(displayKey);
-    toast.success('API key prefix copied to clipboard');
-  };
-
   const columns = [
     {
       id: 'name',
@@ -140,20 +134,9 @@ const ApiKeyList: React.FC<ApiKeyListProps> = ({
       cell: ({ row }: any) => (
         <Box>
           <Text fontWeight="medium">{row.original.name}</Text>
-          <Flex align="center" gap="xs" mt="xs">
-            <Text fontSize="sm" color="gray">
-              {formatApiKey(row.original.key_prefix)}
-            </Text>
-            <Button
-              size="xs"
-              variant="ghost"
-              onClick={(e: React.MouseEvent) => {
-                e.stopPropagation();
-                handleCopyKey(row.original.key_prefix);
-              }}>
-              <CopyIcon size={12} />
-            </Button>
-          </Flex>
+          <Text fontSize="sm" color="gray">
+            {formatApiKey(row.original.key_prefix)}
+          </Text>
         </Box>
       ),
       enableSorting: false,

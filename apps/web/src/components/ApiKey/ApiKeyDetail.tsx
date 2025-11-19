@@ -178,11 +178,10 @@ const ApiKeyDetail: React.FC<ApiKeyDetailProps> = ({ apiKeyId, onEdit }) => {
           <Box
             mb="lg"
             p="md"
-            style={{
-              backgroundColor: 'var(--color-orange-100)',
-              border: '1px solid var(--color-orange-300)',
-              borderRadius: '8px',
-            }}>
+            bg="orange.100"
+            border="1px solid"
+            borderColor="orange.300"
+            borderRadius="md">
             <Flex alignItems="center" gap="sm">
               <WarningIcon size={20} weight="fill" />
               <Text>
@@ -197,11 +196,10 @@ const ApiKeyDetail: React.FC<ApiKeyDetailProps> = ({ apiKeyId, onEdit }) => {
           <Box
             mb="lg"
             p="md"
-            style={{
-              backgroundColor: 'var(--color-red-100)',
-              border: '1px solid var(--color-red-300)',
-              borderRadius: '8px',
-            }}>
+            bg="red.100"
+            border="1px solid"
+            borderColor="red.300"
+            borderRadius="lg">
             <Flex alignItems="center" gap="sm">
               <ClockIcon size={20} weight="fill" />
               <Text>
