@@ -40,8 +40,6 @@ export function defineSmartTable(): SmartTableExtension {
         attrs["data-table-name"] = String(node.attrs.tableName);
       }
 
-      console.log("✅ SmartTableWrapper toDOM:", node.attrs);
-
       return ["div", attrs, 0];
     },
   });

@@ -37,6 +37,7 @@ import {
 } from "@extensions/smart-table";
 import ImageView from "./image-view";
 import SignatureView from "./signature-view";
+import { SmartTableWrapperView } from "./smart-table-wrapper-view";
 import type { SignersConfig } from "./live-editor";
 
 // import { defineImageFileHandlers } from "./upload-file";
@@ -72,10 +73,8 @@ export function defineDefaultExtension({
   isReadonly = false,
 }: DefaultExtensionProps): BasicsExtension {
   const extensions = [
-    // Smart table MUST be first
     defineSmartTable(),
     defineSmartTableCommands(),
-    // Then basic extension
     defineBasicExtension(),
     isReadonly ? undefined : definePlaceholder({ placeholder }),
     defineMention(),
@@ -99,8 +98,7 @@ export function defineDefaultExtension({
     }),
     defineReactNodeView({
       name: "smartTableWrapper",
-      component: require("./smart-table-wrapper-view")
-        .SmartTableWrapperView satisfies ReactNodeViewComponent,
+      component: SmartTableWrapperView satisfies ReactNodeViewComponent,
     }),
   ].filter(Boolean) as Extension[];
 

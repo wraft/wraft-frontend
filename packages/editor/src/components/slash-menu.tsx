@@ -72,20 +72,16 @@ export default function SlashMenu() {
     tableJSON: SmartTableJSON,
     _tableName: string,
   ) => {
-    // Insert the table at the current cursor position
     const { state, view } = editor;
     const { schema, tr } = state;
 
     try {
       const tableNode = schema.nodeFromJSON(tableJSON);
 
-      // Insert the table node at the cursor position
       const transaction = tr.replaceSelectionWith(tableNode).scrollIntoView();
 
-      // Dispatch the transaction
       view.dispatch(transaction);
 
-      // Close modal after successful insertion
       setIsSmartTableModalOpen(false);
     } catch (error) {
       // Handle error - could emit to error tracking service
