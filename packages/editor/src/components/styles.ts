@@ -52,7 +52,17 @@ export const EditorContent = styled.divBox`
     color: var(--theme-ui-colors-gray-1200);
   }
   .ProseMirror p {
-    line-height: 1.5;
+    line-height: 1.6;
+    font-size: 15px;
+    margin: 12px 0px;
+  }
+
+  .ProseMirror td p {
+    line-height: normal;
+  }
+
+  .ProseMirror td p strong {
+    font-weight: 600;
   }
 
   .ProseMirror .ProseMirror-yjs-cursor {
@@ -97,6 +107,32 @@ export const EditorContent = styled.divBox`
     overflow: hidden;
     border-color: gray;
   }
+
+  /* Smart Table Wrapper Styles */
+  .ProseMirror div[data-smart-table-wrapper] {
+    margin: 1rem 0;
+    background: #f8fafc;
+  }
+
+  .ProseMirror div[data-smart-table-wrapper]::before {
+    content: "Smart Table: " attr(data-table-name);
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border: 1px solid var(--theme-ui-colors-border);
+    border-bottom: none;
+    font-size: 14px;
+    // color: #1e40af;
+    padding: 14px;
+    background: var(--theme-ui-colors-background-secondary);
+    border-radius: 6px 6px 0 0;
+  }
+
+  .ProseMirror div[data-smart-table-wrapper] table {
+    background: white;
+    margin: 0;
+  }
+
   .ProseMirror td,
   .ProseMirror th {
     vertical-align: top;
@@ -105,8 +141,32 @@ export const EditorContent = styled.divBox`
     border-width: 1px;
     padding-left: 0.75rem;
     padding-right: 0.75rem;
-    border: 1px solid #ccc;
+    border: 1px solid;
+    border-color: var(--theme-ui-colors-border);
   }
+
+  /* Header row styling - first row in all tables */
+  .ProseMirror table tr:first-child td {
+    // background-color: #f3f4f6;
+  }
+
+  /* Smart table specific styling */
+  .ProseMirror table[data-smart-table="true"] {
+    border: 2px solid #3b82f6;
+  }
+
+  .ProseMirror table[data-smart-table="true"] tr:first-child td {
+    background-color: #dbeafe;
+    font-weight: 600;
+  }
+
+  /* Footer row styling */
+  .ProseMirror td[data-footer="true"] {
+    background-color: #f9fafb;
+    font-weight: 500;
+    border-top: 2px solid #9ca3af;
+  }
+
   .ProseMirror .column-resize-handle {
     position: absolute;
     right: -2px;
