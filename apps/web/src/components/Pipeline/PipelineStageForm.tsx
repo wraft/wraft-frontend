@@ -136,7 +136,6 @@ const PipelineStageForm = ({
       });
   };
 
-  // Pipeline Stage create/update API
   const handleNextStep = () => {
     setIsLoading(true);
     if (formStep == 0) {
@@ -183,7 +182,6 @@ const PipelineStageForm = ({
     }
   };
 
-  // Pipeline mapping API
   const handleSubmitMapping = () => {
     setIsLoading(true);
     const mappingPayload = {
@@ -296,7 +294,6 @@ const PipelineStageForm = ({
       setStageMapping(mappingData);
       setSourceData(mappingData);
 
-      // Initialize field mapping values in the form
       if (mappingData && mappingData.length > 0) {
         mappingData.forEach((mapping: any, index: number) => {
           if (mapping.source && mapping.source.id) {
@@ -315,10 +312,8 @@ const PipelineStageForm = ({
       if (selectedPipelineStageId) {
         setValue('template_id', pipelineStageTemplateId);
 
-        // Fetch the specific template to ensure it's available for display
         fetchAPI(`data_templates/${pipelineStageTemplateId}`)
           .then((data: any) => {
-            // Add this template to the templates list if it's not already there
             setTemplates((prevTemplates) => {
               const exists = prevTemplates.some((t) => t.id === data.id);
               if (!exists) {
@@ -376,13 +371,14 @@ const PipelineStageForm = ({
 
   const formTitles = ['Configure', 'Mapping'];
 
-  // Function to handle field mapping selection
   const handleFieldMappingChange = (index: number, selectedOption: string) => {
     const selectedSource = formFields.find(
       (field) => field.id === selectedOption,
     );
 
     if (selectedSource) {
+      const fieldIdentifier =
+        selectedSource.machine_name || selectedSource.name;
       setSourceData((prevData: any) => {
         const newData = [...prevData];
         newData[index] = {
@@ -392,7 +388,7 @@ const PipelineStageForm = ({
           },
           source: {
             id: selectedSource.id,
-            name: selectedSource.name,
+            name: fieldIdentifier,
           },
         };
         return newData;
@@ -416,7 +412,6 @@ const PipelineStageForm = ({
   };
 
   const onSearchTemplates = async (query?: string) => {
-    // If editing an existing pipeline stage with a template that might not be in the list
     if (selectedPipelineStageId && pipelineStageTemplateId) {
       const existingTemplate = templates.find(
         (template) => template.id === pipelineStageTemplateId,
@@ -435,7 +430,6 @@ const PipelineStageForm = ({
       }
     }
 
-    // If there's a search query, fetch filtered templates from API
     if (query && query.trim() !== '') {
       try {
         const response = (await fetchAPI(
@@ -444,7 +438,7 @@ const PipelineStageForm = ({
         return response.data_templates || [];
       } catch (error) {
         console.error('Error searching templates:', error);
-        return templates; // Fallback to cached templates on error
+        return templates;
       }
     }
 
@@ -488,7 +482,6 @@ const PipelineStageForm = ({
                   control={control}
                   name="template_id"
                   render={({ field: { onChange, name, value } }) => {
-                    // Find the selected template to display in the Search component
                     const selectedTemplate = templates.find(
                       (t) => t.id === value,
                     );
@@ -552,7 +545,6 @@ const PipelineStageForm = ({
                           name={`fields.${index}.source`}
                           defaultValue={stageMapping[index]?.source?.id || ''}
                           render={({ field: { onChange, name, value } }) => {
-                            // Find the selected field to display in the Search component
                             const selectedField =
                               formFields.find((f) => f.id === value) ||
                               (stageMapping[index]

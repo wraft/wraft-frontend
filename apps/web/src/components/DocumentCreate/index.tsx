@@ -290,7 +290,7 @@ const CreateDocument = ({ setIsOpen }: { setIsOpen: any }) => {
                 )}
               />
             )}
-            <Box mt="16px">
+            <Box mt="lg">
               {pageMeta && pageMeta?.total_pages > 1 && (
                 <Pagination
                   type="simple"
@@ -327,35 +327,111 @@ const CreateDocument = ({ setIsOpen }: { setIsOpen: any }) => {
 
             {fields && fields.length > 0 && (
               <Flex direction="column" gap="md">
-                {fields.map((f: FieldT) => (
-                  <Box key={f.id}>
-                    {f.field_type.name === 'date' && (
-                      <FieldDate
-                        name={`contentFields[${convertToVariableName(f.name)}]`}
-                        label={capitalizeFirst(f.name)}
-                        register={register}
-                        sub="Date"
-                        onChange={() => console.log('x')}
+                {fields.map((field: FieldT) => (
+                  <Box key={field.id}>
+                    {field.field_type.name === 'Date' && (
+                      <Controller
+                        control={control}
+                        name={`contentFields.${convertToVariableName(field.name)}`}
+                        rules={{
+                          required: {
+                            value: (field as any).required || false,
+                            message: `${capitalizeFirst(field.name)} is required`,
+                          },
+                        }}
+                        render={({ field: controllerField, fieldState }) => (
+                          <FieldDate
+                            name={`contentFields.${convertToVariableName(field.name)}`}
+                            label={capitalizeFirst(field.name)}
+                            sub="Date"
+                            onChange={(value: string) => {
+                              controllerField.onChange(value);
+                            }}
+                            value={controllerField.value}
+                            required={(field as any).required || false}
+                            dateFormat={
+                              (field as any).meta?.dateFormat || 'yyyy-MM-dd'
+                            }
+                            error={
+                              //@ts-expect-error Dynamic key access
+                              errors?.contentFields?.[
+                                convertToVariableName(field.name)
+                              ]?.message ||
+                              fieldState.error?.message ||
+                              ''
+                            }
+                          />
+                        )}
                       />
                     )}
 
-                    {f.field_type.name !== 'date' && (
+                    {field.field_type.name === 'Table' && null}
+
+                    {field.field_type.name === 'Drop Down' &&
+                      (field as any).meta?.values &&
+                      (field as any).meta.values.length > 0 && (
+                        <Controller
+                          control={control}
+                          name={`contentFields.${convertToVariableName(field.name)}`}
+                          rules={{
+                            required: {
+                              value: (field as any).required || false,
+                              message: `${capitalizeFirst(field.name)} is required`,
+                            },
+                          }}
+                          render={({ field: controllerField }) => {
+                            const options = (field as any).meta.values.map(
+                              (val: any) => ({
+                                value: val.name,
+                                label: val.name,
+                              }),
+                            );
+                            const isRequired = (field as any).required || false;
+                            return (
+                              <Field
+                                label={capitalizeFirst(field.name)}
+                                {...(isRequired && { required: true })}
+                                error={
+                                  //@ts-expect-error Dynamic key access
+                                  errors?.contentFields?.[
+                                    convertToVariableName(field.name)
+                                  ]?.message || ''
+                                }>
+                                <Select
+                                  options={options}
+                                  value={controllerField.value || undefined}
+                                  onChange={(selectedValue: any) => {
+                                    controllerField.onChange(
+                                      selectedValue || '',
+                                    );
+                                  }}
+                                  placeholder={`Select your ${field.name}`}
+                                />
+                              </Field>
+                            );
+                          }}
+                        />
+                      )}
+
+                    {(field.field_type.name === 'String' ||
+                      field.field_type.name === 'Text') && (
                       <Field
-                        label={capitalizeFirst(f.name)}
-                        required
+                        label={capitalizeFirst(field.name)}
+                        {...((field as any).required && { required: true })}
                         error={
                           //@ts-expect-error Dynamic key access
-                          errors?.contentFields?.[convertToVariableName(f.name)]
-                            ?.message || ''
+                          errors?.contentFields?.[
+                            convertToVariableName(field.name)
+                          ]?.message || ''
                         }>
                         <InputText
-                          placeholder={`Enter your ${f.name} `}
+                          placeholder={`Enter your ${field.name} ${field.field_type.name}`}
                           {...register(
-                            `contentFields.${convertToVariableName(f.name)}`,
+                            `contentFields.${convertToVariableName(field.name)}`,
                             {
                               required: {
-                                value: true,
-                                message: `${capitalizeFirst(f.name)} is required`,
+                                value: (field as any).required || false,
+                                message: `${capitalizeFirst(field.name)} is required`,
                               },
                             },
                           )}

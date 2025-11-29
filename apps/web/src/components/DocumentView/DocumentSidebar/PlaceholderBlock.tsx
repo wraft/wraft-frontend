@@ -8,13 +8,14 @@ import {
   Text,
   InputText,
   Field,
+  Select,
 } from '@wraft/ui';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { EditIcon } from '@wraft/icon';
 import { XIcon } from '@phosphor-icons/react';
 
 import FieldDate from 'common/FieldDate';
-import { convertToVariableName, mapFields } from 'utils';
+import { convertToVariableName, mapFields, capitalizeFirst } from 'utils';
 
 import { useDocument } from '../DocumentContext';
 
@@ -31,6 +32,8 @@ export interface IFieldType {
   description?: string | null;
   field_type?: Record<string, any>;
   value: string;
+  order?: number;
+  required?: boolean;
 }
 
 interface PlaceholderBlockProps {
@@ -48,7 +51,12 @@ const PlaceholderBlock = ({ fields, onSaved }: PlaceholderBlockProps) => {
   const { editorMode, fieldValues, setFieldValues, onDocumentSubmit } =
     useDocument();
 
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm();
   const mobileMenuDrawer = useDrawer();
 
   useEffect(() => {
@@ -102,6 +110,7 @@ const PlaceholderBlock = ({ fields, onSaved }: PlaceholderBlockProps) => {
               </Box>
             )}
           </Flex>
+          {console.log('mappedFields', mappedFields)}
 
           <Box
             border="1px solid"
@@ -109,27 +118,29 @@ const PlaceholderBlock = ({ fields, onSaved }: PlaceholderBlockProps) => {
             borderRadius="md"
             mt="sm">
             {mappedFields &&
-              mappedFields.map((x: any) => (
-                <Flex
-                  key={x.id}
-                  borderBottom="1px solid"
-                  borderColor="border"
-                  p="md">
-                  <Text flex="0 0 60%" fontWeight="heading">
-                    {x.value}
-                  </Text>
-                  <Text
-                    flex="0 0 40%"
-                    color="text-secondary"
-                    fontWeight="heading"
-                    textTransform="capitalize"
-                    textAlign="right">
-                    {x.name}
-                  </Text>
+              [...mappedFields]
+                .sort((a, b) => (a.order || 0) - (b.order || 0))
+                .map((x: any) => (
+                  <Flex
+                    key={x.id}
+                    borderBottom="1px solid"
+                    borderColor="border"
+                    p="md">
+                    <Text flex="0 0 60%" fontWeight="heading">
+                      {x.field_type?.name === 'Table' ? x.name : x.value}
+                    </Text>
+                    <Text
+                      flex="0 0 40%"
+                      color="text-secondary"
+                      fontWeight="heading"
+                      textTransform="capitalize"
+                      textAlign="right">
+                      {x.field_type?.name === 'Table' ? 'Table' : x.name}
+                    </Text>
 
-                  {/* <Text>{x.type}</Text> */}
-                </Flex>
-              ))}
+                    {/* <Text>{x.type}</Text> */}
+                  </Flex>
+                ))}
           </Box>
         </>
       )}
@@ -159,29 +170,149 @@ const PlaceholderBlock = ({ fields, onSaved }: PlaceholderBlockProps) => {
           <Box flex={1} overflowY="auto" px="xl" py="md">
             {mappedFields && mappedFields.length > 0 && (
               <Box>
-                {mappedFields.map((f: IFieldType) => (
-                  <Box key={f.id} pb="sm">
-                    {f.field_type?.name === 'date' && (
-                      <FieldDate
-                        name={f.id}
-                        label={f.name}
-                        register={register}
-                        sub="Date"
-                        onChange={() => console.log('x')}
-                      />
-                    )}
-
-                    {f.field_type?.name !== 'date' && (
-                      <Field label={f.name} required>
-                        <InputText
-                          placeholder=""
-                          defaultValue={f.value}
-                          {...register(convertToVariableName(f.name))}
+                {[...mappedFields]
+                  .sort((a, b) => (a.order || 0) - (b.order || 0))
+                  .map((field: IFieldType) => (
+                    <Box key={field.id} pb="sm">
+                      {field.field_type?.name === 'Date' && (
+                        <Controller
+                          control={control}
+                          name={convertToVariableName(field.name)}
+                          defaultValue={field.value || ''}
+                          rules={{
+                            required: {
+                              value: field.required || false,
+                              message: `${capitalizeFirst(field.name)} is required`,
+                            },
+                          }}
+                          render={({ field: controllerField, fieldState }) => (
+                            <FieldDate
+                              name={convertToVariableName(field.name)}
+                              label={capitalizeFirst(field.name)}
+                              sub="Date"
+                              onChange={(value: string) => {
+                                controllerField.onChange(value);
+                              }}
+                              value={controllerField.value}
+                              required={field.required || false}
+                              dateFormat={
+                                (field as any).meta?.dateFormat || 'yyyy-MM-dd'
+                              }
+                              error={
+                                (
+                                  errors?.[
+                                    convertToVariableName(field.name)
+                                  ] as any
+                                )?.message ||
+                                fieldState.error?.message ||
+                                ''
+                              }
+                            />
+                          )}
                         />
-                      </Field>
-                    )}
-                  </Box>
-                ))}
+                      )}
+
+                      {field.field_type?.name === 'Table' && null}
+
+                      {field.field_type?.name === 'Drop Down' &&
+                        field.meta?.values &&
+                        field.meta.values.length > 0 && (
+                          <Controller
+                            control={control}
+                            name={convertToVariableName(field.name)}
+                            defaultValue={field.value || ''}
+                            rules={{
+                              required: {
+                                value: field.required || false,
+                                message: `${capitalizeFirst(field.name)} is required`,
+                              },
+                            }}
+                            render={({ field: controllerField }) => {
+                              const options =
+                                field.meta?.values?.map((val: any) => ({
+                                  value: val.name,
+                                  label: val.name,
+                                })) || [];
+                              const isRequired = field.required || false;
+                              return (
+                                <Field
+                                  label={capitalizeFirst(field.name)}
+                                  {...(isRequired && { required: true })}
+                                  error={
+                                    ((
+                                      errors?.[
+                                        convertToVariableName(field.name)
+                                      ] as any
+                                    )?.message as string) || ''
+                                  }>
+                                  <Select
+                                    options={options}
+                                    value={controllerField.value || undefined}
+                                    onChange={(selectedValue: any) => {
+                                      controllerField.onChange(
+                                        selectedValue || '',
+                                      );
+                                    }}
+                                    placeholder={`Select your ${field.name}`}
+                                  />
+                                </Field>
+                              );
+                            }}
+                          />
+                        )}
+
+                      {(field.field_type?.name === 'String' ||
+                        field.field_type?.name === 'Text') && (
+                        <Field
+                          label={capitalizeFirst(field.name)}
+                          {...(field.required && { required: true })}
+                          error={
+                            ((
+                              errors?.[convertToVariableName(field.name)] as any
+                            )?.message as string) || ''
+                          }>
+                          <InputText
+                            placeholder={`Enter your ${field.name} ${field.field_type.name}`}
+                            defaultValue={field.value}
+                            {...register(convertToVariableName(field.name), {
+                              required: {
+                                value: field.required || false,
+                                message: `${capitalizeFirst(field.name)} is required`,
+                              },
+                            })}
+                          />
+                        </Field>
+                      )}
+
+                      {field.field_type?.name !== 'Date' &&
+                        field.field_type?.name !== 'Table' &&
+                        field.field_type?.name !== 'Drop Down' &&
+                        field.field_type?.name !== 'String' &&
+                        field.field_type?.name !== 'Text' && (
+                          <Field
+                            label={capitalizeFirst(field.name)}
+                            {...(field.required && { required: true })}
+                            error={
+                              ((
+                                errors?.[
+                                  convertToVariableName(field.name)
+                                ] as any
+                              )?.message as string) || ''
+                            }>
+                            <InputText
+                              placeholder=""
+                              defaultValue={field.value}
+                              {...register(convertToVariableName(field.name), {
+                                required: {
+                                  value: field.required || false,
+                                  message: `${capitalizeFirst(field.name)} is required`,
+                                },
+                              })}
+                            />
+                          </Field>
+                        )}
+                    </Box>
+                  ))}
               </Box>
             )}
           </Box>

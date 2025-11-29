@@ -9,11 +9,14 @@ import {
   Textarea,
   Button,
   Field,
+  Select,
 } from '@wraft/ui';
 import toast from 'react-hot-toast';
 import { LogoIcon } from '@wraft/icon';
 
 import { fetchAPI, postAPI } from 'utils/models';
+
+import TableFieldInput, { TableRow } from './TableFieldInput';
 
 const FormEntry = () => {
   const [items, setItems] = useState<any>([]);
@@ -38,7 +41,11 @@ const FormEntry = () => {
                 val.validation.rule === 'required' &&
                 val.validation.value === true,
             ),
-            value: '',
+            value: i.meta?.defaultValue || '',
+            smartTableName: i.meta?.smartTableName || undefined,
+            tableColumns: i.meta?.tableColumns || undefined,
+            defaultValue: i.meta?.defaultValue || undefined,
+            values: i.meta?.values || undefined,
           };
         });
         setInitial(fields);
@@ -61,6 +68,32 @@ const FormEntry = () => {
       value: newVal,
       error:
         newVal.length === 0 && item.required
+          ? 'This field is required'
+          : undefined,
+    };
+    const newArr = items.map((s: any) => {
+      if (s.id === item.id) {
+        return newItem;
+      } else {
+        return s;
+      }
+    });
+    setItems(newArr);
+  };
+
+  const onTableValueChange = (item: any, tableValue: TableRow[]) => {
+    const newVal = JSON.stringify(tableValue);
+    const newItem = {
+      ...item,
+      value: newVal,
+      error:
+        (tableValue.length === 0 ||
+          tableValue.every((row) =>
+            Object.values(row).every(
+              (cell) => !cell || cell.toString().trim() === '',
+            ),
+          )) &&
+        item.required
           ? 'This field is required'
           : undefined,
     };
@@ -186,6 +219,49 @@ const FormEntry = () => {
                         onChange={(e) => onValueChange(e, item)}
                       />
                     )}
+                    {item.type === 'Table' && (
+                      <TableFieldInput
+                        value={item.value}
+                        onChange={(tableValue) =>
+                          onTableValueChange(item, tableValue)
+                        }
+                        columns={item.tableColumns}
+                        smartTableName={item.smartTableName}
+                      />
+                    )}
+                    {(item.type === 'Drop Down' ||
+                      item.type === 'Radio Button') &&
+                      item.values &&
+                      item.values.length > 0 && (
+                        <Select
+                          key={`${item.id}-${item.value || 'empty'}-${item.values.map((v: any) => v.name).join(',')}`}
+                          options={item.values.map((val: any) => ({
+                            value: val.name,
+                            label: val.name,
+                          }))}
+                          value={item.value || undefined}
+                          onChange={(selectedValue: any) => {
+                            const newVal = selectedValue || '';
+                            const newItem = {
+                              ...item,
+                              value: newVal,
+                              error:
+                                newVal.length === 0 && item.required
+                                  ? 'This field is required'
+                                  : undefined,
+                            };
+                            const newArr = items.map((s: any) => {
+                              if (s.id === item.id) {
+                                return newItem;
+                              } else {
+                                return s;
+                              }
+                            });
+                            setItems(newArr);
+                          }}
+                          placeholder="Select an option"
+                        />
+                      )}
                   </>
                 </Field>
               </Box>

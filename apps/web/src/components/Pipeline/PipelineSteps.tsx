@@ -21,7 +21,6 @@ import { usePermission } from 'utils/permissions';
 
 import PipelineStageForm from './PipelineStageForm';
 
-// Define proper interfaces for the pipeline data
 interface PipelineStage {
   id: string;
   data_template: {

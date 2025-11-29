@@ -8,6 +8,7 @@ import { useForm } from 'react-hook-form';
 import FormsFrom from 'components/Form/FormsFrom';
 import FormViewForm from 'components/Form/FormViewForm';
 import { FormResponseList } from 'components/WraftForm';
+import { getFieldTypeFromBackendType } from 'components/Form/FormFieldTypes';
 import MenuStepsIndicator from 'common/MenuStepsIndicator';
 import Page from 'common/PageFrame';
 import FieldText from 'common/FieldText';
@@ -38,10 +39,15 @@ const Index: FC = () => {
     fetchAPI(`forms/${id}`).then((data: any) => {
       setFormdata(data);
       const fileds = data.fields.map((i: any) => {
+        const fieldTypeName = i.field_type.name;
+        // Use helper function to determine uiType from backend field type name
+        const uiType = getFieldTypeFromBackendType(fieldTypeName as any);
+
         return {
           id: i.id,
           name: i.name,
-          type: i.field_type.name,
+          machineName: i.machine_name || undefined,
+          type: fieldTypeName,
           fieldTypeId: i.field_type.id,
           order: i.order,
           required: i.validations.some(
@@ -49,6 +55,11 @@ const Index: FC = () => {
               val.validation.rule === 'required' &&
               val.validation.value === true,
           ),
+          smartTableName: i.meta?.smartTableName || undefined,
+          tableColumns: i.meta?.tableColumns || undefined,
+          defaultValue: i.meta?.defaultValue || undefined,
+          values: i.meta?.values || undefined,
+          uiType: uiType,
         };
       });
       const sortedFields = fileds

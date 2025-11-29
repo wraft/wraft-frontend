@@ -33,6 +33,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 import { fetchAPI, postAPI, putAPI } from 'utils/models';
 import { uuidRegex } from 'utils/regex';
+import { convertToVariableName } from 'utils/index';
 
 import {
   FormFieldsSchema,
@@ -72,7 +73,6 @@ interface FormsFromProps {
   setLoading?: (e: boolean) => void;
 }
 
-// Main component
 const FormsFrom: React.FC<FormsFromProps> = ({
   formdata,
   items,
@@ -89,7 +89,6 @@ const FormsFrom: React.FC<FormsFromProps> = ({
   const [removedFields, setRemovedFields] = useState<string[]>([]);
   const debounceTimerRef = React.useRef<NodeJS.Timeout | null>(null);
 
-  // Setup sensors for drag and drop
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -97,7 +96,6 @@ const FormsFrom: React.FC<FormsFromProps> = ({
     }),
   );
 
-  // Setup React Hook Form
   const { reset } = useForm<FormFieldsType>({
     resolver: zodResolver(FormFieldsSchema),
     defaultValues: {
@@ -109,7 +107,6 @@ const FormsFrom: React.FC<FormsFromProps> = ({
     reset(items);
   }, [items, reset]);
 
-  // Handle drag end for form fields
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
 
@@ -139,7 +136,6 @@ const FormsFrom: React.FC<FormsFromProps> = ({
       fieldTypeId: fieldTypeObj.id,
     };
 
-    // Normalize spaces, capitalize first letter, and trim
     newItem.name = capitalizeFirstLetter(
       newItem.name.replace(/\s+/g, ' ').trim(),
     );
@@ -196,32 +192,42 @@ const FormsFrom: React.FC<FormsFromProps> = ({
     e: React.ChangeEvent<HTMLInputElement>,
     item: FormField,
   ) => {
-    // Get the input value
     const inputValue = e.target.value;
 
-    // Normalize spaces: replace multiple consecutive spaces with a single space
-    // but don't trim to allow spaces during typing
     const normalizedName = inputValue.replace(/\s+/g, ' ');
 
-    // Capitalize first letter if there's input
     const capitalizedName = normalizedName
       ? capitalizeFirstLetter(normalizedName)
       : '';
 
-    // Use functional update to avoid unnecessary array recreations
+    const autoMachineName = normalizedName
+      ? convertToVariableName(normalizedName)
+      : '';
+
+    const previousAutoMachineName = item.name
+      ? convertToVariableName(item.name)
+      : '';
+
     setItems((prevItems) => {
-      // Create updated items with the new name
       const updatedItems = prevItems.map((field) => {
         if (field.id === item.id) {
+          const wasManuallyEdited =
+            item.machineName &&
+            item.machineName !== previousAutoMachineName &&
+            previousAutoMachineName !== '';
+
+          const shouldUpdateMachineName =
+            normalizedName !== item.name || !wasManuallyEdited;
+
           return {
             ...field,
             name: capitalizedName,
-            // Clear error when name is changed
+            machineName: shouldUpdateMachineName
+              ? autoMachineName
+              : item.machineName,
             error: undefined,
           };
         }
-        // Keep other fields as they are, but clear any duplicate name errors
-        // This ensures only fields with the current duplicate name are marked
         if (field.error === 'Field label must be unique') {
           return {
             ...field,
@@ -231,14 +237,12 @@ const FormsFrom: React.FC<FormsFromProps> = ({
         return field;
       });
 
-      // Check if the new name would create duplicates (only check if not empty after trimming)
       if (capitalizedName.trim() !== '') {
         const duplicateNames = getDuplicateFieldNames(
           updatedItems as FormFieldsType,
         );
 
         if (duplicateNames.length > 0) {
-          // Only mark fields with duplicate names as errors
           return updatedItems.map((field) => {
             if (duplicateNames.includes(field.name)) {
               return {
@@ -251,7 +255,6 @@ const FormsFrom: React.FC<FormsFromProps> = ({
         }
       }
 
-      // No duplicates, return updated items normally
       return updatedItems;
     });
   };
@@ -262,14 +265,10 @@ const FormsFrom: React.FC<FormsFromProps> = ({
       item: FormField,
       value: FieldValue,
     ) => {
-      // Get the input value
       const inputValue = e.target.value;
 
-      // Normalize spaces: replace multiple consecutive spaces with a single space
-      // but don't trim to allow spaces during typing
       const normalizedName = inputValue.replace(/\s+/g, ' ');
 
-      // Immediately update the value for responsive typing
       setItems((prevItems) =>
         prevItems.map((field) => {
           if (field.id === item.id && field.values) {
@@ -283,14 +282,12 @@ const FormsFrom: React.FC<FormsFromProps> = ({
             return {
               ...field,
               values: updatedValues,
-              // Keep existing error state during typing
             };
           }
           return field;
         }),
       );
 
-      // Debounce validation to avoid checking on every keystroke
       if (debounceTimerRef.current) {
         clearTimeout(debounceTimerRef.current);
       }
@@ -306,7 +303,6 @@ const FormsFrom: React.FC<FormsFromProps> = ({
                 return val;
               });
 
-              // Only check for empty options if we're clearing an error
               const hasEmptyOptions = updatedValues.some(
                 (val) => val.name.trim() === '',
               );
@@ -314,7 +310,6 @@ const FormsFrom: React.FC<FormsFromProps> = ({
               return {
                 ...field,
                 values: updatedValues,
-                // Update error state after debounce
                 error:
                   hasEmptyOptions && field.type === 'options'
                     ? 'All options require a name'
@@ -324,21 +319,18 @@ const FormsFrom: React.FC<FormsFromProps> = ({
             return field;
           }),
         );
-      }, 300); // 300ms debounce
+      }, 300);
     },
     [],
   );
 
   const onDuplicateField = (index: number, item: FormField) => {
-    // Normalize spaces in the original name: replace multiple spaces with a single space and trim
     const normalizedName = item.name.replace(/\s+/g, ' ').trim();
 
     const duplicatedItem = {
       ...item,
       id: Math.random().toString(),
-      // Ensure duplicated field has a unique name without unwanted spaces
       name: `${normalizedName} Copy`,
-      // Clear any existing errors
       error: undefined,
     };
 
@@ -350,7 +342,6 @@ const FormsFrom: React.FC<FormsFromProps> = ({
       updatedItems.push(duplicatedItem);
     }
 
-    // Clear any existing duplicate name errors
     const clearedItems = updatedItems.map((field) => {
       if (field.error === 'Field label must be unique') {
         return {
@@ -361,13 +352,11 @@ const FormsFrom: React.FC<FormsFromProps> = ({
       return field;
     });
 
-    // Check for duplicate names
     const duplicateNames = getDuplicateFieldNames(
       clearedItems as FormFieldsType,
     );
 
     if (duplicateNames.length > 0) {
-      // Only mark fields with duplicate names as errors
       const itemsWithErrors = clearedItems.map((field) => {
         if (duplicateNames.includes(field.name)) {
           return {
@@ -380,7 +369,6 @@ const FormsFrom: React.FC<FormsFromProps> = ({
 
       setItems(itemsWithErrors);
     } else {
-      // No duplicates, update items normally
       setItems(clearedItems);
     }
   };
@@ -422,7 +410,6 @@ const FormsFrom: React.FC<FormsFromProps> = ({
       if (field.id === item.id) {
         const updatedValues = field.values?.filter((v) => v.id !== value.id);
 
-        // Check if this was the last option
         if (!updatedValues || updatedValues.length === 0) {
           return {
             ...field,
@@ -434,7 +421,6 @@ const FormsFrom: React.FC<FormsFromProps> = ({
         return {
           ...field,
           values: updatedValues,
-          // Clear error if it was related to options
           error:
             field.error === 'All options require a name'
               ? undefined
@@ -447,7 +433,6 @@ const FormsFrom: React.FC<FormsFromProps> = ({
     setItems(updatedItems);
   };
 
-  // Add a function to handle option reordering
   const onReorderOptions = (itemId: string, newValues: FieldValue[]) => {
     setItems(
       items.map((item) => {
@@ -462,7 +447,43 @@ const FormsFrom: React.FC<FormsFromProps> = ({
     );
   };
 
-  // API functions
+  const onDefaultValueChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    item: FormField,
+  ) => {
+    const newValue = e.target.value;
+    setItems(
+      items.map((field) => {
+        if (field.id === item.id) {
+          return {
+            ...field,
+            defaultValue: newValue,
+          };
+        }
+        return field;
+      }),
+    );
+  };
+
+  const onMachineNameChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    item: FormField,
+  ) => {
+    const newValue = e.target.value;
+    const sanitizedValue = newValue.toLowerCase().replace(/[^a-z0-9_]/g, '');
+    setItems(
+      items.map((field) => {
+        if (field.id === item.id) {
+          return {
+            ...field,
+            machineName: sanitizedValue,
+          };
+        }
+        return field;
+      }),
+    );
+  };
+
   const onFetchFieldTypes = () => {
     fetchAPI('field_types')
       .then((data: any) => {
@@ -471,28 +492,21 @@ const FormsFrom: React.FC<FormsFromProps> = ({
       .catch((err) => console.log(err));
   };
 
-  // Helper function to validate the form
   const validateForm = (): boolean => {
-    // Check if form data exists
     if (!formdata) {
       toast.error('Missing Form Data');
       return false;
     }
 
-    // Create a new array for validation
     let validatedItems = [...items];
     let isValid = true;
 
-    // First, clear all existing errors
     validatedItems = validatedItems.map((item) => ({
       ...item,
       error: undefined,
     }));
 
-    // Check for empty field names and uppercase first letter
     validatedItems.forEach((_item, index) => {
-      // Normalize spaces in the name: replace multiple consecutive spaces with a single space
-      // and trim leading/trailing spaces
       const normalizedName = validatedItems[index].name
         .replace(/\s+/g, ' ')
         .trim();
@@ -523,7 +537,6 @@ const FormsFrom: React.FC<FormsFromProps> = ({
       toast.error('All fields require a valid label');
     }
 
-    // Check for duplicate field names
     const duplicateNames = getDuplicateFieldNames(
       validatedItems as FormFieldsType,
     );
@@ -543,10 +556,13 @@ const FormsFrom: React.FC<FormsFromProps> = ({
       toast.error(`Duplicate field labels: ${duplicateNames.join(', ')}`);
     }
 
-    // Check if option fields have at least one option with a name
     validatedItems.forEach((item, index) => {
-      if (item.type === 'options' || item.type === 'Radio Button') {
-        // First check if values exist
+      if (
+        item.type === 'options' ||
+        item.type === 'Radio Button' ||
+        item.type === 'Drop Down' ||
+        item.uiType === FieldType.DROPDOWN
+      ) {
         if (!item.values || item.values.length === 0) {
           validatedItems[index] = {
             ...item,
@@ -554,10 +570,9 @@ const FormsFrom: React.FC<FormsFromProps> = ({
           };
           isValid = false;
           toast.error(`${item.name || 'Field'} requires at least one option`);
-          return; // Skip further checks for this item
+          return;
         }
 
-        // Normalize spaces in all option names
         const normalizedValues = item.values.map((val) => ({
           ...val,
           name: val.name.replace(/\s+/g, ' ').trim(),
@@ -568,7 +583,6 @@ const FormsFrom: React.FC<FormsFromProps> = ({
           values: normalizedValues,
         };
 
-        // Check if any option is empty after normalization
         if (normalizedValues.some((value) => value.name === '')) {
           validatedItems[index] = {
             ...validatedItems[index],
@@ -580,7 +594,6 @@ const FormsFrom: React.FC<FormsFromProps> = ({
       }
     });
 
-    // Update items with validation errors
     setItems(validatedItems);
 
     return isValid;
@@ -596,7 +609,6 @@ const FormsFrom: React.FC<FormsFromProps> = ({
 
     setLoading && setLoading(true);
 
-    // Prepare fields data for API
     const fields = items.map((item) => {
       const validations = [];
 
@@ -620,16 +632,41 @@ const FormsFrom: React.FC<FormsFromProps> = ({
         });
       }
 
-      // Normalize the name before sending to API: replace multiple spaces with a single space and trim
       const normalizedName = item.name.replace(/\s+/g, ' ').trim();
+
+      const meta: any = {};
+      if (
+        item.defaultValue !== undefined &&
+        item.defaultValue !== null &&
+        item.defaultValue.trim() !== ''
+      ) {
+        meta.defaultValue = item.defaultValue.trim();
+      }
+      if (
+        (item.type === 'options' ||
+          item.type === 'Radio Button' ||
+          item.type === 'Drop Down' ||
+          item.uiType === FieldType.DROPDOWN) &&
+        item.values &&
+        item.values.length > 0
+      ) {
+        meta.values = item.values.map((val: FieldValue) => ({
+          id: val.id,
+          name: val.name.trim(),
+        }));
+      }
 
       const data: any = {
         name: normalizedName,
-        meta: {},
+        meta: meta,
         field_type_id: item.fieldTypeId,
         description: '',
         validations: validations,
       };
+
+      if (item.machineName) {
+        data.machine_name = item.machineName;
+      }
 
       if (uuidRegex.test(item.id)) {
         data.field_id = item.id;
@@ -682,7 +719,6 @@ const FormsFrom: React.FC<FormsFromProps> = ({
     }
   };
 
-  // Effects
   useEffect(() => {
     if (trigger) {
       onSave();
@@ -743,6 +779,8 @@ const FormsFrom: React.FC<FormsFromProps> = ({
                   onMoveUp={onMoveUp}
                   onMoveDown={onMoveDown}
                   onReorderOptions={onReorderOptions}
+                  onDefaultValueChange={onDefaultValueChange}
+                  onMachineNameChange={onMachineNameChange}
                 />
               ))}
             </SortableContext>
@@ -784,9 +822,16 @@ interface FormFieldItemProps {
   onMoveUp: (index: number) => void;
   onMoveDown: (index: number) => void;
   onReorderOptions: (itemId: string, newValues: FieldValue[]) => void;
+  onDefaultValueChange: (
+    e: React.ChangeEvent<HTMLInputElement>,
+    item: FormField,
+  ) => void;
+  onMachineNameChange: (
+    e: React.ChangeEvent<HTMLInputElement>,
+    item: FormField,
+  ) => void;
 }
 
-// Create a new SortableFormField component that wraps FormFieldItem with drag functionality
 const SortableFormField: React.FC<FormFieldItemProps> = (props) => {
   const {
     attributes,
@@ -813,8 +858,6 @@ const SortableFormField: React.FC<FormFieldItemProps> = (props) => {
     </div>
   );
 };
-
-// Create the FormFieldItem component that renders the actual field content
 interface FormFieldItemDragProps extends FormFieldItemProps {
   dragHandleProps: {
     attributes: any;
@@ -838,6 +881,8 @@ const FormFieldItem: React.FC<FormFieldItemDragProps> = ({
   onMoveUp,
   onMoveDown,
   onReorderOptions,
+  onDefaultValueChange,
+  onMachineNameChange,
   dragHandleProps,
 }) => {
   const fieldTypeUI = getFieldTypeFromBackendType(item.type);
@@ -901,7 +946,22 @@ const FormFieldItem: React.FC<FormFieldItemDragProps> = ({
         />
       </Field>
 
-      {item.type === 'options' && (
+      <Box mt="md">
+        <Field
+          label="Machine Name"
+          hint="Machine-readable identifier for pipeline pattern matching (auto-filled from field label)">
+          <Input
+            placeholder="e.g., customer_name, order_date"
+            value={item.machineName || ''}
+            onChange={(e) => onMachineNameChange(e, item)}
+          />
+        </Field>
+      </Box>
+
+      {(item.type === 'options' ||
+        item.uiType === FieldType.DROPDOWN ||
+        item.type === 'Radio Button' ||
+        item.type === 'Drop Down') && (
         <OptionsSection
           item={item}
           onOptionNameChange={onOptionNameChange}
@@ -910,6 +970,18 @@ const FormFieldItem: React.FC<FormFieldItemDragProps> = ({
           onReorderOptions={onReorderOptions}
         />
       )}
+
+      <Box mt="md">
+        <Field
+          label="Default Value"
+          hint="Optional: Enter a default value that will be pre-filled when users create new entries">
+          <Input
+            placeholder="Enter default value"
+            value={item.defaultValue || ''}
+            onChange={(e) => onDefaultValueChange(e, item)}
+          />
+        </Field>
+      </Box>
 
       <FieldControls
         item={item}
@@ -946,7 +1018,6 @@ const OptionsSection: React.FC<OptionsSectionProps> = ({
   onAddOption,
   onReorderOptions,
 }) => {
-  // Check if there are any empty option names after trimming
   const hasEmptyOptions = item.values?.some(
     (value) => value.name.trim() === '',
   );
@@ -1076,7 +1147,6 @@ const FormElementsPanel: React.FC<FormElementsPanelProps> = ({
   );
 };
 
-// DraggableValues component
 interface DraggableValuesProps {
   item: FormField;
   onOptionNameChange: (
@@ -1143,7 +1213,6 @@ const DraggableValues: React.FC<DraggableValuesProps> = ({
   );
 };
 
-// SortableItem component
 interface SortableItemProps {
   value: FieldValue;
   item: FormField;
@@ -1169,7 +1238,6 @@ const SortableItem = React.memo<SortableItemProps>(
     });
 
     const transformStyle = CSS.Transform.toString(transform);
-    // Check if the value name is empty after trimming
     const isEmptyValue = value.name.trim() === '';
 
     return (
@@ -1215,7 +1283,6 @@ const SortableItem = React.memo<SortableItemProps>(
     );
   },
   (prevProps, nextProps) => {
-    // Only re-render if these props change
     return (
       prevProps.value.name === nextProps.value.name &&
       prevProps.value.id === nextProps.value.id &&
@@ -1226,7 +1293,6 @@ const SortableItem = React.memo<SortableItemProps>(
   },
 );
 
-// Add display name
 SortableItem.displayName = 'SortableItem';
 
 export default FormsFrom;

@@ -102,7 +102,7 @@ export const Backdrop: any = styled.div<any>`
     `};
 `;
 
-export const Title: any = styled.h3`
+export const Title: any = styled.div`
   ${th("drawers.title")};
   font-size: base;
   color: gray.900;

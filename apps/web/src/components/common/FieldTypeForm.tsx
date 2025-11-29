@@ -15,6 +15,11 @@ const FieldTypeForm = () => {
   } = useForm();
 
   const onSubmit = (data: any) => {
+    const meta: any = {};
+    if (data.defaultValue && data.defaultValue.trim() !== '') {
+      meta.defaultValue = data.defaultValue.trim();
+    }
+
     const item: any = {
       validations: [
         {
@@ -26,7 +31,7 @@ const FieldTypeForm = () => {
         },
       ],
       name: data.name,
-      meta: {},
+      meta: meta,
       description: data.description,
     };
 
@@ -60,6 +65,12 @@ const FieldTypeForm = () => {
               name="description"
               label="Description"
               defaultValue="desc"
+              register={register}
+              mb="md"
+            />
+            <Field
+              name="defaultValue"
+              label="Default Value"
               register={register}
               mb="md"
             />
