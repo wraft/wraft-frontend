@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useMemo } from 'react';
 import Router, { useRouter } from 'next/router';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { TextTIcon } from '@phosphor-icons/react';
@@ -16,17 +16,17 @@ import { useForm, Controller } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
 import MentionField from 'components/MentionsField';
+import {
+  getFieldTypeFromBackendType,
+  FieldIcons,
+  BackendFieldType,
+} from 'components/Form/FormFieldTypes';
 import { IconFrame, TimeAgo } from 'common/Atoms';
 import Editor from 'common/Editor';
 import NavEdit from 'common/NavEdit';
 import { Template, TemplateSchema } from 'schemas/template';
 import { putAPI, postAPI, fetchAPI } from 'utils/models';
-import {
-  IContentType,
-  ContentTypes,
-  Field as FieldT,
-  DataTemplates,
-} from 'utils/types';
+import { IContentType, ContentTypes, DataTemplates } from 'utils/types';
 
 import EditMenus from './EditMenus';
 
@@ -312,6 +312,26 @@ const TemplateEditor = () => {
     }
   };
 
+  const getFieldIcon = (fieldTypeName: string) => {
+    const backendType = fieldTypeName as BackendFieldType;
+    const fieldType = getFieldTypeFromBackendType(backendType);
+
+    if (fieldType && FieldIcons[fieldType]) {
+      return FieldIcons[fieldType];
+    }
+
+    return TextTIcon;
+  };
+
+  const sortedFields = useMemo(() => {
+    if (!selectedVariant?.fields) return [];
+    return [...selectedVariant.fields].sort((a: any, b: any) => {
+      const orderA = a.order !== undefined && a.order !== null ? a.order : 0;
+      const orderB = b.order !== undefined && b.order !== null ? b.order : 0;
+      return orderA - orderB;
+    });
+  }, [selectedVariant?.fields]);
+
   return (
     <Box h="100vh" overflow="hidden">
       <NavEdit
@@ -479,26 +499,61 @@ const TemplateEditor = () => {
                 Dynamic variables provided by Variants
               </Text>
               <Box border="solid 1px" borderColor="border" borderRadius="sm">
-                {selectedVariant.fields &&
-                  selectedVariant.fields.map((field: FieldT, index: number) => (
-                    <Flex
-                      bg="background-secondary"
-                      p="sm"
-                      borderBottom={
-                        index === selectedVariant.fields.length - 1
-                          ? 'none'
-                          : 'solid 1px'
-                      }
-                      borderColor="border"
-                      justify="space-between"
-                      key={field.id}
-                      onClick={() => insertBlock(field)}>
-                      <Text>{field.name}</Text>
-                      <IconFrame color="icon">
-                        <TextTIcon />
-                      </IconFrame>
-                    </Flex>
-                  ))}
+                {sortedFields &&
+                  sortedFields.map((field: any, index: number) => {
+                    const FieldIcon = getFieldIcon(
+                      field.field_type?.name || '',
+                    );
+                    const isRequired = field.required === true;
+                    const machineName = field.machine_name;
+
+                    return (
+                      <Flex
+                        bg="background-secondary"
+                        p="sm"
+                        borderBottom={
+                          index === sortedFields.length - 1
+                            ? 'none'
+                            : 'solid 1px'
+                        }
+                        borderColor="border"
+                        justify="space-between"
+                        alignItems="center"
+                        key={field.id}
+                        onClick={() => insertBlock(field)}>
+                        <Flex alignItems="center" gap="sm" flex={1}>
+                          <IconFrame color="icon">
+                            <FieldIcon size={18} />
+                          </IconFrame>
+                          <Flex direction="column" flex={1}>
+                            <Flex alignItems="center" gap="sm">
+                              <Text>{field.name}</Text>
+                              {isRequired && (
+                                <Text
+                                  as="span"
+                                  fontSize="xs"
+                                  color="green.800"
+                                  fontWeight="medium">
+                                  Required
+                                </Text>
+                              )}
+                            </Flex>
+                            {machineName && (
+                              <Text
+                                fontSize="xs"
+                                color="text-secondary"
+                                lineHeight="1.3">
+                                Machine name: {machineName}
+                              </Text>
+                            )}
+                          </Flex>
+                        </Flex>
+                        <Text color="text-secondary" fontSize="sm">
+                          {field.field_type?.name}
+                        </Text>
+                      </Flex>
+                    );
+                  })}
               </Box>
             </Box>
           )}

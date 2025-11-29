@@ -18,12 +18,12 @@ import {
 import { Box, Field, Flex, InputText as Input, Text, Toggle } from '@wraft/ui';
 import { CloseIcon, DocumentsIcon, DragIcon } from '@wraft/icon';
 import {
-  ArrowDown,
-  ArrowUp,
-  Copy,
-  Plus,
-  Trash,
-  DotsSixVertical,
+  ArrowDownIcon,
+  ArrowUpIcon,
+  CopyIcon,
+  PlusIcon,
+  TrashIcon,
+  DotsSixVerticalIcon,
 } from '@phosphor-icons/react';
 import { CSS } from '@dnd-kit/utilities';
 import { Button } from '@wraft/ui';
@@ -31,6 +31,7 @@ import toast from 'react-hot-toast';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
+import { IconFrame } from 'common/Atoms';
 import { fetchAPI, postAPI, putAPI } from 'utils/models';
 import { uuidRegex } from 'utils/regex';
 import { convertToVariableName } from 'utils/index';
@@ -906,29 +907,41 @@ const FormFieldItem: React.FC<FormFieldItemDragProps> = ({
             cursor="grab"
             {...dragHandleProps.attributes}
             {...dragHandleProps.listeners}>
-            <DotsSixVertical size={20} />
+            <IconFrame color="icon">
+              <DotsSixVerticalIcon size={20} />
+            </IconFrame>
           </Box>
           <Flex align="center" gap="xs">
-            <Icon width={24} />
+            <IconFrame color="icon">
+              <Icon width={24} />
+            </IconFrame>
             <Text fontWeight="heading">{displayName}</Text>
           </Flex>
         </Flex>
 
         <Flex align="center" gap="md">
           <Box w="18px" h="18px" onClick={() => onDuplicateField(index, item)}>
-            <Copy size={18} />
+            <IconFrame color="icon">
+              <CopyIcon size={18} />
+            </IconFrame>
           </Box>
           <Box w="18px" h="18px" onClick={() => onDeleteField(index)}>
-            <Trash size={18} />
+            <IconFrame color="icon">
+              <TrashIcon size={18} />
+            </IconFrame>
           </Box>
           {index !== 0 && (
             <Box w="18px" h="18px" onClick={() => onMoveUp(index)}>
-              <ArrowUp size={18} />
+              <IconFrame color="icon">
+                <ArrowUpIcon size={18} />
+              </IconFrame>
             </Box>
           )}
           {index !== itemsLength - 1 && (
             <Box w="18px" h="18px" onClick={() => onMoveDown(index)}>
-              <ArrowDown size={18} />
+              <IconFrame color="icon">
+                <ArrowDownIcon size={18} />
+              </IconFrame>
             </Box>
           )}
         </Flex>
@@ -1044,7 +1057,9 @@ const OptionsSection: React.FC<OptionsSectionProps> = ({
         onClick={() => onAddOption(item.id)}
         style={{ width: '100%', marginTop: '16px' }}>
         <Flex align="center">
-          <Plus size={20} color="currentColor" />
+          <IconFrame color="icon">
+            <PlusIcon size={20} />
+          </IconFrame>
           <Text ml="sm">Add Option</Text>
         </Flex>
       </Button>
@@ -1261,7 +1276,9 @@ const SortableItem = React.memo<SortableItemProps>(
           flexShrink={0}
           color="text-secondary"
           p="md">
-          <DragIcon />
+          <IconFrame color="icon">
+            <DragIcon />
+          </IconFrame>
         </Box>
         <Input
           className={`${isDragging ? 'z-10' : ''}`}
@@ -1275,11 +1292,13 @@ const SortableItem = React.memo<SortableItemProps>(
           style={{ flexGrow: 1 }}
         />
         <Box color="text-secondary" p="md">
-          <CloseIcon
-            onClick={() => {
-              onDeleteValue(item, value);
-            }}
-          />
+          <IconFrame color="icon">
+            <CloseIcon
+              onClick={() => {
+                onDeleteValue(item, value);
+              }}
+            />
+          </IconFrame>
         </Box>
       </Flex>
     );

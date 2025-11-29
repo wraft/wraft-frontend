@@ -1,6 +1,8 @@
 import React from 'react';
 import { Box, Text, Flex } from '@wraft/ui';
 
+import { IconFrame } from 'common/Atoms';
+
 import { FieldType, FieldMap } from './FormFieldTypes';
 
 type Props = {
@@ -34,7 +36,11 @@ const AnimatedButton = ({
       style={{ transition: 'all 0.3s ease' }}
       onClick={() => !disabled && onClick()}>
       <Flex className="icon" mr="sm" w="20px" h="20px" mt="2px">
-        {children || <Icon size={20} />}
+        {children || (
+          <IconFrame color="icon">
+            <Icon size={20} />
+          </IconFrame>
+        )}
       </Flex>
       <Box>
         <Text ml={1} fontWeight="heading">
