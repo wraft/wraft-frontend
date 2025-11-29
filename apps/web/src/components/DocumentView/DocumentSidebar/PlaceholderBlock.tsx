@@ -110,7 +110,6 @@ const PlaceholderBlock = ({ fields, onSaved }: PlaceholderBlockProps) => {
               </Box>
             )}
           </Flex>
-          {console.log('mappedFields', mappedFields)}
 
           <Box
             border="1px solid"
@@ -137,8 +136,6 @@ const PlaceholderBlock = ({ fields, onSaved }: PlaceholderBlockProps) => {
                       textAlign="right">
                       {x.field_type?.name === 'Table' ? 'Table' : x.name}
                     </Text>
-
-                    {/* <Text>{x.type}</Text> */}
                   </Flex>
                 ))}
           </Box>

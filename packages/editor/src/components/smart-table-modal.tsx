@@ -122,6 +122,12 @@ export default function SmartTableModal({
     }
   }, [isOpen, existingData]);
 
+  const handleTableNameChange = (value: string) => {
+    const sanitizedValue = value.toLowerCase().replace(/[^a-z0-9_]/g, "");
+    setTableName(sanitizedValue);
+    setError("");
+  };
+
   const handleJsonChange = (value: string) => {
     setJsonInput(value);
     setError("");
@@ -144,6 +150,13 @@ export default function SmartTableModal({
   const handleSubmit = () => {
     if (!tableName.trim()) {
       setError("Please enter a table name");
+      return;
+    }
+
+    if (!/^[a-z0-9_]+$/.test(tableName)) {
+      setError(
+        "Table name can only contain lowercase letters, numbers, and underscores.",
+      );
       return;
     }
 
@@ -293,13 +306,13 @@ export default function SmartTableModal({
           <Box mb="lg">
             <Field
               label="Table Name *"
-              hint="A unique identifier for this table"
+              hint="Only lowercase letters, numbers, and underscores are allowed. Examples: invoice_items, spec_items"
             >
               <InputText
                 type="text"
                 value={tableName}
-                onChange={(e) => setTableName(e.target.value)}
-                placeholder="e.g., invoice-items, user-list"
+                onChange={(e) => handleTableNameChange(e.target.value)}
+                placeholder="e.g., invoice_items, user_list"
               />
             </Field>
           </Box>
