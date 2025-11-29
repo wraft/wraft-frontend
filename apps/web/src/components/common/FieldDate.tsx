@@ -13,10 +13,16 @@ const DateInputWrapper = styled(Box)`
   .rdp-root {
     --rdp-accent-color: var(--theme-ui-colors-green-800);
     padding: 10px 10px;
+    background: var(--theme-ui-colors-background-primary);
+    color: var(--theme-ui-colors-text-primary);
   }
 
-  input::placeholder {
-    color: var(--theme-ui-colors-gray-800);
+  input {
+    background: transparent;
+    color: var(--theme-ui-colors-text-primary);
+    ::placeholder {
+      color: var(--theme-ui-colors-gray-800);
+    }
   }
 `;
 

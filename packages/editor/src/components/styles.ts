@@ -112,6 +112,7 @@ export const EditorContent = styled.divBox`
   .ProseMirror div[data-smart-table-wrapper] {
     margin: 1rem 0;
     background: #f8fafc;
+    border-radius: 8px 8px 0 0;
   }
 
   .ProseMirror div[data-smart-table-wrapper]::before {
@@ -125,11 +126,11 @@ export const EditorContent = styled.divBox`
     // color: #1e40af;
     padding: 14px;
     background: var(--theme-ui-colors-background-secondary);
-    border-radius: 6px 6px 0 0;
+    border-radius: 8px 8px 0 0;
   }
 
   .ProseMirror div[data-smart-table-wrapper] table {
-    background: white;
+    background: var(--theme-ui-colors-background-primary);
     margin: 0;
   }
 
