@@ -1,7 +1,8 @@
 import React, { useState, useCallback } from 'react';
 import { Box, Flex, Button, InputText } from '@wraft/ui';
-import { Plus, Trash } from '@phosphor-icons/react';
+import { PlusIcon, TrashIcon } from '@phosphor-icons/react';
 
+import { IconFrame } from 'common/Atoms';
 export interface TableRow {
   [key: string]: string;
 }
@@ -174,7 +175,9 @@ const TableFieldInput: React.FC<TableFieldInputProps> = ({
                     size="sm"
                     onClick={() => handleRemoveRow(rowIndex)}
                     aria-label="Remove row">
-                    <Trash size={16} />
+                    <IconFrame color="icon">
+                      <TrashIcon size={16} />
+                    </IconFrame>
                   </Button>
                 </Box>
               )}
@@ -186,7 +189,9 @@ const TableFieldInput: React.FC<TableFieldInputProps> = ({
       {!disabled && (
         <Box mt="sm">
           <Button variant="tertiary" size="sm" onClick={handleAddRow}>
-            <Plus size={16} />
+            <IconFrame color="icon">
+              <PlusIcon size={16} />
+            </IconFrame>
             <Box as="span">Add Row</Box>
           </Button>
         </Box>

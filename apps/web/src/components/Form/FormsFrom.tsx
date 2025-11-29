@@ -971,17 +971,19 @@ const FormFieldItem: React.FC<FormFieldItemDragProps> = ({
         />
       )}
 
-      <Box mt="md">
-        <Field
-          label="Default Value"
-          hint="Optional: Enter a default value that will be pre-filled when users create new entries">
-          <Input
-            placeholder="Enter default value"
-            value={item.defaultValue || ''}
-            onChange={(e) => onDefaultValueChange(e, item)}
-          />
-        </Field>
-      </Box>
+      {fieldTypeUI !== FieldType.TABLE && item.type !== 'Table' && (
+        <Box mt="md">
+          <Field
+            label="Default Value"
+            hint="Optional: Enter a default value that will be pre-filled when users create new entries">
+            <Input
+              placeholder="Enter default value"
+              value={item.defaultValue || ''}
+              onChange={(e) => onDefaultValueChange(e, item)}
+            />
+          </Field>
+        </Box>
+      )}
 
       <FieldControls
         item={item}
