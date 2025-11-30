@@ -11,7 +11,7 @@ import {
   Modal,
 } from '@wraft/ui';
 import toast from 'react-hot-toast';
-import { Pencil, Trash } from '@phosphor-icons/react';
+import { PencilIcon, TrashIcon } from '@phosphor-icons/react';
 
 import { IconFrame } from 'common/Atoms';
 import ConfirmDelete from 'common/ConfirmDelete';
@@ -220,13 +220,13 @@ const PipelineSteps: React.FC<PipelineStepsProps> = ({
               }>
               {hasPermission('pipeline', 'manage') && (
                 <IconFrame color="gray.1100">
-                  <Pencil size={18} />
+                  <PencilIcon size={18} />
                 </IconFrame>
               )}
             </Button>
             {hasPermission('pipeline', 'delete') && (
               <IconFrame color="gray.1100">
-                <Trash
+                <TrashIcon
                   size={20}
                   color=""
                   cursor="pointer"
