@@ -416,8 +416,6 @@ export const DocumentProvider = ({
     const markdownContent = editorRef.current?.helpers?.getMarkdown();
     const jsonContent = editorRef.current?.helpers?.getJSON();
 
-    console.log('fieldValues [b]', fieldValues);
-
     const serials: any = {
       ...obj,
       title: pageTitle || 'welcome',

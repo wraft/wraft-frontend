@@ -9,11 +9,14 @@ import {
   Textarea,
   Button,
   Field,
+  Select,
 } from '@wraft/ui';
 import toast from 'react-hot-toast';
 import { LogoIcon } from '@wraft/icon';
 
 import { fetchAPI, postAPI } from 'utils/models';
+
+import TableFieldInput, { TableRow } from './TableFieldInput';
 
 const FormEntry = () => {
   const [items, setItems] = useState<any>([]);
@@ -38,7 +41,11 @@ const FormEntry = () => {
                 val.validation.rule === 'required' &&
                 val.validation.value === true,
             ),
-            value: '',
+            value: i.meta?.defaultValue || '',
+            smartTableName: i.meta?.smartTableName || undefined,
+            tableColumns: i.meta?.tableColumns || undefined,
+            defaultValue: i.meta?.defaultValue || undefined,
+            values: i.meta?.values || undefined,
           };
         });
         setInitial(fields);
@@ -74,6 +81,63 @@ const FormEntry = () => {
     setItems(newArr);
   };
 
+  const onTableValueChange = (item: any, tableValue: TableRow[]) => {
+    const newVal = JSON.stringify(tableValue);
+    const newItem = {
+      ...item,
+      value: newVal,
+      error:
+        (tableValue.length === 0 ||
+          tableValue.every((row) =>
+            Object.values(row).every(
+              (cell) => !cell || cell.toString().trim() === '',
+            ),
+          )) &&
+        item.required
+          ? 'This field is required'
+          : undefined,
+    };
+    const newArr = items.map((s: any) => {
+      if (s.id === item.id) {
+        return newItem;
+      } else {
+        return s;
+      }
+    });
+    setItems(newArr);
+  };
+
+  // Helper function to transform table data to the new format
+  const transformTableData = (
+    tableRows: Array<Record<string, string>>,
+    tableColumns?: Array<{ id: string; name: string }>,
+    footer?: string[],
+  ): Record<string, any> => {
+    const headers =
+      tableColumns?.map((col) => col.name) ||
+      (tableRows.length > 0 ? Object.keys(tableRows[0]) : []);
+
+    const rows = tableRows.map((row) => {
+      if (tableColumns && tableColumns.length > 0) {
+        return tableColumns.map((col) => row[col.id] || '');
+      }
+      return headers.map((header) => {
+        return row[header] || '';
+      });
+    });
+
+    const result: Record<string, any> = {
+      headers,
+      rows,
+    };
+
+    if (footer && footer.length > 0) {
+      result.footer = footer;
+    }
+
+    return result;
+  };
+
   const onSave = () => {
     if (items.some((i: any) => i.value.length === 0 && i.required == true)) {
       const errorsAdded = items.map((i: any) => {
@@ -87,8 +151,35 @@ const FormEntry = () => {
       return;
     }
     const fields = items.map((i: any) => {
+      let value: any = i.value;
+
+      if (i.type === 'Table' && typeof i.value === 'string') {
+        try {
+          const parsed = JSON.parse(i.value);
+          if (Array.isArray(parsed)) {
+            const transformed = transformTableData(parsed, i.tableColumns);
+            value = transformed;
+          } else if (typeof parsed === 'object' && parsed !== null) {
+            if (parsed.headers && parsed.rows) {
+              value = parsed;
+            } else if (Array.isArray(parsed.rows)) {
+              const transformed = transformTableData(
+                parsed.rows,
+                i.tableColumns,
+                parsed.footer,
+              );
+              value = transformed;
+            } else {
+              value = parsed;
+            }
+          }
+        } catch {
+          value = i.value;
+        }
+      }
+
       return {
-        value: i.value,
+        value,
         field_id: i.id,
       };
     });
@@ -186,6 +277,49 @@ const FormEntry = () => {
                         onChange={(e) => onValueChange(e, item)}
                       />
                     )}
+                    {item.type === 'Table' && (
+                      <TableFieldInput
+                        value={item.value}
+                        onChange={(tableValue) =>
+                          onTableValueChange(item, tableValue)
+                        }
+                        columns={item.tableColumns}
+                        smartTableName={item.smartTableName}
+                      />
+                    )}
+                    {(item.type === 'Drop Down' ||
+                      item.type === 'Radio Button') &&
+                      item.values &&
+                      item.values.length > 0 && (
+                        <Select
+                          key={`${item.id}-${item.value || 'empty'}-${item.values.map((v: any) => v.name).join(',')}`}
+                          options={item.values.map((val: any) => ({
+                            value: val.name,
+                            label: val.name,
+                          }))}
+                          value={item.value || undefined}
+                          onChange={(selectedValue: any) => {
+                            const newVal = selectedValue || '';
+                            const newItem = {
+                              ...item,
+                              value: newVal,
+                              error:
+                                newVal.length === 0 && item.required
+                                  ? 'This field is required'
+                                  : undefined,
+                            };
+                            const newArr = items.map((s: any) => {
+                              if (s.id === item.id) {
+                                return newItem;
+                              } else {
+                                return s;
+                              }
+                            });
+                            setItems(newArr);
+                          }}
+                          placeholder="Select an option"
+                        />
+                      )}
                   </>
                 </Field>
               </Box>

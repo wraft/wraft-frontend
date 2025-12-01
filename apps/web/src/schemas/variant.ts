@@ -2,8 +2,6 @@ import { z } from 'zod';
 
 import { hexColorRegex, safeTextRegex, uuidRegex } from 'utils/regex';
 
-// First, update the VariantSchema
-
 export const VariantSchema = z.object({
   name: z
     .string()
@@ -43,7 +41,6 @@ export const VariantSchema = z.object({
     )
     .optional(),
 
-  //next
   layout: z.union([
     z.string().regex(uuidRegex, 'Layout is required'),
     z.object({
@@ -86,20 +83,39 @@ export const VariantSchema = z.object({
     .regex(hexColorRegex, 'Invalid hexadecimal color')
     .optional(),
 
-  //next
   fields: z
     .array(
       z.object({
         type: z.string().regex(uuidRegex, 'Invalid field type'),
         name: z.string().min(1, 'Name is required'),
         fromFrame: z.boolean().optional(),
+        smartTableName: z.string().optional(),
+        required: z.boolean().optional(),
+        order: z.number().int().min(0).optional(),
+        machine_name: z.string().optional(),
+        dateFormat: z.string().optional(),
+        values: z
+          .array(
+            z.object({
+              id: z.string(),
+              name: z.string().min(1, 'Option name is required'),
+            }),
+          )
+          .optional(),
+        validations: z
+          .array(
+            z.object({
+              validation: z.any(),
+              error_message: z.string().optional(),
+            }),
+          )
+          .optional(),
       }),
     )
     .superRefine((fields, ctx) => {
       const nameSet = new Set<string>();
       fields.forEach((field, index) => {
-        // Case-insensitive uniqueness check
-        const normalizedName = field.name.toLowerCase(); // Normalize for case-insensitive comparison
+        const normalizedName = field.name.toLowerCase();
         if (nameSet.has(normalizedName)) {
           ctx.addIssue({
             code: 'custom',

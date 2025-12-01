@@ -8,6 +8,7 @@ import {
   Spinner,
   Textarea,
   Text,
+  Select,
 } from '@wraft/ui';
 import { Button } from '@wraft/ui';
 import toast from 'react-hot-toast';
@@ -22,6 +23,8 @@ import {
   prepareFormEntrySubmission,
 } from 'schemas/pipelineFormEntry';
 import { fetchAPI, postAPI } from 'utils/models';
+
+import TableFieldInput, { TableRow } from '../Form/TableFieldInput';
 
 interface PipelineFormEntryProps {
   formId: string;
@@ -68,10 +71,6 @@ const PipelineFormEntry: React.FC<PipelineFormEntryProps> = ({
     resolver: zodResolver(createFormSchema(fields)),
   });
 
-  /**
-   * Fetches form data and initializes the form
-   * @param id - Form ID to fetch
-   */
   const fetchFormData = async (id: string) => {
     setIsLoading(true);
     setIsFieldsLoading(true);
@@ -92,15 +91,18 @@ const PipelineFormEntry: React.FC<PipelineFormEntryProps> = ({
           (val: any) =>
             val.validation.rule === 'required' && val.validation.value === true,
         ),
-        value: '',
+        value: field.meta?.defaultValue || '',
+        smartTableName: field.meta?.smartTableName || undefined,
+        tableColumns: field.meta?.tableColumns || undefined,
+        defaultValue: field.meta?.defaultValue || undefined,
+        values: field.meta?.values || undefined,
       }));
 
       setFields(formFields);
 
-      // Initialize form with empty values
       const defaultValues: Record<string, string> = {};
       formFields.forEach((field: FormFieldEntry) => {
-        defaultValues[field.id] = '';
+        defaultValues[field.id] = (field as any).defaultValue || '';
       });
 
       reset(defaultValues);
@@ -117,7 +119,6 @@ const PipelineFormEntry: React.FC<PipelineFormEntryProps> = ({
    * Resets the form to empty values
    */
   const handleClearForm = () => {
-    // Reset form to empty values
     const defaultValues: Record<string, string> = {};
     fields.forEach((field) => {
       defaultValues[field.id] = '';
@@ -131,7 +132,6 @@ const PipelineFormEntry: React.FC<PipelineFormEntryProps> = ({
   ) => {
     setIsSubmitting(true);
 
-    // Convert form data to the format expected by the API
     const formattedFields = fields.map((field) => ({
       ...field,
       value: formData[field.id] || '',
@@ -274,6 +274,47 @@ const PipelineFormEntry: React.FC<PipelineFormEntryProps> = ({
                   )}
                 />
               )}
+              {field.type === 'Table' && (
+                <Controller
+                  name={field.id}
+                  control={control}
+                  render={({ field: controllerField }) => (
+                    <TableFieldInput
+                      value={controllerField.value}
+                      onChange={(tableValue: TableRow[]) => {
+                        controllerField.onChange(JSON.stringify(tableValue));
+                      }}
+                      columns={(field as any).tableColumns}
+                      smartTableName={(field as any).smartTableName}
+                    />
+                  )}
+                />
+              )}
+              {(field.type === 'Drop Down' || field.type === 'Radio Button') &&
+                (field as any).values &&
+                (field as any).values.length > 0 && (
+                  <Controller
+                    name={field.id}
+                    control={control}
+                    render={({ field: controllerField }) => {
+                      const options = (field as any).values.map((val: any) => ({
+                        value: val.name,
+                        label: val.name,
+                      }));
+                      return (
+                        <Select
+                          key={`${field.id}-${controllerField.value || 'empty'}-${options.map((o: any) => o.value).join(',')}`}
+                          options={options}
+                          value={controllerField.value || undefined}
+                          onChange={(selectedValue: any) => {
+                            controllerField.onChange(selectedValue || '');
+                          }}
+                          placeholder="Select an option"
+                        />
+                      );
+                    }}
+                  />
+                )}
             </>
           </Field>
         </Box>

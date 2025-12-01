@@ -7,7 +7,10 @@ import {
   AutocompleteList,
   AutocompletePopover,
 } from "prosekit/react/autocomplete";
+import { useState } from "react";
+import type { SmartTableJSON } from "../helpers/smart-table";
 import type { EditorExtension } from "./extension";
+import SmartTableModal from "./smart-table-modal";
 
 const StyledPopover = styled(AutocompletePopover)`
   position: relative;
@@ -63,49 +66,90 @@ const StyledItem = styled(AutocompleteItem)`
 
 export default function SlashMenu() {
   const editor = useEditor<EditorExtension>();
+  const [isSmartTableModalOpen, setIsSmartTableModalOpen] = useState(false);
+
+  const handleInsertSmartTable = (
+    tableJSON: SmartTableJSON,
+    _tableName: string,
+  ) => {
+    const { state, view } = editor;
+    const { schema, tr } = state;
+
+    try {
+      const tableNode = schema.nodeFromJSON(tableJSON);
+
+      const transaction = tr.replaceSelectionWith(tableNode).scrollIntoView();
+
+      view.dispatch(transaction);
+
+      setIsSmartTableModalOpen(false);
+    } catch (error) {
+      // Handle error - could emit to error tracking service
+      // For now, just keep modal open so user can retry
+      if (error instanceof Error) {
+        // Error occurred during insertion
+      }
+    }
+  };
 
   return (
-    <StyledPopover regex={/\/.*$/iu}>
-      <StyledList>
-        <StyledEmpty>No results</StyledEmpty>
+    <>
+      <StyledPopover regex={/\/.*$/iu}>
+        <StyledList>
+          <StyledEmpty>No results</StyledEmpty>
 
-        <StyledItem
-          onSelect={() =>
-            editor.commands.insertSignature({
-              placeholder: true,
-              // src: "https://placehold.co/200x100/8bd450/ffffff/png",
-              width: 200,
-              height: 100,
-            })
-          }
-        >
-          Signature
-        </StyledItem>
-        <StyledItem onSelect={() => editor.commands.setHeading({ level: 1 })}>
-          Heading 1
-        </StyledItem>
-        <StyledItem onSelect={() => editor.commands.setHeading({ level: 2 })}>
-          Heading 2
-        </StyledItem>
+          <StyledItem
+            onSelect={() => {
+              setIsSmartTableModalOpen(true);
+            }}
+          >
+            Smart Table
+          </StyledItem>
 
-        <StyledItem
-          onSelect={() => editor.commands.wrapInList({ kind: "bullet" })}
-        >
-          Bullet list
-        </StyledItem>
+          <StyledItem
+            onSelect={() =>
+              editor.commands.insertSignature({
+                placeholder: true,
+                // src: "https://placehold.co/200x100/8bd450/ffffff/png",
+                width: 200,
+                height: 100,
+              })
+            }
+          >
+            Signature
+          </StyledItem>
+          <StyledItem onSelect={() => editor.commands.setHeading({ level: 1 })}>
+            Heading 1
+          </StyledItem>
+          <StyledItem onSelect={() => editor.commands.setHeading({ level: 2 })}>
+            Heading 2
+          </StyledItem>
 
-        <StyledItem
-          onSelect={() => editor.commands.wrapInList({ kind: "ordered" })}
-        >
-          Ordered list
-        </StyledItem>
+          <StyledItem
+            onSelect={() => editor.commands.wrapInList({ kind: "bullet" })}
+          >
+            Bullet list
+          </StyledItem>
 
-        <StyledItem
-          onSelect={() => editor.commands.wrapInList({ kind: "toggle" })}
-        >
-          Toggle list
-        </StyledItem>
-      </StyledList>
-    </StyledPopover>
+          <StyledItem
+            onSelect={() => editor.commands.wrapInList({ kind: "ordered" })}
+          >
+            Ordered list
+          </StyledItem>
+
+          <StyledItem
+            onSelect={() => editor.commands.wrapInList({ kind: "toggle" })}
+          >
+            Toggle list
+          </StyledItem>
+        </StyledList>
+      </StyledPopover>
+
+      <SmartTableModal
+        isOpen={isSmartTableModalOpen}
+        onClose={() => setIsSmartTableModalOpen(false)}
+        onSubmit={handleInsertSmartTable}
+      />
+    </>
   );
 }

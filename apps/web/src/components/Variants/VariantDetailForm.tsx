@@ -14,8 +14,13 @@ import {
   Textarea,
   Label,
 } from '@wraft/ui';
-import { TextT, X as _X } from '@phosphor-icons/react';
+import { TextTIcon } from '@phosphor-icons/react';
 
+import {
+  getFieldTypeFromBackendType,
+  FieldIcons,
+  BackendFieldType,
+} from 'components/Form/FormFieldTypes';
 import MenuStepsIndicator from 'common/MenuStepsIndicator';
 import FieldColor from 'common/FieldColor';
 import { IconFrame } from 'common/Atoms';
@@ -94,6 +99,17 @@ const ContentTypeViewForm = () => {
   const titles = ['Details', 'Configure', 'Fields'];
   const goTo = (step: number) => {
     setFormStep(step);
+  };
+
+  const getFieldIcon = (fieldTypeName: string) => {
+    const backendType = fieldTypeName as BackendFieldType;
+    const fieldType = getFieldTypeFromBackendType(backendType);
+
+    if (fieldType && FieldIcons[fieldType]) {
+      return FieldIcons[fieldType];
+    }
+
+    return TextTIcon;
   };
 
   return (
@@ -180,28 +196,54 @@ const ContentTypeViewForm = () => {
               <Label>Fields</Label>
               <Box border="1px solid" borderColor="border" mt="md">
                 {fields &&
-                  fields.map((f: any, index: number) => (
-                    <Flex
-                      key={f.id}
-                      borderBottom={
-                        index < fields.length - 1 ? '1px solid' : 'none'
-                      }
-                      borderColor="border"
-                      justify="space-between"
-                      alignItems="center"
-                      px="sm"
-                      py="sm">
-                      <Flex alignItems="center" gap="sm">
-                        <IconFrame color="gray.1100">
-                          <TextT size={14} />
-                        </IconFrame>
-                        <Text as="p">{f.name}</Text>
+                  fields.map((field: any, index: number) => {
+                    const FieldIcon = getFieldIcon(field.value.field_type.name);
+                    const isRequired = field.value.required === true;
+                    const machineName = field.value.machine_name;
+                    return (
+                      <Flex
+                        key={field.id}
+                        borderBottom={
+                          index < fields.length - 1 ? '1px solid' : 'none'
+                        }
+                        borderColor="border"
+                        justify="space-between"
+                        alignItems="center"
+                        px="md"
+                        py="md">
+                        <Flex alignItems="center" gap="md" flex={1}>
+                          <IconFrame color="icon">
+                            <FieldIcon size={18} />
+                          </IconFrame>
+                          <Flex direction="column" flex={1}>
+                            <Flex alignItems="center" gap="sm">
+                              <Text>{field.name}</Text>
+                              {isRequired && (
+                                <Text
+                                  as="span"
+                                  fontSize="xs"
+                                  color="green.800"
+                                  fontWeight="medium">
+                                  Required
+                                </Text>
+                              )}
+                            </Flex>
+                            {machineName && (
+                              <Text
+                                fontSize="xs"
+                                color="text-secondary"
+                                lineHeight="1.3">
+                                Machine name: {machineName}
+                              </Text>
+                            )}
+                          </Flex>
+                        </Flex>
+                        <Text color="text-secondary">
+                          {field.value.field_type.name}
+                        </Text>
                       </Flex>
-                      <Text as="p" color="text-secondary">
-                        {f.value.field_type.name}
-                      </Text>
-                    </Flex>
-                  ))}
+                    );
+                  })}
               </Box>
             </Box>
 

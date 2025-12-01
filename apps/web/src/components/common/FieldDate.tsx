@@ -2,12 +2,32 @@ import React, { useEffect, useState, useRef } from 'react';
 import { format, parse, isValid } from 'date-fns';
 import { DayPicker } from 'react-day-picker';
 import { Box, Text, Label } from '@wraft/ui';
-import { Calendar } from '@phosphor-icons/react';
+import { CalendarIcon } from '@phosphor-icons/react';
+import styled from '@emotion/styled';
 
 import 'react-day-picker/dist/style.css';
 
+import { IconFrame } from './Atoms';
+
+const DateInputWrapper = styled(Box)`
+  .rdp-root {
+    --rdp-accent-color: var(--theme-ui-colors-green-800);
+    padding: 10px 10px;
+    background: var(--theme-ui-colors-background-primary);
+    color: var(--theme-ui-colors-text-primary);
+  }
+
+  input {
+    background: transparent;
+    color: var(--theme-ui-colors-text-primary);
+    ::placeholder {
+      color: var(--theme-ui-colors-gray-800);
+    }
+  }
+`;
+
 interface Props {
-  register: any;
+  register?: any;
   label: string;
   name: string;
   defaultValue?: string;
@@ -18,18 +38,23 @@ interface Props {
   onChange: any;
   required?: boolean;
   value?: any;
+  error?: string;
+  dateFormat?: string;
 }
 
 const Field: React.FC<Props> = ({
   name,
   label,
-  // placeholder,
+  placeholder = 'Select a date',
   register,
   defaultValue,
+  value: controlledValue,
   onChange,
   required = false,
   mr,
   sub,
+  error,
+  dateFormat = 'yyyy-MM-dd',
 }) => {
   const [selected, setSelected] = useState<Date | undefined>();
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
@@ -39,7 +64,7 @@ const Field: React.FC<Props> = ({
   const inputRef = useRef<HTMLDivElement>(null);
   const inputId = `date-field-${name}`;
 
-  const FORMAT = 'yyyy-MM-dd';
+  const FORMAT = dateFormat;
 
   const formatDate = (date: Date): string => {
     return format(date, FORMAT);
@@ -53,8 +78,9 @@ const Field: React.FC<Props> = ({
   const handleDaySelect = (date: Date | undefined) => {
     setSelected(date);
     if (date) {
-      setInputValue(formatDate(date));
-      onChange && onChange(formatDate(date));
+      const formattedDate = formatDate(date);
+      setInputValue(formattedDate);
+      onChange && onChange(formattedDate);
     }
     setIsCalendarOpen(false);
   };
@@ -67,6 +93,8 @@ const Field: React.FC<Props> = ({
     if (parsedDate) {
       setSelected(parsedDate);
       onChange && onChange(value);
+    } else {
+      onChange && onChange(value);
     }
   };
 
@@ -74,7 +102,6 @@ const Field: React.FC<Props> = ({
     setIsCalendarOpen(!isCalendarOpen);
   };
 
-  // Handle clicks outside the calendar
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -97,7 +124,12 @@ const Field: React.FC<Props> = ({
   }, [isCalendarOpen]);
 
   useEffect(() => {
-    if (defaultValue) {
+    if (controlledValue !== undefined) {
+      setStatus(2);
+      const dx = parseDate(controlledValue);
+      setSelected(dx);
+      setInputValue(controlledValue || '');
+    } else if (defaultValue) {
       setStatus(2);
       const dx = parseDate(defaultValue);
       setSelected(dx);
@@ -108,10 +140,10 @@ const Field: React.FC<Props> = ({
       setInputValue(defaultDate ? formatDate(defaultDate) : '');
       setStatus(2);
     }
-  }, [defaultValue]);
+  }, [controlledValue, defaultValue]);
 
   return (
-    <Box pb="sm" mr={mr} position="relative" w="100%">
+    <DateInputWrapper pb="sm" mr={mr} position="relative" w="100%">
       <Label htmlFor={inputId} mb="0">
         {label}
         {required && (
@@ -122,29 +154,38 @@ const Field: React.FC<Props> = ({
       </Label>
       {status > 1 && (
         <Box position="relative" mt="xs">
-          <div ref={inputRef}>
-            <input
+          <Box ref={inputRef}>
+            <Box
+              as="input"
               id={inputId}
               name={name}
-              value={inputValue}
+              value={
+                controlledValue !== undefined ? controlledValue : inputValue
+              }
               onChange={handleInputChange}
               onClick={toggleCalendar}
-              {...register(name, { required: required })}
+              placeholder={placeholder}
+              {...(register ? register(name, { required: required }) : {})}
               aria-label={`Date field for ${label}`}
               aria-required={required}
-              style={{
-                width: '100%',
-                padding: '8px 12px',
-                borderRadius: '4px',
-                border: '1px solid #ddd',
-                fontSize: '16px',
-              }}
+              w="100%"
+              py="md"
+              px="md"
+              borderRadius="md"
+              border="1px solid"
+              borderColor={error ? 'error' : 'border'}
+              fontSize="14px"
             />
+            {error && (
+              <Text fontSize="sm" color="error" mt="sm">
+                {error}
+              </Text>
+            )}
             {sub && (
               <Box
                 position="absolute"
-                right="8px"
-                top="8px"
+                right="10px"
+                top="10px"
                 cursor="pointer"
                 onClick={toggleCalendar}
                 aria-label="Open calendar"
@@ -155,10 +196,12 @@ const Field: React.FC<Props> = ({
                     toggleCalendar();
                   }
                 }}>
-                <Calendar size={20} weight="regular" />
+                <IconFrame color="icon">
+                  <CalendarIcon size={20} />
+                </IconFrame>
               </Box>
             )}
-          </div>
+          </Box>
 
           {isCalendarOpen && (
             <Box
@@ -181,7 +224,7 @@ const Field: React.FC<Props> = ({
           )}
         </Box>
       )}
-    </Box>
+    </DateInputWrapper>
   );
 };
 

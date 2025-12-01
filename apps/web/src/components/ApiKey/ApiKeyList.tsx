@@ -6,7 +6,6 @@ import {
   PencilIcon,
   TrashIcon,
   EyeIcon,
-  CopyIcon,
   PowerIcon,
 } from '@phosphor-icons/react';
 

@@ -13,6 +13,9 @@ export const WEBHOOK_EVENTS = [
   'document.comment_added',
   'document.deleted',
   'document.reminder_sent',
+  'pipeline.completed',
+  'pipeline.failed',
+  'pipeline.partially_completed',
   'test',
 ] as const;
 
@@ -27,6 +30,10 @@ export const EVENT_DESCRIPTIONS = {
   'document.comment_added': 'Triggered when a comment is added',
   'document.deleted': 'Triggered when a document is deleted',
   'document.reminder_sent': 'Triggered when a reminder is sent',
+  'pipeline.completed': 'Triggered when a pipeline is completed',
+  'pipeline.failed': 'Triggered when a pipeline fails',
+  'pipeline.partially_completed':
+    'Triggered when a pipeline is partially completed',
   test: 'Test event for webhook verification',
 } as const;
 

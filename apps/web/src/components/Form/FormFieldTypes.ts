@@ -7,20 +7,21 @@ import {
   ListDashes,
   Clock,
   EnvelopeSimple,
+  Table,
 } from '@phosphor-icons/react';
 import { IconProps } from '@phosphor-icons/react';
 
-// Backend field types
 export type BackendFieldType =
   | 'Email'
   | 'Date'
   | 'Time'
   | 'Text'
   | 'Radio Button'
+  | 'Drop Down'
   | 'String'
-  | 'options';
+  | 'options'
+  | 'Table';
 
-// UI field types
 export enum FieldType {
   TEXT = 'TEXT',
   LONG_TEXT = 'LONG_TEXT',
@@ -31,18 +32,24 @@ export enum FieldType {
   CHECKBOX = 'CHECKBOX',
   DROPDOWN = 'DROPDOWN',
   OPTIONS = 'OPTIONS',
+  TABLE = 'TABLE',
 }
 
-// Field value interface
 export interface FieldValue {
   id: string;
   name: string;
 }
 
-// Form field interface
+export interface TableColumn {
+  id: string;
+  name: string;
+  type?: string;
+}
+
 export interface FormField {
   id: string;
   name: string;
+  machineName?: string;
   type: BackendFieldType;
   fieldTypeId: string;
   required?: boolean;
@@ -50,11 +57,13 @@ export interface FormField {
   multiple?: boolean;
   fileSize?: number;
   values?: FieldValue[];
+  tableColumns?: TableColumn[];
+  tableRows?: Record<string, any>[];
+  defaultValue?: string;
   error?: string;
-  uiType?: FieldType; // For UI differentiation
+  uiType?: FieldType;
 }
 
-// Mapping UI field types to backend field types
 export const BackendTypeMapping: Record<FieldType, BackendFieldType> = {
   [FieldType.TEXT]: 'String',
   [FieldType.LONG_TEXT]: 'Text',
@@ -63,11 +72,11 @@ export const BackendTypeMapping: Record<FieldType, BackendFieldType> = {
   [FieldType.EMAIL]: 'Email',
   [FieldType.RADIO]: 'Radio Button',
   [FieldType.CHECKBOX]: 'Radio Button',
-  [FieldType.DROPDOWN]: 'Radio Button',
+  [FieldType.DROPDOWN]: 'Drop Down',
   [FieldType.OPTIONS]: 'options',
+  [FieldType.TABLE]: 'Table',
 };
 
-// Field display names
 export const FieldDisplayNames: Record<FieldType, string> = {
   [FieldType.TEXT]: 'Text',
   [FieldType.LONG_TEXT]: 'Long Text',
@@ -78,9 +87,9 @@ export const FieldDisplayNames: Record<FieldType, string> = {
   [FieldType.CHECKBOX]: 'Checkbox',
   [FieldType.DROPDOWN]: 'Dropdown',
   [FieldType.OPTIONS]: 'Options',
+  [FieldType.TABLE]: 'Table',
 };
 
-// Field icons mapping
 export const FieldIcons: Record<FieldType, React.ComponentType<IconProps>> = {
   [FieldType.TEXT]: TextT,
   [FieldType.LONG_TEXT]: TextAlignLeft,
@@ -91,9 +100,9 @@ export const FieldIcons: Record<FieldType, React.ComponentType<IconProps>> = {
   [FieldType.CHECKBOX]: CheckSquare,
   [FieldType.DROPDOWN]: ListDashes,
   [FieldType.OPTIONS]: ListDashes,
+  [FieldType.TABLE]: Table,
 };
 
-// Field descriptions
 export const FieldDescriptions: Record<FieldType, string> = {
   [FieldType.TEXT]: 'Short answer text field',
   [FieldType.LONG_TEXT]: 'Paragraph text field',
@@ -104,9 +113,9 @@ export const FieldDescriptions: Record<FieldType, string> = {
   [FieldType.CHECKBOX]: 'Multiple selection from options',
   [FieldType.DROPDOWN]: 'Dropdown selection menu',
   [FieldType.OPTIONS]: 'Options field',
+  [FieldType.TABLE]: 'Table with rows and columns',
 };
 
-// Complete field map for easy access to all field properties
 export const FieldMap: Record<
   FieldType,
   {
@@ -170,20 +179,24 @@ export const FieldMap: Record<
     icon: FieldIcons[FieldType.OPTIONS],
     backendType: BackendTypeMapping[FieldType.OPTIONS],
   },
+  [FieldType.TABLE]: {
+    displayName: FieldDisplayNames[FieldType.TABLE],
+    description: FieldDescriptions[FieldType.TABLE],
+    icon: FieldIcons[FieldType.TABLE],
+    backendType: BackendTypeMapping[FieldType.TABLE],
+  },
 };
 
-// Field types to display in the form elements panel
 export const FormElementTypes: FieldType[] = [
   FieldType.TEXT,
   FieldType.LONG_TEXT,
   FieldType.DATE,
+  FieldType.TABLE,
+  FieldType.DROPDOWN,
   // FieldType.RADIO,
   // FieldType.CHECKBOX,
-  // FieldType.DROPDOWN,
-  // Add or remove field types here to control what appears in the form elements panel
 ];
 
-// Helper function to find the UI field type from a backend type
 export const getFieldTypeFromBackendType = (
   backendType: BackendFieldType,
 ): FieldType | undefined => {
@@ -195,7 +208,6 @@ export const getFieldTypeFromBackendType = (
   return undefined;
 };
 
-// Default field configurations
 export const getDefaultFieldConfig = (fieldType: FieldType): FormField => {
   const baseConfig: FormField = {
     name: '',
@@ -219,6 +231,12 @@ export const getDefaultFieldConfig = (fieldType: FieldType): FormField => {
       return {
         ...baseConfig,
         long: true,
+      };
+    case FieldType.TABLE:
+      return {
+        ...baseConfig,
+        tableColumns: [],
+        tableRows: [],
       };
     default:
       return baseConfig;

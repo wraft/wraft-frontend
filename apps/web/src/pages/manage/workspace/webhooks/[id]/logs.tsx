@@ -76,8 +76,6 @@ const WebhookLogsPage: React.FC = () => {
     }
   };
 
-  console.log(logs);
-
   const fetchStats = async () => {
     try {
       setIsStatsLoading(true);
