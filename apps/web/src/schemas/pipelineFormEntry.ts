@@ -63,6 +63,7 @@ const transformTableData = (
   });
 
   const result: Record<string, any> = {
+    type: 'table',
     headers,
     rows,
   };

@@ -127,6 +127,7 @@ const FormEntry = () => {
     });
 
     const result: Record<string, any> = {
+      type: 'table',
       headers,
       rows,
     };
