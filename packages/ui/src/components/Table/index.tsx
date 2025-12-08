@@ -204,9 +204,9 @@ const Table = ({
           borderTop="none"
         >
           <x.div textAlign="center">
-            <x.p m="0" color="text-primary">
+            <x.div m="0" color="text-primary">
               {emptyMessage}
-            </x.p>
+            </x.div>
           </x.div>
         </x.div>
       )}

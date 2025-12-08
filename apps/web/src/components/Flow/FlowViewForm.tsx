@@ -19,7 +19,6 @@ import { fetchAPI, putAPI } from 'utils/models';
 
 import FlowForm from './FlowForm';
 import { Droppable } from './Droppable';
-import StateForm from './StateForm';
 
 export interface States {
   total_pages: number;
@@ -580,17 +579,6 @@ const FlowViewForm = () => {
         onClose={() => setIsOpen(false)}>
         {isOpen && <FlowForm setOpen={setIsOpen} setRerender={setRerender} />}
       </Drawer>
-
-      <StateForm
-        isOpen={isStateFormOpen}
-        onClose={() => {
-          setIsStateFormOpen(false);
-          setEditingState(null);
-        }}
-        onStateSaved={handleStateSaved}
-        flowId={flowId}
-        editingState={editingState}
-      />
     </React.Fragment>
   );
 };
