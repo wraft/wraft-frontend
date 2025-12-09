@@ -5,15 +5,7 @@ import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
 import { BrandLogoIcon } from '@wraft/icon';
-import {
-  Flex,
-  Box,
-  Text,
-  Button,
-  Field,
-  InputText,
-  PasswordInput,
-} from '@wraft/ui';
+import { Flex, Box, Text, Button, Field, PasswordInput } from '@wraft/ui';
 
 import Link from 'common/NavLink';
 import { postAPI } from 'utils/models';

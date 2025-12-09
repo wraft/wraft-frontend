@@ -161,6 +161,7 @@ export default function SlashMenu() {
         isOpen={isSmartTableModalOpen}
         onClose={() => setIsSmartTableModalOpen(false)}
         onSubmit={handleInsertSmartTable}
+        fields={tokens ?? []}
       />
 
       <ConditionalBlockModal

@@ -232,7 +232,7 @@ export default function ConditionalBlockModal({
               : "Create Conditional Block"}
           </Text>
           <Box onClick={onClose} cursor="pointer">
-            <CloseIcon color="#2C3641" />
+            <CloseIcon className="icon-primary" />
           </Box>
         </Flex>
 

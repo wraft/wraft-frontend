@@ -155,7 +155,7 @@ export const EditorContent = styled.divBox`
 
   /* Header row styling - first row in all tables */
   .ProseMirror table tr:first-child td {
-    // background-color: #f3f4f6;
+    // background-color: background-secondary;
   }
 
   /* Smart table specific styling */
@@ -235,7 +235,8 @@ const _EditorDiffContainer = styled.divBox`
 
   .ProseMirror table td,
   .ProseMirror table th {
-    border: 1px solid #d1d5db;
+    border: 1px solid;
+    border-color: border;
     box-sizing: border-box;
     min-width: 1em;
     padding: 8px;
