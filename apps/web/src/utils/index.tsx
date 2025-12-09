@@ -266,11 +266,15 @@ export const mapFields = (
 };
 
 export const mapPlaceholdersToFields = (placeholder: any): IFieldField[] => {
-  return placeholder.map(({ name, value, id }: any) => ({
-    name,
-    value,
-    named: value,
-    label: name,
-    id: id,
-  }));
+  return placeholder.map(
+    ({ name, value, id, machine_name, field_type }: any) => ({
+      name,
+      value,
+      machineName: machine_name || '',
+      type: field_type.name,
+      named: value,
+      label: name,
+      id: id,
+    }),
+  );
 };

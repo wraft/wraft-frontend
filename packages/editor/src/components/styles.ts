@@ -16,8 +16,15 @@ export const EditorContainer = styled.divBox<{ type?: string }>`
   background-color: white;
   color: black;
 
-  .ProseMirror [data-node-view-root="true"] {
-    display: inline-block;
+  // .ProseMirror [data-node-view-root="true"] {
+  //   display: inline-block;
+  // }
+
+  .ProseMirror [data-conditional-block="true"] {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   &[type="editerdiffview"] {

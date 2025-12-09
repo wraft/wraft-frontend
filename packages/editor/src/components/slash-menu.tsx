@@ -11,6 +11,8 @@ import { useState } from "react";
 import type { SmartTableJSON } from "../helpers/smart-table";
 import type { EditorExtension } from "./extension";
 import SmartTableModal from "./smart-table-modal";
+import ConditionalBlockModal from "./conditional-block-modal";
+import { useEditorConfig } from "./editor-config";
 
 const StyledPopover = styled(AutocompletePopover)`
   position: relative;
@@ -66,7 +68,10 @@ const StyledItem = styled(AutocompleteItem)`
 
 export default function SlashMenu() {
   const editor = useEditor<EditorExtension>();
+  const { tokens } = useEditorConfig();
   const [isSmartTableModalOpen, setIsSmartTableModalOpen] = useState(false);
+  const [isConditionalBlockModalOpen, setIsConditionalBlockModalOpen] =
+    useState(false);
 
   const handleInsertSmartTable = (
     tableJSON: SmartTableJSON,
@@ -97,14 +102,6 @@ export default function SlashMenu() {
       <StyledPopover regex={/\/.*$/iu}>
         <StyledList>
           <StyledEmpty>No results</StyledEmpty>
-
-          <StyledItem
-            onSelect={() => {
-              setIsSmartTableModalOpen(true);
-            }}
-          >
-            Smart Table
-          </StyledItem>
 
           <StyledItem
             onSelect={() =>
@@ -142,6 +139,21 @@ export default function SlashMenu() {
           >
             Toggle list
           </StyledItem>
+          <StyledItem
+            onSelect={() => {
+              setIsSmartTableModalOpen(true);
+            }}
+          >
+            Smart Table
+          </StyledItem>
+
+          <StyledItem
+            onSelect={() => {
+              setIsConditionalBlockModalOpen(true);
+            }}
+          >
+            Conditional Block
+          </StyledItem>
         </StyledList>
       </StyledPopover>
 
@@ -149,6 +161,16 @@ export default function SlashMenu() {
         isOpen={isSmartTableModalOpen}
         onClose={() => setIsSmartTableModalOpen(false)}
         onSubmit={handleInsertSmartTable}
+      />
+
+      <ConditionalBlockModal
+        isOpen={isConditionalBlockModalOpen}
+        onClose={() => setIsConditionalBlockModalOpen(false)}
+        onInsert={(attrs) => {
+          editor.commands.insertConditionalBlock(attrs);
+          setIsConditionalBlockModalOpen(false);
+        }}
+        fields={tokens ?? []}
       />
     </>
   );

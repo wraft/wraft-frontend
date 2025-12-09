@@ -16,10 +16,10 @@ import { prosemirrorJSONToYXmlFragment } from "y-prosemirror";
 import { ListDOMSerializer } from "prosekit/extensions/list";
 import type { Node } from "@prosekit/pm/model";
 import type { Awareness } from "y-protocols/awareness";
+import type { ProsemirrorNodeJSON } from "prosemirror-flat-list";
 import { markdownFromHTML } from "@helpers/markdown";
 // import { IndexeddbPersistence } from "y-indexeddb";
 import { migrateDocJSON } from "@helpers/migrate";
-import type { ProsemirrorNodeJSON } from "prosemirror-flat-list";
 import { getUserColor } from "../lib/utils";
 import { PhoenixChannelProvider } from "../lib/y-phoenix-channel";
 import { defineCollaborativeExtension } from "./extension";
@@ -234,7 +234,7 @@ export const LiveEditor = forwardRef(
     );
 
     return (
-      <EditorConfigProvider config={{ apiHost }}>
+      <EditorConfigProvider config={{ apiHost }} tokens={tokens}>
         <S.EditorWrapper className={`wraft-editor ${className}`}>
           {isLoading && editor && (
             <ProseKit editor={editor}>
