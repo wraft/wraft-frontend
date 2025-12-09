@@ -117,7 +117,8 @@ const Index = () => {
                 label="Confirm Password"
                 required
                 error={errors?.confirmPassword?.message}>
-                <InputText
+                <PasswordInput
+                  autoComplete="new-password"
                   placeholder="Enter your Confirm Password"
                   {...register('confirmPassword')}
                 />
