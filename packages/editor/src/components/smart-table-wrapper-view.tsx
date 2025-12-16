@@ -56,7 +56,11 @@ export const SmartTableWrapperView: ReactNodeViewComponent = ({
     setIsDeleteModalOpen(false);
   };
 
-  const handleUpdate = (tableJSON: any, newTableName: string) => {
+  const handleUpdate = (
+    tableJSON: any,
+    newTableName: string,
+    _machineName?: string | null,
+  ) => {
     const pos = getPos();
     if (pos === undefined) return;
 
@@ -83,6 +87,7 @@ export const SmartTableWrapperView: ReactNodeViewComponent = ({
     <Box
       data-smart-table-wrapper="true"
       data-table-name={node.attrs.tableName || ""}
+      data-machine-name={node.attrs.machineName || ""}
       className="smart-table-wrapper"
       style={{ position: "relative" }}
     >

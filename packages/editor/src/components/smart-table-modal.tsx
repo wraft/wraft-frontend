@@ -22,11 +22,16 @@ import {
   smartTableDataToJSON,
   generateEmptySmartTableData,
 } from "../helpers/smart-table";
+import { getMachineName } from "../lib/utils";
 
 interface SmartTableModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (tableJSON: SmartTableJSON, tableName: string) => void;
+  onSubmit: (
+    tableJSON: SmartTableJSON,
+    tableName: string,
+    machineName?: string | null,
+  ) => void;
   existingData?: {
     name: string;
     data: SmartTableData;
@@ -197,8 +202,19 @@ export default function SmartTableModal({
       dataToSubmit = manualData;
     }
 
-    const tableJSON = smartTableDataToJSON(dataToSubmit, tableName);
-    onSubmit(tableJSON, tableName);
+    // Find the machine_name for the selected table
+    const selectedField = tableFields.find(
+      (field: any) =>
+        (field.machine_name || field.machineName || field.name) === tableName,
+    );
+    const machineName = getMachineName(selectedField);
+
+    const tableJSON = smartTableDataToJSON(
+      dataToSubmit,
+      tableName,
+      machineName,
+    );
+    onSubmit(tableJSON, tableName, machineName);
   };
 
   const updateHeader = (index: number, value: string) => {

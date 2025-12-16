@@ -14,6 +14,7 @@ export type SmartTableJSON =
       type: "smartTableWrapper";
       attrs?: {
         tableName?: string | null;
+        machineName?: string | null;
         isSmartTable?: boolean;
       };
       content: any[];
@@ -116,6 +117,7 @@ function createTableRow(cells: any[]) {
 export function smartTableDataToJSON(
   data: SmartTableData,
   tableName?: string,
+  machineName?: string | null,
 ): SmartTableJSON {
   const rows: any[] = [];
 
@@ -146,6 +148,7 @@ export function smartTableDataToJSON(
       type: "smartTableWrapper",
       attrs: {
         tableName,
+        ...(machineName && { machineName }),
         isSmartTable: true,
       },
       content: [table],

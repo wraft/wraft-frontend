@@ -11,6 +11,7 @@ export const FormFieldEntrySchema = z.object({
   value: z.string(),
   error: z.string().optional(),
   smartTableName: z.string().optional(),
+  machineName: z.string().optional(),
   tableColumns: z
     .array(
       z.object({
@@ -109,6 +110,7 @@ export const prepareFormEntrySubmission = (
 
     return {
       field_id: entry.id,
+      machine_name: entry.machineName || '',
       value,
     };
   });

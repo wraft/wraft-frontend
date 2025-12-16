@@ -25,6 +25,7 @@ import { IconFrame, TimeAgo } from 'common/Atoms';
 import Editor from 'common/Editor';
 import NavEdit from 'common/NavEdit';
 import { Template, TemplateSchema } from 'schemas/template';
+import { mapPlaceholdersToFields } from 'utils';
 import { putAPI, postAPI, fetchAPI } from 'utils/models';
 import { IContentType, ContentTypes, DataTemplates } from 'utils/types';
 
@@ -106,11 +107,7 @@ const TemplateEditor = () => {
 
   useEffect(() => {
     if (selectedVariant?.fields) {
-      const tokens = selectedVariant.fields.map((field: any) => ({
-        id: `${field.id}`,
-        label: `${field.name}`,
-        name: `${field.name}`,
-      }));
+      const tokens = mapPlaceholdersToFields(selectedVariant.fields);
       setFieldTokens(tokens);
     }
   }, [selectedVariant]);

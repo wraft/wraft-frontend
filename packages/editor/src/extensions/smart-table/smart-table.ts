@@ -14,6 +14,7 @@ export function defineSmartTable(): SmartTableExtension {
     group: "block",
     attrs: {
       tableName: { default: null },
+      machineName: { default: null },
       isSmartTable: { default: true },
     },
     parseDOM: [
@@ -23,6 +24,7 @@ export function defineSmartTable(): SmartTableExtension {
           if (dom instanceof HTMLElement) {
             return {
               tableName: dom.getAttribute("data-table-name") || null,
+              machineName: dom.getAttribute("data-machine-name") || null,
               isSmartTable: true,
             };
           }
@@ -38,6 +40,10 @@ export function defineSmartTable(): SmartTableExtension {
 
       if (node.attrs.tableName) {
         attrs["data-table-name"] = String(node.attrs.tableName);
+      }
+
+      if (node.attrs.machineName) {
+        attrs["data-machine-name"] = String(node.attrs.machineName);
       }
 
       return ["div", attrs, 0];

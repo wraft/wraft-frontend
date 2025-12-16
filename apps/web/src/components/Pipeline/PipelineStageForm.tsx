@@ -385,6 +385,7 @@ const PipelineStageForm = ({
           destination: {
             id: templateFields[index].id,
             name: templateFields[index].name,
+            machine_name: templateFields[index].machine_name || '',
           },
           source: {
             id: selectedSource.id,
@@ -400,6 +401,7 @@ const PipelineStageForm = ({
           destination: {
             id: templateFields[index].id,
             name: templateFields[index].name,
+            machine_name: templateFields[index].machine_name || '',
           },
           source: {
             id: selectedOption,

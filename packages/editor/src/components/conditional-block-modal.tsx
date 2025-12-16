@@ -4,6 +4,7 @@ import { Modal, Box, Flex, Button, Text, InputText, Select } from "@wraft/ui";
 import { PlusIcon, TrashIcon } from "@phosphor-icons/react";
 import { CloseIcon } from "@wraft/icon";
 import type { ConditionalBlockAttrs } from "../extensions/conditional-block/conditional-block-spec";
+import { getMachineName } from "../lib/utils";
 
 interface ConditionalBlockModalProps {
   isOpen: boolean;
@@ -30,6 +31,7 @@ interface ConditionalBlockFormData {
     operation: string;
     value: string;
     logic?: "and" | "or";
+    machineName?: string | null;
   }[];
 }
 
@@ -137,12 +139,21 @@ export default function ConditionalBlockModal({
     }
 
     const attrs: ConditionalBlockAttrs = {
-      conditions: data.conditions.map((cond, idx) => ({
-        placeholder: cond.placeholder,
-        operation: cond.operation,
-        value: cond.value,
-        ...(idx > 0 && { logic: cond.logic || "and" }),
-      })),
+      conditions: data.conditions.map((cond, idx) => {
+        // Find the field to get its machine_name
+        const selectedField = filteredFields.find(
+          (field: any) => (field.name || field.label) === cond.placeholder,
+        );
+        const machineName = getMachineName(selectedField);
+
+        return {
+          placeholder: cond.placeholder,
+          operation: cond.operation,
+          value: cond.value,
+          ...(idx > 0 && { logic: cond.logic || "and" }),
+          ...(machineName && { machineName }),
+        };
+      }),
     };
 
     onInsert(attrs);

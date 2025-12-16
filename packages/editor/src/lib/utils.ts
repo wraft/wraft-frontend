@@ -38,3 +38,12 @@ export function getUserColor(userId: string | null | undefined): string {
   const index = Math.abs(hash) % colors.length;
   return colors[index];
 }
+
+/**
+ * Extracts machine_name from a field object, handling both snake_case and camelCase variants
+ * @param field - Field object that may have machine_name or machineName property
+ * @returns The machine_name value or null if not found
+ */
+export function getMachineName(field: any): string | null {
+  return field?.machine_name || field?.machineName || null;
+}

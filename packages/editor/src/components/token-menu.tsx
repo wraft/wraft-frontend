@@ -76,6 +76,7 @@ export default function TokenMenu({ tokens }: any) {
       id: token.id,
       name: token.name,
       named: token.named || null,
+      machineName: token.machineName || null,
     });
   };
 

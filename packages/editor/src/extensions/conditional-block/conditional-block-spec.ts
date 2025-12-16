@@ -16,6 +16,7 @@ export interface ConditionalBlockAttrs {
     operation: string;
     value: string;
     logic?: "and" | "or";
+    machineName?: string | null;
   }[];
 }
 
