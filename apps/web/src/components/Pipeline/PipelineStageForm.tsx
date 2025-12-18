@@ -390,6 +390,7 @@ const PipelineStageForm = ({
           source: {
             id: selectedSource.id,
             name: fieldIdentifier,
+            machine_name: selectedSource.machine_name || '',
           },
         };
         return newData;
@@ -406,6 +407,7 @@ const PipelineStageForm = ({
           source: {
             id: selectedOption,
             name: selectedOption,
+            machine_name: '',
           },
         };
         return newData;
