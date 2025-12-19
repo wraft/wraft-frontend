@@ -1,8 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { AxiosError } from 'axios';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import cookie from 'js-cookie';
 
 export interface IField {
   name: string;
@@ -99,7 +97,7 @@ export const updateVars = (data, fields, nodeType = 'holder') => {
  * @param newValue
  * @param match
  */
-export const replaceBoy = (
+export const replaceBody = (
   body: string,
   matches: string[],
   maps: IField[],
@@ -163,7 +161,7 @@ export const findVars = (body: string, escaped: boolean): string[] => {
  */
 export const replaceVars = (body: string, maps: IField[], escaped: boolean) => {
   const resultVars = findVars(body, escaped);
-  return replaceBoy(body, resultVars, maps, escaped);
+  return replaceBody(body, resultVars, maps, escaped);
 };
 
 /**

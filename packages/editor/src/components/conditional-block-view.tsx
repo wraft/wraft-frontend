@@ -69,10 +69,20 @@ export default function ConditionalBlockView(props: ReactNodeViewProps) {
               display="flex"
               gap="xs"
             >
-              <Button onClick={handleEdit} size="xs" variant="secondary">
+              <Button
+                onClick={handleEdit}
+                size="xs"
+                variant="secondary"
+                aria-label="Edit conditional block"
+              >
                 <PencilSimpleIcon size={12} />
               </Button>
-              <Button onClick={handleDelete} size="xs" variant="secondary">
+              <Button
+                onClick={handleDelete}
+                size="xs"
+                variant="secondary"
+                aria-label="Delete conditional block"
+              >
                 <TrashIcon size={12} />
               </Button>
             </Box>

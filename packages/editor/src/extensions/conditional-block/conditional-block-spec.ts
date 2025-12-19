@@ -56,7 +56,12 @@ export function defineConditionalBlockSpec() {
           if (conditionsAttr) {
             try {
               conditions = JSON.parse(conditionsAttr);
-            } catch (e) {}
+            } catch (e) {
+              console.warn(
+                "Failed to parse conditional block conditions:",
+                e instanceof Error ? e.message : String(e),
+              );
+            }
           }
 
           return {

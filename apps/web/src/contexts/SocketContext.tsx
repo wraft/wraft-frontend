@@ -67,13 +67,6 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
         user_id: userProfile.id,
         organisation_id: userProfile.organisation_id,
       },
-
-      // enable this to see the socket logs in the console and debug
-      // logger: (kind, msg, data) => {
-      //   if (process.env.NODE_ENV === 'development') {
-      //     console.log(`Phoenix Socket ${kind}: ${msg}`, data);
-      //   }
-      // },
     });
 
     newSocket.onOpen(() => {
@@ -101,15 +94,11 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
     }
 
     if (reconnectAttemptsRef.current >= MAX_RECONNECT_ATTEMPTS) {
-      console.log('Max reconnection attempts reached');
       return;
     }
 
     const delay =
       INITIAL_RECONNECT_DELAY * Math.pow(2, reconnectAttemptsRef.current);
-    // console.log(
-    //   `Attempting to reconnect in ${delay}ms (attempt ${reconnectAttemptsRef.current + 1})`,
-    // );
 
     reconnectTimeoutRef.current = setTimeout(() => {
       reconnectAttemptsRef.current += 1;

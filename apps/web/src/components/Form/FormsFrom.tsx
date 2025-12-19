@@ -490,7 +490,7 @@ const FormsFrom: React.FC<FormsFromProps> = ({
       .then((data: any) => {
         setFieldTypes(data.field_types);
       })
-      .catch((err) => console.log(err));
+      .catch(() => {});
   };
 
   const validateForm = (): boolean => {

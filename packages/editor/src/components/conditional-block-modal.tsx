@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm, Controller, useFieldArray } from "react-hook-form";
 import { Modal, Box, Flex, Button, Text, InputText, Select } from "@wraft/ui";
 import { PlusIcon, TrashIcon } from "@phosphor-icons/react";
@@ -6,11 +6,21 @@ import { CloseIcon } from "@wraft/icon";
 import type { ConditionalBlockAttrs } from "../extensions/conditional-block/conditional-block-spec";
 import { getMachineName } from "../lib/utils";
 
+interface Field {
+  name?: string;
+  label?: string;
+  type?: string;
+  fieldType?: string;
+  field_type?: string | { name: string };
+  machine_name?: string;
+  machineName?: string;
+}
+
 interface ConditionalBlockModalProps {
   isOpen: boolean;
   onClose: () => void;
   onInsert: (attrs: ConditionalBlockAttrs) => void;
-  fields: any[];
+  fields: Field[];
   existingAttrs?: ConditionalBlockAttrs;
 }
 
@@ -35,6 +45,29 @@ interface ConditionalBlockFormData {
   }[];
 }
 
+// Helper function to get default form values
+function getDefaultFormValues(
+  existingAttrs?: ConditionalBlockAttrs,
+): ConditionalBlockFormData {
+  if (existingAttrs && existingAttrs.conditions.length > 0) {
+    return {
+      conditions: existingAttrs.conditions.map((cond, idx) => ({
+        ...cond,
+        logic: idx === 0 ? undefined : cond.logic || "and",
+      })),
+    };
+  }
+  return {
+    conditions: [
+      {
+        placeholder: "",
+        operation: "equal",
+        value: "",
+      },
+    ],
+  };
+}
+
 export default function ConditionalBlockModal({
   isOpen,
   onClose,
@@ -42,42 +75,19 @@ export default function ConditionalBlockModal({
   fields,
   existingAttrs,
 }: ConditionalBlockModalProps) {
+  const [validationError, setValidationError] = useState<string | null>(null);
   const fieldsArray = Array.isArray(fields) ? fields : [];
-  const filteredFields = fieldsArray.filter((field: any) => {
+  const filteredFields = fieldsArray.filter((field: Field) => {
     const fieldType =
       field.type ||
       field.fieldType ||
       (typeof field.field_type === "object"
-        ? field.field_type?.name
+        ? field.field_type.name
         : field.field_type);
     return fieldType !== "Table" && fieldType !== "table";
   });
 
-  const defaultValues: ConditionalBlockFormData = existingAttrs
-    ? {
-        conditions:
-          existingAttrs.conditions.length > 0
-            ? existingAttrs.conditions.map((cond, idx) => ({
-                ...cond,
-                logic: idx === 0 ? undefined : cond.logic || "and",
-              }))
-            : [
-                {
-                  placeholder: "",
-                  operation: "equal",
-                  value: "",
-                },
-              ],
-      }
-    : {
-        conditions: [
-          {
-            placeholder: "",
-            operation: "equal",
-            value: "",
-          },
-        ],
-      };
+  const defaultValues = getDefaultFormValues(existingAttrs);
 
   const {
     control,
@@ -100,49 +110,40 @@ export default function ConditionalBlockModal({
 
   useEffect(() => {
     if (isOpen) {
-      const values: ConditionalBlockFormData = existingAttrs
-        ? {
-            conditions:
-              existingAttrs.conditions.length > 0
-                ? existingAttrs.conditions.map((cond, idx) => ({
-                    ...cond,
-                    logic: idx === 0 ? undefined : cond.logic || "and",
-                  }))
-                : [
-                    {
-                      placeholder: "",
-                      operation: "equal",
-                      value: "",
-                    },
-                  ],
-          }
-        : {
-            conditions: [
-              {
-                placeholder: "",
-                operation: "equal",
-                value: "",
-              },
-            ],
-          };
+      const values = getDefaultFormValues(existingAttrs);
       reset(values);
+      setValidationError(null);
     }
   }, [isOpen, existingAttrs, reset]);
 
   const onSubmit = (data: ConditionalBlockFormData) => {
+    // Validate that at least one condition exists
+    if (data.conditions.length === 0) {
+      setValidationError("At least one condition is required");
+      return;
+    }
+
+    // Validate that all placeholders are valid using filteredFields
+    // to ensure consistency with the field lookup logic
     const allPlaceholdersValid = data.conditions.every((cond) =>
-      fields.some((field) => field.name === cond.placeholder),
+      filteredFields.some(
+        (field) => (field.name || field.label) === cond.placeholder,
+      ),
     );
 
     if (!allPlaceholdersValid) {
+      setValidationError("Please select valid placeholders for all conditions");
       return;
     }
+
+    // Clear any previous validation errors
+    setValidationError(null);
 
     const attrs: ConditionalBlockAttrs = {
       conditions: data.conditions.map((cond, idx) => {
         // Find the field to get its machine_name
         const selectedField = filteredFields.find(
-          (field: any) => (field.name || field.label) === cond.placeholder,
+          (field) => (field.name || field.label) === cond.placeholder,
         );
         const machineName = getMachineName(selectedField);
 
@@ -253,6 +254,21 @@ export default function ConditionalBlockModal({
               This block will only be included when all conditions are met.
             </Text>
 
+            {validationError && (
+              <Box
+                p="md"
+                mb="md"
+                border="1px solid"
+                borderColor="error"
+                borderRadius="md"
+                backgroundColor="error.50"
+              >
+                <Text fontSize="sm" color="error">
+                  {validationError}
+                </Text>
+              </Box>
+            )}
+
             <Box
               p="md"
               border="1px solid"
@@ -315,14 +331,14 @@ export default function ConditionalBlockModal({
                             required: "Required",
                             validate: (value) =>
                               filteredFields.some(
-                                (f: any) => (f.name || f.label) === value,
+                                (f) => (f.name || f.label) === value,
                               ) || "Invalid",
                           }}
                           render={({ field: controllerField }) => (
                             <Select
                               options={[
                                 { value: "", label: "Placeholder" },
-                                ...filteredFields.map((field: any) => ({
+                                ...filteredFields.map((field) => ({
                                   value: field.name || field.label || "",
                                   label: field.name || field.label || "",
                                 })),
