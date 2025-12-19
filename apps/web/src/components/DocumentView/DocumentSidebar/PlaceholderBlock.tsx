@@ -34,6 +34,7 @@ export interface IFieldType {
   value: string;
   order?: number;
   required?: boolean;
+  machine_name?: string | null;
 }
 
 interface PlaceholderBlockProps {
@@ -95,6 +96,13 @@ const PlaceholderBlock = ({ fields, onSaved }: PlaceholderBlockProps) => {
 
   const openDrawer = () => setDrawerOpen(true);
   const closeDrawer = () => setDrawerOpen(false);
+
+  // Helper function to get field identifier (machine_name if available, otherwise name)
+  const getFieldIdentifier = (field: IFieldType): string => {
+    return field.machine_name != null && field.machine_name !== ''
+      ? field.machine_name
+      : convertToVariableName(field.name);
+  };
 
   return (
     <Box mt="xl">
@@ -174,7 +182,7 @@ const PlaceholderBlock = ({ fields, onSaved }: PlaceholderBlockProps) => {
                       {field.field_type?.name === 'Date' && (
                         <Controller
                           control={control}
-                          name={convertToVariableName(field.name)}
+                          name={getFieldIdentifier(field)}
                           defaultValue={field.value || ''}
                           rules={{
                             required: {
@@ -184,7 +192,7 @@ const PlaceholderBlock = ({ fields, onSaved }: PlaceholderBlockProps) => {
                           }}
                           render={({ field: controllerField, fieldState }) => (
                             <FieldDate
-                              name={convertToVariableName(field.name)}
+                              name={getFieldIdentifier(field)}
                               label={capitalizeFirst(field.name)}
                               sub="Date"
                               onChange={(value: string) => {
@@ -196,11 +204,8 @@ const PlaceholderBlock = ({ fields, onSaved }: PlaceholderBlockProps) => {
                                 (field as any).meta?.dateFormat || 'yyyy-MM-dd'
                               }
                               error={
-                                (
-                                  errors?.[
-                                    convertToVariableName(field.name)
-                                  ] as any
-                                )?.message ||
+                                (errors?.[getFieldIdentifier(field)] as any)
+                                  ?.message ||
                                 fieldState.error?.message ||
                                 ''
                               }
@@ -216,7 +221,7 @@ const PlaceholderBlock = ({ fields, onSaved }: PlaceholderBlockProps) => {
                         field.meta.values.length > 0 && (
                           <Controller
                             control={control}
-                            name={convertToVariableName(field.name)}
+                            name={getFieldIdentifier(field)}
                             defaultValue={field.value || ''}
                             rules={{
                               required: {
@@ -237,9 +242,7 @@ const PlaceholderBlock = ({ fields, onSaved }: PlaceholderBlockProps) => {
                                   {...(isRequired && { required: true })}
                                   error={
                                     ((
-                                      errors?.[
-                                        convertToVariableName(field.name)
-                                      ] as any
+                                      errors?.[getFieldIdentifier(field)] as any
                                     )?.message as string) || ''
                                   }>
                                   <Select
@@ -257,26 +260,19 @@ const PlaceholderBlock = ({ fields, onSaved }: PlaceholderBlockProps) => {
                             }}
                           />
                         )}
-
                       {(field.field_type?.name === 'String' ||
                         field.field_type?.name === 'Text') && (
                         <Field
                           label={capitalizeFirst(field.name)}
                           {...(field.required && { required: true })}
                           error={
-                            ((
-                              errors?.[convertToVariableName(field.name)] as any
-                            )?.message as string) || ''
+                            ((errors?.[getFieldIdentifier(field)] as any)
+                              ?.message as string) || ''
                           }>
                           <InputText
                             placeholder={`Enter your ${field.name} ${field.field_type.name}`}
                             defaultValue={field.value}
-                            {...register(convertToVariableName(field.name), {
-                              required: {
-                                value: field.required || false,
-                                message: `${capitalizeFirst(field.name)} is required`,
-                              },
-                            })}
+                            {...register(getFieldIdentifier(field))}
                           />
                         </Field>
                       )}
@@ -290,21 +286,13 @@ const PlaceholderBlock = ({ fields, onSaved }: PlaceholderBlockProps) => {
                             label={capitalizeFirst(field.name)}
                             {...(field.required && { required: true })}
                             error={
-                              ((
-                                errors?.[
-                                  convertToVariableName(field.name)
-                                ] as any
-                              )?.message as string) || ''
+                              ((errors?.[getFieldIdentifier(field)] as any)
+                                ?.message as string) || ''
                             }>
                             <InputText
                               placeholder=""
                               defaultValue={field.value}
-                              {...register(convertToVariableName(field.name), {
-                                required: {
-                                  value: field.required || false,
-                                  message: `${capitalizeFirst(field.name)} is required`,
-                                },
-                              })}
+                              {...register(getFieldIdentifier(field))}
                             />
                           </Field>
                         )}

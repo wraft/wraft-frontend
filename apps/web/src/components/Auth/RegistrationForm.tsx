@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { Box, Flex, Text, Field, InputText } from '@wraft/ui';
+import { Box, Flex, Text, Field, InputText, PasswordInput } from '@wraft/ui';
 import { BrandLogoIcon } from '@wraft/icon';
 import { Button } from '@wraft/ui';
 
@@ -157,7 +157,8 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ inviteToken }) => {
               label="Enter New Password"
               required
               error={errors?.password?.message}>
-              <InputText
+              <PasswordInput
+                autoComplete="new-password"
                 {...register('password')}
                 placeholder="Enter New Password"
               />

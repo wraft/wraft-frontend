@@ -92,6 +92,7 @@ const PipelineFormEntry: React.FC<PipelineFormEntryProps> = ({
             val.validation.rule === 'required' && val.validation.value === true,
         ),
         value: field.meta?.defaultValue || '',
+        machineName: field.machine_name || undefined,
         smartTableName: field.meta?.smartTableName || undefined,
         tableColumns: field.meta?.tableColumns || undefined,
         defaultValue: field.meta?.defaultValue || undefined,

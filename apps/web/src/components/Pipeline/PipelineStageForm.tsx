@@ -385,10 +385,12 @@ const PipelineStageForm = ({
           destination: {
             id: templateFields[index].id,
             name: templateFields[index].name,
+            machine_name: templateFields[index].machine_name || '',
           },
           source: {
             id: selectedSource.id,
             name: fieldIdentifier,
+            machine_name: selectedSource.machine_name || '',
           },
         };
         return newData;
@@ -400,10 +402,12 @@ const PipelineStageForm = ({
           destination: {
             id: templateFields[index].id,
             name: templateFields[index].name,
+            machine_name: templateFields[index].machine_name || '',
           },
           source: {
             id: selectedOption,
             name: selectedOption,
+            machine_name: '',
           },
         };
         return newData;

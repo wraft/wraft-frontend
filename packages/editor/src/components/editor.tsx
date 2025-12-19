@@ -3,8 +3,8 @@ import { ProseKit } from "prosekit/react";
 import { useMemo, useImperativeHandle, forwardRef } from "react";
 import { ListDOMSerializer } from "prosekit/extensions/list";
 import type { Node } from "@prosekit/pm/model";
-import { markdownFromHTML } from "@helpers/markdown";
 import type { ProsemirrorNodeJSON } from "prosemirror-flat-list";
+import { markdownFromHTML } from "@helpers/markdown";
 import { migrateDocJSON } from "@helpers/migrate";
 import { defineDefaultExtension } from "./extension";
 import InlineMenu from "./inline-menu";
@@ -86,7 +86,7 @@ export const Editor = forwardRef<EditorRef, EditorProps>(
     );
 
     return (
-      <EditorConfigProvider config={{ apiHost }}>
+      <EditorConfigProvider config={{ apiHost }} tokens={tokens}>
         <div className={`wraft-editor ${className}`}>
           <ProseKit editor={editor}>
             <S.EditorContainer>

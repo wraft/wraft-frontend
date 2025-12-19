@@ -414,7 +414,9 @@ const CreateDocument = ({ setIsOpen }: { setIsOpen: any }) => {
                       )}
 
                     {(field.field_type.name === 'String' ||
-                      field.field_type.name === 'Text') && (
+                      field.field_type.name === 'Text' ||
+                      field.field_type.name === 'Email' ||
+                      field.field_type.name === 'Phone') && (
                       <Field
                         label={capitalizeFirst(field.name)}
                         {...((field as any).required && { required: true })}

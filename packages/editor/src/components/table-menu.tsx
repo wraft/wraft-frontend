@@ -44,7 +44,8 @@ const MenuContent = styled.div`
   padding: 0.25rem;
   overflow: auto;
   background-color: white;
-  border: 1px solid #d1d5db;
+  border: 1px solid;
+  border-color: border;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 `;
 

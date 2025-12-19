@@ -44,7 +44,7 @@ const StyledTableHandleColumnRoot = styled(TableHandleColumnRoot)`
   // width: 1.5em;
   background-color: white;
   border: solid 1px;
-  border-color: #d1d5db;
+  border-color: border;
   border-radius: 4px;
   color: rgba(113, 113, 113, 0.5);
 
@@ -74,7 +74,8 @@ const StyledTableHandlePopoverContent = styled(TableHandlePopoverContent)`
   padding: 0.25rem;
   overflow: auto;
   background-color: white;
-  border: 1px solid #d1d5db;
+  border: 1px solid;
+  border-color: border;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 `;
 
@@ -97,7 +98,7 @@ const StyledTableHandleRowRoot = styled(TableHandleRowRoot)`
   // width: 1.2em;
   background-color: white;
   border: solid 1px;
-  border-color: #d1d5db; /* zinc-200 */
+  border-color: border;
   border-radius: 4px;
   transform: translateX(14px);
 `;

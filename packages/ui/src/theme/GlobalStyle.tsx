@@ -62,4 +62,8 @@ export const GlobalStyle = createGlobalStyle`
   #sidebars .menu-group:last-child .line {
     display: none; 
   }
+  
+  .icon-primary {
+    color: var(--theme-ui-colors-icon);
+  }
 `;

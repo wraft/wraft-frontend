@@ -6,6 +6,7 @@ import { PencilSimpleIcon, TrashIcon } from "@phosphor-icons/react";
 import { extractTableDataFromNode } from "../helpers/extract-table-data";
 import type { SmartTableData } from "../helpers/smart-table";
 import SmartTableModal from "./smart-table-modal";
+import { useEditorConfig } from "./editor-config";
 
 /**
  * React Node View for Smart Table Wrapper
@@ -17,12 +18,14 @@ export const SmartTableWrapperView: ReactNodeViewComponent = ({
   getPos,
   contentRef,
 }) => {
+  const { tokens } = useEditorConfig();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [existingData, setExistingData] = useState<SmartTableData | null>(null);
   const [tableName, setTableName] = useState<string>("");
 
   const isReadonly = !view.editable;
+  const fields = tokens || [];
 
   useEffect(() => {
     if (node.attrs.tableName) {
@@ -53,7 +56,11 @@ export const SmartTableWrapperView: ReactNodeViewComponent = ({
     setIsDeleteModalOpen(false);
   };
 
-  const handleUpdate = (tableJSON: any, newTableName: string) => {
+  const handleUpdate = (
+    tableJSON: any,
+    newTableName: string,
+    _machineName?: string | null,
+  ) => {
     const pos = getPos();
     if (pos === undefined) return;
 
@@ -80,6 +87,7 @@ export const SmartTableWrapperView: ReactNodeViewComponent = ({
     <Box
       data-smart-table-wrapper="true"
       data-table-name={node.attrs.tableName || ""}
+      data-machine-name={node.attrs.machineName || ""}
       className="smart-table-wrapper"
       style={{ position: "relative" }}
     >
@@ -113,6 +121,7 @@ export const SmartTableWrapperView: ReactNodeViewComponent = ({
             name: tableName,
             data: existingData,
           }}
+          fields={fields}
         />
       )}
 

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Box, Text, Table, Flex } from '@wraft/ui';
+import { Box, Text, Table, Flex, Button } from '@wraft/ui';
+import { EyeIcon } from '@phosphor-icons/react';
 
 import { StateBadge } from 'common/Atoms';
 import { fetchAPI } from 'utils/models';
@@ -50,6 +51,10 @@ const PipelineLogsList = ({ rerender }: Props) => {
   useEffect(() => {
     loadPipelineHistory();
   }, [rerender]);
+
+  const handleViewDetail = (logId: string) => {
+    router.push(`/pipelines/logs/${logId}`);
+  };
 
   const columns = [
     {
@@ -133,13 +138,36 @@ const PipelineLogsList = ({ rerender }: Props) => {
         <Flex justify="flex-start">
           <Text as="p">
             {row.original.state == 'pending'
-              ? `${row.original.error.info}`
+              ? `${row.original.error?.info || 'Processing...'}`
               : row.original.state === 'partially_completed'
-                ? `${row.original.error.info}`
+                ? `${row.original.error?.info || 'Partially completed'}`
                 : row.original.state === 'success'
                   ? 'Build complete'
                   : 'failed to start build'}
           </Text>
+        </Flex>
+      ),
+      enableSorting: false,
+    },
+    {
+      id: 'actions',
+      header: (
+        <Flex justify="flex-start">
+          <Text as="p">Actions</Text>
+        </Flex>
+      ),
+      accessorKey: 'actions',
+      cell: ({ row }: any) => (
+        <Flex justify="flex-start" gap="xs">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleViewDetail(row.original.id);
+            }}>
+            <EyeIcon size={16} />
+          </Button>
         </Flex>
       ),
       enableSorting: false,

@@ -149,6 +149,7 @@ export const DropDownIndicator = styled.button<{
   border: none;
   background: transparent;
   right: 12px;
+  color: var(--theme-ui-colors-icon);
   ${centerContent};
 
   svg {

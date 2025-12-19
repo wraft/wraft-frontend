@@ -127,6 +127,7 @@ const FormEntry = () => {
     });
 
     const result: Record<string, any> = {
+      type: 'table',
       headers,
       rows,
     };
@@ -187,8 +188,6 @@ const FormEntry = () => {
       data: fields,
     };
 
-    // const query = formId ? pipelineId : '';
-
     postAPI(`forms/${cId}/entries`, data)
       .then(() => {
         toast.success('Submitted Successfully');
@@ -203,10 +202,6 @@ const FormEntry = () => {
   useEffect(() => {
     if (cId && cId.length > 0) loadData(cId);
   }, [cId]);
-
-  useEffect(() => {
-    console.table(items);
-  }, [items]);
 
   if (loading) {
     return (

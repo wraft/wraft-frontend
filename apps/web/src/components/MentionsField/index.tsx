@@ -63,7 +63,6 @@ const MentionField: React.FC<any> = ({
           options={options}
           value={defaultValue || ''}
           id={name}
-          onSelect={(val) => console.log('onSelect', val)}
         />
         {error && (
           <Text as="span" position="absolute" bottom="-22px" left="4px">

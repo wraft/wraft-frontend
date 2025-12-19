@@ -5,15 +5,7 @@ import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
 import { BrandLogoIcon } from '@wraft/icon';
-import {
-  Flex,
-  Box,
-  Text,
-  Button,
-  Field,
-  InputText,
-  PasswordInput,
-} from '@wraft/ui';
+import { Flex, Box, Text, Button, Field, PasswordInput } from '@wraft/ui';
 
 import Link from 'common/NavLink';
 import { postAPI } from 'utils/models';
@@ -117,7 +109,8 @@ const Index = () => {
                 label="Confirm Password"
                 required
                 error={errors?.confirmPassword?.message}>
-                <InputText
+                <PasswordInput
+                  autoComplete="new-password"
                   placeholder="Enter your Confirm Password"
                   {...register('confirmPassword')}
                 />

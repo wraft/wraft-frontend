@@ -29,7 +29,7 @@ export function defineImageFileHandlers() {
         type: "image",
         attrs: { src: uploadTask.objectURL },
       });
-      // eslint-disable-next-line @typescript-eslint/unbound-method -- view.dispatch is safely bound by prosekit
+
       return command(view.state, view.dispatch, view);
     }),
     defineFileDropHandler(({ view, file, pos }) => {
@@ -50,7 +50,7 @@ export function defineImageFileHandlers() {
         attrs: { src: uploadTask.objectURL },
         pos,
       });
-      // eslint-disable-next-line @typescript-eslint/unbound-method -- view.dispatch is safely bound by prosekit
+
       return command(view.state, view.dispatch, view);
     }),
   );

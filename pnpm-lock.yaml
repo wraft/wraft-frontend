@@ -140,7 +140,7 @@ importers:
         version: 11.14.1(@emotion/react@11.14.0(@types/react@18.3.23)(react@18.3.1))(@types/react@18.3.23)(react@18.3.1)
       '@hookform/resolvers':
         specifier: ^5.2.1
-        version: 5.2.1(react-hook-form@7.62.0(react@18.3.1))
+        version: 5.2.1(react-hook-form@7.68.0(react@18.3.1))
       '@next/third-parties':
         specifier: ^15.2.3
         version: 15.4.3(next@14.2.32(@babel/core@7.28.0)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
@@ -241,8 +241,8 @@ importers:
         specifier: ^5.4.1
         version: 5.5.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-hook-form:
-        specifier: ^7.62.0
-        version: 7.62.0(react@18.3.1)
+        specifier: ^7.68.0
+        version: 7.68.0(react@18.3.1)
       react-hot-toast:
         specifier: ^2.6.0
         version: 2.6.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -418,6 +418,9 @@ importers:
       react-dropzone:
         specifier: 14.3.8
         version: 14.3.8(react@18.3.1)
+      react-hook-form:
+        specifier: ^7.68.0
+        version: 7.68.0(react@18.3.1)
       react-signature-canvas:
         specifier: 1.1.0-alpha.2
         version: 1.1.0-alpha.2(@types/prop-types@15.7.15)(@types/react@18.3.23)(prop-types@15.8.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -7203,8 +7206,8 @@ packages:
   react-flatten-children@1.1.2:
     resolution: {integrity: sha512-9pnG/uw2Wa0n97s+yBZg/WgfMPE8RC4qNcr6iYbyb19sacCk3gRJCmCzAhTuANSWesFsK9v/yTKW42pkenaAfw==}
 
-  react-hook-form@7.62.0:
-    resolution: {integrity: sha512-7KWFejc98xqG/F4bAxpL41NB3o1nnvQO1RWZT3TqRZYL8RryQETGfEdVnJN2fy1crCiBLLjkRBVK05j24FxJGA==}
+  react-hook-form@7.68.0:
+    resolution: {integrity: sha512-oNN3fjrZ/Xo40SWlHf1yCjlMK417JxoSJVUXQjGdvdRCU07NTFei1i1f8ApUAts+IVh14e4EdakeLEA+BEAs/Q==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18 || ^19
@@ -10054,10 +10057,10 @@ snapshots:
 
   '@floating-ui/utils@0.2.10': {}
 
-  '@hookform/resolvers@5.2.1(react-hook-form@7.62.0(react@18.3.1))':
+  '@hookform/resolvers@5.2.1(react-hook-form@7.68.0(react@18.3.1))':
     dependencies:
       '@standard-schema/utils': 0.3.0
-      react-hook-form: 7.62.0(react@18.3.1)
+      react-hook-form: 7.68.0(react@18.3.1)
 
   '@humanwhocodes/config-array@0.13.0':
     dependencies:
@@ -17336,7 +17339,7 @@ snapshots:
 
   react-flatten-children@1.1.2: {}
 
-  react-hook-form@7.62.0(react@18.3.1):
+  react-hook-form@7.68.0(react@18.3.1):
     dependencies:
       react: 18.3.1
 

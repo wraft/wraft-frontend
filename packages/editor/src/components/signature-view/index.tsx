@@ -4,10 +4,10 @@ import type { ReactNodeViewProps } from "prosekit/react";
 import { useEffect, useState, useRef, type SyntheticEvent } from "react";
 import { Box, Button, Flex, Text } from "@wraft/ui";
 import {
-  ArrowDownRight,
-  ImageBroken,
-  SpinnerGap,
-  X,
+  ArrowDownRightIcon,
+  ImageBrokenIcon,
+  SpinnerGapIcon,
+  XIcon,
 } from "@phosphor-icons/react";
 import type { SignatureAttrs } from "../../extensions/signature";
 import {
@@ -122,20 +122,20 @@ export default function SignatureView(props: ReactNodeViewProps) {
 
           {isUploading && !error && (
             <UploadingOverlay>
-              <SpinnerGap size={8} />
+              <SpinnerGapIcon size={8} />
               <div>{Math.round(uploadProgress * 100)}%</div>
             </UploadingOverlay>
           )}
           {error && (
             <ErrorOverlay>
-              <ImageBroken size={8} />
+              <ImageBrokenIcon size={8} />
               <div className="hidden opacity-80 @xs:block">
                 Failed to upload image
               </div>
             </ErrorOverlay>
           )}
           <StyledResizableHandle position="bottom-right">
-            <ArrowDownRight size={8} />
+            <ArrowDownRightIcon size={8} />
           </StyledResizableHandle>
         </StyledResizableRoot>
       </div>
@@ -155,7 +155,7 @@ export default function SignatureView(props: ReactNodeViewProps) {
                 variant="ghost"
                 onClick={() => setIsSignatureModalOpen(false)}
               >
-                <X />
+                <XIcon />
               </Button>
             </Flex>
             <SignatureCanvasComponent

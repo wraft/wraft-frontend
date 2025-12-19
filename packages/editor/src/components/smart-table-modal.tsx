@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useForm, Controller } from "react-hook-form";
 import styled from "@xstyled/emotion";
 import { PlusIcon, TrashIcon, TableIcon, EyeIcon } from "@phosphor-icons/react";
 import {
@@ -12,6 +13,7 @@ import {
   Textarea,
   Tab,
   useTab,
+  Select,
 } from "@wraft/ui";
 import { CloseIcon } from "@wraft/icon";
 import type { SmartTableData, SmartTableJSON } from "../helpers/smart-table";
@@ -20,18 +22,27 @@ import {
   smartTableDataToJSON,
   generateEmptySmartTableData,
 } from "../helpers/smart-table";
+import { getMachineName } from "../lib/utils";
 
 interface SmartTableModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (tableJSON: SmartTableJSON, tableName: string) => void;
+  onSubmit: (
+    tableJSON: SmartTableJSON,
+    tableName: string,
+    machineName?: string | null,
+  ) => void;
   existingData?: {
     name: string;
     data: SmartTableData;
   };
+  fields?: any[];
 }
 
-// Styled components for tables (not available in wraft UI)
+interface SmartTableFormData {
+  tableName: string;
+}
+
 const PreviewTable = styled.table`
   width: 100%;
   border-collapse: collapse;
@@ -39,13 +50,14 @@ const PreviewTable = styled.table`
 
   th,
   td {
-    border: 1px solid #d1d5db;
+    border: 1px solid;
+    border-color: border;
     padding: 0.5rem 0.75rem;
     text-align: left;
   }
 
   th {
-    background-color: #f3f4f6;
+    background-color: background-secondary;
     font-weight: 600;
   }
 
@@ -63,12 +75,13 @@ const ManualTable = styled.table`
 
   th,
   td {
-    border: 1px solid #d1d5db;
+    border: 1px solid;
+    border-color: border;
     padding: 0.25rem;
   }
 
   th {
-    background-color: #f3f4f6;
+    background-color: background-secondary;
   }
 
   input {
@@ -90,29 +103,56 @@ export default function SmartTableModal({
   onClose,
   onSubmit,
   existingData,
+  fields = [],
 }: SmartTableModalProps) {
-  const [tableName, setTableName] = useState("");
-  const tab = useTab({ defaultSelectedId: "json" });
+  const tab = useTab({ defaultSelectedId: "manual" });
   const [jsonInput, setJsonInput] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [previewData, setPreviewData] = useState<SmartTableData | null>(null);
 
-  // Manual creation state
+  const tableFields = (Array.isArray(fields) ? fields : []).filter(
+    (field: any) => {
+      const fieldType =
+        field.type ||
+        field.fieldType ||
+        (typeof field.field_type === "object"
+          ? field.field_type?.name
+          : field.field_type);
+      const isTableType = fieldType === "Table" || fieldType === "table";
+      const hasValidName = field.name || field.label;
+      const hasValidMachineName =
+        field.machine_name || field.machineName || field.name;
+      return isTableType && hasValidName && hasValidMachineName;
+    },
+  );
+
   const [manualData, setManualData] = useState<SmartTableData>(
     generateEmptySmartTableData(2, 3),
   );
 
+  const defaultValues: SmartTableFormData = {
+    tableName: existingData?.name || "",
+  };
+
+  const {
+    control,
+    handleSubmit: handleFormSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<SmartTableFormData>({
+    defaultValues,
+  });
+
   useEffect(() => {
     if (isOpen) {
-      // Reset or load existing data
       if (existingData) {
-        setTableName(existingData.name);
+        reset({ tableName: existingData.name });
         setManualData(existingData.data);
         setJsonInput(JSON.stringify(existingData.data, null, 2));
         setPreviewData(existingData.data);
       } else {
-        setTableName("");
+        reset({ tableName: "" });
         setJsonInput("");
         setError("");
         setSuccess("");
@@ -120,13 +160,7 @@ export default function SmartTableModal({
         setManualData(generateEmptySmartTableData(2, 3));
       }
     }
-  }, [isOpen, existingData]);
-
-  const handleTableNameChange = (value: string) => {
-    const sanitizedValue = value.toLowerCase().replace(/[^a-z0-9_]/g, "");
-    setTableName(sanitizedValue);
-    setError("");
-  };
+  }, [isOpen, existingData, reset]);
 
   const handleJsonChange = (value: string) => {
     setJsonInput(value);
@@ -147,42 +181,42 @@ export default function SmartTableModal({
     }
   };
 
-  const handleSubmit = () => {
-    if (!tableName.trim()) {
-      setError("Please enter a table name");
-      return;
-    }
-
-    if (!/^[a-z0-9_]+$/.test(tableName)) {
-      setError(
-        "Table name can only contain lowercase letters, numbers, and underscores.",
-      );
-      return;
-    }
+  const onSubmitForm = (data: SmartTableFormData) => {
+    const tableName = data.tableName.trim();
 
     let dataToSubmit: SmartTableData;
 
     if (activeTab === "json") {
-      const { data, error: parseError } = parseAndValidateJSON(jsonInput);
+      const { data: parsedData, error: parseError } =
+        parseAndValidateJSON(jsonInput);
       if (parseError) {
-        setError(parseError);
+        setError("Please check JSON data");
         return;
       }
-      if (!data) {
+      if (!parsedData) {
         setError("Invalid JSON data");
         return;
       }
-      dataToSubmit = data;
+      dataToSubmit = parsedData;
     } else {
       dataToSubmit = manualData;
     }
 
-    const tableJSON = smartTableDataToJSON(dataToSubmit, tableName);
-    onSubmit(tableJSON, tableName);
-    // Note: modal closing is handled by parent component after successful insertion
+    // Find the machine_name for the selected table
+    const selectedField = tableFields.find(
+      (field: any) =>
+        (field.machine_name || field.machineName || field.name) === tableName,
+    );
+    const machineName = getMachineName(selectedField);
+
+    const tableJSON = smartTableDataToJSON(
+      dataToSubmit,
+      tableName,
+      machineName,
+    );
+    onSubmit(tableJSON, tableName, machineName);
   };
 
-  // Manual table handlers
   const updateHeader = (index: number, value: string) => {
     const newHeaders = [...manualData.headers];
     newHeaders[index] = value;
@@ -263,7 +297,7 @@ export default function SmartTableModal({
     }
   };
 
-  const activeTab = tab.useState("selectedId") || "json";
+  const activeTab = tab.useState("selectedId") || "manual";
 
   if (!isOpen) return null;
 
@@ -292,13 +326,13 @@ export default function SmartTableModal({
           borderColor="border"
         >
           <Flex align="center" gap="sm">
-            <TableIcon size={24} />
+            <TableIcon size={24} className="icon-primary" />
             <Text fontSize="lg" fontWeight="heading">
               {existingData ? "Edit Smart Table" : "Create Smart Table"}
             </Text>
           </Flex>
           <Box onClick={onClose} cursor="pointer">
-            <CloseIcon color="#2C3641" />
+            <CloseIcon className="icon-primary" />
           </Box>
         </Flex>
 
@@ -306,23 +340,64 @@ export default function SmartTableModal({
           <Box mb="lg">
             <Field
               label="Table Name *"
-              hint="Only lowercase letters, numbers, and underscores are allowed. Examples: invoice_items, spec_items"
+              error={errors.tableName?.message}
+              hint="Select a table name"
             >
-              <InputText
-                type="text"
-                value={tableName}
-                onChange={(e) => handleTableNameChange(e.target.value)}
-                placeholder="e.g., invoice_items, user_list"
+              <Controller
+                name="tableName"
+                control={control}
+                rules={{
+                  required: "Please select a table name",
+                  validate: (value) => {
+                    const trimmedValue = (value || "").trim();
+                    if (!trimmedValue) {
+                      return "Please select a table name";
+                    }
+                    const isValid = tableFields.some(
+                      (field: any) =>
+                        (field.machine_name ||
+                          field.machineName ||
+                          field.name) === trimmedValue,
+                    );
+                    return isValid || "Please select a valid table";
+                  },
+                }}
+                render={({ field: controllerField }) => (
+                  <Select
+                    options={[
+                      { value: "", label: "Select a table" },
+                      ...tableFields.map((field: any) => ({
+                        value:
+                          field.machine_name ||
+                          field.machineName ||
+                          field.name ||
+                          "",
+                        label: field.name || field.label || "",
+                      })),
+                    ]}
+                    value={controllerField.value || undefined}
+                    onChange={(selectedValue) => {
+                      const value = String(
+                        Array.isArray(selectedValue)
+                          ? selectedValue[0] || ""
+                          : selectedValue || "",
+                      );
+                      controllerField.onChange(value);
+                      if (error) setError("");
+                    }}
+                    placeholder="Select a table"
+                  />
+                )}
               />
             </Field>
           </Box>
 
           <Tab.List aria-label="Table Creation Tabs" store={tab} mb="lg">
-            <Tab id="json" store={tab}>
-              Import from JSON
-            </Tab>
             <Tab id="manual" store={tab}>
               Create Manually
+            </Tab>
+            <Tab id="json" store={tab}>
+              Import from JSON
             </Tab>
           </Tab.List>
 
@@ -331,6 +406,7 @@ export default function SmartTableModal({
               <Box mb="lg">
                 <Field
                   label="JSON Data"
+                  error={error || undefined}
                   hint="Paste your JSON with headers, rows, and optional footer"
                 >
                   <Textarea
@@ -338,7 +414,6 @@ export default function SmartTableModal({
                     onChange={(e) => handleJsonChange(e.target.value)}
                     placeholder={JSON.stringify(exampleJSON, null, 2)}
                     minRows={15}
-                    style={{ fontFamily: "monospace" }}
                   />
                 </Field>
               </Box>
@@ -347,7 +422,7 @@ export default function SmartTableModal({
                 mb="md"
                 p="sm"
                 backgroundColor="#1f2937"
-                color="#f3f4f6"
+                color="text-secondary"
                 borderRadius="sm"
                 fontSize="sm"
                 overflowX="auto"
@@ -364,28 +439,14 @@ export default function SmartTableModal({
                 </Button>
               </Box>
 
-              {error && (
-                <Box
-                  mb="md"
-                  p="sm"
-                  color="#dc2626"
-                  backgroundColor="#fef2f2"
-                  border="1px solid"
-                  borderColor="#fecaca"
-                  borderRadius="sm"
-                  fontSize="sm"
-                >
-                  {error}
-                </Box>
-              )}
               {success && (
                 <Box
                   mb="md"
                   p="sm"
-                  color="#059669"
+                  color="success"
                   backgroundColor="#d1fae5"
                   border="1px solid"
-                  borderColor="#a7f3d0"
+                  borderColor="border"
                   borderRadius="sm"
                   fontSize="sm"
                 >
@@ -407,34 +468,36 @@ export default function SmartTableModal({
                     fontSize="sm"
                     fontWeight="medium"
                     mb="sm"
-                    color="#374151"
+                    color="text-secondary"
                   >
                     Preview:
                   </Text>
                   <PreviewTable>
-                    <thead>
-                      <tr>
+                    <Box as="thead">
+                      <Box as="tr">
                         {previewData.headers.map((header, i) => (
                           <th key={i}>{header}</th>
                         ))}
-                      </tr>
-                    </thead>
-                    <tbody>
+                      </Box>
+                    </Box>
+                    <Box as="tbody">
                       {previewData.rows.map((row, i) => (
-                        <tr key={i}>
+                        <Box as="tr" key={i}>
                           {row.map((cell, j) => (
                             <td key={j}>{cell}</td>
                           ))}
-                        </tr>
+                        </Box>
                       ))}
                       {previewData.footer && (
-                        <tr data-footer="true">
+                        <Box as="tr" data-footer="true">
                           {previewData.footer.map((cell, i) => (
-                            <td key={i}>{cell}</td>
+                            <Box as="td" key={i}>
+                              {cell}
+                            </Box>
                           ))}
-                        </tr>
+                        </Box>
                       )}
-                    </tbody>
+                    </Box>
                   </PreviewTable>
                 </Box>
               )}
@@ -462,28 +525,25 @@ export default function SmartTableModal({
                   <Box as="tr">
                     {manualData.headers.map((header, i) => (
                       <Box as="th" key={i}>
-                        <InputText
-                          type="text"
-                          value={header}
-                          onChange={(e) => updateHeader(i, e.target.value)}
-                          placeholder={`Header ${i + 1}`}
-                          transparent
-                          style={{
-                            border: "none",
-                            padding: "0.5rem",
-                            background: "transparent",
-                          }}
-                        />
-                        {manualData.headers.length > 1 && (
-                          <Button
-                            size="sm"
-                            variant="secondary"
-                            onClick={() => removeColumn(i)}
-                            style={{ marginTop: "0.25rem" }}
-                          >
-                            <TrashIcon size={14} />
-                          </Button>
-                        )}
+                        <Flex justify="space-between" gap="sm" align="center">
+                          <Box flex="1" fontWeight="heading">
+                            <InputText
+                              type="text"
+                              value={header}
+                              onChange={(e) => updateHeader(i, e.target.value)}
+                              placeholder={`Header ${i + 1}`}
+                            />
+                          </Box>
+                          {manualData.headers.length > 1 && (
+                            <Button
+                              size="sm"
+                              variant="secondary"
+                              onClick={() => removeColumn(i)}
+                            >
+                              <TrashIcon size={14} />
+                            </Button>
+                          )}
+                        </Flex>
                       </Box>
                     ))}
                   </Box>
@@ -501,11 +561,6 @@ export default function SmartTableModal({
                             }
                             placeholder="Enter value"
                             transparent
-                            style={{
-                              border: "none",
-                              padding: "0.5rem",
-                              background: "transparent",
-                            }}
                           />
                         </td>
                       ))}
@@ -523,11 +578,6 @@ export default function SmartTableModal({
                             onChange={(e) => updateFooter(i, e.target.value)}
                             placeholder="Footer value"
                             transparent
-                            style={{
-                              border: "none",
-                              padding: "0.5rem",
-                              background: "transparent",
-                            }}
                           />
                         </Box>
                       ))}
@@ -561,7 +611,12 @@ export default function SmartTableModal({
           <Button variant="secondary" onClick={onClose}>
             Cancel
           </Button>
-          <Button onClick={handleSubmit}>
+          <Button
+            onClick={(e) => {
+              e.preventDefault();
+              void handleFormSubmit(onSubmitForm)(e);
+            }}
+          >
             {existingData ? "Update Table" : "Create Table"}
           </Button>
         </Flex>

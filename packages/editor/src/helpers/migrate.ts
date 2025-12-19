@@ -1,5 +1,5 @@
-import type { ListAttrs } from "@extensions/list-item";
 import type { ProsemirrorNodeJSON } from "prosemirror-flat-list";
+import type { ListAttrs } from "@extensions/list-item";
 
 function migrateNodes(
   nodes: ProsemirrorNodeJSON[],

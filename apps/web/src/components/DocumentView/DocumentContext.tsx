@@ -361,9 +361,7 @@ export const DocumentProvider = ({
           setContentType(data?.content_type);
         }
       })
-      .catch((err) => {
-        console.log(err, 'logerr');
-      });
+      .catch(() => {});
   };
 
   const fetchStates = (id: string) => {

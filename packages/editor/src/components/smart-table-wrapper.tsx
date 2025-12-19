@@ -3,6 +3,7 @@ import { TableIcon, PencilSimpleIcon } from "@phosphor-icons/react";
 import { Box, Flex, Text, Button } from "@wraft/ui";
 import type { SmartTableData } from "../helpers/smart-table";
 import SmartTableModal from "./smart-table-modal";
+import { useEditorConfig } from "./editor-config";
 
 interface SmartTableWrapperProps {
   tableName?: string;
@@ -15,8 +16,10 @@ export default function SmartTableWrapper({
   isSmartTable,
   children,
 }: SmartTableWrapperProps) {
+  const { tokens } = useEditorConfig();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [_tableData, _setTableData] = useState<SmartTableData | null>(null);
+  const fields = tokens || [];
 
   const handleEdit = () => {
     setIsEditModalOpen(true);
@@ -88,6 +91,7 @@ export default function SmartTableWrapper({
                 }
               : undefined
           }
+          fields={fields}
         />
       )}
     </Box>
