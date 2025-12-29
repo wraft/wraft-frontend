@@ -3,15 +3,7 @@ import { useSearchParams } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import {
-  Flex,
-  Box,
-  Button,
-  Text,
-  Field,
-  InputText,
-  PasswordInput,
-} from '@wraft/ui';
+import { Flex, Box, Button, Text, Field, PasswordInput } from '@wraft/ui';
 import { z } from 'zod';
 import { BrandLogoIcon } from '@wraft/icon';
 
@@ -111,7 +103,7 @@ const Index = () => {
                   label="New Password"
                   required
                   error={errors?.newPassword?.message}>
-                  <InputText
+                  <PasswordInput
                     autoComplete="off"
                     {...register('newPassword')}
                     placeholder="Enter your New Password"
