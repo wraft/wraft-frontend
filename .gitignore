@@ -68,3 +68,6 @@ volumes
 .env.local
 .env.production
 .env
+
+# Exception: allow logs directory in pipelines (overrides global gitignore)
+!apps/web/src/pages/pipelines/logs/
