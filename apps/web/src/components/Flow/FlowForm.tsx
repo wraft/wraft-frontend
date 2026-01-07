@@ -433,7 +433,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
             </Button>
           )}
           {formStep === 1 && (
-            <Flex>
+            <Flex gap="md">
               <Button variant="secondary" type="button" onClick={prev}>
                 Prev
               </Button>

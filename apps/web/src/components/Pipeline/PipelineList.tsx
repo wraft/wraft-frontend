@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Box, Flex, Text } from '@wraft/ui';
+import { Box, Flex, Text, InputText } from '@wraft/ui';
 import { Drawer, Button, Pagination, useDrawer } from '@wraft/ui';
 import { Table } from '@wraft/ui';
-import { PlayIcon, TreeStructureIcon } from '@phosphor-icons/react';
+import {
+  PlayIcon,
+  TreeStructureIcon,
+  MagnifyingGlassIcon,
+} from '@phosphor-icons/react';
 
 import Link from 'common/NavLink';
 import PageHeader from 'common/PageHeader';
-import { PageInner, TimeAgo } from 'common/Atoms';
+import { PageInner, TimeAgo, IconFrame } from 'common/Atoms';
 import { fetchAPI } from 'utils/models';
 import { usePermission } from 'utils/permissions';
 
@@ -51,19 +55,37 @@ const Form = () => {
 
   const router: any = useRouter();
   const currentPage: any = parseInt(router.query.page) || 1;
+  const [searchQuery, setSearchQuery] = useState<string>(
+    (router.query.search as string) || '',
+  );
 
   const mobileMenuDrawer = useDrawer();
   const formMenuDrawer = useDrawer();
 
   const { hasPermission } = usePermission();
 
-  const loadData = () => {
+  useEffect(() => {
+    if (router.query.search) {
+      setSearchQuery(router.query.search as string);
+    }
+    if (router.query.page) {
+      setPage(parseInt(router.query.page as string));
+    }
+  }, [router.query.search, router.query.page]);
+
+  const loadData = (pageNumber: number, search: string = '') => {
     setLoading(true);
-    const pageNo = currentPage ? `&page=${currentPage}` : '';
+    const params = new URLSearchParams();
+    if (pageNumber > 0) {
+      params.append('page', pageNumber.toString());
+    }
+    params.append('sort', 'inserted_at_desc');
+    if (search.trim()) {
+      params.append('name', search.trim());
+    }
+    const query = params.toString() ? `?${params.toString()}` : '';
 
-    const query = `sort=inserted_at_desc${pageNo}`;
-
-    fetchAPI(`pipelines?${query}`).then((data: any) => {
+    fetchAPI(`pipelines${query}`).then((data: any) => {
       const res: Pipeline[] = data.pipelines;
       setContents(res);
       setPageMeta(data);
@@ -73,9 +95,11 @@ const Form = () => {
 
   useEffect(() => {
     if (page) {
-      loadData();
+      loadData(page, searchQuery);
+    } else {
+      loadData(currentPage, searchQuery);
     }
-  }, [currentPage, rerender]);
+  }, [currentPage, rerender, searchQuery]);
 
   const changePage = (newPage: any) => {
     setPage(newPage);
@@ -95,6 +119,28 @@ const Form = () => {
     setIsOpen(true);
     setSourceId(formId);
     setPipelineId(pipeId);
+  };
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    setPage(1);
+    const currentPath = router.pathname;
+    const currentQuery = {
+      ...router.query,
+      page: 1,
+      search: query || undefined,
+    };
+    if (!query) {
+      delete currentQuery.search;
+    }
+    router.push(
+      {
+        pathname: currentPath,
+        query: currentQuery,
+      },
+      undefined,
+      { shallow: true },
+    );
   };
 
   const columns = [
@@ -164,6 +210,24 @@ const Form = () => {
       </PageHeader>
 
       <PageInner>
+        <Box mb="xs">
+          <Flex gap="md" align="end" justify="flex-start">
+            <Box w="320px" bg="background-primary">
+              <InputText
+                placeholder="Search by name..."
+                value={searchQuery}
+                size="md"
+                onChange={(e) => handleSearch(e.target.value)}
+                icon={
+                  <IconFrame size={12} color="gray.700">
+                    <MagnifyingGlassIcon width="18px" />
+                  </IconFrame>
+                }
+                iconPlacement="right"
+              />
+            </Box>
+          </Flex>
+        </Box>
         <Table
           data={contents}
           columns={columns}

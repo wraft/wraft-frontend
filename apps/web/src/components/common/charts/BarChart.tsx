@@ -137,9 +137,8 @@ export const BarChart: React.FC<BarChartProps> = ({
 
   return (
     <Box
-      as="div"
-      border="1px solid"
-      borderColor="border"
+      // border="1px solid"
+      // borderColor="border"
       borderRadius="md"
       overflow="hidden">
       {(title || description) &&
@@ -149,7 +148,7 @@ export const BarChart: React.FC<BarChartProps> = ({
           (title?.toLowerCase() === 'total' ||
             title?.toLowerCase() === 'total:')
         ) && <BlockTitle title={title} description={description} />}
-      <Box py="md">
+      <Box px="xl" py="lg">
         <Box style={{ width, height }}>
           <ResponsiveContainer>
             <RechartsBarChart

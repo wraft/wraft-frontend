@@ -1,13 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import NavLink from 'next/link';
 import { useRouter } from 'next/router';
-import { Pagination, DropdownMenu, Table, Box, Flex, Text } from '@wraft/ui';
+import {
+  Pagination,
+  DropdownMenu,
+  Table,
+  Box,
+  Flex,
+  Text,
+  InputText,
+} from '@wraft/ui';
 import { ThreeDotIcon } from '@wraft/icon';
 import toast from 'react-hot-toast';
-import { Plus, Download } from '@phosphor-icons/react';
+import {
+  PlusIcon,
+  DownloadIcon,
+  MagnifyingGlassIcon,
+} from '@phosphor-icons/react';
 import { Button } from '@wraft/ui';
 
-import { PageInner, TimeAgo, VariantLine } from 'common/Atoms';
+import { PageInner, TimeAgo, VariantLine, IconFrame } from 'common/Atoms';
 import PageHeader from 'common/PageHeader';
 import { fetchAPI, postAPI } from 'utils/models';
 import api from 'utils/models';
@@ -84,7 +96,7 @@ const columns = ({
               <DropdownMenu.Item
                 onClick={() => onDownloadTemplate(row.original)}>
                 <Flex alignItems="center" gap="xs">
-                  <Download size={14} />
+                  <DownloadIcon size={14} />
                   Download
                 </Flex>
               </DropdownMenu.Item>
@@ -99,29 +111,47 @@ const columns = ({
 ];
 
 const TemplateList = () => {
+  const router: any = useRouter();
+  const currentPage: any = parseInt(router.query.page) || 1;
+  const { hasPermission } = usePermission();
+
   const [templates, setTemplates] = useState<Array<IField>>([]);
   const [pageMeta, setPageMeta] = useState<any>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [page, setPage] = useState<number>();
-  const { hasPermission } = usePermission();
-
-  const router: any = useRouter();
-  const currentPage: any = parseInt(router.query.page) || 1;
+  const [searchQuery, setSearchQuery] = useState<string>(
+    (router.query.search as string) || '',
+  );
 
   useEffect(() => {
-    loadTemplates(currentPage);
-  }, []);
+    if (router.query.search) {
+      setSearchQuery(router.query.search as string);
+    }
+    if (router.query.page) {
+      setPage(parseInt(router.query.page as string));
+    }
+  }, [router.query.search, router.query.page]);
 
   useEffect(() => {
     if (page) {
-      loadTemplates(page);
+      loadTemplates(page, searchQuery);
+    } else {
+      loadTemplates(currentPage, searchQuery);
     }
-  }, [page]);
+  }, [page, searchQuery]);
 
-  const loadTemplates = async (pageNo: number) => {
+  const loadTemplates = async (pageNo: number, search: string = '') => {
     try {
       setIsLoading(true);
-      const query = `?page=${pageNo}&sort=updated_at_desc`;
+      const params = new URLSearchParams();
+      if (pageNo > 0) {
+        params.append('page', pageNo.toString());
+      }
+      params.append('sort', 'updated_at_desc');
+      if (search.trim()) {
+        params.append('title', search.trim());
+      }
+      const query = params.toString() ? `?${params.toString()}` : '';
       const data: any = await fetchAPI(`data_templates${query}`);
       setTemplates(data.data_templates || []);
       setPageMeta(data);
@@ -138,6 +168,28 @@ const TemplateList = () => {
       {
         pathname: router.pathname,
         query: { ...router.query, page: newPage },
+      },
+      undefined,
+      { shallow: true },
+    );
+  };
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    setPage(1);
+    const currentPath = router.pathname;
+    const currentQuery = {
+      ...router.query,
+      page: 1,
+      search: query || undefined,
+    };
+    if (!query) {
+      delete currentQuery.search;
+    }
+    router.push(
+      {
+        pathname: currentPath,
+        query: currentQuery,
       },
       undefined,
       { shallow: true },
@@ -199,12 +251,30 @@ const TemplateList = () => {
             onClick={() => router.push(`/templates/new`)}
             variant="secondary"
             size="sm">
-            <Plus size={12} weight="bold" />
+            <PlusIcon size={12} weight="bold" />
             New Template
           </Button>
         )}
       </PageHeader>
       <PageInner>
+        <Box mb="xs">
+          <Flex gap="md" align="end" justify="flex-start">
+            <Box w="320px" bg="background-primary">
+              <InputText
+                placeholder="Search by name..."
+                value={searchQuery}
+                size="md"
+                onChange={(e) => handleSearch(e.target.value)}
+                icon={
+                  <IconFrame size={12} color="gray.700">
+                    <MagnifyingGlassIcon width="18px" />
+                  </IconFrame>
+                }
+                iconPlacement="right"
+              />
+            </Box>
+          </Flex>
+        </Box>
         <Box mx={0} mb={3}>
           <Table
             data={templates}

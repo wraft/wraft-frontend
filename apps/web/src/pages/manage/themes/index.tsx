@@ -2,10 +2,8 @@ import { FC, useState } from 'react';
 import Head from 'next/head';
 import { Button, Drawer, useDrawer } from '@wraft/ui';
 
-// import { menuLinks } from '@constants/menuLinks';
 import ThemeAddForm from 'components/Theme/ThemeForm';
 import ThemeList from 'components/Theme/ThemeList';
-// import ManageSidebar from 'common/ManageSidebar';
 import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
 import DescriptionLinker from 'common/DescriptionLinker';
@@ -14,9 +12,14 @@ import { usePermission } from 'utils/permissions';
 
 const ThemePage: FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [rerender, setRerender] = useState<any>(false);
+  const [refreshKey, setRefreshKey] = useState<number>(0);
   const drawer = useDrawer();
   const { hasPermission } = usePermission();
+
+  const handleThemeSuccess = () => {
+    setRefreshKey((prev) => prev + 1);
+    setIsOpen(false);
+  };
 
   return (
     <>
@@ -46,7 +49,7 @@ const ThemePage: FC = () => {
         </PageHeader>
 
         <PageInner>
-          <ThemeList rerender={rerender} />
+          <ThemeList refreshKey={refreshKey} />
         </PageInner>
       </Page>
       {/*
@@ -58,7 +61,7 @@ const ThemePage: FC = () => {
         withBackdrop={true}
         onClose={() => setIsOpen(false)}>
         {isOpen && (
-          <ThemeAddForm setIsOpen={setIsOpen} setRerender={setRerender} />
+          <ThemeAddForm setIsOpen={setIsOpen} onSuccess={handleThemeSuccess} />
         )}
       </Drawer>
       {/* )} */}

@@ -402,9 +402,15 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
     return false;
   };
 
-  const onSearchLayouts = async () => {
+  const onSearchLayouts = async (name: string) => {
     try {
-      const response: any = await fetchAPI('layouts');
+      const params = new URLSearchParams();
+      params.append('page_size', '20');
+      const queryParam = params.toString();
+      if (name && name.trim()) {
+        params.append('name', name);
+      }
+      const response: any = await fetchAPI(`layouts?${queryParam}`);
 
       if (!response || !response.layouts) {
         throw new Error('Invalid response structure');
@@ -417,9 +423,15 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
     }
   };
 
-  const onSearchFlows = async () => {
+  const onSearchFlows = async (name: string) => {
     try {
-      const response: any = await fetchAPI('flows');
+      const params = new URLSearchParams();
+      params.append('page_size', '20');
+      if (name && name.trim()) {
+        params.append('name', name);
+      }
+      const queryParam = params.toString();
+      const response: any = await fetchAPI(`flows?${queryParam}`);
 
       if (!response || !response.flows) {
         throw new Error('Invalid response structure');
@@ -437,9 +449,15 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
     }
   };
 
-  const onSearchThemes = async () => {
+  const onSearchThemes = async (name: string) => {
     try {
-      const response: any = await fetchAPI('themes');
+      const params = new URLSearchParams();
+      params.append('page_size', '20');
+      if (name && name.trim()) {
+        params.append('name', name);
+      }
+      const queryParam = params.toString();
+      const response: any = await fetchAPI(`themes?${queryParam}`);
 
       if (!response || !response.themes) {
         throw new Error('Invalid response structure');
@@ -1090,6 +1108,7 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
                     onChange={(item: any) => {
                       if (!item) {
                         onChange('');
+
                         return;
                       }
                       onChange(item);

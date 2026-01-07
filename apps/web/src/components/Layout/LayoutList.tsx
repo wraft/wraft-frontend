@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import NextLink from 'next/link';
+import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
+import { MagnifyingGlassIcon } from '@phosphor-icons/react';
 import {
   Table,
   Box,
@@ -10,10 +12,12 @@ import {
   Modal,
   useDrawer,
   Drawer,
+  Pagination,
+  InputText,
 } from '@wraft/ui';
 import { ThreeDotIcon } from '@wraft/icon';
 
-import { TimeAgo } from 'common/Atoms';
+import { TimeAgo, IconFrame } from 'common/Atoms';
 import ConfirmDelete from 'common/ConfirmDelete';
 import { fetchAPI, deleteAPI } from 'utils/models';
 import { usePermission } from 'utils/permissions';
@@ -53,13 +57,24 @@ const LayoutList = ({ rerender }: Props) => {
   const [deleteLayout, setDeleteLayout] = useState<number | null>(null);
   const [isEdit, setIsEdit] = useState<number | boolean>(false);
   const [loading, setIslLoading] = useState<number | boolean>(false);
+  const [pageMeta, setPageMeta] = useState<any>();
+  const [page, setPage] = useState<number>(1);
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const { hasPermission } = usePermission();
 
+  const router: any = useRouter();
+  const currentPage: any = parseInt(router.query.page as string) || 1;
   const stateDrawer = useDrawer();
 
   useEffect(() => {
-    loadLayout();
-  }, [rerender]);
+    if (router.query.search) {
+      setSearchQuery(router.query.search as string);
+    }
+  }, [router.query.search]);
+
+  useEffect(() => {
+    loadLayout(page, searchQuery);
+  }, [page, rerender, searchQuery]);
 
   const onDelete = (_id: string) => {
     deleteAPI(`layouts/${_id}`)
@@ -68,7 +83,7 @@ const LayoutList = ({ rerender }: Props) => {
           duration: 1000,
           position: 'top-right',
         });
-        loadLayout();
+        loadLayout(page, searchQuery);
         setDeleteLayout(null);
       })
       .catch(() => {
@@ -80,19 +95,65 @@ const LayoutList = ({ rerender }: Props) => {
   };
 
   /**
-   * Load all Engines
+   * Load all Layouts with pagination and search
    */
-  const loadLayout = () => {
+  const loadLayout = (pageNumber: number, search: string = '') => {
     setIslLoading(true);
-    fetchAPI('layouts?sort=inserted_at_desc')
+    const params = new URLSearchParams();
+    if (pageNumber > 0) {
+      params.append('page', pageNumber.toString());
+    }
+    params.append('sort', 'inserted_at_desc');
+    if (search.trim()) {
+      params.append('name', search.trim());
+    }
+    const query = params.toString() ? `?${params.toString()}` : '';
+    fetchAPI(`layouts${query}`)
       .then((data: any) => {
+        setIslLoading(false);
         const res: IField[] = data.layouts;
         setContents(res);
-        setIslLoading(false);
+        setPageMeta(data);
       })
       .catch(() => {
         setIslLoading(false);
       });
+  };
+
+  const changePage = (newPage: any) => {
+    setPage(newPage);
+    const currentPath = router.pathname;
+    const currentQuery = { ...router.query, page: newPage };
+    router.push(
+      {
+        pathname: currentPath,
+        query: currentQuery,
+      },
+      undefined,
+      { shallow: true },
+    );
+  };
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    setPage(1);
+    const currentPath = router.pathname;
+    const currentQuery = {
+      ...router.query,
+      page: 1,
+      search: query || undefined,
+    };
+    if (!query) {
+      delete currentQuery.search;
+    }
+    router.push(
+      {
+        pathname: currentPath,
+        query: currentQuery,
+      },
+      undefined,
+      { shallow: true },
+    );
   };
 
   const columns = [
@@ -186,6 +247,36 @@ const LayoutList = ({ rerender }: Props) => {
     },
   ];
 
-  return <Table data={contents} columns={columns} isLoading={loading} />;
+  return (
+    <Box w="100%">
+      <Box mb="lg">
+        <Flex gap="md" align="end" justify="flex-start">
+          <Box w="320px" bg="background-primary">
+            <InputText
+              placeholder="Search by name..."
+              value={searchQuery}
+              size="md"
+              onChange={(e) => handleSearch(e.target.value)}
+              icon={
+                <IconFrame size={12} color="gray.700">
+                  <MagnifyingGlassIcon width="18px" />
+                </IconFrame>
+              }
+              iconPlacement="right"
+            />
+          </Box>
+        </Flex>
+      </Box>
+      <Table data={contents} columns={columns} isLoading={loading} />
+      {pageMeta && pageMeta?.total_pages > 1 && (
+        <Pagination
+          totalPage={pageMeta?.total_pages}
+          initialPage={currentPage}
+          onPageChange={changePage}
+          totalEntries={pageMeta?.total_entries}
+        />
+      )}
+    </Box>
+  );
 };
 export default LayoutList;

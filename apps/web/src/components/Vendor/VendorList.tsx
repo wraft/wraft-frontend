@@ -223,23 +223,21 @@ const VendorList: React.FC<VendorListProps> = ({
   return (
     <>
       <PageInner>
-        <Box mb="lg">
-          <Flex gap="md" align="end" justify="flex-end">
-            <Box w="360px">
-              <InputText
-                placeholder="Search by name or email..."
-                value={searchQuery}
-                onChange={(e) => handleSearch(e.target.value)}
-                icon={
-                  <IconFrame size={12} color="gray.700">
-                    <MagnifyingGlassIcon width="18px" />
-                  </IconFrame>
-                }
-                iconPlacement="right"
-              />
-            </Box>
-          </Flex>
-        </Box>
+        <Flex gap="md" justify="flex-start">
+          <Box w="360px" bg="background-primary">
+            <InputText
+              placeholder="Search by name or email..."
+              value={searchQuery}
+              onChange={(e) => handleSearch(e.target.value)}
+              icon={
+                <IconFrame size={12} color="gray.700">
+                  <MagnifyingGlassIcon width="18px" />
+                </IconFrame>
+              }
+              iconPlacement="right"
+            />
+          </Box>
+        </Flex>
 
         <Box mb="lg">
           <Table

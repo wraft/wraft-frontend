@@ -52,14 +52,15 @@ interface TransformedDataItem {
 
 const ChartContainer = styled(Box)`
   width: 100%;
-  background: background-secondary;
+  background-color: background-primary;
+  border: 1px solid;
+  border-color: border;
   border-radius: md;
-  padding: xl;
-  min-height: 320px;
+  min-height: 380px;
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  justify-content: center;
+  justify-content: space-between;
 `;
 
 const DocumentTypesChart: React.FC = () => {
@@ -156,14 +157,11 @@ const DocumentTypesChart: React.FC = () => {
 
   return (
     <ChartContainer>
-      <Text
-        as="h4"
-        fontWeight="heading"
-        fontSize="base"
-        mb="md"
-        color="text-secondary">
-        Document Types Distribution
-      </Text>
+      <Box px="xl" py="lg" borderBottom="1px solid" borderColor="border">
+        <Text as="h4" fontWeight="heading" fontSize="md" color="gray.1100">
+          Document Types Distribution
+        </Text>
+      </Box>
       {loading ? (
         <>
           <Box mb="md">
@@ -199,7 +197,7 @@ const DocumentTypesChart: React.FC = () => {
         <PieChart
           // showLabels={false}
           data={transformedData}
-          height={240}
+          height={290}
           showLegend
           showTooltip
           config={chartConfig}

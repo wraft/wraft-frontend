@@ -1,29 +1,26 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 
 import ThemeViewForm from 'components/Theme/ThemeViewForm';
 import DescriptionLinker from 'common/DescriptionLinker';
 import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
 import { PageInner } from 'common/Atoms';
-import { fetchAPI } from 'utils/models';
 
 const Index: FC = () => {
   const [theme, setTheme] = useState<any>();
-  const router = useRouter();
-  const id: string = router.query.id as string;
 
-  useEffect(() => {
-    fetchAPI(`themes/${id}`).then((data: any) => {
-      setTheme(data);
-    });
-  }, []);
+  const handleThemeLoad = (themeData: any) => {
+    setTheme(themeData);
+  };
   return (
     <>
       <Head>
-        <title>Edit Theme | Wraft</title>
-        <meta name="description" content="edit theme" />
+        <title>
+          {theme?.theme?.name
+            ? ` ${theme.theme.name} | Wraft`
+            : 'Theme Details | Wraft'}
+        </title>
       </Head>
       <Page>
         <PageHeader
@@ -43,7 +40,7 @@ const Index: FC = () => {
           }
         />
         <PageInner>
-          <ThemeViewForm />
+          <ThemeViewForm onThemeLoad={handleThemeLoad} />
         </PageInner>
       </Page>
     </>

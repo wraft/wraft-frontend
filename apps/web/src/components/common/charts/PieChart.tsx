@@ -124,8 +124,7 @@ export const PieChart: React.FC<PieChartProps> = ({
 
   return (
     <Box
-      as="div"
-      border="1px solid"
+      // border="1px solid"
       borderColor="border"
       borderRadius="md"
       overflow="hidden">

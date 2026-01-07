@@ -9,11 +9,13 @@ import {
   Flex,
   Text,
   Modal,
+  InputText,
 } from '@wraft/ui';
 import toast from 'react-hot-toast';
 import { ThreeDotIcon } from '@wraft/icon';
+import { MagnifyingGlassIcon } from '@phosphor-icons/react';
 
-import { TimeAgo } from 'common/Atoms';
+import { TimeAgo, IconFrame } from 'common/Atoms';
 import ConfirmDelete from 'common/ConfirmDelete';
 import UserCard from 'common/UserCard';
 import { fetchAPI, deleteAPI, postAPI } from 'utils/models';
@@ -58,12 +60,26 @@ const VariantDashboard = ({ rerender, setRerender }: Props) => {
 
   const router: any = useRouter();
   const currentPage: any = parseInt(router.query.page) || 1;
+  const [searchQuery, setSearchQuery] = useState<string>(
+    (router.query.search as string) || '',
+  );
+
+  useEffect(() => {
+    if (router.query.search) {
+      setSearchQuery(router.query.search as string);
+    }
+    if (router.query.page) {
+      setPage(parseInt(router.query.page as string));
+    }
+  }, [router.query.search, router.query.page]);
 
   useEffect(() => {
     if (page) {
-      loadData();
+      loadData(page, searchQuery);
+    } else {
+      loadData(currentPage, searchQuery);
     }
-  }, [currentPage, rerender]);
+  }, [currentPage, rerender, searchQuery]);
 
   const onDelete = (id: string) => {
     deleteAPI(`content_types/${id}`)
@@ -77,14 +93,20 @@ const VariantDashboard = ({ rerender, setRerender }: Props) => {
       });
   };
 
-  const loadData = () => {
+  const loadData = (pageNumber: number, search: string = '') => {
     setLoading(true);
 
-    const pageNo = currentPage ? `&page=${currentPage}` : '';
+    const params = new URLSearchParams();
+    if (pageNumber > 0) {
+      params.append('page', pageNumber.toString());
+    }
+    params.append('sort', 'inserted_at_desc');
+    if (search.trim()) {
+      params.append('name', search.trim());
+    }
+    const query = params.toString() ? `?${params.toString()}` : '';
 
-    const query = `sort=inserted_at_desc${pageNo}`;
-
-    fetchAPI(`content_types?${query}`)
+    fetchAPI(`content_types${query}`)
       .then((data: any) => {
         setLoading(false);
         const res: IField[] = data.content_types;
@@ -100,6 +122,28 @@ const VariantDashboard = ({ rerender, setRerender }: Props) => {
     setPage(newPage);
     const currentPath = router.pathname;
     const currentQuery = { ...router.query, page: newPage };
+    router.push(
+      {
+        pathname: currentPath,
+        query: currentQuery,
+      },
+      undefined,
+      { shallow: true },
+    );
+  };
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    setPage(1);
+    const currentPath = router.pathname;
+    const currentQuery = {
+      ...router.query,
+      page: 1,
+      search: query || undefined,
+    };
+    if (!query) {
+      delete currentQuery.search;
+    }
     router.push(
       {
         pathname: currentPath,
@@ -140,7 +184,7 @@ const VariantDashboard = ({ rerender, setRerender }: Props) => {
       theme_id: originalData.theme.id,
     };
 
-    postAPI('variant', convertedData)
+    postAPI('content_types', convertedData)
       .then((content: any) => {
         router.push(`/variants/${content.id}`);
         toast.success('Created Successfully', {
@@ -289,6 +333,24 @@ const VariantDashboard = ({ rerender, setRerender }: Props) => {
 
   return (
     <Box>
+      <Box mb="lg">
+        <Flex gap="md" align="end" justify="flex-start">
+          <Box w="320px" bg="background-primary">
+            <InputText
+              placeholder="Search by name..."
+              value={searchQuery}
+              size="md"
+              onChange={(e) => handleSearch(e.target.value)}
+              icon={
+                <IconFrame size={12} color="gray.700">
+                  <MagnifyingGlassIcon width="18px" />
+                </IconFrame>
+              }
+              iconPlacement="right"
+            />
+          </Box>
+        </Flex>
+      </Box>
       <Table
         data={contents}
         isLoading={loading}

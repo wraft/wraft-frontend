@@ -1,10 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
-import { Box, Flex, Table, Pagination, Text, Button, Avatar } from '@wraft/ui';
+import { MagnifyingGlassIcon } from '@phosphor-icons/react';
+import {
+  Box,
+  Flex,
+  Table,
+  Pagination,
+  Text,
+  Button,
+  Avatar,
+  InputText,
+} from '@wraft/ui';
 
 import PageHeader from 'common/PageHeader';
-import { PageInner, StateBadge, TimeAgo } from 'common/Atoms';
+import { PageInner, StateBadge, TimeAgo, IconFrame } from 'common/Atoms';
 import { ContentTitleList } from 'common/content';
 import { fetchAPI } from 'utils/models';
 
@@ -109,27 +119,43 @@ const columns = () => [
 ];
 
 const Approvals = () => {
+  const router: any = useRouter();
+  const currentPage: any = parseInt(router.query.page) || 1;
+
   const [contents, setContents] = useState<Array<ApprovaSystemItem>>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [pageMeta, setPageMeta] = useState<IPageMeta>();
   const [page, setPage] = useState<number>(1);
-
-  const router: any = useRouter();
-  const currentPage: any = parseInt(router.query.page) || 1;
+  const [searchQuery, setSearchQuery] = useState<string>(
+    (router.query.search as string) || '',
+  );
 
   useEffect(() => {
-    if (page) {
-      loadData();
+    if (router.query.search) {
+      setSearchQuery(router.query.search as string);
     }
-  }, [currentPage]);
+    if (router.query.page) {
+      setPage(parseInt(router.query.page as string));
+    }
+  }, [router.query.search, router.query.page]);
 
-  const loadData = () => {
+  useEffect(() => {
+    loadData(page, searchQuery);
+  }, [page, searchQuery]);
+
+  const loadData = (pageNumber: number, search: string = '') => {
     setLoading(true);
-    const pageNo = currentPage ? `&page=${currentPage}` : '';
+    const params = new URLSearchParams();
+    if (pageNumber > 0) {
+      params.append('page', pageNumber.toString());
+    }
+    params.append('sort', 'inserted_at_desc');
+    if (search.trim()) {
+      params.append('name', search.trim());
+    }
+    const query = params.toString() ? `?${params.toString()}` : '';
 
-    const query = `sort=inserted_at_desc${pageNo}`;
-
-    fetchAPI(`users/list_pending_approvals?${query}`)
+    fetchAPI(`users/list_pending_approvals${query}`)
       .then((data: any) => {
         setLoading(false);
         const res: any[] = data.pending_approvals;
@@ -155,11 +181,51 @@ const Approvals = () => {
     );
   };
 
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    setPage(1);
+    const currentPath = router.pathname;
+    const currentQuery = {
+      ...router.query,
+      page: 1,
+      search: query || undefined,
+    };
+    if (!query) {
+      delete currentQuery.search;
+    }
+    router.push(
+      {
+        pathname: currentPath,
+        query: currentQuery,
+      },
+      undefined,
+      { shallow: true },
+    );
+  };
+
   return (
     <Box minHeight="100%" bg="background-secondary">
       <PageHeader title="Approvals" desc="All Approvals across your feeds" />
 
       <PageInner>
+        <Box mb="xs">
+          <Flex gap="md" align="end" justify="flex-start">
+            <Box w="320px" bg="background-primary">
+              <InputText
+                placeholder="Search by name..."
+                value={searchQuery}
+                size="md"
+                onChange={(e) => handleSearch(e.target.value)}
+                icon={
+                  <IconFrame size={12} color="gray.700">
+                    <MagnifyingGlassIcon width="18px" />
+                  </IconFrame>
+                }
+                iconPlacement="right"
+              />
+            </Box>
+          </Flex>
+        </Box>
         <Table
           data={contents}
           isLoading={loading}

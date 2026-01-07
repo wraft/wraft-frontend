@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
+import { MagnifyingGlassIcon } from '@phosphor-icons/react';
 import {
   Avatar,
   Button,
@@ -11,12 +12,13 @@ import {
   Flex,
   Drawer,
   useDrawer,
+  InputText,
 } from '@wraft/ui';
 import toast from 'react-hot-toast';
 
 import CreateDocument from 'components/DocumentCreate';
 import { ContentTitleList } from 'common/content';
-import { TimeAgo, FilterBlock, PageInner } from 'common/Atoms';
+import { TimeAgo, FilterBlock, PageInner, IconFrame } from 'common/Atoms';
 import PageHeader from 'common/PageHeader';
 import { StateProgress } from 'common/StateProgress';
 import { fetchAPI } from 'utils/models';
@@ -165,16 +167,24 @@ const DocumentList = () => {
   const [page, setPage] = useState<number>();
   const [isDocumentCreatorOpen, setIsDocumentCreatorOpen] =
     useState<boolean>(false);
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
   const router: any = useRouter();
   const currentPage: any = parseInt(router.query.page) || 1;
   const currentVariant: any = router.query.variant;
+  const currentSearch: any = router.query.search;
   const mobileMenuDrawer = useDrawer();
 
   useEffect(() => {
     loadData();
     loadVariants();
   }, []);
+
+  useEffect(() => {
+    if (router.query.search) {
+      setSearchQuery(router.query.search as string);
+    }
+  }, [router.query.search]);
 
   /**
    * Load Content Types
@@ -191,10 +201,10 @@ const DocumentList = () => {
   };
 
   useEffect(() => {
-    if (page || currentVariant) {
+    if (page || currentVariant || currentSearch) {
       loadData();
     }
-  }, [currentPage, currentVariant]);
+  }, [currentPage, currentVariant, currentSearch]);
 
   /**
    * Load Contents with pagination
@@ -207,8 +217,11 @@ const DocumentList = () => {
     const qvariant = currentVariant
       ? `&content_type_name=${currentVariant}`
       : '';
+    const qsearch = currentSearch
+      ? `&document_instance_title=${encodeURIComponent(currentSearch)}`
+      : '';
 
-    const query = `sort=inserted_at_desc${qpage}${qvariant}`;
+    const query = `sort=inserted_at_desc${qpage}${qvariant}${qsearch}`;
 
     fetchAPI(`contents?${query}`)
       .then((data: any) => {
@@ -255,6 +268,28 @@ const DocumentList = () => {
     );
   };
 
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    setPage(1);
+    const currentPath = router.pathname;
+    const currentQuery = {
+      ...router.query,
+      page: 1,
+      search: query || undefined,
+    };
+    if (!query) {
+      delete currentQuery.search;
+    }
+    router.push(
+      {
+        pathname: currentPath,
+        query: currentQuery,
+      },
+      undefined,
+      { shallow: true },
+    );
+  };
+
   return (
     <>
       <PageHeader title="Documents" desc="Manage all documents">
@@ -286,6 +321,24 @@ const DocumentList = () => {
             )}
           </Box>
           <Box w="25%" px="lg">
+            <Box mb="lg">
+              <Flex gap="md" align="end" justify="flex-end">
+                <Box w="100%" bg="background-primary">
+                  <InputText
+                    placeholder="Search by name..."
+                    value={searchQuery}
+                    size="md"
+                    onChange={(e) => handleSearch(e.target.value)}
+                    icon={
+                      <IconFrame size={12} color="gray.700">
+                        <MagnifyingGlassIcon width="18px" />
+                      </IconFrame>
+                    }
+                    iconPlacement="right"
+                  />
+                </Box>
+              </Flex>
+            </Box>
             <Flex justifyContent="space-between" mb="sm">
               <Text as="h4" fontWeight="heading" color="text-primary">
                 Filter by Variant

@@ -260,12 +260,14 @@ const Dashboard = () => {
 
   return (
     <PageInner>
-      <Text color="text-secondary" fontSize="sm">
-        {format(currentTime, 'EEEE, MMMM dd')}
-      </Text>
-      <Text fontWeight="heading" mb="xl" color="text-primary">
-        {getGreeting()}, {userProfile?.name}
-      </Text>
+      <Box>
+        <Text color="text-secondary" fontSize="sm">
+          {format(currentTime, 'EEEE, MMMM dd')}
+        </Text>
+        <Text fontWeight="heading" mb="xl" fontSize="lg" color="text-primary">
+          {getGreeting()}, {userProfile?.name}
+        </Text>
+      </Box>
 
       {isLoading ? (
         <Box>
@@ -311,6 +313,7 @@ const Dashboard = () => {
               w="50%"
               p="lg"
               pl="xs"
+              pr="xs"
               // bg="background-primary"
             >
               <Tab.List aria-label="Content Tab" store={tab}>
@@ -324,6 +327,7 @@ const Dashboard = () => {
                   Expired Contracts
                 </Tab> */}
               </Tab.List>
+
               <Box mt="lg">
                 <Tab.Panel tabId="recent_documents" store={tab}>
                   <PendingDocumentBlock />

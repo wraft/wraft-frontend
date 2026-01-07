@@ -29,7 +29,11 @@ type FormValues = {
   body_color: string;
 };
 
-const ThemeForm = () => {
+const ThemeForm = ({
+  onThemeLoad,
+}: {
+  onThemeLoad?: (themeData: any) => void;
+}) => {
   const [assets, setAssets] = useState<Array<Asset>>([]);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [theme, setTheme] = useState<any>(null);
@@ -59,6 +63,10 @@ const ThemeForm = () => {
       setValue('primary_color', res.theme.primary_color || '');
       setValue('secondary_color', res.theme.secondary_color || '');
       setAssets(res.theme.assets || []);
+
+      if (onThemeLoad) {
+        onThemeLoad(res);
+      }
     }
   };
 

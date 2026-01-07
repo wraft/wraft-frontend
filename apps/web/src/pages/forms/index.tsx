@@ -3,7 +3,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { Box, Button, Field, Flex, InputText, Modal } from '@wraft/ui';
 import { useForm } from 'react-hook-form';
-import { Plus, X as _X } from '@phosphor-icons/react';
+import { PlusIcon } from '@phosphor-icons/react';
 import { CloseIcon } from '@wraft/icon';
 import { zodResolver } from '@hookform/resolvers/zod';
 import toast from 'react-hot-toast';
@@ -11,6 +11,7 @@ import toast from 'react-hot-toast';
 import FormList from 'components/Form/FormList';
 import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
+import { PageInner } from 'common/Atoms';
 import { FormSchema, Form } from 'schemas/form';
 import { postAPI } from 'utils/models';
 import { usePermission } from 'utils/permissions';
@@ -63,14 +64,14 @@ const Index: FC = () => {
         <PageHeader title="Forms">
           {hasPermission('form', 'manage') && (
             <Button variant="secondary" onClick={onOpenDrawer} size="sm">
-              <Plus size={10} weight="bold" />
+              <PlusIcon size={10} weight="bold" />
               Create Form
             </Button>
           )}
         </PageHeader>
-        <Box py="xl" px="3xl" minHeight="100%" bg="background-secondary">
+        <PageInner>
           <FormList rerender={rerender} setRerender={setRerender} />
-        </Box>
+        </PageInner>
       </Page>
       <Modal
         ariaLabel="Create Form"

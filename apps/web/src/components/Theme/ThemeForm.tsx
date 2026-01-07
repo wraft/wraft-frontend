@@ -43,7 +43,7 @@ type FormValues = {
 
 type Props = {
   setIsOpen: (e: any) => void;
-  setRerender?: (e: any) => void;
+  onSuccess?: () => void;
   onUpdate?: (e: any) => void;
 };
 
@@ -53,7 +53,7 @@ const DEFAULT_FORM = {
   secondary_color: '#000000',
 };
 
-const ThemeAddForm = ({ setIsOpen, setRerender, onUpdate }: Props) => {
+const ThemeAddForm = ({ setIsOpen, onSuccess, onUpdate }: Props) => {
   const [isEdit, setIsEdit] = useState(false);
   const [theme, setTheme] = useState<any>(null);
   const [assets, setAssets] = useState<Array<Asset>>([]);
@@ -102,9 +102,8 @@ const ThemeAddForm = ({ setIsOpen, setRerender, onUpdate }: Props) => {
   };
 
   const onDone = () => {
-    // Router.push(`/manage/themes`);
     setIsOpen(false);
-    setRerender && setRerender((prev: boolean) => !prev);
+    onSuccess?.();
   };
 
   const onSubmit = async (data: any) => {

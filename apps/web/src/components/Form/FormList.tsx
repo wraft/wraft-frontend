@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
 import { useThemeUI } from 'theme-ui';
+import { MagnifyingGlassIcon } from '@phosphor-icons/react';
 import {
   Box,
   DropdownMenu,
@@ -10,10 +11,11 @@ import {
   Pagination,
   Table,
   Text,
+  InputText,
 } from '@wraft/ui';
 import { EllipsisHIcon } from '@wraft/icon';
 
-import { TimeAgo } from 'common/Atoms';
+import { TimeAgo, IconFrame } from 'common/Atoms';
 import ConfirmDelete from 'common/ConfirmDelete';
 import { NextLinkText } from 'common/NavLink';
 import { fetchAPI, deleteAPI } from 'utils/models';
@@ -54,11 +56,32 @@ const FormList = ({ rerender, setRerender }: Props) => {
   const { hasPermission } = usePermission();
 
   const { theme } = useThemeUI();
+  const router: any = useRouter();
+  const currentPage: any = parseInt(router.query.page) || 1;
+  const [searchQuery, setSearchQuery] = useState<string>(
+    (router.query.search as string) || '',
+  );
 
-  const loadData = (pageNumber: number) => {
+  useEffect(() => {
+    if (router.query.search) {
+      setSearchQuery(router.query.search as string);
+    }
+    if (router.query.page) {
+      setPage(parseInt(router.query.page as string));
+    }
+  }, [router.query.search, router.query.page]);
+
+  const loadData = (pageNumber: number, search: string = '') => {
     setLoading(true);
-    const query =
-      pageNumber > 0 ? `?page=${pageNumber}&sort=inserted_at_desc` : '';
+    const params = new URLSearchParams();
+    if (pageNumber > 0) {
+      params.append('page', pageNumber.toString());
+    }
+    params.append('sort', 'inserted_at_desc');
+    if (search.trim()) {
+      params.append('name', search.trim());
+    }
+    const query = params.toString() ? `?${params.toString()}` : '';
     fetchAPI(`forms${query}`)
       .then((data: any) => {
         setLoading(false);
@@ -83,11 +106,12 @@ const FormList = ({ rerender, setRerender }: Props) => {
   };
 
   useEffect(() => {
-    loadData(page);
-  }, [page, rerender]);
-
-  const router: any = useRouter();
-  const currentPage: any = parseInt(router.query.page) || 1;
+    if (page) {
+      loadData(page, searchQuery);
+    } else {
+      loadData(currentPage, searchQuery);
+    }
+  }, [page, rerender, searchQuery]);
   const columns = [
     {
       id: 'content.name',
@@ -193,8 +217,49 @@ const FormList = ({ rerender, setRerender }: Props) => {
       { shallow: true },
     );
   };
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    setPage(1);
+    const currentPath = router.pathname;
+    const currentQuery = {
+      ...router.query,
+      page: 1,
+      search: query || undefined,
+    };
+    if (!query) {
+      delete currentQuery.search;
+    }
+    router.push(
+      {
+        pathname: currentPath,
+        query: currentQuery,
+      },
+      undefined,
+      { shallow: true },
+    );
+  };
+
   return (
     <Flex direction="column" gap="md">
+      <Box mb="xs">
+        <Flex gap="md" align="end" justify="flex-start">
+          <Box w="320px" bg="background-primary">
+            <InputText
+              placeholder="Search by name..."
+              value={searchQuery}
+              size="md"
+              onChange={(e) => handleSearch(e.target.value)}
+              icon={
+                <IconFrame size={12} color="gray.700">
+                  <MagnifyingGlassIcon width="18px" />
+                </IconFrame>
+              }
+              iconPlacement="right"
+            />
+          </Box>
+        </Flex>
+      </Box>
       <Table
         data={contents}
         columns={columns}

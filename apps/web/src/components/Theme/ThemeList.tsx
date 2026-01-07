@@ -1,11 +1,22 @@
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import { FontIcon, ThreeDotIcon } from '@wraft/icon';
 import toast from 'react-hot-toast';
-import { Box, DropdownMenu, Flex, Text, Modal } from '@wraft/ui';
-import { Table } from '@wraft/ui';
+import { MagnifyingGlassIcon } from '@phosphor-icons/react';
+import {
+  Box,
+  DropdownMenu,
+  Flex,
+  Text,
+  Modal,
+  Table,
+  Pagination,
+  InputText,
+} from '@wraft/ui';
 
 import ConfirmDelete from 'common/ConfirmDelete';
 import Link from 'common/NavLink';
+import { IconFrame } from 'common/Atoms';
 import { fetchAPI, deleteAPI } from 'utils/models';
 import { usePermission } from 'utils/permissions';
 
@@ -26,30 +37,93 @@ export interface ThemeElement {
 }
 
 type Props = {
-  rerender: any;
+  refreshKey?: number;
 };
 
-const ThemeList = ({ rerender }: Props) => {
+const ThemeList = ({ refreshKey }: Props) => {
+  const router = useRouter();
+  const currentPage: any = parseInt(router.query.page as string) || 1;
+
   const [contents, setContents] = useState<Array<ThemeElement>>([]);
   const [deleteTheme, setDeleteTheme] = useState<number | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [pageMeta, setPageMeta] = useState<any>();
+  const [page, setPage] = useState<number>(currentPage);
+  const [searchQuery, setSearchQuery] = useState<string>(
+    (router.query.search as string) || '',
+  );
   const { hasPermission } = usePermission();
 
   useEffect(() => {
-    loadData();
-  }, [rerender]);
+    if (router.query.search) {
+      setSearchQuery(router.query.search as string);
+    }
+    if (router.query.page) {
+      setPage(parseInt(router.query.page as string));
+    }
+  }, [router.query.search, router.query.page]);
 
-  const loadData = async () => {
+  useEffect(() => {
+    loadData(page, searchQuery);
+  }, [page, searchQuery, refreshKey]);
+
+  const loadData = async (pageNumber: number, search: string = '') => {
     setLoading(true);
 
     try {
-      const res: any = await fetchAPI('themes?sort=inserted_at_desc');
+      const params = new URLSearchParams();
+      if (pageNumber > 0) {
+        params.append('page', pageNumber.toString());
+      }
+      params.append('sort', 'inserted_at_desc');
+      if (search.trim()) {
+        params.append('name', search.trim());
+      }
+      const query = params.toString() ? `?${params.toString()}` : '';
+      const res: any = await fetchAPI(`themes${query}`);
       setContents(res.themes);
+      setPageMeta(res);
     } catch (err) {
       console.error('Error loading themes:', err);
     } finally {
       setLoading(false);
     }
+  };
+
+  const changePage = (newPage: any) => {
+    setPage(newPage);
+    const currentPath = router.pathname;
+    const currentQuery = { ...router.query, page: newPage };
+    router.push(
+      {
+        pathname: currentPath,
+        query: currentQuery,
+      },
+      undefined,
+      { shallow: true },
+    );
+  };
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    setPage(1);
+    const currentPath = router.pathname;
+    const currentQuery = {
+      ...router.query,
+      page: 1,
+      search: query || undefined,
+    };
+    if (!query) {
+      delete currentQuery.search;
+    }
+    router.push(
+      {
+        pathname: currentPath,
+        query: currentQuery,
+      },
+      undefined,
+      { shallow: true },
+    );
   };
 
   const onDelete = async (id: string) => {
@@ -58,7 +132,7 @@ const ThemeList = ({ rerender }: Props) => {
       await request;
       toast.success('Successfully deleted theme');
       setDeleteTheme(null);
-      await loadData();
+      await loadData(page, searchQuery);
     } catch (err) {
       console.error('Error deleting theme:', err);
       toast.error('Failed to delete theme');
@@ -161,7 +235,33 @@ const ThemeList = ({ rerender }: Props) => {
 
   return (
     <Box w="100%">
+      <Box mb="lg">
+        <Flex gap="md" align="end" justify="flex-start">
+          <Box w="320px" bg="background-primary">
+            <InputText
+              placeholder="Search by name..."
+              value={searchQuery}
+              size="md"
+              onChange={(e) => handleSearch(e.target.value)}
+              icon={
+                <IconFrame size={12} color="gray.700">
+                  <MagnifyingGlassIcon width="18px" />
+                </IconFrame>
+              }
+              iconPlacement="right"
+            />
+          </Box>
+        </Flex>
+      </Box>
       <Table data={contents} columns={columns} isLoading={loading} />
+      {pageMeta && pageMeta?.total_pages > 1 && (
+        <Pagination
+          totalPage={pageMeta?.total_pages}
+          initialPage={currentPage}
+          onPageChange={changePage}
+          totalEntries={pageMeta?.total_entries}
+        />
+      )}
     </Box>
   );
 };

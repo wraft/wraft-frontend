@@ -9,7 +9,6 @@ const boxVariant = {
     backgroundColor: "background-primary",
   },
   block: {
-    padding: "md",
     border: "1px solid",
     borderColor: "border",
     // borderRadius: "md2",
