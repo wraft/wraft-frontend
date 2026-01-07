@@ -32,6 +32,8 @@ import { ImageUploadPopover } from "./image-upload-popover";
 import { TableMenu } from "./table-menu";
 
 const ToolbarContainer = styled.divBox`
+  position: sticky;
+  top: 0;
   z-index: 2;
   box-sizing: border-box;
   border-style: solid;

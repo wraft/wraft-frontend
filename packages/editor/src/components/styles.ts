@@ -6,7 +6,7 @@ export const EditorContainer = styled.divBox<{ type?: string }>`
   height: 100%;
   width: 100%;
   min-height: 40rem;
-  overflow: hidden;
+  // overflow: hidden;
   border-radius: 0.375rem;
   border: 1px solid;
   border-color: gray.300;

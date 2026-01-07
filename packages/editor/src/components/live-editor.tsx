@@ -238,11 +238,7 @@ export const LiveEditor = forwardRef(
         <S.EditorWrapper className={`wraft-editor ${className}`}>
           {isLoading && editor && (
             <ProseKit editor={editor}>
-              {!isReadonly && (
-                <div className="toolbar">
-                  <Toolbar />
-                </div>
-              )}
+              {!isReadonly && <Toolbar />}
 
               <S.EditorContainer>
                 <S.EditorContent>
