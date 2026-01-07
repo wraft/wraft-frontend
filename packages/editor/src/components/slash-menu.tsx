@@ -73,6 +73,23 @@ export default function SlashMenu() {
   const [isConditionalBlockModalOpen, setIsConditionalBlockModalOpen] =
     useState(false);
 
+  // Check if there are any Table type fields available
+  const hasTableFields = (Array.isArray(tokens) ? tokens : []).some(
+    (field: any) => {
+      const fieldType =
+        field.type ||
+        field.fieldType ||
+        (typeof field.field_type === "object"
+          ? field.field_type?.name
+          : field.field_type);
+      const isTableType = fieldType === "Table" || fieldType === "table";
+      const hasValidName = field.name || field.label;
+      const hasValidMachineName =
+        field.machine_name || field.machineName || field.name;
+      return isTableType && hasValidName && hasValidMachineName;
+    },
+  );
+
   const handleInsertSmartTable = (
     tableJSON: SmartTableJSON,
     _tableName: string,
@@ -139,13 +156,15 @@ export default function SlashMenu() {
           >
             Toggle list
           </StyledItem>
-          <StyledItem
-            onSelect={() => {
-              setIsSmartTableModalOpen(true);
-            }}
-          >
-            Smart Table
-          </StyledItem>
+          {hasTableFields && (
+            <StyledItem
+              onSelect={() => {
+                setIsSmartTableModalOpen(true);
+              }}
+            >
+              Smart Table
+            </StyledItem>
+          )}
 
           <StyledItem
             onSelect={() => {
