@@ -37,6 +37,7 @@ interface StateState {
   is_user_eligible: boolean;
   order: number;
   state: string;
+  type?: 'reviewer' | 'editor' | 'sign';
   updated_at: string;
 }
 
@@ -122,6 +123,7 @@ export const DocumentProvider = ({
   const [fieldValues, setFieldValues] = useState<any>([]);
   const [fields, setField] = useState<Array<FieldT>>([]);
   const [flow, setFlow] = useState<any>(null);
+  const [flowVersionId, setFlowVersionId] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [meta, setMeta] = useState<any>({});
   const [nextState, setNextState] = useState<StateState>();
@@ -196,9 +198,9 @@ export const DocumentProvider = ({
 
   useEffect(() => {
     if (flow && flow.flow) {
-      fetchStates(flow.flow.id);
+      fetchStates(flow.flow.id, flowVersionId);
     }
-  }, [flow, contents]);
+  }, [flow, contents, flowVersionId]);
 
   useEffect(() => {
     if (editorMode === 'new' && newContent?.template?.title_template) {
@@ -355,6 +357,10 @@ export const DocumentProvider = ({
         const tFlow = res?.content_type?.flow;
         setFlow(tFlow);
 
+        if (data?.flow_version?.id) {
+          setFlowVersionId(data.flow_version.id);
+        }
+
         const tFields = data.content_type?.fields;
         if (tFields) {
           setField(tFields);
@@ -369,8 +375,9 @@ export const DocumentProvider = ({
       });
   };
 
-  const fetchStates = (id: string) => {
-    fetchAPI(`flows/${id}/states`).then((data: any) => {
+  const fetchStates = (id: string, versionId?: string | null) => {
+    const versionParam = versionId ? `?flow_version_id=${versionId}` : '';
+    fetchAPI(`flows/${id}/states${versionParam}`).then((data: any) => {
       const stateNames = data
         .flatMap((item: any) => {
           const state = item.state;
@@ -386,6 +393,7 @@ export const DocumentProvider = ({
             order: state.order,
             is_user_eligible: isUserEligible,
             approvers: state.approvers,
+            type: state.type || 'reviewer',
           };
         })
         .sort((a: any, b: any) => a.order - b.order);
