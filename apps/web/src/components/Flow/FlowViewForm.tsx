@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
+import { PencilSimple, X } from '@phosphor-icons/react';
 import {
   Avatar,
   Box,
   Button,
+  DropdownMenu,
   Field,
   Flex,
   InputText,
@@ -15,10 +17,24 @@ import {
 } from '@wraft/ui';
 import toast from 'react-hot-toast';
 
-import { fetchAPI, putAPI } from 'utils/models';
+import { IconFrame } from 'common/Atoms';
+import { fetchAPI, postAPI, putAPI } from 'utils/models';
+import { usePermission } from 'utils/permissions';
 
 import FlowForm from './FlowForm';
 import { Droppable } from './Droppable';
+import StateForm from './StateForm';
+
+interface FlowVersion {
+  id: string;
+  version_number: number;
+  status: 'draft' | 'published';
+  controlled: boolean;
+  control_data?: Record<string, any>;
+  creator?: any;
+  inserted_at: string;
+  updated_at: string;
+}
 
 export interface States {
   total_pages: number;
@@ -80,14 +96,24 @@ const FlowViewForm = () => {
   const [isStateFormOpen, setIsStateFormOpen] = useState<boolean>(false);
   const [editingState, setEditingState] = useState<any>(null);
 
+  // Version state
+  const [versions, setVersions] = useState<FlowVersion[]>([]);
+  const [activeVersion, setActiveVersion] = useState<FlowVersion | null>(null);
+  const [isDraft, setIsDraft] = useState<boolean>(false);
+
   const { register, setValue } = useForm();
   const stateDrawer = useDrawer();
+  const stateFormDrawer = useDrawer();
   const router = useRouter();
   const flowId: string = router.query.id as string;
+  const { hasPermission } = usePermission();
+
+  const hasDraft = versions.some((v) => v.status === 'draft');
 
   useEffect(() => {
     if (flowId) {
       loadFlow(flowId);
+      loadVersions(flowId);
     }
   }, [flowId, rerender]);
 
@@ -96,12 +122,36 @@ const FlowViewForm = () => {
       setLoading(true);
       setError(null);
       const response = await fetchAPI(`flows/${fId}`);
-      const { flow: flowData, states: flowStates }: any = response;
+      const {
+        flow: flowData,
+        states: flowStates,
+        versions: flowVersions,
+      }: any = response;
 
       setFlow(flowData);
-      setStates(flowStates);
-      setEditableStates(flowStates);
+      // Sort states by order to ensure consistent display
+      const sortedStates =
+        flowStates && Array.isArray(flowStates)
+          ? [...flowStates].sort(
+              (a: any, b: any) => (a.order || 0) - (b.order || 0),
+            )
+          : flowStates;
+      setStates(sortedStates);
+      setEditableStates(sortedStates);
       setValue('name', flowData.name);
+
+      // Set versions from show response
+      if (flowVersions && flowVersions.length > 0) {
+        setVersions(flowVersions);
+        // Default to the latest published version
+        const published = flowVersions.find(
+          (v: FlowVersion) => v.status === 'published',
+        );
+        if (published && !activeVersion) {
+          setActiveVersion(published);
+          setIsDraft(false);
+        }
+      }
     } catch (error) {
       console.error('Failed to load flow:', error);
       setError('Failed to load flow data. Please try again.');
@@ -110,11 +160,85 @@ const FlowViewForm = () => {
     }
   };
 
+  const loadVersions = async (fId: string) => {
+    try {
+      const response: any = await fetchAPI(`flows/${fId}/versions`);
+      if (response?.versions) {
+        setVersions(response.versions);
+      }
+    } catch (error) {
+      console.error('Failed to load versions:', error);
+    }
+  };
+
+  const switchVersion = async (versionId: string) => {
+    try {
+      setLoading(true);
+      const response: any = await fetchAPI(`flow_versions/${versionId}`);
+      const { version, states: versionStates } = response;
+      setActiveVersion(version);
+      setIsDraft(version.status === 'draft');
+
+      const sortedStates =
+        versionStates && Array.isArray(versionStates)
+          ? [...versionStates].sort(
+              (a: any, b: any) => (a.order || 0) - (b.order || 0),
+            )
+          : versionStates;
+      setStates(sortedStates);
+      setEditableStates(sortedStates);
+      setIsEditMode(false);
+      setHasChanges(false);
+    } catch (error) {
+      console.error('Failed to switch version:', error);
+      toast.error('Failed to load version');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCreateDraft = async () => {
+    try {
+      const response: any = await postAPI(`flows/${flowId}/versions`, {});
+      const { version } = response;
+      await switchVersion(version.id);
+      await loadVersions(flowId);
+      toast.success('Draft version created');
+    } catch (error: any) {
+      const msg =
+        error?.response?.data?.errors?.[0] ||
+        error?.response?.data?.error ||
+        'Failed to create draft version';
+      toast.error(msg);
+    }
+  };
+
+  const handlePublish = async () => {
+    if (!activeVersion) return;
+    try {
+      await postAPI(`flow_versions/${activeVersion.id}/publish`, {});
+      await loadFlow(flowId);
+      await loadVersions(flowId);
+      // Switch to the now-published version
+      setIsDraft(false);
+      toast.success(`Version ${activeVersion.version_number} published`);
+    } catch (error: any) {
+      const msg =
+        error?.response?.data?.errors?.[0] ||
+        error?.response?.data?.error ||
+        'Failed to publish version';
+      toast.error(msg);
+    }
+  };
+
   const handleEditModeToggle = () => {
     if (isEditMode) {
       // Exiting edit mode - reset changes
       setEditableStates(states);
       setHasChanges(false);
+    } else {
+      // Entering edit mode - initialize editableStates with current states
+      setEditableStates(states);
     }
     setIsEditMode(!isEditMode);
   };
@@ -127,28 +251,40 @@ const FlowViewForm = () => {
   const handleSave = async () => {
     try {
       setLoading(true);
+      setError(null);
 
-      // Update each state individually with the new order - using correct endpoint from Swagger docs
-      const updatePromises = editableStates.map((state, index) => {
-        // For reordering, we don't want to change approvers, so send empty add/remove arrays
-        const stateData = {
-          state: state.state,
-          type: state.type,
-          order: index + 1,
-          approvers: {
-            add: [],
-            remove: [],
+      // Validate that all states have IDs (they should all be saved states)
+      const statesWithoutIds = editableStates.filter(
+        (state) => !state.id || !state.id.trim(),
+      );
+      if (statesWithoutIds.length > 0) {
+        toast.error(
+          'Some states are not saved yet. Please save all states before reordering.',
+          {
+            duration: 3000,
+            position: 'top-right',
           },
-        };
+        );
+        setLoading(false);
+        return;
+      }
 
-        return putAPI(`states/${state.id}`, stateData);
-      });
+      // Use align-states endpoint to properly reorder states
+      // This is the same approach used in FlowForm
+      const alignData = {
+        states: editableStates.map((state, index) => ({
+          id: state.id,
+          order: index + 1,
+        })),
+      };
 
-      // Wait for all updates to complete
-      await Promise.all(updatePromises);
+      // First, align the states using the align-states endpoint
+      await putAPI(`flows/${flowId}/align-states`, alignData);
+
+      // Reload the flow to get the updated state data
+      await loadFlow(flowId);
 
       // Update the local state
-      setStates(editableStates);
       setHasChanges(false);
       setIsEditMode(false);
 
@@ -157,12 +293,15 @@ const FlowViewForm = () => {
         duration: 2000,
         position: 'top-right',
       });
-
-      console.log('States reordered successfully:', editableStates);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Failed to save changes:', error);
-      setError('Failed to save state order changes. Please try again.');
-      toast.error('Failed to save state order changes. Please try again.', {
+      const errorMessage =
+        error?.response?.data?.errors?.[0] ||
+        error?.response?.data?.error ||
+        error?.message ||
+        'Failed to save state order changes. Please try again.';
+      setError(errorMessage);
+      toast.error(errorMessage, {
         duration: 3000,
         position: 'top-right',
       });
@@ -171,40 +310,58 @@ const FlowViewForm = () => {
     }
   };
 
-  const addNewState = () => {
+  const addNewState = (e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    console.log('Add new state clicked');
     setEditingState(null);
     setIsStateFormOpen(true);
   };
 
   const editState = (state: any) => {
+    if (!state) {
+      console.error('No state provided to editState');
+      return;
+    }
     console.log('Editing state:', state);
-    console.log('State properties:', {
+    // Ensure we have the correct state structure
+    const stateToEdit = {
       id: state.id,
-      state: state.state,
-      type: state.type,
-      order: state.order,
-      approvers: state.approvers,
-    });
-    setEditingState(state);
+      state: state.state || state.name,
+      type: state.type || 'reviewer',
+      order: state.order || 0,
+      approvers: state.approvers || [],
+      inserted_at: state.inserted_at,
+      updated_at: state.updated_at,
+    };
+    setEditingState(stateToEdit);
     setIsStateFormOpen(true);
   };
 
-  const handleStateSaved = (savedState: any) => {
-    if (editingState) {
-      // Update existing state
-      const updatedStates = editableStates.map((state) =>
-        state.id === editingState.id ? savedState : state,
-      );
-      setEditableStates(updatedStates);
-      setStates(updatedStates);
+  const handleStateSaved = async (_savedState: any) => {
+    // Reload the active version or flow to get the latest state data
+    if (activeVersion) {
+      await switchVersion(activeVersion.id);
     } else {
-      // Add new state
-      const updatedStates = [...editableStates, savedState];
-      setEditableStates(updatedStates);
-      setStates(updatedStates);
+      await loadFlow(flowId);
     }
     setHasChanges(true);
     setEditingState(null);
+    setIsStateFormOpen(false);
+  };
+
+  const handleCloseStateForm = () => {
+    setIsStateFormOpen(false);
+    setEditingState(null);
+  };
+
+  const getHighestOrder = () => {
+    if (!editableStates || editableStates.length === 0) {
+      return 0;
+    }
+    return Math.max(...editableStates.map((s: any) => s.order || 0));
   };
 
   if (loading) {
@@ -270,6 +427,86 @@ const FlowViewForm = () => {
             </Text>
           </Box>
 
+          {/* Version Bar */}
+          {activeVersion && (
+            <Flex
+              justifyContent="space-between"
+              alignItems="center"
+              py="sm"
+              px="md"
+              bg="gray.50"
+              borderRadius="md"
+              mb="md"
+              border="1px solid"
+              borderColor="border">
+              <Flex alignItems="center" gap="sm">
+                <Text fontSize="xs" color="text.secondary" fontWeight="medium">
+                  Version {activeVersion.version_number}
+                </Text>
+                {isDraft ? (
+                  <Box
+                    bg="orange.100"
+                    color="orange.700"
+                    px="sm"
+                    py="xs"
+                    borderRadius="sm">
+                    <Text fontSize="xs" fontWeight="medium">
+                      Draft
+                    </Text>
+                  </Box>
+                ) : (
+                  <Box
+                    bg="green.100"
+                    color="green.700"
+                    px="sm"
+                    py="xs"
+                    borderRadius="sm">
+                    <Text fontSize="xs" fontWeight="medium">
+                      Published
+                    </Text>
+                  </Box>
+                )}
+              </Flex>
+
+              <Flex alignItems="center" gap="sm">
+                {versions.length > 1 && (
+                  <DropdownMenu.Provider>
+                    <DropdownMenu.Trigger>
+                      <Button variant="ghost" size="xs">
+                        All Versions ({versions.length})
+                      </Button>
+                    </DropdownMenu.Trigger>
+                    <DropdownMenu aria-label="Version switcher">
+                      {versions.map((v) => (
+                        <DropdownMenu.Item
+                          key={v.id}
+                          onClick={() => switchVersion(v.id)}>
+                          v{v.version_number} — {v.status}
+                          {v.id === activeVersion?.id ? ' (viewing)' : ''}
+                        </DropdownMenu.Item>
+                      ))}
+                    </DropdownMenu>
+                  </DropdownMenu.Provider>
+                )}
+
+                {!hasDraft && hasPermission('flow', 'manage') && (
+                  <Button
+                    variant="secondary"
+                    size="xs"
+                    onClick={handleCreateDraft}>
+                    + New Version
+                  </Button>
+                )}
+
+                {isDraft && hasPermission('flow', 'manage') && (
+                  <Button variant="primary" size="xs" onClick={handlePublish}>
+                    Publish
+                  </Button>
+                )}
+              </Flex>
+            </Flex>
+          )}
+
           <Box py="sm">
             <Flex justifyContent="space-between" alignItems="center" mb="md">
               <Flex alignItems="center" gap="md">
@@ -291,12 +528,28 @@ const FlowViewForm = () => {
                     Save Changes
                   </Button>
                 )}
-                <Button
-                  variant={isEditMode ? 'secondary' : 'secondary'}
-                  size="sm"
-                  onClick={handleEditModeToggle}>
-                  {isEditMode ? 'Cancel' : 'Edit'}
-                </Button>
+                {(isDraft || !activeVersion) && (
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={handleEditModeToggle}>
+                    {isEditMode ? (
+                      <>
+                        <IconFrame color="gray.800" mr="xs">
+                          <X size={16} weight="regular" />
+                        </IconFrame>
+                        Cancel
+                      </>
+                    ) : (
+                      <>
+                        <IconFrame color="gray.800" mr="xs">
+                          <PencilSimple size={16} weight="regular" />
+                        </IconFrame>
+                        Edit
+                      </>
+                    )}
+                  </Button>
+                )}
               </Flex>
             </Flex>
 
@@ -309,7 +562,11 @@ const FlowViewForm = () => {
                     highestOrder={editableStates.length}
                   />
                   <Box mt="md" textAlign="center">
-                    <Button variant="secondary" size="sm" onClick={addNewState}>
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      type="button"
+                      onClick={addNewState}>
                       + Add New State
                     </Button>
                   </Box>
@@ -516,6 +773,7 @@ const FlowViewForm = () => {
                               <Button
                                 variant="ghost"
                                 size="xs"
+                                type="button"
                                 onClick={(e) => {
                                   e.preventDefault();
                                   e.stopPropagation();
@@ -578,6 +836,24 @@ const FlowViewForm = () => {
         withBackdrop={true}
         onClose={() => setIsOpen(false)}>
         {isOpen && <FlowForm setOpen={setIsOpen} setRerender={setRerender} />}
+      </Drawer>
+
+      <Drawer
+        open={isStateFormOpen}
+        store={stateFormDrawer}
+        aria-label="state form drawer"
+        withBackdrop={true}
+        onClose={handleCloseStateForm}>
+        {isStateFormOpen && flowId && (
+          <StateForm
+            flowId={flowId}
+            flowVersionId={activeVersion?.id}
+            editingState={editingState}
+            onClose={handleCloseStateForm}
+            onSave={handleStateSaved}
+            highestOrder={getHighestOrder()}
+          />
+        )}
       </Drawer>
     </React.Fragment>
   );
