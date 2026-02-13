@@ -140,16 +140,19 @@ const FlowViewForm = () => {
       setEditableStates(sortedStates);
       setValue('name', flowData.name);
 
-      // Set versions from show response
+      // Set versions from show response and load version-specific states
       if (flowVersions && flowVersions.length > 0) {
         setVersions(flowVersions);
-        // Default to the latest published version
-        const published = flowVersions.find(
-          (v: FlowVersion) => v.status === 'published',
-        );
-        if (published && !activeVersion) {
-          setActiveVersion(published);
-          setIsDraft(false);
+        // Default to the latest published version, load its states
+        const latestPublished = [...flowVersions]
+          .filter((v: FlowVersion) => v.status === 'published')
+          .sort(
+            (a: FlowVersion, b: FlowVersion) =>
+              b.version_number - a.version_number,
+          )[0];
+        const target = latestPublished || flowVersions[0];
+        if (target && !activeVersion) {
+          await switchVersion(target.id);
         }
       }
     } catch (error) {
@@ -217,10 +220,8 @@ const FlowViewForm = () => {
     if (!activeVersion) return;
     try {
       await postAPI(`flow_versions/${activeVersion.id}/publish`, {});
-      await loadFlow(flowId);
+      await switchVersion(activeVersion.id);
       await loadVersions(flowId);
-      // Switch to the now-published version
-      setIsDraft(false);
       toast.success(`Version ${activeVersion.version_number} published`);
     } catch (error: any) {
       const msg =
@@ -269,20 +270,24 @@ const FlowViewForm = () => {
         return;
       }
 
-      // Use align-states endpoint to properly reorder states
-      // This is the same approach used in FlowForm
-      const alignData = {
-        states: editableStates.map((state, index) => ({
-          id: state.id,
-          order: index + 1,
-        })),
-      };
+      // Update each state's order individually to avoid issues
+      // with the flow-level align-states endpoint and versioned states
+      await Promise.all(
+        editableStates.map((state, index) =>
+          putAPI(`states/${state.id}`, {
+            state: state.state,
+            order: index + 1,
+            approvers: { add: [], remove: [] },
+          }),
+        ),
+      );
 
-      // First, align the states using the align-states endpoint
-      await putAPI(`flows/${flowId}/align-states`, alignData);
-
-      // Reload the flow to get the updated state data
-      await loadFlow(flowId);
+      // Reload the active version to get the updated state data
+      if (activeVersion) {
+        await switchVersion(activeVersion.id);
+      } else {
+        await loadFlow(flowId);
+      }
 
       // Update the local state
       setHasChanges(false);
