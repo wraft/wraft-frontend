@@ -1,54 +1,38 @@
-import { FC, useEffect, useState } from 'react';
+import { FC } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { Box } from '@wraft/ui';
+import { Box, Flex, Spinner } from '@wraft/ui';
 
 import VariantDetailForm from 'components/Variants/VariantDetailForm';
-import Page from 'common/PageFrame';
+import Page from 'common/PageFrameInner';
 import PageHeader from 'common/PageHeader';
-import DescriptionLinker from 'common/DescriptionLinker';
-import { fetchAPI } from 'utils/models';
 
 const Index: FC = () => {
-  const [variant, setVariant] = useState<any>();
   const router = useRouter();
   const id: string = router.query.id as string;
 
-  useEffect(() => {
-    fetchAPI(`content_types/${id}`)
-      .then((data: any) => {
-        setVariant(data);
-      })
-      .catch((error) => {
-        if (error?.status === 400 || error?.statusCode === 400) {
-          router.push('/404');
-        }
-      });
-  }, []);
+  if (!id) {
+    return (
+      <Page>
+        <Flex align="center" justify="center" py="3xl">
+          <Spinner size={24} />
+        </Flex>
+      </Page>
+    );
+  }
 
   return (
     <>
       <Head>
         <title>Variants | Wraft</title>
-        <meta name="description" content="edit variant" />
+        <meta name="description" content="Variant details" />
       </Head>
       <Page>
         <PageHeader
-          title={[
-            { name: 'Variants', path: '/variants' },
-            variant?.content_type?.name,
-          ]}
-          desc={
-            <DescriptionLinker
-              data={[
-                { name: 'Variants', path: '/variants' },
-                { name: `${variant?.content_type?.name || ''}` },
-              ]}
-            />
-          }
+          title={[{ name: 'Variants', path: '/variants' }]}
+          desc="Variant configuration and field details"
         />
-
-        <Box p="xl">
+        <Box px="xxl" py="lg">
           <VariantDetailForm />
         </Box>
       </Page>
