@@ -7,7 +7,7 @@ import { Variant } from 'schemas/template-filter';
 interface TemplateFilterSidebarProps {
   variants: Variant[];
   selectedVariantIds: string[];
-  onVariantToggle: (variantId: string) => void;
+  onVariantToggle: (variantName: string) => void;
   onClearAll: () => void;
   isLoading?: boolean;
 }
@@ -72,9 +72,12 @@ const TemplateFilterSidebar: React.FC<TemplateFilterSidebarProps> = ({
               key={variant.id}
               title={variant.name}
               color={variant.color}
-              setSelected={() => onVariantToggle(variant.id)}
+              setSelected={() => onVariantToggle(variant.name)}
               active={
-                selectedVariantIds.includes(variant.id)
+                selectedVariantIds.some((id) => {
+                  const selectedVariant = variants.find((v) => v.id === id);
+                  return selectedVariant?.name === variant.name;
+                })
                   ? 'green.400'
                   : undefined
               }

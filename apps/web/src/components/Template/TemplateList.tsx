@@ -139,6 +139,10 @@ const TemplateList = () => {
     }
   }, [page]);
 
+  useEffect(() => {
+    loadTemplates(currentPage);
+  }, [contentTypeIdFilter]);
+
   const loadVariants = async () => {
     try {
       setIsVariantsLoading(true);
@@ -173,10 +177,13 @@ const TemplateList = () => {
     }
   };
 
-  const onVariantToggle = (variantId: string) => {
-    const newSelection = selectedVariantIds.includes(variantId)
-      ? selectedVariantIds.filter((id) => id !== variantId)
-      : [...selectedVariantIds, variantId];
+  const onVariantToggle = (variantName: string) => {
+    const variant = variants.find((v) => v.name === variantName);
+    if (!variant) return;
+
+    const newSelection = selectedVariantIds.includes(variant.id)
+      ? selectedVariantIds.filter((id) => id !== variant.id)
+      : [...selectedVariantIds, variant.id];
 
     setSelectedVariantIds(newSelection);
 
