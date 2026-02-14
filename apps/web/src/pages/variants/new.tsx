@@ -8,7 +8,7 @@ import React, {
 } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
-import { Box, Flex, Text, Button, Modal } from '@wraft/ui';
+import { Box, Flex, Text, Button } from '@wraft/ui';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -436,7 +436,7 @@ const Index: FC = () => {
       </Page>
 
       {/* Unsaved Changes Warning Modal */}
-      <Modal
+      {/* <Modal
         open={showUnsavedWarning}
         onClose={() => setShowUnsavedWarning(false)}>
         <Modal.Header>
@@ -460,7 +460,7 @@ const Index: FC = () => {
             </Button>
           </Flex>
         </Modal.Footer>
-      </Modal>
+      </Modal> */}
     </>
   );
 };
