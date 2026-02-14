@@ -7,6 +7,7 @@ import { PencilSimple, Plus, FileText, Files } from '@phosphor-icons/react';
 import toast from 'react-hot-toast';
 import { useTheme } from '@xstyled/emotion';
 
+import { DocumentCard } from 'components/Dashboard/DocumentCard';
 import Back from 'common/Back';
 import { TimeAgo } from 'common/Atoms';
 import { BarChart } from 'common/charts/BarChart';
@@ -26,13 +27,46 @@ const ThemeAddForm = dynamic(() => import('components/Theme/ThemeForm'), {
 
 // --- Primitives ---
 
-const Card = ({ children }: { children: React.ReactNode }) => (
+const Card = ({
+  children,
+  p = '0',
+}: {
+  children: React.ReactNode;
+  p?: string;
+}) => (
   <Box
     border="1px solid"
     borderColor="border"
     borderRadius="md"
     bg="background-primary"
-    overflow="hidden">
+    overflow="hidden"
+    p={p}>
+    {children}
+  </Box>
+);
+
+const TabButton = ({
+  active,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}) => (
+  <Box
+    as="button"
+    onClick={onClick}
+    pb="sm"
+    px="sm"
+    borderBottom="2px solid"
+    borderColor={active ? 'green.500' : 'transparent'}
+    color={active ? 'green.900' : 'text-secondary'}
+    fontWeight={active ? '600' : '500'}
+    fontSize="sm"
+    bg="transparent"
+    cursor="pointer"
+    style={{ transition: 'all 0.2s' }}>
     {children}
   </Box>
 );
@@ -168,6 +202,10 @@ const VariantDetailForm = () => {
   const [isLayoutOpen, setIsLayoutOpen] = useState(false);
   const [isThemeOpen, setIsThemeOpen] = useState(false);
   const [rerender, setRerender] = useState(false);
+  const [activeTab, setActiveTab] = useState<
+    'overview' | 'contents' | 'activities'
+  >('overview');
+
   const { hasPermission } = usePermission();
   const editDrawer = useDrawer();
   const layoutDrawer = useDrawer();
@@ -357,202 +395,221 @@ const VariantDetailForm = () => {
         </Flex>
       </Box>
 
-      {/* Page body — full width with comfortable padding */}
+      {/* Page body */}
       <Box px="xl" py="lg" style={{ overflow: 'auto', flex: 1 }}>
         <Flex gap="xl" style={{ maxWidth: 1600, margin: '0 auto' }}>
           {/* LEFT PANEL (Main Content) - 75% */}
           <Flex direction="column" gap="lg" flex={3} style={{ minWidth: 0 }}>
-            {/* Upgrade banner */}
-            {(content as any)?.flow_version_outdated && (
-              <Flex
-                bg="orange.50"
-                border="1px solid"
-                borderColor="orange.200"
-                borderRadius="md"
-                px="lg"
-                py="sm"
-                align="center"
-                justify="space-between">
-                <Text fontSize="sm" color="orange.900">
-                  Using flow v{versionNum}. Version{' '}
-                  {(content as any)?.latest_flow_version?.version_number} is
-                  available.
-                </Text>
-                {canManage && (
-                  <Button variant="secondary" size="xs" onClick={handleUpgrade}>
-                    Upgrade
-                  </Button>
+            {/* Tabs */}
+            <Flex
+              gap="md"
+              borderBottom="1px solid"
+              borderColor="border"
+              mb="md">
+              <TabButton
+                active={activeTab === 'overview'}
+                onClick={() => setActiveTab('overview')}>
+                Overview
+              </TabButton>
+              <TabButton
+                active={activeTab === 'contents'}
+                onClick={() => setActiveTab('contents')}>
+                Contents
+              </TabButton>
+              <TabButton
+                active={activeTab === 'activities'}
+                onClick={() => setActiveTab('activities')}>
+                Activities
+              </TabButton>
+            </Flex>
+
+            {activeTab === 'overview' && (
+              <Flex direction="column" gap="xl">
+                {/* Upgrade banner */}
+                {(content as any)?.flow_version_outdated && (
+                  <Flex
+                    bg="orange.50"
+                    border="1px solid"
+                    borderColor="orange.200"
+                    borderRadius="md"
+                    px="lg"
+                    py="sm"
+                    align="center"
+                    justify="space-between">
+                    <Text fontSize="sm" color="orange.900">
+                      Using flow v{versionNum}. Version{' '}
+                      {(content as any)?.latest_flow_version?.version_number} is
+                      available.
+                    </Text>
+                    {canManage && (
+                      <Button
+                        variant="secondary"
+                        size="xs"
+                        onClick={handleUpgrade}>
+                        Upgrade
+                      </Button>
+                    )}
+                  </Flex>
                 )}
-              </Flex>
-            )}
 
-            {/* Stats row */}
-            <Box display="grid" gridTemplateColumns="repeat(4, 1fr)" gap="md">
-              {[
-                { label: 'Documents', value: totalDocuments },
-                { label: 'Templates', value: templates.length },
-                { label: 'Fields', value: fields.length },
-                { label: 'Flow version', value: versionNum || 0 },
-              ].map((stat) => (
-                <Card key={stat.label}>
-                  <Box px="lg" py="md">
-                    <Text fontSize="xs" color="text-secondary" mb="xxs">
-                      {stat.label}
-                    </Text>
-                    <Text
-                      fontSize="xl"
-                      fontWeight="600"
-                      color="text-primary"
-                      style={{ fontVariantNumeric: 'tabular-nums' }}>
-                      {stat.value}
-                    </Text>
+                {/* Combined Stats & Chart Unit */}
+                <Box display="grid" gridTemplateColumns="2fr 1fr" gap="lg">
+                  {/* Chart Area */}
+                  <Box>
+                    <BarChart
+                      title="Document Activity"
+                      description="Last 6 months"
+                      data={chartData}
+                      dataKeys={['documents']}
+                      height={240}
+                      showGrid
+                      showLegend={false}
+                      showTooltip
+                      config={chartConfig}
+                      hoverBarColor={variant.color || theme.colors.green['400']}
+                    />
                   </Box>
-                </Card>
-              ))}
-            </Box>
 
-            {/* Charts Row */}
-            <Box>
-              <BarChart
-                title="Document Activity"
-                description="Documents created over the last 6 months"
-                data={chartData}
-                dataKeys={['documents']}
-                height={280}
-                showGrid
-                showLegend={false}
-                showTooltip
-                config={chartConfig}
-                hoverBarColor={variant.color || theme.colors.green['400']}
-              />
-            </Box>
-
-            {/* Content Lists (Templates & Documents) */}
-            <Box display="grid" gridTemplateColumns="1fr 1fr" gap="lg">
-              {/* Templates */}
-              <Card>
-                <CardHeader
-                  title="Templates"
-                  count={templates.length}
-                  action={
-                    templates.length > 0 ? (
-                      <NavLink
-                        href={`/templates?content_type_id=${variant.id}`}>
-                        <Text fontSize="sm" color="green.900" fontWeight="500">
-                          View all
-                        </Text>
-                      </NavLink>
-                    ) : undefined
-                  }
-                />
-                {templates.length === 0 ? (
-                  <CardEmpty
-                    message="No templates yet"
-                    actionLabel="Create template"
-                    onAction={() => router.push('/templates')}
-                  />
-                ) : (
-                  templates.map((t: any, i: number) => (
-                    <Row key={t.id} isLast={i === templates.length - 1}>
-                      <NavLink href={`/templates/${t.id}`}>
-                        <Flex align="center" gap="sm">
-                          <FileText
-                            size={14}
-                            color="var(--theme-ui-colors-text-secondary)"
-                          />
+                  {/* Stats Grid */}
+                  <Box display="grid" gridTemplateColumns="1fr 1fr" gap="md">
+                    {[
+                      { label: 'Documents', value: totalDocuments },
+                      { label: 'Templates', value: templates.length },
+                      { label: 'Fields', value: fields.length },
+                      { label: 'Flow v.', value: versionNum || 0 },
+                    ].map((stat) => (
+                      <Card key={stat.label} p="md">
+                        <Flex
+                          direction="column"
+                          justify="space-between"
+                          h="100%">
+                          <Text fontSize="xs" color="text-secondary" mb="xxs">
+                            {stat.label}
+                          </Text>
                           <Text
-                            fontSize="sm"
-                            fontWeight="500"
-                            style={{
-                              maxWidth: 360,
-                              overflow: 'hidden',
-                              textOverflow: 'ellipsis',
-                              whiteSpace: 'nowrap',
-                            }}>
-                            {t.title}
+                            fontSize="xl"
+                            fontWeight="600"
+                            color="text-primary"
+                            style={{ fontVariantNumeric: 'tabular-nums' }}>
+                            {stat.value}
                           </Text>
                         </Flex>
-                      </NavLink>
-                      <Text fontSize="sm" color="text-secondary" flexShrink={0}>
-                        <TimeAgo time={t.updated_at} />
-                      </Text>
-                    </Row>
-                  ))
-                )}
-              </Card>
+                      </Card>
+                    ))}
+                  </Box>
+                </Box>
 
-              {/* Recent documents */}
-              <Card>
-                <CardHeader
-                  title="Recent documents"
-                  count={totalDocuments}
-                  action={
-                    documents.length > 0 ? (
+                {/* Recent Documents using DocumentCard */}
+                <Box>
+                  <Flex justify="space-between" align="center" mb="md">
+                    <Text fontSize="md" fontWeight="600">
+                      Recent Documents
+                    </Text>
+                    {documents.length > 0 && (
                       <NavLink
                         href={`/documents?content_type_name=${encodeURIComponent(variant.name)}`}>
                         <Text fontSize="sm" color="green.900" fontWeight="500">
                           View all
                         </Text>
                       </NavLink>
-                    ) : undefined
-                  }
-                />
-                {documents.length === 0 ? (
-                  <CardEmpty
-                    message="No documents yet"
-                    actionLabel="Create document"
-                    onAction={() => router.push('/documents')}
-                  />
-                ) : (
-                  documents.map((doc: any, i: number) => (
-                    <Row
-                      key={doc.content?.id || i}
-                      isLast={i === documents.length - 1}>
-                      <Flex
-                        align="center"
-                        gap="sm"
-                        style={{ minWidth: 0, flex: 1 }}>
-                        <Files
-                          size={14}
-                          color="var(--theme-ui-colors-text-secondary)"
-                          style={{ flexShrink: 0 }}
+                    )}
+                  </Flex>
+
+                  {documents.length === 0 ? (
+                    <Card>
+                      <CardEmpty
+                        message="No documents yet"
+                        actionLabel="Create document"
+                        onAction={() => router.push('/documents')}
+                      />
+                    </Card>
+                  ) : (
+                    <Flex direction="column" gap="sm">
+                      {documents.map((doc: any) => (
+                        <DocumentCard
+                          key={doc.content.id}
+                          content={{
+                            content: doc.content,
+                            creator: doc.creator,
+                            state: doc.state,
+                            flow: doc.flow,
+                            content_type: { color: variant.color },
+                          }}
+                          hideState={false}
                         />
-                        <Flex direction="column" style={{ minWidth: 0 }}>
+                      ))}
+                    </Flex>
+                  )}
+                </Box>
+              </Flex>
+            )}
+
+            {activeTab === 'contents' && (
+              <Flex direction="column" gap="lg">
+                <Card>
+                  <CardHeader
+                    title="Templates"
+                    count={templates.length}
+                    action={
+                      templates.length > 0 ? (
+                        <NavLink
+                          href={`/templates?content_type_id=${variant.id}`}>
                           <Text
                             fontSize="sm"
-                            fontWeight="500"
-                            style={{
-                              overflow: 'hidden',
-                              textOverflow: 'ellipsis',
-                              whiteSpace: 'nowrap',
-                            }}>
-                            {doc.content?.instance_id || `Document ${i + 1}`}
+                            color="green.900"
+                            fontWeight="500">
+                            View all
                           </Text>
-                          <Text fontSize="xs" color="text-secondary">
-                            {doc.creator?.name}
-                          </Text>
-                        </Flex>
-                      </Flex>
-                      <Flex align="center" gap="sm" flexShrink={0}>
+                        </NavLink>
+                      ) : undefined
+                    }
+                  />
+                  {templates.length === 0 ? (
+                    <CardEmpty
+                      message="No templates yet"
+                      actionLabel="Create template"
+                      onAction={() => router.push('/templates')}
+                    />
+                  ) : (
+                    templates.map((t: any, i: number) => (
+                      <Row key={t.id} isLast={i === templates.length - 1}>
+                        <NavLink href={`/templates/${t.id}`}>
+                          <Flex align="center" gap="sm">
+                            <FileText
+                              size={14}
+                              color="var(--theme-ui-colors-text-secondary)"
+                            />
+                            <Text
+                              fontSize="sm"
+                              fontWeight="500"
+                              style={{
+                                maxWidth: 360,
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                whiteSpace: 'nowrap',
+                              }}>
+                              {t.title}
+                            </Text>
+                          </Flex>
+                        </NavLink>
                         <Text
-                          fontSize="xs"
-                          fontWeight="500"
+                          fontSize="sm"
                           color="text-secondary"
-                          bg="background-secondary"
-                          px="xs"
-                          py="xxs"
-                          borderRadius="sm">
-                          {doc.state?.state || 'Draft'}
+                          flexShrink={0}>
+                          <TimeAgo time={t.updated_at} />
                         </Text>
-                        <Text fontSize="sm" color="text-secondary">
-                          <TimeAgo time={doc.content?.updated_at} />
-                        </Text>
-                      </Flex>
-                    </Row>
-                  ))
-                )}
+                      </Row>
+                    ))
+                  )}
+                </Card>
+              </Flex>
+            )}
+
+            {activeTab === 'activities' && (
+              <Card>
+                <CardEmpty message="No recent activities" />
               </Card>
-            </Box>
+            )}
           </Flex>
 
           {/* RIGHT PANEL (Sidebar) - 25% */}
