@@ -71,6 +71,47 @@ const TabButton = ({
   </Box>
 );
 
+const TemplateCard = ({ template }: { template: any }) => (
+  <NavLink href={`/templates/${template.id}`}>
+    <Box
+      border="1px solid"
+      borderColor="border"
+      borderRadius="md"
+      p="md"
+      bg="background-primary"
+      style={{ transition: 'all 0.2s', cursor: 'pointer' }}>
+      <Flex align="center" gap="sm" mb="sm">
+        <FileText size={20} color="var(--theme-ui-colors-green-500)" />
+        <Text fontSize="md" fontWeight="600" color="text-primary">
+          {template.title}
+        </Text>
+      </Flex>
+      {template.description && (
+        <Text
+          fontSize="sm"
+          color="text-secondary"
+          mb="md"
+          style={{
+            display: '-webkit-box',
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: 'vertical',
+            overflow: 'hidden',
+          }}>
+          {template.description}
+        </Text>
+      )}
+      <Flex justify="space-between" align="center">
+        <Text fontSize="xs" color="text-tertiary">
+          Updated <TimeAgo time={template.updated_at} />
+        </Text>
+        <Text fontSize="xs" color="text-tertiary">
+          v{template.version || '1.0'}
+        </Text>
+      </Flex>
+    </Box>
+  </NavLink>
+);
+
 const CardHeader = ({
   title,
   count,
@@ -252,7 +293,7 @@ const VariantDetailForm = () => {
         `contents?sort=inserted_at_desc&page=1&content_type_name=${encodeURIComponent(variantName)}`,
       );
       const items = data?.contents || [];
-      setDocuments(items.slice(0, 5));
+      setDocuments(items.slice(0, 5)); // Load top 5 for Overview
       setDocumentsMeta({ total_entries: data.total_entries || items.length });
     } catch {
       setDocuments([]);
@@ -545,63 +586,84 @@ const VariantDetailForm = () => {
             )}
 
             {activeTab === 'contents' && (
-              <Flex direction="column" gap="lg">
-                <Card>
-                  <CardHeader
-                    title="Templates"
-                    count={templates.length}
-                    action={
-                      templates.length > 0 ? (
-                        <NavLink
-                          href={`/templates?content_type_id=${variant.id}`}>
-                          <Text
-                            fontSize="sm"
-                            color="green.900"
-                            fontWeight="500">
-                            View all
-                          </Text>
-                        </NavLink>
-                      ) : undefined
-                    }
-                  />
+              <Flex direction="column" gap="xxl">
+                {/* Templates Grid */}
+                <Box>
+                  <Flex justify="space-between" align="center" mb="md">
+                    <Text fontSize="md" fontWeight="600">
+                      Templates
+                    </Text>
+                    <Button
+                      variant="secondary"
+                      size="xs"
+                      onClick={() => router.push('/templates/new')}>
+                      <Plus size={12} weight="bold" />
+                      Create Template
+                    </Button>
+                  </Flex>
+
                   {templates.length === 0 ? (
-                    <CardEmpty
-                      message="No templates yet"
-                      actionLabel="Create template"
-                      onAction={() => router.push('/templates')}
-                    />
+                    <Card>
+                      <CardEmpty
+                        message="No templates yet"
+                        actionLabel="Create template"
+                        onAction={() => router.push('/templates/new')}
+                      />
+                    </Card>
                   ) : (
-                    templates.map((t: any, i: number) => (
-                      <Row key={t.id} isLast={i === templates.length - 1}>
-                        <NavLink href={`/templates/${t.id}`}>
-                          <Flex align="center" gap="sm">
-                            <FileText
-                              size={14}
-                              color="var(--theme-ui-colors-text-secondary)"
-                            />
-                            <Text
-                              fontSize="sm"
-                              fontWeight="500"
-                              style={{
-                                maxWidth: 360,
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                                whiteSpace: 'nowrap',
-                              }}>
-                              {t.title}
-                            </Text>
-                          </Flex>
-                        </NavLink>
-                        <Text
-                          fontSize="sm"
-                          color="text-secondary"
-                          flexShrink={0}>
-                          <TimeAgo time={t.updated_at} />
-                        </Text>
-                      </Row>
-                    ))
+                    <Box
+                      display="grid"
+                      gridTemplateColumns="repeat(auto-fill, minmax(280px, 1fr))"
+                      gap="md">
+                      {templates.map((t: any) => (
+                        <TemplateCard key={t.id} template={t} />
+                      ))}
+                    </Box>
                   )}
-                </Card>
+                </Box>
+
+                {/* Documents List */}
+                <Box>
+                  <Flex justify="space-between" align="center" mb="md">
+                    <Text fontSize="md" fontWeight="600">
+                      All Documents
+                    </Text>
+                    {documents.length > 0 && (
+                      <NavLink
+                        href={`/documents?content_type_name=${encodeURIComponent(variant.name)}`}>
+                        <Text fontSize="sm" color="green.900" fontWeight="500">
+                          View full list
+                        </Text>
+                      </NavLink>
+                    )}
+                  </Flex>
+
+                  {documents.length === 0 ? (
+                    <Card>
+                      <CardEmpty
+                        message="No documents yet"
+                        actionLabel="Create document"
+                        onAction={() => router.push('/documents')}
+                      />
+                    </Card>
+                  ) : (
+                    <Flex direction="column" gap="sm">
+                      {documents.map((doc: any) => (
+                        <DocumentCard
+                          key={doc.content.id}
+                          content={{
+                            content: doc.content,
+                            creator: doc.creator,
+                            state: doc.state,
+                            flow: doc.flow,
+                            content_type: { color: variant.color },
+                          }}
+                          hideState={false}
+                        />
+                      ))}
+                    </Flex>
+                  )}
+                </Box>
               </Flex>
             )}
 
