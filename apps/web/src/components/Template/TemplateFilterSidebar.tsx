@@ -1,7 +1,7 @@
 import React from 'react';
-import { Box, Flex, Text, Checkbox, Button } from '@wraft/ui';
+import { Box, Flex, Text, Button } from '@wraft/ui';
 
-import { VariantLine } from 'common/Atoms';
+import { FilterBlock } from 'common/Atoms';
 import { Variant } from 'schemas/template-filter';
 
 interface TemplateFilterSidebarProps {
@@ -21,66 +21,67 @@ const TemplateFilterSidebar: React.FC<TemplateFilterSidebarProps> = ({
 }) => {
   if (isLoading) {
     return (
-      <Box p="md" border="border" borderRadius="md" bg="background-primary">
-        <Text>Loading filters...</Text>
+      <Box w="25%" px="lg">
+        <Flex justifyContent="space-between" mb="sm">
+          <Text as="h4" fontWeight="heading" color="text-primary">
+            Filter by Variant
+          </Text>
+        </Flex>
+        <Box border="solid 1px" borderBottom="none" borderColor="border">
+          <Box px="md" py="sm">
+            <Text color="text-secondary">Loading filters...</Text>
+          </Box>
+        </Box>
       </Box>
     );
   }
 
   if (variants.length === 0) {
     return (
-      <Box p="md" border="border" borderRadius="md" bg="background-primary">
-        <Text>No variants available</Text>
+      <Box w="25%" px="lg">
+        <Flex justifyContent="space-between" mb="sm">
+          <Text as="h4" fontWeight="heading" color="text-primary">
+            Filter by Variant
+          </Text>
+        </Flex>
+        <Box border="solid 1px" borderBottom="none" borderColor="border">
+          <Box px="md" py="sm">
+            <Text color="text-secondary">No variants available</Text>
+          </Box>
+        </Box>
       </Box>
     );
   }
 
   return (
-    <Box
-      p="md"
-      border="border"
-      borderRadius="md"
-      bg="background-primary"
-      width="250px"
-      flexShrink={0}>
-      <Flex flexDirection="column" gap="sm">
-        <Box>
-          <Text fontWeight="heading" fontSize="lg">
-            Filters
-          </Text>
-          <Text color="text-secondary" fontSize="sm">
-            Filter by variant
-          </Text>
-        </Box>
-
-        <Flex flexDirection="column" gap="xs">
-          {variants.map((variant) => (
-            <Box key={variant.id}>
-              <Checkbox
-                checked={selectedVariantIds.includes(variant.id)}
-                onChange={() => onVariantToggle(variant.id)}
-                label={
-                  <Flex alignItems="center" gap="sm">
-                    <VariantLine bg={variant.color} />
-                    <Text fontSize="sm">{variant.name}</Text>
-                    <Text color="text-secondary" fontSize="xs">
-                      ({variant.prefix})
-                    </Text>
-                  </Flex>
-                }
-              />
-            </Box>
-          ))}
-        </Flex>
-
+    <Box w="25%" px="lg">
+      <Flex justifyContent="space-between" mb="sm" alignItems="center">
+        <Text as="h4" fontWeight="heading" color="text-primary">
+          Filter by Variant
+        </Text>
         {selectedVariantIds.length > 0 && (
-          <Box>
-            <Button variant="ghost" size="sm" onClick={onClearAll} width="100%">
-              Clear all filters
-            </Button>
-          </Box>
+          <Button size="xs" variant="secondary" onClick={onClearAll}>
+            Clear
+          </Button>
         )}
       </Flex>
+      <Box border="solid 1px" borderBottom="none" borderColor="border">
+        <Flex flexDirection="column">
+          {variants.map((variant) => (
+            <FilterBlock
+              key={variant.id}
+              title={variant.name}
+              color={variant.color}
+              setSelected={() => onVariantToggle(variant.id)}
+              active={
+                selectedVariantIds.includes(variant.id)
+                  ? 'green.400'
+                  : undefined
+              }
+            />
+          ))}
+        </Flex>
+      </Box>
     </Box>
   );
 };

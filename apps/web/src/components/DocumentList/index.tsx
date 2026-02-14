@@ -119,33 +119,57 @@ const columns = [
   {
     header: 'Status',
     accessorKey: 'age',
-    cell: ({ row }: any) => (
-      <Box ml="auto">
-        <Box justifyContent="flex-start" alignItems="center">
-          <Text
-            as="span"
-            fontSize="xs"
-            textTransform="uppercase"
-            fontWeight="heading"
-            color="text-secondary"
-            mb="xs">
-            {row.original?.state?.state}
-          </Text>
-          <StateProgress
-            states={row.original?.flow?.states || []}
-            activeStateId={row.original?.state?.id}
-            completedStateIds={
-              row.original?.flow?.states
-                ?.filter(
-                  (s: StateClass) =>
-                    s.order < (row.original?.state?.order || 0),
-                )
-                ?.map((s: StateClass) => s.id) || []
-            }
-          />
+    cell: ({ row }: any) => {
+      const flowStates = row.original?.flow?.states || [];
+      const currentState = row.original?.state;
+      const currentStateOrder = currentState?.order || 0;
+
+      // Sort states by order to find the final state
+      const sortedStates = [...flowStates].sort(
+        (a: StateClass, b: StateClass) => (a.order || 0) - (b.order || 0),
+      );
+      const finalState = sortedStates[sortedStates.length - 1];
+      const finalStateOrder = finalState?.order || 0;
+
+      // If document is at the final state (published/completed), mark all states as completed
+      // Otherwise, mark states before the current state as completed
+      const isCompleted =
+        currentStateOrder >= finalStateOrder && finalStateOrder > 0;
+
+      const completedStateIds = isCompleted
+        ? sortedStates.map((s: StateClass) => s.id)
+        : sortedStates
+            .filter((s: StateClass) => (s.order || 0) < currentStateOrder)
+            .map((s: StateClass) => s.id);
+
+      return (
+        <Box ml="auto">
+          <Box justifyContent="flex-start" alignItems="center">
+            <Text
+              as="span"
+              fontSize="xs"
+              textTransform="uppercase"
+              fontWeight="heading"
+              color="text-secondary"
+              mb="xs">
+              {currentState?.state || 'Unknown'}
+            </Text>
+            <StateProgress
+              states={flowStates}
+              activeStateId={currentState?.id}
+              completedStateIds={completedStateIds}
+              currentActiveIndex={
+                isCompleted
+                  ? sortedStates.length
+                  : sortedStates.findIndex(
+                      (s: StateClass) => s.id === currentState?.id,
+                    ) + 1
+              }
+            />
+          </Box>
         </Box>
-      </Box>
-    ),
+      );
+    },
     enableSorting: false,
     // maxSize: 90,
     textAlign: 'right',

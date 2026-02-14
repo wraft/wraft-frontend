@@ -1,0 +1,74 @@
+[     979ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:4000/api/v1/content_types?sort=inserted_at_desc&page=1:0
+[   87678ms] [ERROR] Warning: validateDOMNesting(...): %s cannot appear as a child of <%s>.%s%s%s <h3> h3   
+    at h3
+    at eval (webpack-internal:///../../node_modules/@emotion/react/dist/emotion-element-489459f2.browser.development.esm.js:55:66)
+    at h3
+    at eval (webpack-internal:///../../node_modules/@emotion/react/dist/emotion-element-489459f2.browser.development.esm.js:55:66)
+    at Title2 (webpack-internal:///../../packages/ui/dist/index.mjs:3193:11)
+    at div
+    at eval (webpack-internal:///../../node_modules/@emotion/react/dist/emotion-element-489459f2.browser.development.esm.js:55:66)
+    at Header3 (webpack-internal:///../../packages/ui/dist/index.mjs:3216:11)
+    at div
+    at eval (webpack-internal:///../../node_modules/@emotion/react/dist/emotion-element-489459f2.browser.development.esm.js:55:66)
+    at _c21 (webpack-internal:///../../packages/ui/dist/index.mjs:1929:14)
+    at form
+    at eval (webpack-internal:///../../node_modules/@emotion/react/dist/emotion-element-489459f2.browser.development.esm.js:55:66)
+    at _c21 (webpack-internal:///../../packages/ui/dist/index.mjs:1929:14)
+    at _c28 (webpack-internal:///../../packages/ui/dist/index.mjs:1981:11)
+    at VariantForm (webpack-internal:///./src/components/Variants/VariantForm.tsx:52:11)
+    at div
+    at eval (webpack-internal:///../../node_modules/@emotion/react/dist/emotion-element-489459f2.browser.development.esm.js:55:66)
+    at HeadingLevel (webpack-internal:///../../packages/ui/node_modules/@ariakit/react-core/esm/__chunks/5M6RIVE2.js:14:25)
+    at ContextProvider
+    at ScopedContextProvider
+    at ContextProvider
+    at ContextProvider
+    at ScopedContextProvider
+    at ContextProvider
+    at ScopedContextProvider
+    at ContextProvider
+    at ContextProvider
+    at ScopedContextProvider
+    at eval (webpack-internal:///../../packages/ui/node_modules/@ariakit/react-core/esm/__chunks/VOQWLFSQ.js:23:78)
+    at eval (webpack-internal:///../../packages/ui/node_modules/@ariakit/react-core/esm/__chunks/VOQWLFSQ.js:23:78)
+    at _c58 (webpack-internal:///../../packages/ui/dist/index.mjs:3239:11)
+    at VariantDetailForm (webpack-internal:///./src/components/Variants/VariantDetailForm.tsx:56:82)
+    at div
+    at eval (webpack-internal:///../../node_modules/@emotion/react/dist/emotion-element-489459f2.browser.development.esm.js:55:66)
+    at _c21 (webpack-internal:///../../packages/ui/dist/index.mjs:1929:14)
+    at div
+    at eval (webpack-internal:///../../node_modules/@emotion/react/dist/emotion-element-489459f2.browser.development.esm.js:55:66)
+    at _c21 (webpack-internal:///../../packages/ui/dist/index.mjs:1929:14)
+    at div
+    at eval (webpack-internal:///../../node_modules/@emotion/react/dist/emotion-element-489459f2.browser.development.esm.js:55:66)
+    at _c21 (webpack-internal:///../../packages/ui/dist/index.mjs:1929:14)
+    at _c25 (webpack-internal:///../../packages/ui/dist/index.mjs:1953:11)
+    at Page (webpack-internal:///./src/components/common/PageFrame.tsx:16:11)
+    at Index (webpack-internal:///./src/pages/variants/[id].tsx:22:74)
+    at SocketProvider (webpack-internal:///./src/contexts/SocketContext.tsx:27:11)
+    at UserProvider (webpack-internal:///./src/contexts/AuthContext.tsx:30:11)
+    at __ThemeUIInternalBaseThemeProvider (webpack-internal:///../../node_modules/@theme-ui/core/dist/theme-ui-core.browser.esm.js:69:3)
+    at TopLevelColorModeProvider (webpack-internal:///../../node_modules/@theme-ui/color-modes/dist/theme-ui-color-modes.esm.js:157:3)
+    at ColorModeProvider (webpack-internal:///../../node_modules/@theme-ui/color-modes/dist/theme-ui-color-modes.esm.js:392:3)
+    at __ThemeUIInternalBaseThemeProvider (webpack-internal:///../../node_modules/@theme-ui/core/dist/theme-ui-core.browser.esm.js:69:3)
+    at ThemeProvider (webpack-internal:///../../node_modules/@theme-ui/core/dist/theme-ui-core.browser.esm.js:78:3)
+    at ThemeUIProvider (webpack-internal:///../../node_modules/@theme-ui/theme-provider/dist/theme-ui-theme-provider.esm.js:44:3)
+    at NextAuthProviders (webpack-internal:///./src/contexts/NextAuthProviders.tsx:11:11)
+    at TourProvider (webpack-internal:///../../node_modules/@reactour/tour/dist/index.mjs:932:5)
+    at MyApp (webpack-internal:///./src/pages/_app.tsx:56:11)
+    at PathnameContextProviderAdapter (webpack-internal:///../../node_modules/next/dist/shared/lib/router/adapters.js:81:11)
+    at ErrorBoundary (webpack-internal:///../../node_modules/next/dist/client/components/react-dev-overlay/pages/ErrorBoundary.js:41:9)
+    at ReactDevOverlay (webpack-internal:///../../node_modules/next/dist/client/components/react-dev-overlay/pages/ReactDevOverlay.js:33:11)
+    at Container (webpack-internal:///../../node_modules/next/dist/client/index.js:81:1)
+    at AppContainer (webpack-internal:///../../node_modules/next/dist/client/index.js:189:11)
+    at Root (webpack-internal:///../../node_modules/next/dist/client/index.js:413:11) @ webpack-internal:///../../node_modules/next/dist/client/components/react-dev-overlay/internal/helpers/hydration-error-info.js:62
+[   87692ms] [WARNING] You must pass the "required" prop to the <Field /> instead of JSHandle@node @ webpack-internal:///../../packages/ui/dist/index.mjs:1511
+[   87693ms] [WARNING] You must pass the "required" prop to the <Field /> instead of JSHandle@node @ webpack-internal:///../../packages/ui/dist/index.mjs:1511
+[   87717ms] [WARNING] You must pass the "required" prop to the <Field /> instead of JSHandle@node @ webpack-internal:///../../packages/ui/dist/index.mjs:1511
+[   87852ms] [WARNING] You must pass the "required" prop to the <Field /> instead of JSHandle@node @ webpack-internal:///../../packages/ui/dist/index.mjs:1511
+[   87855ms] [WARNING] You must pass the "required" prop to the <Field /> instead of JSHandle@node @ webpack-internal:///../../packages/ui/dist/index.mjs:1511
+[   87857ms] [WARNING] You must pass the "required" prop to the <Field /> instead of JSHandle@node @ webpack-internal:///../../packages/ui/dist/index.mjs:1511
+[   87897ms] [WARNING] You must pass the "required" prop to the <Field /> instead of JSHandle@node @ webpack-internal:///../../packages/ui/dist/index.mjs:1511
+[   87900ms] [WARNING] You must pass the "required" prop to the <Field /> instead of JSHandle@node @ webpack-internal:///../../packages/ui/dist/index.mjs:1511
+[   87908ms] [WARNING] You must pass the "required" prop to the <Field /> instead of JSHandle@node @ webpack-internal:///../../packages/ui/dist/index.mjs:1511
+[   89416ms] [WARNING] You must pass the "required" prop to the <Field /> instead of JSHandle@node @ webpack-internal:///../../packages/ui/dist/index.mjs:1511

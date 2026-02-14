@@ -1,11 +1,10 @@
 import { FC } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { Box, Flex, Spinner } from '@wraft/ui';
+import { Flex, Spinner } from '@wraft/ui';
 
 import VariantDetailForm from 'components/Variants/VariantDetailForm';
 import Page from 'common/PageFrameInner';
-import PageHeader from 'common/PageHeader';
 
 const Index: FC = () => {
   const router = useRouter();
@@ -28,14 +27,7 @@ const Index: FC = () => {
         <meta name="description" content="Variant details" />
       </Head>
       <Page>
-        <PageHeader
-          title={[{ name: 'Variants', path: '/variants' }]}
-          desc="Variant configuration and field details"
-          hasBack
-        />
-        <Box px="xxl" py="lg">
-          <VariantDetailForm />
-        </Box>
+        <VariantDetailForm />
       </Page>
     </>
   );

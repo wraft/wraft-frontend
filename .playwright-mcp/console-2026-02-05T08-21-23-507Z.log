@@ -1,0 +1,58 @@
+[    2660ms] [ERROR] Warning: Prop `%s` did not match. Server: %s Client: %s%s className "css-prax8x" "css-pd18n2" 
+    at div
+    at eval (webpack-internal:///../../node_modules/@emotion/react/dist/emotion-element-489459f2.browser.development.esm.js:55:66)
+    at eval (webpack-internal:///../../packages/ui/dist/index.mjs:1478:11)
+    at div
+    at eval (webpack-internal:///../../node_modules/@emotion/react/dist/emotion-element-489459f2.browser.development.esm.js:55:66)
+    at _c21 (webpack-internal:///../../packages/ui/dist/index.mjs:1929:14)
+    at _c28 (webpack-internal:///../../packages/ui/dist/index.mjs:1981:11)
+    at div
+    at eval (webpack-internal:///../../node_modules/@emotion/react/dist/emotion-element-489459f2.browser.development.esm.js:55:66)
+    at _c21 (webpack-internal:///../../packages/ui/dist/index.mjs:1929:14)
+    at div
+    at eval (webpack-internal:///../../node_modules/@emotion/react/dist/emotion-element-489459f2.browser.development.esm.js:55:66)
+    at _c21 (webpack-internal:///../../packages/ui/dist/index.mjs:1929:14)
+    at div
+    at eval (webpack-internal:///../../node_modules/@emotion/react/dist/emotion-element-489459f2.browser.development.esm.js:55:66)
+    at _c21 (webpack-internal:///../../packages/ui/dist/index.mjs:1929:14)
+    at _c28 (webpack-internal:///../../packages/ui/dist/index.mjs:1981:11)
+    at ContentTypeViewForm (webpack-internal:///./src/components/Variants/VariantDetailForm.tsx:35:80)
+    at div
+    at eval (webpack-internal:///../../node_modules/@emotion/react/dist/emotion-element-489459f2.browser.development.esm.js:55:66)
+    at _c21 (webpack-internal:///../../packages/ui/dist/index.mjs:1929:14)
+    at div
+    at eval (webpack-internal:///../../node_modules/@emotion/react/dist/emotion-element-489459f2.browser.development.esm.js:55:66)
+    at _c21 (webpack-internal:///../../packages/ui/dist/index.mjs:1929:14)
+    at div
+    at eval (webpack-internal:///../../node_modules/@emotion/react/dist/emotion-element-489459f2.browser.development.esm.js:55:66)
+    at _c21 (webpack-internal:///../../packages/ui/dist/index.mjs:1929:14)
+    at _c25 (webpack-internal:///../../packages/ui/dist/index.mjs:1953:11)
+    at Page (webpack-internal:///./src/components/common/PageFrame.tsx:16:11)
+    at Index (webpack-internal:///./src/pages/variants/[id].tsx:30:82)
+    at SocketProvider (webpack-internal:///./src/contexts/SocketContext.tsx:27:11)
+    at UserProvider (webpack-internal:///./src/contexts/AuthContext.tsx:30:11)
+    at __ThemeUIInternalBaseThemeProvider (webpack-internal:///../../node_modules/@theme-ui/core/dist/theme-ui-core.browser.esm.js:69:3)
+    at TopLevelColorModeProvider (webpack-internal:///../../node_modules/@theme-ui/color-modes/dist/theme-ui-color-modes.esm.js:157:3)
+    at ColorModeProvider (webpack-internal:///../../node_modules/@theme-ui/color-modes/dist/theme-ui-color-modes.esm.js:392:3)
+    at __ThemeUIInternalBaseThemeProvider (webpack-internal:///../../node_modules/@theme-ui/core/dist/theme-ui-core.browser.esm.js:69:3)
+    at ThemeProvider (webpack-internal:///../../node_modules/@theme-ui/core/dist/theme-ui-core.browser.esm.js:78:3)
+    at ThemeUIProvider (webpack-internal:///../../node_modules/@theme-ui/theme-provider/dist/theme-ui-theme-provider.esm.js:44:3)
+    at NextAuthProviders (webpack-internal:///./src/contexts/NextAuthProviders.tsx:11:11)
+    at TourProvider (webpack-internal:///../../node_modules/@reactour/tour/dist/index.mjs:932:5)
+    at MyApp (webpack-internal:///./src/pages/_app.tsx:56:11)
+    at PathnameContextProviderAdapter (webpack-internal:///../../node_modules/next/dist/shared/lib/router/adapters.js:81:11)
+    at ErrorBoundary (webpack-internal:///../../node_modules/next/dist/client/components/react-dev-overlay/pages/ErrorBoundary.js:41:9)
+    at ReactDevOverlay (webpack-internal:///../../node_modules/next/dist/client/components/react-dev-overlay/pages/ReactDevOverlay.js:33:11)
+    at Container (webpack-internal:///../../node_modules/next/dist/client/index.js:81:1)
+    at AppContainer (webpack-internal:///../../node_modules/next/dist/client/index.js:189:11)
+    at Root (webpack-internal:///../../node_modules/next/dist/client/index.js:413:11) 
+See more info here: https://nextjs.org/docs/messages/react-hydration-error @ webpack-internal:///../../node_modules/next/dist/client/components/react-dev-overlay/internal/helpers/hydration-error-info.js:62
+[    2871ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:4000/api/v1/content_types/1b4aea6b-e99c-4af7-b554-e2ca82e46e44:0
+[    2873ms] Object
+[    2977ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:4000/api/v1/content_types/1b4aea6b-e99c-4af7-b554-e2ca82e46e44:0
+[    2979ms] Object
+[    3037ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:4000/api/v1/content_types/1b4aea6b-e99c-4af7-b554-e2ca82e46e44:0
+[  260167ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:4000/api/v1/content_types/1b4aea6b-e99c-4af7-b554-e2ca82e46e44:0
+[  260300ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:4000/api/v1/content_types/1b4aea6b-e99c-4af7-b554-e2ca82e46e44:0
+[  267370ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:4000/api/v1/content_types/1b4aea6b-e99c-4af7-b554-e2ca82e46e44:0
+[  298394ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:4000/api/v1/content_types/1b4aea6b-e99c-4af7-b554-e2ca82e46e44:0

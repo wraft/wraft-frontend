@@ -158,17 +158,31 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
     };
 
     if (states) {
-      const checkedStates = states.map((e) => {
-        return {
-          ...e,
-          error:
-            e.approvers.length === 0
-              ? 'Please add approvers for this state'
+      // Filter out incomplete new states (those without name, type, or approvers)
+      const incompleteStates = states.filter(
+        (e) =>
+          !e.state || !e.state.trim() || !e.type || e.approvers.length === 0,
+      );
+
+      if (incompleteStates.length > 0) {
+        const checkedStates = states.map((e) => {
+          const isIncomplete =
+            !e.state || !e.state.trim() || !e.type || e.approvers.length === 0;
+          return {
+            ...e,
+            error: isIncomplete
+              ? 'Please complete this state (name, type, and at least one assignee)'
               : undefined,
-        };
-      });
-      if (checkedStates.some((e) => e.approvers.length === 0)) {
+          };
+        });
         setStates(checkedStates);
+        toast.error(
+          'Please complete all states before saving. Each state needs a name, type, and at least one assignee.',
+          {
+            duration: 4000,
+            position: 'top-right',
+          },
+        );
         return;
       }
     }
@@ -214,8 +228,8 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
             id: changedItem.id,
             state: changedItem.state,
             type: changedItem.type,
-            //used initial order cause backend throws error order already exists
-            order: initialItem.order,
+            // Don't include order here - align-states will handle all order updates
+            // This prevents "order already exists" errors
             approvers: {
               add: addedApprovers,
               remove: removedApprovers,
@@ -223,14 +237,26 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
           };
         });
 
-        const createDataArr = newStates.map((newItem, index) => {
-          return {
-            state: newItem.state,
-            type: newItem.type,
-            order: highestOrder + 1 + index,
-            approvers: newItem.approvers.map((approver) => approver.id),
-          };
-        });
+        // Calculate order for new states based on their position in the full states array
+        const createDataArr = newStates
+          .filter(
+            (newItem) =>
+              newItem.state &&
+              newItem.state.trim() &&
+              newItem.type &&
+              newItem.approvers.length > 0,
+          )
+          .map((newItem) => {
+            // Find the position of this state in the full states array
+            const stateIndex = states.findIndex((s) => s.id === newItem.id);
+            return {
+              state: newItem.state,
+              type: newItem.type,
+              // Use the order from the current states array (reflects drag-and-drop changes)
+              order: stateIndex >= 0 ? newItem.order : highestOrder + 1,
+              approvers: newItem.approvers.map((approver) => approver.id),
+            };
+          });
 
         const CreateReqs = createDataArr.map((item) => {
           return postAPI(`flows/${cId}/states`, item);
@@ -264,12 +290,26 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
                     id: string;
                   }[];
                 };
+                // Match states by ID and use the order from the current states array
+                // This ensures the order reflects the user's drag-and-drop changes
+                // We need to align all states from the backend response according to the current order
                 const alignData: Align = {
-                  states: x.map((state) => {
+                  states: x.map((backendState) => {
+                    // Find the corresponding state in the current states array
+                    const currentState = states.find(
+                      (s) => s.id === backendState.id,
+                    );
+                    if (currentState) {
+                      // Use the order from the current states array
+                      return {
+                        id: backendState.id,
+                        order: currentState.order,
+                      };
+                    }
+                    // Fallback to backend order if not found in current states
                     return {
-                      order:
-                        states.find((s) => s.state === state.state)?.order || 0,
-                      id: state.id,
+                      id: backendState.id,
+                      order: backendState.order,
                     };
                   }),
                 };
@@ -347,6 +387,8 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
     if (states) {
       const newArr: StateState[] = [...states, newState];
       setStates(newArr);
+    } else {
+      setStates([newState]);
     }
   };
 
@@ -399,7 +441,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
             </Field>
           </Flex>
           <Box display={formStep === 1 ? 'block' : 'none'}>
-            {edit && states && (
+            {states && states.length > 0 && (
               <StatesForm
                 states={states}
                 setStates={setStates}
@@ -410,7 +452,11 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
             <Button
               variant="secondary"
               type="button"
-              onClick={() => AddState()}>
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                AddState();
+              }}>
               <AddIcon width={14} height={14} />
               <Text>Add Flow Step</Text>
             </Button>

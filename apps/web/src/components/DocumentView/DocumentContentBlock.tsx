@@ -210,6 +210,7 @@ export const DocumentContentBlock = () => {
     fetchContentDetails,
     setSignerBoxes,
     setContents,
+    nextState,
   } = useDocument();
 
   const { canAccess } = usePermissions(userType, docRole);
@@ -218,7 +219,9 @@ export const DocumentContentBlock = () => {
   const { userProfile } = useAuth();
   const tabView = useTabStore();
 
-  const defaultSelectedId = 'edit';
+  // Check if the next state is a sign state
+  const isSignState = nextState?.type === 'sign';
+  const defaultSelectedId = isSignState ? 'sign' : 'view';
 
   const collabData = {
     user: {
@@ -359,12 +362,15 @@ export const DocumentContentBlock = () => {
                   <StepBlock title="Content" desc="Draft content" />
                 </Tab>
 
-                <Tab id="view">
-                  <StepBlock title="Document" desc="Sign and Manage" />
-                </Tab>
-                <Tab id="sign">
-                  <StepBlock title="Signature" desc="Sign and Manage" />
-                </Tab>
+                {isSignState ? (
+                  <Tab id="sign">
+                    <StepBlock title="Signature" desc="Sign and Manage" />
+                  </Tab>
+                ) : (
+                  <Tab id="view">
+                    <StepBlock title="Document" desc="Sign and Manage" />
+                  </Tab>
+                )}
               </TabList>
               <Flex align="center" gap="sm">
                 {contentBody && <AwarenessUsers />}
@@ -400,10 +406,7 @@ export const DocumentContentBlock = () => {
               </Flex>
             </Flex>
 
-            <TabPanel
-              tabId={defaultSelectedId}
-              store={tabView}
-              className="main-content">
+            <TabPanel tabId="edit" store={tabView} className="main-content">
               <ErrorBoundary>
                 <Flex>
                   <Box minWidth="794px" maxWidth="920px">
@@ -428,79 +431,86 @@ export const DocumentContentBlock = () => {
                 </Flex>
               </ErrorBoundary>
             </TabPanel>
-            <TabPanel store={tabView} className="main-content">
-              {!contents?.content?.build && (
-                <Box
-                  w="100%"
-                  mx="md"
-                  p="xl"
-                  border="solid 1px"
-                  borderColor="border">
-                  <Text fontSize="xl" fontWeight="heading" mb="xs">
-                    Document not generated
-                  </Text>
-                  <Text color="text-secondary" mb="md">
-                    Documents need to be generated
-                  </Text>
-                  <Button
-                    variant="secondary"
-                    loading={isBuilding}
-                    disabled={isBuilding}
-                    onClick={() => doBuild()}>
-                    <Play size={14} className="action" />
-                    Generate
-                  </Button>
-                </Box>
-              )}
-
-              {contents?.content?.build && (
-                <PdfWrapper>
-                  <PdfViewer url={`${contents.content.build}`} pageNumber={1} />
-                </PdfWrapper>
-              )}
-            </TabPanel>
-            <TabPanel store={tabView} className="main-content">
-              {contents?.content?.signed_doc_url ? (
-                <Box>
-                  <Flex justify="flex-end" mb="md">
+            {!isSignState && (
+              <TabPanel tabId="view" store={tabView} className="main-content">
+                {!contents?.content?.build && (
+                  <Box
+                    w="100%"
+                    mx="md"
+                    p="xl"
+                    border="solid 1px"
+                    borderColor="border">
+                    <Text fontSize="xl" fontWeight="heading" mb="xs">
+                      Document not generated
+                    </Text>
+                    <Text color="text-secondary" mb="md">
+                      Documents need to be generated
+                    </Text>
                     <Button
                       variant="secondary"
-                      size="sm"
-                      onClick={() =>
-                        window.open(contents.content.signed_doc_url, '_blank')
-                      }>
-                      Download PDF
+                      loading={isBuilding}
+                      disabled={isBuilding}
+                      onClick={() => doBuild()}>
+                      <Play size={14} className="action" />
+                      Generate
                     </Button>
-                  </Flex>
-                  <PdfSignerViewer
-                    signerBoxes={signerBoxes}
-                    url={contents?.content?.signed_doc_url}
-                  />
-                </Box>
-              ) : (
-                <Box
-                  w="100%"
-                  mx="md"
-                  p="xl"
-                  border="solid 1px"
-                  borderColor="border">
-                  <Text fontSize="xl" fontWeight="heading" mb="xs">
-                    SignDocument not generated
-                  </Text>
-                  <Text color="text-secondary" mb="md">
-                    Documents need to be generated
-                  </Text>
-                  <Button
-                    variant="secondary"
-                    loading={isBuilding}
-                    disabled={isBuilding}
-                    onClick={() => onbuildforSigning()}>
-                    <Play size={14} className="action" />
-                    Generate for Signing
-                  </Button>
-                </Box>
-              )}
-            </TabPanel>
+                  </Box>
+                )}
+
+                {contents?.content?.build && (
+                  <PdfWrapper>
+                    <PdfViewer
+                      url={`${contents.content.build}`}
+                      pageNumber={1}
+                    />
+                  </PdfWrapper>
+                )}
+              </TabPanel>
+            )}
+            {isSignState && (
+              <TabPanel tabId="sign" store={tabView} className="main-content">
+                {contents?.content?.signed_doc_url ? (
+                  <Box>
+                    <Flex justify="flex-end" mb="md">
+                      <Button
+                        variant="secondary"
+                        size="sm"
+                        onClick={() =>
+                          window.open(contents.content.signed_doc_url, '_blank')
+                        }>
+                        Download PDF
+                      </Button>
+                    </Flex>
+                    <PdfSignerViewer
+                      signerBoxes={signerBoxes}
+                      url={contents?.content?.signed_doc_url}
+                    />
+                  </Box>
+                ) : (
+                  <Box
+                    w="100%"
+                    mx="md"
+                    p="xl"
+                    border="solid 1px"
+                    borderColor="border">
+                    <Text fontSize="xl" fontWeight="heading" mb="xs">
+                      SignDocument not generated
+                    </Text>
+                    <Text color="text-secondary" mb="md">
+                      Documents need to be generated
+                    </Text>
+                    <Button
+                      variant="secondary"
+                      loading={isBuilding}
+                      disabled={isBuilding}
+                      onClick={() => onbuildforSigning()}>
+                      <Play size={14} className="action" />
+                      Generate for Signing
+                    </Button>
+                  </Box>
+                )}
+              </TabPanel>
+            )}
           </TabProvider>
         </TabWrapper>
       )}

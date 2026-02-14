@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useForm, Controller } from 'react-hook-form';
 import {
   closestCenter,
   DndContext,
@@ -25,8 +26,9 @@ import {
   Select,
   Text,
   Button,
-  Modal,
   Search,
+  Field,
+  Modal,
 } from '@wraft/ui';
 import toast from 'react-hot-toast';
 
@@ -43,6 +45,7 @@ type Props = {
 
 export function Droppable({ states, setStates, highestOrder }: Props) {
   const [items, setItems] = useState<StateState[]>([]);
+  const [expandedStateId, setExpandedStateId] = useState<string | null>(null);
 
   useEffect(() => {
     if (states && states.length > 0) {
@@ -51,7 +54,11 @@ export function Droppable({ states, setStates, highestOrder }: Props) {
   }, [states]);
 
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     }),
@@ -63,9 +70,11 @@ export function Droppable({ states, setStates, highestOrder }: Props) {
     const overState = states.filter((s) => s.id == over.id)[0];
     const oldIndex = states.indexOf(activeState);
     const newIndex = states.indexOf(overState);
+    // Use sequential order based on array position (1, 2, 3, ...)
+    // This ensures no conflicts when submitting
     const newArr = arrayMove(states, oldIndex, newIndex).map((i, index) => ({
       ...i,
-      order: highestOrder + 1 + index,
+      order: index + 1,
     }));
     setStates(newArr);
   };
@@ -173,6 +182,15 @@ export function Droppable({ states, setStates, highestOrder }: Props) {
                     states={items}
                     setStates={setStates}
                     index={index + 1}
+                    isExpanded={expandedStateId === state.id}
+                    onExpand={() => {
+                      setExpandedStateId(
+                        expandedStateId === state.id ? null : state.id,
+                      );
+                    }}
+                    onCollapse={() => {
+                      setExpandedStateId(null);
+                    }}
                   />
                 </Box>
               );
@@ -189,15 +207,39 @@ type SortableItemProps = {
   state: StateState;
   states: StateState[];
   setStates: (e: StateState[]) => void;
+  isExpanded: boolean;
+  onExpand: () => void;
+  onCollapse: () => void;
 };
 const SortableItem = ({
   index,
   setStates,
   state,
   states,
+  isExpanded,
+  onExpand,
+  onCollapse,
 }: SortableItemProps) => {
   const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
-  const [showAssignees, setShowAssignees] = useState<boolean>(false);
+  const [editApprovers, setEditApprovers] = useState<any[]>([]);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    control,
+    setValue,
+    reset,
+    watch,
+  } = useForm({
+    defaultValues: {
+      state: '',
+      type: 'reviewer',
+    },
+  });
+
+  const watchedStateName = watch('state');
+  const watchedStateType = watch('type');
 
   const {
     attributes,
@@ -210,49 +252,84 @@ const SortableItem = ({
     id: state.id,
   });
 
+  // Initialize edit form when expanded
+  useEffect(() => {
+    if (isExpanded) {
+      setValue('state', state.state || '');
+      setValue('type', state.type || 'reviewer');
+      setEditApprovers(state.approvers || []);
+    } else {
+      // Reset form when collapsed
+      reset({
+        state: '',
+        type: 'reviewer',
+      });
+      setEditApprovers([]);
+    }
+  }, [isExpanded, state, setValue, reset]);
+
   const onUserSelect = (user: any) => {
-    if (states && state) {
-      const userExists = state.approvers.some(
+    if (user) {
+      const userExists = editApprovers.some(
         (approver: any) => approver.id === user.id,
       );
       if (userExists) {
-        toast.error('user already exists');
+        toast.error('User already added');
       } else {
-        const newState: StateState = {
-          ...state,
-          approvers: [...state.approvers, user],
-          error: undefined,
-        };
-        const newArr = states.map((s: any) => {
-          if (s.id === state.id) {
-            return newState;
-          } else {
-            return s;
-          }
-        });
-        setStates(newArr);
+        setEditApprovers([...editApprovers, user]);
       }
     }
   };
 
   const onRemoveUser = (user: any) => {
-    if (states && state) {
-      const filterdApprovers = state.approvers.filter(
-        (a: any) => a.id !== user.id,
-      );
-      const newState: StateState = {
-        ...state,
-        approvers: filterdApprovers,
-      };
-      const newArr = states.map((s: any) => {
-        if (s.id === state.id) {
-          return newState;
-        } else {
-          return s;
-        }
-      });
-      setStates(newArr);
+    setEditApprovers(editApprovers.filter((a: any) => a.id !== user.id));
+  };
+
+  const handleSaveEdit = (e?: React.FormEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
     }
+
+    handleSubmit((data) => {
+      if (!data.state || data.state.trim() === '') {
+        toast.error('State name is required');
+        return;
+      }
+
+      if (editApprovers.length === 0) {
+        toast.error('At least one assignee is required');
+        return;
+      }
+
+      if (states && state) {
+        const updatedState: StateState = {
+          ...state,
+          state: data.state.trim(),
+          type: data.type,
+          approvers: editApprovers,
+          error: undefined,
+        };
+        const newArr = states.map((s: any) => {
+          if (s.id === state.id) {
+            return updatedState;
+          } else {
+            return s;
+          }
+        });
+        setStates(newArr);
+        onCollapse();
+        toast.success('State updated successfully');
+      }
+    })();
+  };
+
+  const handleCancelEdit = () => {
+    // Reset to original values
+    setValue('state', state.state || '');
+    setValue('type', state.type || 'reviewer');
+    setEditApprovers(state.approvers || []);
+    onCollapse();
   };
 
   const onDeleteState = () => {
@@ -390,13 +467,25 @@ const SortableItem = ({
             <Button
               variant="ghost"
               size="xs"
-              onClick={() => setShowAssignees(true)}>
-              Edit State
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (isExpanded) {
+                  handleCancelEdit();
+                } else {
+                  onExpand();
+                }
+              }}>
+              {isExpanded ? 'Cancel' : 'Edit State'}
             </Button>
             <Button
               variant="ghost"
               size="xs"
-              onClick={() => setDeleteOpen(true)}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setDeleteOpen(true);
+              }}
               color="error.500">
               <CloseIcon width={14} height={14} />
             </Button>
@@ -404,100 +493,230 @@ const SortableItem = ({
         </Box>
       </Flex>
 
-      {/* Assignee Management Modal */}
-      <Modal
-        ariaLabel="Manage Assignees"
-        open={showAssignees}
-        onClose={() => setShowAssignees(false)}>
-        <Box p="xl" w="400px">
-          <Text fontSize="lg" fontWeight="semibold" mb="md">
-            Manage Assignees for {state.state}
-          </Text>
-
-          <Box mb="md">
-            <Search
-              itemToString={(item: any) => item?.name || ''}
-              placeholder="Search and add assignees..."
-              minChars={1}
-              onChange={(user: any) => {
-                if (user) {
-                  onUserSelect(user);
-                }
+      {/* Inline Edit Form - Accordion */}
+      <Box
+        borderTop={isExpanded ? '1px solid' : 'none'}
+        borderColor="border"
+        bg={isExpanded ? 'gray.50' : 'transparent'}
+        overflow="hidden"
+        maxHeight={isExpanded ? '1000px' : '0'}
+        opacity={isExpanded ? 1 : 0}
+        transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
+        style={{
+          transform: isExpanded ? 'translateY(0)' : 'translateY(-10px)',
+          pointerEvents: isExpanded ? 'auto' : 'none',
+        }}>
+        {isExpanded && (
+          <Box p="xl">
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                handleSaveEdit(e);
               }}
-              renderItem={(user: any) => (
-                <Flex alignItems="center" gap="sm" p="sm">
-                  <Avatar size="xs" src={user.profile_pic} alt={user.name} />
-                  <Text fontSize="md" fontWeight="medium">
-                    {user.name}
-                  </Text>
-                </Flex>
-              )}
-              search={async (query: string) => {
-                try {
-                  const data: any = await fetchAPI(`users/search?key=${query}`);
-                  return data.users.filter(
-                    (u: any) =>
-                      !state.approvers.some((a: any) => a.id === u.id),
-                  );
-                } catch (error) {
-                  console.error('Error searching users:', error);
-                  return [];
-                }
-              }}
-            />
-          </Box>
+              onClick={(e) => e.stopPropagation()}>
+              <Flex direction="column" gap="lg">
+                {/* State Name */}
+                <Field
+                  label="State Name"
+                  required
+                  error={errors?.state?.message as string}>
+                  <InputText
+                    {...register('state', {
+                      required: 'State name is required',
+                    })}
+                    placeholder="Enter state name"
+                    autoFocus
+                  />
+                </Field>
 
-          {state.approvers && state.approvers.length > 0 ? (
-            <Box
-              border="1px solid"
-              borderColor="border"
-              borderRadius="md"
-              overflow="hidden">
-              {state.approvers.map((e: any, idx: number) => (
-                <Flex
-                  key={e.id}
-                  justifyContent="space-between"
-                  alignItems="center"
-                  px="md"
-                  py="sm"
-                  borderBottom={
-                    idx < state.approvers.length - 1 ? '1px solid' : 'none'
-                  }
-                  borderBottomColor="border">
-                  <Flex alignItems="center" gap="sm">
-                    <Avatar size="xs" src={e.profile_pic} alt={e.name} />
-                    <Text
-                      fontSize="md"
-                      fontWeight="medium"
-                      color="text.primary">
-                      {e.name}
-                    </Text>
-                  </Flex>
-                  <Box
-                    onClick={() => onRemoveUser(e)}
-                    cursor="pointer"
-                    p="1"
-                    borderRadius="4px">
-                    <DeleteIcon width={16} height={16} color="error.500" />
+                {/* State Type */}
+                <Box>
+                  <Controller
+                    control={control}
+                    name="type"
+                    rules={{ required: true }}
+                    render={({ field: { name, value, onChange } }) => {
+                      const typeOptions = [
+                        { value: 'reviewer', label: 'Review' },
+                        { value: 'editor', label: 'Edit' },
+                        { value: 'sign', label: 'Sign' },
+                      ];
+                      const selectedOption = typeOptions.find(
+                        (opt) => opt.value === value,
+                      );
+                      return (
+                        <Field
+                          label="State Type"
+                          required
+                          error={errors?.type?.message as string}>
+                          <Select
+                            name={name}
+                            value={selectedOption || null}
+                            onChange={(newValue) => {
+                              onChange(newValue);
+                            }}
+                            options={typeOptions}
+                            placeholder="Select state type"
+                          />
+                        </Field>
+                      );
+                    }}
+                  />
+                </Box>
+
+                {/* Assignees */}
+                <Box>
+                  <Label mb="sm" fontSize="sm" fontWeight="medium" required>
+                    Assignees
+                  </Label>
+                  <Box mb="sm">
+                    <Search
+                      itemToString={(item: any) => item?.name || ''}
+                      placeholder="Search and add assignees..."
+                      minChars={1}
+                      onChange={(user: any) => {
+                        if (user) {
+                          onUserSelect(user);
+                        }
+                      }}
+                      renderItem={(user: any) => (
+                        <Flex alignItems="center" gap="sm" p="sm">
+                          <Avatar
+                            size="xs"
+                            src={user.profile_pic}
+                            alt={user.name}
+                          />
+                          <Text fontSize="md" fontWeight="medium">
+                            {user.name}
+                          </Text>
+                        </Flex>
+                      )}
+                      search={async (query: string) => {
+                        try {
+                          const data: any = await fetchAPI(
+                            `users/search?key=${query}`,
+                          );
+                          return data.users.filter(
+                            (u: any) =>
+                              !editApprovers.some((a: any) => a.id === u.id),
+                          );
+                        } catch (error) {
+                          console.error('Error searching users:', error);
+                          return [];
+                        }
+                      }}
+                    />
                   </Box>
+
+                  {editApprovers && editApprovers.length > 0 ? (
+                    <Box
+                      border="1px solid"
+                      borderColor="border"
+                      borderRadius="md"
+                      overflow="hidden"
+                      mt="sm">
+                      {editApprovers.map((e: any, idx: number) => (
+                        <Flex
+                          key={e.id}
+                          justifyContent="space-between"
+                          alignItems="center"
+                          px="md"
+                          py="sm"
+                          borderBottom={
+                            idx < editApprovers.length - 1
+                              ? '1px solid'
+                              : 'none'
+                          }
+                          borderBottomColor="border"
+                          bg="background.primary"
+                          transition="all 0.2s ease">
+                          <Flex alignItems="center" gap="sm">
+                            <Avatar
+                              size="xs"
+                              src={e.profile_pic}
+                              alt={e.name}
+                            />
+                            <Text
+                              fontSize="md"
+                              fontWeight="medium"
+                              color="text.primary">
+                              {e.name}
+                            </Text>
+                          </Flex>
+                          <Box
+                            onClick={() => onRemoveUser(e)}
+                            cursor="pointer"
+                            p="xs"
+                            borderRadius="4px"
+                            transition="all 0.2s ease"
+                            role="button"
+                            tabIndex={0}
+                            onKeyDown={(keyEvent: any) => {
+                              if (
+                                keyEvent.key === 'Enter' ||
+                                keyEvent.key === ' '
+                              ) {
+                                keyEvent.preventDefault();
+                                onRemoveUser(e);
+                              }
+                            }}>
+                            <DeleteIcon
+                              width={16}
+                              height={16}
+                              color="error.500"
+                            />
+                          </Box>
+                        </Flex>
+                      ))}
+                    </Box>
+                  ) : (
+                    <Box
+                      border="1px dashed"
+                      borderColor="border"
+                      borderRadius="md"
+                      p="lg"
+                      textAlign="center"
+                      bg="gray.50"
+                      mt="sm">
+                      <Text color="text.secondary" fontSize="sm">
+                        No assignees added yet. Add at least one assignee.
+                      </Text>
+                    </Box>
+                  )}
+                </Box>
+
+                {/* Action Buttons */}
+                <Flex gap="sm" justifyContent="flex-end" mt="md">
+                  <Button
+                    variant="secondary"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      handleCancelEdit();
+                    }}
+                    type="button">
+                    Cancel
+                  </Button>
+                  <Button
+                    variant="primary"
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      handleSaveEdit(e);
+                    }}
+                    disabled={
+                      !watchedStateName?.trim() || editApprovers.length === 0
+                    }>
+                    Save Changes
+                  </Button>
                 </Flex>
-              ))}
-            </Box>
-          ) : (
-            <Box
-              border="1px dashed"
-              borderColor="border"
-              borderRadius="md"
-              p="xl"
-              textAlign="center"
-              bg="gray.50">
-              <Text color="text.secondary" fontSize="sm">
-                No assignees added yet
-              </Text>
-            </Box>
-          )}
-        </Box>
-      </Modal>
+              </Flex>
+            </form>
+          </Box>
+        )}
+      </Box>
 
       <Modal
         ariaLabel="Delete State"

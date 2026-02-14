@@ -15,7 +15,6 @@ import { IField } from 'utils/types/content';
 import { usePermission } from 'utils/permissions';
 
 import TemplateFilterSidebar from './TemplateFilterSidebar';
-import ActiveFilterBadge from './ActiveFilterBadge';
 
 const columns = ({ onCloneTemplete, hasPermission }: any) => [
   {
@@ -206,10 +205,6 @@ const TemplateList = () => {
     });
   };
 
-  const onFilterDismiss = (variantId: string) => {
-    onVariantToggle(variantId);
-  };
-
   const onPageChange = (newPage: any) => {
     setPage(newPage);
     router.push(
@@ -257,7 +252,43 @@ const TemplateList = () => {
         )}
       </PageHeader>
       <PageInner>
-        <Flex gap="4">
+        <Flex>
+          <Box flexGrow={1}>
+            <Box mb="sm">
+              <Table
+                data={templates}
+                isLoading={isLoading}
+                columns={columns({ onCloneTemplete, hasPermission })}
+                skeletonRows={10}
+                emptyMessage={
+                  <Box mx="auto" gap="md" w="60%">
+                    <Text as="h3" fontSize="md">
+                      No templates
+                    </Text>
+                    <Text color="text-secondary" mb="md">
+                      {selectedVariantIds.length > 0
+                        ? 'No templates match your filters.'
+                        : 'You have no recent templates to display.'}
+                    </Text>
+                    <Button variant="secondary" size="sm">
+                      <IconFrame color="gray.800" mr="xs">
+                        <Plus size={12} weight="bold" />
+                      </IconFrame>
+                      Add Template
+                    </Button>
+                  </Box>
+                }
+              />
+            </Box>
+            {pageMeta && pageMeta?.total_pages > 1 && (
+              <Pagination
+                totalPage={pageMeta?.total_pages}
+                initialPage={currentPage}
+                onPageChange={onPageChange}
+                totalEntries={pageMeta?.total_entries}
+              />
+            )}
+          </Box>
           <TemplateFilterSidebar
             variants={variants}
             selectedVariantIds={selectedVariantIds}
@@ -265,66 +296,6 @@ const TemplateList = () => {
             onClearAll={onClearAllFilters}
             isLoading={isVariantsLoading}
           />
-          <Box flex={1}>
-            {selectedVariantIds.length > 0 && (
-              <Box mb="md">
-                <Flex gap="xs" alignItems="center" flexWrap="wrap">
-                  <Text fontSize="sm" color="text-secondary" mr="xs">
-                    Active filters:
-                  </Text>
-                  {selectedVariantIds.map((variantId) => {
-                    const variant = variants.find((v) => v.id === variantId);
-                    return variant ? (
-                      <ActiveFilterBadge
-                        key={variant.id}
-                        variant={variant}
-                        onDismiss={() => onFilterDismiss(variant.id)}
-                      />
-                    ) : null;
-                  })}
-                </Flex>
-              </Box>
-            )}
-            <Box mx={0} mb={3}>
-              <Table
-                data={templates}
-                isLoading={isLoading}
-                columns={columns({ onCloneTemplete, hasPermission })}
-                skeletonRows={10}
-                emptyMessage={
-                  <Box mx="auto" gap="md">
-                    <Text as="h3">No templates found</Text>
-                    <Text color="text-secondary" mb="md">
-                      {selectedVariantIds.length > 0
-                        ? 'No templates match your filters.'
-                        : 'Create your first template to get started.'}
-                    </Text>
-                    {selectedVariantIds.length === 0 && (
-                      <Button
-                        variant="secondary"
-                        size="sm"
-                        onClick={() => router.push(`/templates/new`)}>
-                        <IconFrame color="gray.800" mr="xs">
-                          <Plus size={12} weight="bold" />
-                        </IconFrame>
-                        Add Template
-                      </Button>
-                    )}
-                  </Box>
-                }
-              />
-              <Box mt="16px">
-                {pageMeta && pageMeta?.total_pages > 1 && (
-                  <Pagination
-                    totalPage={pageMeta?.total_pages}
-                    initialPage={currentPage}
-                    onPageChange={onPageChange}
-                    totalEntries={pageMeta?.total_entries}
-                  />
-                )}
-              </Box>
-            </Box>
-          </Box>
         </Flex>
       </PageInner>
     </Box>

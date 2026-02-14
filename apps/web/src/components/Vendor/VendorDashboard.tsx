@@ -1,13 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Flex, Text, Grid, Spinner } from '@wraft/ui';
-import {
-  ClockCounterClockwiseIcon,
-  CurrencyDollarIcon,
-  FilesIcon,
-  MapPinIcon,
-  TrendUpIcon,
-  UsersIcon,
-} from '@phosphor-icons/react';
+import { Box, Flex, Text, Spinner } from '@wraft/ui';
 
 import { vendorDashboardService } from 'components/Vendor/vendorService';
 
@@ -38,27 +30,25 @@ const VendorDashboard: React.FC<VendorDashboardProps> = ({ vendorId }) => {
 
   if (loading) {
     return (
-      <Flex alignItems="center" justifyContent="center" h="200px">
-        <Spinner size={32} />
+      <Flex align="center" justify="center" py="3xl">
+        <Spinner size={20} />
       </Flex>
     );
   }
 
-  const statCards = [
+  if (!stats) return null;
+
+  const statItems = [
     {
-      title: 'Total Documents',
+      label: 'Documents',
       value: stats?.total_documents || 0,
-      icon: FilesIcon,
-      description: 'Documents across all vendors',
     },
     {
-      title: 'Pending Approvals',
+      label: 'Pending Approvals',
       value: stats?.pending_approvals || 0,
-      icon: ClockCounterClockwiseIcon,
-      description: 'Documents awaiting approval',
     },
     {
-      title: 'Total Contract Value',
+      label: 'Contract Value',
       value: stats?.total_contract_value
         ? new Intl.NumberFormat('en-US', {
             style: 'currency',
@@ -67,87 +57,89 @@ const VendorDashboard: React.FC<VendorDashboardProps> = ({ vendorId }) => {
             maximumFractionDigits: 1,
           }).format(stats.total_contract_value)
         : '$0',
-      icon: CurrencyDollarIcon,
-      description: 'Combined value of all contracts',
     },
     {
-      title: 'Total Contacts',
+      label: 'Contacts',
       value: stats?.total_contacts || 0,
-      icon: UsersIcon,
-      description: 'Vendor contacts registered',
     },
     {
-      title: 'New This Month',
+      label: 'New This Month',
       value: stats?.new_this_month || 0,
-      icon: TrendUpIcon,
-      description: 'Vendors added this month',
     },
   ];
 
   return (
-    <Box>
-      <Grid
-        gridTemplateColumns="repeat(auto-fit, minmax(250px, 1fr))"
-        gap="lg"
-        mb="xl">
-        {statCards.map((card) => {
-          const IconComponent = card.icon;
-          return (
-            <Box
-              key={card.title}
-              p="lg"
-              borderRadius="md"
-              boxShadow="sm"
-              bg="white">
-              <Flex alignItems="center" justifyContent="space-between" mb="md">
-                <Box>
-                  <Text variant="3xl" fontWeight="600" color="text-primary">
-                    {card.value}
-                  </Text>
-                  <Text variant="lg" fontWeight="500" mb="xs">
-                    {card.title}
-                  </Text>
-                  <Text color="text-secondary" fontSize="sm">
-                    {card.description}
-                  </Text>
-                </Box>
-                <Box p="md" borderRadius="lg" color="text-secondary">
-                  <IconComponent size={24} />
-                </Box>
-              </Flex>
-            </Box>
-          );
-        })}
-      </Grid>
-      {stats?.vendors_by_country && stats.vendors_by_country.length > 0 && (
-        <Box p="lg" mt="lg" borderRadius="md" boxShadow="sm" bg="white">
-          <Text variant="lg" fontWeight="600" mb="md">
-            Vendors by Country
+    <Flex direction="column" gap="lg">
+      <Box
+        border="1px solid"
+        borderColor="border"
+        borderRadius="md"
+        bg="background-primary"
+        overflow="hidden">
+        <Box px="lg" py="sm" borderBottom="1px solid" borderColor="border">
+          <Text fontSize="sm" fontWeight="600" color="text-secondary">
+            Activity
           </Text>
-          <Grid
-            gridTemplateColumns="repeat(auto-fit, minmax(200px, 1fr))"
-            gap="md">
-            {stats.vendors_by_country.map((country: any) => (
+        </Box>
+        <Box>
+          {statItems.map((item, index) => (
+            <Flex
+              key={item.label}
+              justify="space-between"
+              align="center"
+              px="lg"
+              py="sm"
+              borderBottom={index < statItems.length - 1 ? '1px solid' : 'none'}
+              borderColor="border">
+              <Text fontSize="sm" color="text-secondary">
+                {item.label}
+              </Text>
+              <Text fontSize="sm2" fontWeight="600">
+                {item.value}
+              </Text>
+            </Flex>
+          ))}
+        </Box>
+      </Box>
+
+      {stats?.vendors_by_country && stats.vendors_by_country.length > 0 && (
+        <Box
+          border="1px solid"
+          borderColor="border"
+          borderRadius="md"
+          bg="background-primary"
+          overflow="hidden">
+          <Box px="lg" py="sm" borderBottom="1px solid" borderColor="border">
+            <Text fontSize="sm" fontWeight="600" color="text-secondary">
+              By Country
+            </Text>
+          </Box>
+          <Box>
+            {stats.vendors_by_country.map((country: any, index: number) => (
               <Flex
                 key={country.country}
-                alignItems="center"
-                justifyContent="space-between"
-                p="md"
-                borderRadius="md"
-                bg="gray.50">
-                <Flex alignItems="center" gap="sm">
-                  <MapPinIcon size={16} />
-                  <Text fontWeight="500">{country.country || 'Unknown'}</Text>
-                </Flex>
-                <Text fontWeight="600" color="blue.600">
+                justify="space-between"
+                align="center"
+                px="lg"
+                py="sm"
+                borderBottom={
+                  index < stats.vendors_by_country.length - 1
+                    ? '1px solid'
+                    : 'none'
+                }
+                borderColor="border">
+                <Text fontSize="sm" color="text-secondary">
+                  {country.country || 'Unknown'}
+                </Text>
+                <Text fontSize="sm2" fontWeight="600">
                   {country.count}
                 </Text>
               </Flex>
             ))}
-          </Grid>
+          </Box>
         </Box>
       )}
-    </Box>
+    </Flex>
   );
 };
 

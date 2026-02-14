@@ -50,9 +50,11 @@ const VendorDetailPage: NextPage = () => {
 
   if (loading) {
     return (
-      <Flex align="center" justify="center" h="100vh">
-        <Spinner size={32} />
-      </Flex>
+      <Page>
+        <Flex align="center" justify="center" py="3xl">
+          <Spinner size={24} />
+        </Flex>
+      </Page>
     );
   }
 

@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep:*)",
+      "Bash(pnpm --filter @wraft/web build:*)",
+      "Bash(pnpm exec prettier:*)",
+      "Bash(pnpm exec eslint:*)",
+      "mcp__plugin_compound-engineering_pw__browser_navigate",
+      "mcp__plugin_compound-engineering_pw__browser_wait_for",
+      "mcp__plugin_compound-engineering_pw__browser_click",
+      "mcp__plugin_compound-engineering_pw__browser_snapshot",
+      "mcp__plugin_compound-engineering_pw__browser_take_screenshot"
+    ]
+  }
+}

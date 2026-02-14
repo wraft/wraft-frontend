@@ -22,13 +22,7 @@ import {
   PlusIcon,
   PencilSimpleIcon,
   TrashIcon,
-  PhoneIcon,
-  EnvelopeIcon,
-  GlobeIcon,
-  MapPinIcon,
   BuildingIcon,
-  UserIcon,
-  CalendarIcon,
   XIcon,
 } from '@phosphor-icons/react';
 import toast from 'react-hot-toast';
@@ -51,6 +45,24 @@ import VendorDashboard from './VendorDashboard';
 interface VendorDetailProps {
   vendorId: string;
 }
+
+const DetailItem = ({
+  label,
+  value,
+}: {
+  label: string;
+  value?: string | null;
+}) => {
+  if (!value) return null;
+  return (
+    <Box>
+      <Text fontSize="sm" color="text-secondary" mb="xs">
+        {label}
+      </Text>
+      <Text fontSize="sm2">{value}</Text>
+    </Box>
+  );
+};
 
 const VendorDetail: React.FC<VendorDetailProps> = ({ vendorId }) => {
   const router = useRouter();
@@ -177,19 +189,23 @@ const VendorDetail: React.FC<VendorDetailProps> = ({ vendorId }) => {
 
   if (loading) {
     return (
-      <Flex align="center" justify="center" h="100vh">
-        <Spinner size={32} />
+      <Flex align="center" justify="center" py="3xl">
+        <Spinner size={24} />
       </Flex>
     );
   }
 
   if (!vendor) {
     return (
-      <Box>
-        <Text>Vendor not found</Text>
+      <Box p="xl">
+        <Text color="text-secondary">Vendor not found</Text>
       </Box>
     );
   }
+
+  const hasContact =
+    vendor.email || vendor.phone || vendor.website || vendor.contact_person;
+  const hasAddress = vendor.address || vendor.city || vendor.country;
 
   const contactColumns = [
     {
@@ -219,17 +235,17 @@ const VendorDetail: React.FC<VendorDetailProps> = ({ vendorId }) => {
       ),
     },
     {
-      header: 'Actions',
+      header: '',
       accessorKey: 'actions',
       cell: ({ row }: any) => (
-        <Flex gap="sm">
+        <Flex gap="xs" justify="flex-end">
           {hasPermission('vendor', 'manage') && (
             <Button
               variant="ghost"
               size="sm"
               onClick={() => handleEditContact(row.original)}
               title="Edit contact">
-              <PencilSimpleIcon size={16} />
+              <PencilSimpleIcon size={14} />
             </Button>
           )}
           {hasPermission('vendor', 'delete') && (
@@ -237,9 +253,8 @@ const VendorDetail: React.FC<VendorDetailProps> = ({ vendorId }) => {
               variant="ghost"
               size="sm"
               onClick={() => handleDeleteContactClick(row.original)}
-              title="Delete contact"
-              color="red">
-              <TrashIcon size={16} />
+              title="Delete contact">
+              <TrashIcon size={14} />
             </Button>
           )}
         </Flex>
@@ -250,6 +265,46 @@ const VendorDetail: React.FC<VendorDetailProps> = ({ vendorId }) => {
   return (
     <Box>
       <PageInner>
+        {/* Vendor Profile */}
+        <Flex gap="md" align="center" mb="md">
+          {vendor.logo_url ? (
+            <Box
+              as="img"
+              src={vendor.logo_url}
+              alt={vendor.name}
+              w="48px"
+              h="48px"
+              borderRadius="md"
+              objectFit="cover"
+              border="1px solid"
+              borderColor="border"
+              flexShrink={0}
+            />
+          ) : (
+            <Flex
+              w="48px"
+              h="48px"
+              borderRadius="md"
+              bg="green.300"
+              align="center"
+              justify="center"
+              color="green.900"
+              flexShrink={0}>
+              <BuildingIcon size={20} />
+            </Flex>
+          )}
+          <Box>
+            <Text variant="lg" fontWeight="600">
+              {vendor.name}
+            </Text>
+            {vendor.contact_person && (
+              <Text fontSize="sm" color="text-secondary">
+                {vendor.contact_person}
+              </Text>
+            )}
+          </Box>
+        </Flex>
+
         <Tab.List store={tabStore}>
           <Tab id="overview" store={tabStore}>
             Overview
@@ -258,167 +313,157 @@ const VendorDetail: React.FC<VendorDetailProps> = ({ vendorId }) => {
             Contacts
           </Tab>
         </Tab.List>
+
+        {/* Overview Tab */}
         <Tab.Panel tabId="overview" store={tabStore}>
-          <Box mt="lg">
-            <Flex gap="lg" mb="xl">
-              {vendor.logo_url && (
-                <Box
-                  as="img"
-                  src={vendor.logo_url}
-                  alt={vendor.name}
-                  w="120px"
-                  h="120px"
-                  borderRadius="lg"
-                  objectFit="cover"
-                  border="2px solid"
-                  borderColor="border"
-                />
-              )}
-              <Box flex={1}>
-                <Text variant="2xl" fontWeight="600" mb="sm">
-                  {vendor.name}
-                </Text>
-                {vendor.contact_person && (
-                  <Flex align="center" gap="sm" mb="sm">
-                    <UserIcon size={16} />
-                    <Text color="text-secondary">
-                      Contact: {vendor.contact_person}
-                    </Text>
-                  </Flex>
-                )}
-                <Flex gap="lg" flexWrap="wrap">
-                  {vendor.email && (
-                    <Flex align="center" gap="sm">
-                      <EnvelopeIcon size={16} />
-                      <Text color="text-secondary">{vendor.email}</Text>
-                    </Flex>
-                  )}
-                  {vendor.phone && (
-                    <Flex align="center" gap="sm">
-                      <PhoneIcon size={16} />
-                      <Text color="text-secondary">{vendor.phone}</Text>
-                    </Flex>
-                  )}
-                  {vendor.website && (
-                    <Flex align="center" gap="sm">
-                      <GlobeIcon size={16} />
-                      <Text color="text-secondary">{vendor.website}</Text>
-                    </Flex>
-                  )}
-                </Flex>
-              </Box>
-            </Flex>
-            <VendorDashboard vendorId={vendorId} />
-            <Text variant="xl" fontWeight="600" mb="lg">
-              Basic Information
-            </Text>
-            <Box
-              display="grid"
-              gridTemplateColumns="repeat(auto-fit, minmax(300px, 1fr))"
-              gap="lg">
+          <Box display="grid" gridTemplateColumns="1fr 320px" gap="xl" mt="lg">
+            {/* Details */}
+            <Box minW={0}>
               <Box
-                bg="background-primary"
-                p="lg"
-                borderRadius="lg"
                 border="1px solid"
-                borderColor="border">
-                <Text variant="lg" fontWeight="600" mb="md">
-                  Address Information
-                </Text>
-                <Flex direction="column" gap="sm">
-                  {vendor.address && (
-                    <Flex align="start" gap="sm">
-                      <MapPinIcon size={16} style={{ marginTop: '2px' }} />
-                      <Text color="text-secondary">{vendor.address}</Text>
-                    </Flex>
-                  )}
-                  {vendor.city && (
-                    <Flex align="center" gap="sm">
-                      <BuildingIcon size={16} />
-                      <Text color="text-secondary">{vendor.city}</Text>
-                    </Flex>
-                  )}
-                  {vendor.country && (
-                    <Flex align="center" gap="sm">
-                      <MapPinIcon size={16} />
-                      <Text color="text-secondary">{vendor.country}</Text>
-                    </Flex>
-                  )}
-                </Flex>
-              </Box>
-              <Box
+                borderColor="border"
+                borderRadius="md"
                 bg="background-primary"
-                p="lg"
-                borderRadius="lg"
-                border="1px solid"
-                borderColor="border">
-                <Text variant="lg" fontWeight="600" mb="md">
-                  Business Information
-                </Text>
-                <Flex direction="column" gap="sm">
-                  {vendor.registration_number && (
-                    <Box>
-                      <Text fontWeight="500" mb="xs">
-                        Registration Number
-                      </Text>
-                      <Text color="text-secondary">
-                        {vendor.registration_number}
+                overflow="hidden">
+                {/* Contact Section */}
+                {hasContact && (
+                  <Box>
+                    <Box px="lg" py="sm">
+                      <Text
+                        fontSize="sm"
+                        fontWeight="600"
+                        color="text-secondary">
+                        Contact
                       </Text>
                     </Box>
-                  )}
-                </Flex>
-              </Box>
-              <Box
-                bg="background-primary"
-                p="lg"
-                borderRadius="lg"
-                border="1px solid"
-                borderColor="border">
-                <Text variant="lg" fontWeight="600" mb="md">
-                  System Information
-                </Text>
-                <Flex direction="column" gap="sm">
-                  <Flex align="center" gap="sm">
-                    <CalendarIcon size={16} />
-                    <Text color="text-secondary">
-                      Created:{' '}
-                      {new Date(vendor.inserted_at).toLocaleDateString()}
+                    <Box px="lg" pb="lg">
+                      <Box
+                        display="grid"
+                        gridTemplateColumns="repeat(2, 1fr)"
+                        gap="md">
+                        <DetailItem label="Email" value={vendor.email} />
+                        <DetailItem label="Phone" value={vendor.phone} />
+                        <DetailItem label="Website" value={vendor.website} />
+                        <DetailItem
+                          label="Contact Person"
+                          value={vendor.contact_person}
+                        />
+                      </Box>
+                    </Box>
+                  </Box>
+                )}
+
+                {/* Address Section */}
+                {hasAddress && (
+                  <Box borderTop="1px solid" borderColor="border">
+                    <Box px="lg" py="sm">
+                      <Text
+                        fontSize="sm"
+                        fontWeight="600"
+                        color="text-secondary">
+                        Address
+                      </Text>
+                    </Box>
+                    <Box px="lg" pb="lg">
+                      <Box
+                        display="grid"
+                        gridTemplateColumns="repeat(2, 1fr)"
+                        gap="md">
+                        <DetailItem label="Street" value={vendor.address} />
+                        <DetailItem label="City" value={vendor.city} />
+                        <DetailItem label="Country" value={vendor.country} />
+                      </Box>
+                    </Box>
+                  </Box>
+                )}
+
+                {/* Business Section */}
+                {vendor.registration_number && (
+                  <Box borderTop="1px solid" borderColor="border">
+                    <Box px="lg" py="sm">
+                      <Text
+                        fontSize="sm"
+                        fontWeight="600"
+                        color="text-secondary">
+                        Business
+                      </Text>
+                    </Box>
+                    <Box px="lg" pb="lg">
+                      <DetailItem
+                        label="Registration Number"
+                        value={vendor.registration_number}
+                      />
+                    </Box>
+                  </Box>
+                )}
+
+                {/* Record Section */}
+                <Box borderTop="1px solid" borderColor="border">
+                  <Box px="lg" py="sm">
+                    <Text fontSize="sm" fontWeight="600" color="text-secondary">
+                      Record
                     </Text>
-                  </Flex>
-                  <Flex align="center" gap="sm">
-                    <CalendarIcon size={16} />
-                    <Text color="text-secondary">
-                      Updated:{' '}
-                      {new Date(vendor.updated_at).toLocaleDateString()}
-                    </Text>
-                  </Flex>
-                </Flex>
+                  </Box>
+                  <Box px="lg" pb="lg">
+                    <Box
+                      display="grid"
+                      gridTemplateColumns="repeat(2, 1fr)"
+                      gap="md">
+                      <DetailItem
+                        label="Created"
+                        value={new Date(
+                          vendor.inserted_at,
+                        ).toLocaleDateString()}
+                      />
+                      <DetailItem
+                        label="Updated"
+                        value={new Date(vendor.updated_at).toLocaleDateString()}
+                      />
+                    </Box>
+                  </Box>
+                </Box>
               </Box>
+            </Box>
+
+            {/* Stats Sidebar */}
+            <Box>
+              <VendorDashboard vendorId={vendorId} />
             </Box>
           </Box>
         </Tab.Panel>
+
+        {/* Contacts Tab */}
         <Tab.Panel tabId="contacts" store={tabStore}>
           <Box mt="lg">
-            <Flex justify="space-between" align="center" mb="lg">
-              <Flex gap="md" align="center">
-                <Text variant="lg" fontWeight="600">
-                  Vendor Contacts
-                </Text>
-              </Flex>
+            <Flex justify="space-between" align="center" mb="md">
+              <Text fontSize="sm2" fontWeight="600" color="text-secondary">
+                {totalContacts > 0
+                  ? `${totalContacts} ${totalContacts === 1 ? 'contact' : 'contacts'}`
+                  : 'Contacts'}
+              </Text>
               {hasPermission('vendor', 'manage') && (
-                <Button variant="secondary" onClick={handleAddContact}>
-                  <PlusIcon size={16} />
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={handleAddContact}>
+                  <PlusIcon size={14} />
                   Add Contact
                 </Button>
               )}
             </Flex>
-            <Table
-              data={contacts || []}
-              columns={contactColumns || []}
-              isLoading={contactsLoading}
-              skeletonRows={5}
-              emptyMessage="No contacts found. Add your first contact to get started."
-            />
+            <Box
+              border="1px solid"
+              borderColor="border"
+              borderRadius="md"
+              overflow="hidden">
+              <Table
+                data={contacts || []}
+                columns={contactColumns || []}
+                isLoading={contactsLoading}
+                skeletonRows={5}
+                emptyMessage="No contacts yet"
+              />
+            </Box>
             {totalPages > 1 && (
               <Flex justify="center" mt="lg">
                 <Pagination
@@ -433,50 +478,47 @@ const VendorDetail: React.FC<VendorDetailProps> = ({ vendorId }) => {
         </Tab.Panel>
       </PageInner>
 
+      {/* Delete Contact Modal */}
       <Modal
         open={deleteContactModalOpen}
         onClose={() => {
           setDeleteContactModalOpen(false);
           setContactToDelete(null);
         }}
-        ariaLabel="Delete Contact Confirmation">
-        <Box p="lg">
-          <Text variant="xl" fontWeight="600" mb="md">
+        ariaLabel="Delete Contact">
+        <Box p="xl">
+          <Text fontSize="base" fontWeight="600" mb="md">
             Delete Contact
           </Text>
-          <Text mb="md" display="inline-flex">
-            You are about to delete contact{' '}
-            <Text as="span" fontWeight="600">
-              &quot;{contactToDelete?.name}&quot;
+          <Text fontSize="sm2" color="text-secondary" mb="lg">
+            Are you sure you want to delete{' '}
+            <Text as="span" fontWeight="600" color="text-primary">
+              {contactToDelete?.name}
             </Text>
+            ? This action cannot be undone.
           </Text>
-          <Text mb="lg">
-            This action will:
-            <Box as="ul" mt="xs">
-              <Box as="li">Remove the contact&apos;s information</Box>
-              <Box as="li">Remove their association with this vendor</Box>
-              <Box as="li">Cannot be undone</Box>
-            </Box>
-          </Text>
-          <Text mb="lg" fontWeight="500">
-            Are you sure you want to proceed?
-          </Text>
-          <Flex gap="md" justify="end">
+          <Flex gap="sm" justify="flex-end">
             <Button
               variant="secondary"
+              size="sm"
               onClick={() => {
                 setDeleteContactModalOpen(false);
                 setContactToDelete(null);
               }}>
-              No, Keep Contact
+              Cancel
             </Button>
-            <Button variant="primary" danger onClick={handleDeleteContact}>
-              Yes, Delete Contact
+            <Button
+              variant="primary"
+              size="sm"
+              danger
+              onClick={handleDeleteContact}>
+              Delete
             </Button>
           </Flex>
         </Box>
       </Modal>
 
+      {/* Contact Form Drawer */}
       <ContactFormDrawer
         open={contactModalOpen}
         onClose={() => {

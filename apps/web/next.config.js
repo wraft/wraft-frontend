@@ -2,9 +2,10 @@ const withImages = require('next-images');
 
 const HOST = process.env.NEXT_PUBLIC_API_HOST || 'http://localhost:4000';
 
-const apiHost = HOST.startsWith('http://') || HOST.startsWith('https://') 
-  ? HOST 
-  : `http://${HOST}`;
+const apiHost =
+  HOST.startsWith('http://') || HOST.startsWith('https://')
+    ? HOST
+    : `http://${HOST}`;
 
 module.exports = withImages({
   env: {

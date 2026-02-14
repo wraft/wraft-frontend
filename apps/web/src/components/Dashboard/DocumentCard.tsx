@@ -238,6 +238,47 @@ export const DocumentCard: React.FC<DocumentCardProps> = ({
     return null;
   }, [content]);
 
+  // Calculate completion status and completed state IDs
+  const stateProgressData = useMemo(() => {
+    const flowStates = content.flow?.states || [];
+    const currentState = content.state;
+    const currentStateOrder = currentState?.order || 0;
+
+    if (flowStates.length === 0) {
+      return {
+        completedStateIds: [],
+        currentActiveIndex: 0,
+      };
+    }
+
+    // Sort states by order to find the final state
+    const sortedStates = [...flowStates].sort(
+      (a: FlowState, b: FlowState) => (a.order || 0) - (b.order || 0),
+    );
+    const finalState = sortedStates[sortedStates.length - 1];
+    const finalStateOrder = finalState?.order || 0;
+
+    // If document is at the final state (published/completed), mark all states as completed
+    // Otherwise, mark states before the current state as completed
+    const isCompleted =
+      currentStateOrder >= finalStateOrder && finalStateOrder > 0;
+
+    const completedStateIds = isCompleted
+      ? sortedStates.map((s: FlowState) => s.id)
+      : sortedStates
+          .filter((s: FlowState) => (s.order || 0) < currentStateOrder)
+          .map((s: FlowState) => s.id);
+
+    const calculatedActiveIndex = isCompleted
+      ? sortedStates.length
+      : sortedStates.findIndex((s: FlowState) => s.id === currentState?.id) + 1;
+
+    return {
+      completedStateIds,
+      currentActiveIndex: calculatedActiveIndex,
+    };
+  }, [content.flow?.states, content.state]);
+
   // Calculate expiry information with memoization for performance
   const expiryInfo = useMemo(() => {
     if (!expiryDate) return null;
@@ -343,17 +384,13 @@ export const DocumentCard: React.FC<DocumentCardProps> = ({
                 fontWeight="heading"
                 color="text-secondary"
                 mb="xs">
-                {content.state?.state}
+                {content.state?.state || 'Unknown'}
               </Text>
               <StateProgress
                 states={content.flow?.states || []}
                 activeStateId={content.state?.id}
-                completedStateIds={
-                  content.flow?.states
-                    ?.filter((s) => s.order < (content.state?.order || 0))
-                    ?.map((s) => s.id) || []
-                }
-                currentActiveIndex={currentActiveIndex}
+                completedStateIds={stateProgressData.completedStateIds}
+                currentActiveIndex={stateProgressData.currentActiveIndex}
                 nextState={nextState}
               />
             </Box>

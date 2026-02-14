@@ -11,28 +11,27 @@
   /* 
     Reset the counter for the first list node in the sequence.
     */
-    &:first-child,
-    :not(&) + & {
-      counter-reset: prosemirror-flat-list;
+  &:first-child,
+  :not(&) + & {
+    counter-reset: prosemirror-flat-list;
 
-      /* 
+    /* 
       If the first list node has a custom order number, set the counter to that value.
       */
-      &[data-list-order] {
-        @supports (counter-set: prosemirror-flat-list-counter 1) {
-          counter-set: prosemirror-flat-list
-            var(--prosemirror-flat-list-order);
-        }
+    &[data-list-order] {
+      @supports (counter-set: prosemirror-flat-list-counter 1) {
+        counter-set: prosemirror-flat-list var(--prosemirror-flat-list-order);
+      }
 
-        /* 
+      /* 
         Safari older than version 17.2 doesn't support `counter-set` 
         */
-        @supports not (counter-set: prosemirror-flat-list-counter 1) {
-          counter-increment: prosemirror-flat-list
-            var(--prosemirror-flat-list-order);
-        }
+      @supports not (counter-set: prosemirror-flat-list-counter 1) {
+        counter-increment: prosemirror-flat-list
+          var(--prosemirror-flat-list-order);
       }
     }
+  }
 }
 
 .ProseMirror .prosemirror-flat-list[data-list-kind="upper-roman"]::before,

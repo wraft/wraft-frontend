@@ -45,6 +45,7 @@ type Props = {
   setIsOpen: (e: any) => void;
   setRerender?: (e: any) => void;
   onUpdate?: (e: any) => void;
+  themeId?: string;
 };
 
 const DEFAULT_FORM = {
@@ -53,7 +54,7 @@ const DEFAULT_FORM = {
   secondary_color: '#000000',
 };
 
-const ThemeAddForm = ({ setIsOpen, setRerender, onUpdate }: Props) => {
+const ThemeAddForm = ({ setIsOpen, setRerender, onUpdate, themeId }: Props) => {
   const [isEdit, setIsEdit] = useState(false);
   const [theme, setTheme] = useState<any>(null);
   const [assets, setAssets] = useState<Array<Asset>>([]);
@@ -68,7 +69,7 @@ const ThemeAddForm = ({ setIsOpen, setRerender, onUpdate }: Props) => {
     trigger,
   } = useForm<FormValues>({ mode: 'onSubmit', defaultValues: DEFAULT_FORM });
   const router = useRouter();
-  const cId: string = router.query.id as string;
+  const cId: string = themeId || (router.query.id as string);
 
   useEffect(() => {
     if (cId) {

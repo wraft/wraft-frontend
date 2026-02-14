@@ -50,6 +50,11 @@ export interface IField {
   name: string;
   flow: IFlow;
   creator: ICreator;
+  states?: Array<{
+    id: string;
+    state: string;
+    order: number;
+  }>;
 }
 
 export interface IFieldItem {
@@ -132,9 +137,6 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
             <NextLink href={`/manage/flows/${row.original?.flow?.id}`}>
               <Text>{row.original?.flow?.name}</Text>
             </NextLink>
-            {/* <Drawer open={false} setOpen={() => {}}>
-              <FlowForm setOpen={() => {}} />
-            </Drawer> */}
           </>
         );
       },
