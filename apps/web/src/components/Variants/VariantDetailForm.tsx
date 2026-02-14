@@ -3,13 +3,7 @@ import dynamic from 'next/dynamic';
 import NavLink from 'next/link';
 import { useRouter } from 'next/router';
 import { Drawer, useDrawer, Button, Box, Flex, Text, Spinner } from '@wraft/ui';
-import {
-  PencilSimple,
-  Plus,
-  FileText,
-  Files,
-  ArrowUpRight,
-} from '@phosphor-icons/react';
+import { PencilSimple, Plus, FileText, Files } from '@phosphor-icons/react';
 import toast from 'react-hot-toast';
 
 import { TimeAgo } from 'common/Atoms';
@@ -28,28 +22,13 @@ const ThemeAddForm = dynamic(() => import('components/Theme/ThemeForm'), {
 
 // --- Primitives ---
 
-const Stat = ({ label, value }: { label: string; value: string | number }) => (
-  <Box>
-    <Text
-      fontSize="xl"
-      fontWeight="700"
-      color="text-primary"
-      style={{ fontVariantNumeric: 'tabular-nums' }}>
-      {value}
-    </Text>
-    <Text fontSize="xs" color="text-secondary" mt="2px">
-      {label}
-    </Text>
-  </Box>
-);
-
-const SectionCard = ({
-  title,
+const Section = ({
+  label,
   count,
   action,
   children,
 }: {
-  title: string;
+  label: string;
   count?: number;
   action?: React.ReactNode;
   children: React.ReactNode;
@@ -60,23 +39,16 @@ const SectionCard = ({
     borderRadius="md"
     bg="background-primary"
     overflow="hidden">
-    <Flex
-      justify="space-between"
-      align="center"
-      px="md"
-      py="sm"
-      borderBottom="1px solid"
-      borderColor="border">
+    <Flex justify="space-between" align="center" px="lg" pt="md" pb="sm">
       <Flex align="center" gap="xs">
-        <Text fontSize="sm" fontWeight="600" color="text-primary">
-          {title}
+        <Text fontSize="xs" fontWeight="600" color="text-secondary">
+          {label}
         </Text>
         {count !== undefined && (
           <Text
             fontSize="xs"
-            fontWeight="500"
             color="text-secondary"
-            style={{ fontVariantNumeric: 'tabular-nums' }}>
+            style={{ fontVariantNumeric: 'tabular-nums', opacity: 0.6 }}>
             {count}
           </Text>
         )}
@@ -87,7 +59,7 @@ const SectionCard = ({
   </Box>
 );
 
-const EmptyBlock = ({
+const Empty = ({
   message,
   actionLabel,
   onAction,
@@ -96,8 +68,8 @@ const EmptyBlock = ({
   actionLabel?: string;
   onAction?: () => void;
 }) => (
-  <Flex direction="column" align="center" justify="center" py="lg" px="md">
-    <Text fontSize="sm" color="text-secondary" textAlign="center" mb="sm">
+  <Flex direction="column" align="center" justify="center" py="xl" px="lg">
+    <Text fontSize="xs" color="text-secondary" mb="sm">
       {message}
     </Text>
     {actionLabel && onAction && (
@@ -109,7 +81,7 @@ const EmptyBlock = ({
   </Flex>
 );
 
-const KV = ({
+const Property = ({
   label,
   value,
   onClick,
@@ -117,34 +89,39 @@ const KV = ({
   label: string;
   value?: string | null;
   onClick?: () => void;
-}) => (
-  <Flex
-    justify="space-between"
-    align="center"
-    px="md"
-    py="8px"
-    onClick={onClick}
-    cursor={onClick ? 'pointer' : 'default'}
-    _hover={onClick ? { bg: 'background-secondary' } : undefined}>
-    <Text fontSize="xs" color="text-secondary">
-      {label}
-    </Text>
-    <Text
-      fontSize="xs"
-      fontWeight="500"
-      color={onClick ? 'primary' : 'text-primary'}
-      style={{
-        maxWidth: 160,
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap',
-      }}>
-      {value || '—'}
-    </Text>
-  </Flex>
-);
+}) => {
+  const interactive = !!onClick;
+  return (
+    <Flex
+      justify="space-between"
+      align="center"
+      px="lg"
+      py="sm"
+      onClick={onClick}
+      cursor={interactive ? 'pointer' : 'default'}
+      style={
+        interactive ? { transition: 'background 120ms ease-out' } : undefined
+      }>
+      <Text fontSize="xs" color="text-secondary">
+        {label}
+      </Text>
+      <Text
+        fontSize="xs"
+        fontWeight="500"
+        color={interactive ? 'green.900' : 'text-primary'}
+        style={{
+          maxWidth: 140,
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          whiteSpace: 'nowrap',
+        }}>
+        {value || '—'}
+      </Text>
+    </Flex>
+  );
+};
 
-const Row = ({
+const ListRow = ({
   children,
   isLast,
 }: {
@@ -154,10 +131,11 @@ const Row = ({
   <Flex
     justify="space-between"
     align="center"
-    px="md"
-    py="8px"
-    borderBottom={isLast ? 'none' : '1px solid'}
-    borderColor="border">
+    px="lg"
+    py="sm"
+    borderTop="1px solid"
+    borderColor="border"
+    style={isLast ? { borderBottom: 'none' } : undefined}>
     {children}
   </Flex>
 );
@@ -219,7 +197,7 @@ const VariantDetailForm = () => {
         `contents?sort=inserted_at_desc&page=1&content_type_name=${encodeURIComponent(variantName)}`,
       );
       const items = data?.contents || [];
-      setDocuments(items.slice(0, 6));
+      setDocuments(items.slice(0, 5));
       setDocumentsMeta({ total_entries: data.total_entries || items.length });
     } catch {
       setDocuments([]);
@@ -260,52 +238,53 @@ const VariantDetailForm = () => {
 
   return (
     <>
-      {/* Header: compact, single-line */}
-      <Flex justify="space-between" align="center" mb="md">
+      {/* Header */}
+      <Flex justify="space-between" align="flex-start" mb="lg">
         <Flex gap="sm" align="center">
           <Flex
-            w="32px"
-            h="32px"
-            borderRadius="sm"
+            w="28px"
+            h="28px"
+            borderRadius="md"
             bg={variant.color || 'green.300'}
             align="center"
             justify="center"
             flexShrink={0}>
-            <Text fontSize="sm" fontWeight="700" color="white">
+            <Text fontSize="xs" fontWeight="700" color="white">
               {variant.prefix?.charAt(0) || 'V'}
             </Text>
           </Flex>
-          <Text fontSize="md" fontWeight="600" color="text-primary">
-            {variant.name}
-          </Text>
-          <Text
-            fontSize="xs"
-            fontWeight="500"
-            color="text-secondary"
-            bg="background-secondary"
-            px="xs"
-            py="2px"
-            borderRadius="sm">
-            {variant.prefix}
-          </Text>
-          {variant.description && (
-            <>
-              <Text fontSize="xs" color="text-secondary" opacity={0.4}>
-                /
+          <Box>
+            <Flex align="center" gap="xs">
+              <Text fontSize="base" fontWeight="600" color="text-primary">
+                {variant.name}
               </Text>
               <Text
                 fontSize="xs"
+                fontWeight="500"
                 color="text-secondary"
+                bg="background-secondary"
+                px="xs"
+                py="xxs"
+                borderRadius="sm"
+                style={{ fontVariantNumeric: 'tabular-nums' }}>
+                {variant.prefix}
+              </Text>
+            </Flex>
+            {variant.description && (
+              <Text
+                fontSize="xs"
+                color="text-secondary"
+                mt="xxs"
                 style={{
-                  maxWidth: 300,
+                  maxWidth: 400,
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
                   whiteSpace: 'nowrap',
                 }}>
                 {variant.description}
               </Text>
-            </>
-          )}
+            )}
+          </Box>
         </Flex>
         {canManage && (
           <Button variant="secondary" size="sm" onClick={() => setIsOpen(true)}>
@@ -315,21 +294,22 @@ const VariantDetailForm = () => {
         )}
       </Flex>
 
-      {/* Upgrade banner — tight */}
+      {/* Upgrade banner */}
       {(content as any)?.flow_version_outdated && (
         <Flex
-          bg="yellow.50"
+          bg="orange.50"
           border="1px solid"
-          borderColor="yellow.200"
-          borderRadius="sm"
-          px="md"
-          py="xs"
+          borderColor="orange.200"
+          borderRadius="md"
+          px="lg"
+          py="sm"
           align="center"
           justify="space-between"
-          mb="md">
-          <Text fontSize="xs" color="yellow.800">
-            Using Flow v{versionNum}. Version{' '}
-            {(content as any)?.latest_flow_version?.version_number} available.
+          mb="lg">
+          <Text fontSize="xs" color="orange.900">
+            Using flow v{versionNum}. Version{' '}
+            {(content as any)?.latest_flow_version?.version_number} is
+            available.
           </Text>
           {canManage && (
             <Button variant="secondary" size="xs" onClick={handleUpgrade}>
@@ -339,56 +319,34 @@ const VariantDetailForm = () => {
         </Flex>
       )}
 
-      {/* Stats bar — inline, no cards */}
-      <Flex
-        gap="xl"
-        mb="md"
-        pb="md"
-        borderBottom="1px solid"
-        borderColor="border">
-        <Stat label="Documents" value={totalDocuments} />
-        <Stat label="Templates" value={templates.length} />
-        <Stat label="Fields" value={fields.length} />
-        <Stat
-          label="Flow"
-          value={flowName ? `${flowName} v${versionNum}` : '—'}
-        />
-      </Flex>
-
-      {/* Two-column dashboard */}
-      <Box display="grid" gridTemplateColumns="1fr 300px" gap="md">
-        {/* Left */}
-        <Flex direction="column" gap="md">
+      {/* Dashboard grid */}
+      <Box display="grid" gridTemplateColumns="1fr 260px" gap="lg">
+        {/* Left column */}
+        <Flex direction="column" gap="lg">
           {/* Templates */}
-          <SectionCard
-            title="Templates"
+          <Section
+            label="Templates"
             count={templates.length}
             action={
               templates.length > 0 ? (
                 <NavLink href="/templates">
-                  <Flex align="center" gap="2px">
-                    <Text fontSize="xs" color="primary">
-                      View all
-                    </Text>
-                    <ArrowUpRight
-                      size={10}
-                      color="var(--theme-ui-colors-primary)"
-                    />
-                  </Flex>
+                  <Text fontSize="xs" color="green.900" fontWeight="500">
+                    View all
+                  </Text>
                 </NavLink>
               ) : undefined
             }>
             {templates.length === 0 ? (
-              <EmptyBlock
-                message="No templates yet."
-                actionLabel="Create Template"
+              <Empty
+                message="No templates yet"
+                actionLabel="Create template"
                 onAction={() => router.push('/templates')}
               />
             ) : (
               templates.map((t: any, i: number) => (
-                <Row key={t.id} isLast={i === templates.length - 1}>
+                <ListRow key={t.id} isLast={i === templates.length - 1}>
                   <NavLink href={`/templates/${t.id}`}>
-                    <Flex align="center" gap="xs">
+                    <Flex align="center" gap="sm">
                       <FileText
                         size={14}
                         color="var(--theme-ui-colors-text-secondary)"
@@ -397,7 +355,7 @@ const VariantDetailForm = () => {
                         fontSize="sm"
                         fontWeight="500"
                         style={{
-                          maxWidth: 320,
+                          maxWidth: 300,
                           overflow: 'hidden',
                           textOverflow: 'ellipsis',
                           whiteSpace: 'nowrap',
@@ -406,40 +364,36 @@ const VariantDetailForm = () => {
                       </Text>
                     </Flex>
                   </NavLink>
-                  <TimeAgo time={t.updated_at} />
-                </Row>
+                  <Text fontSize="xs" color="text-secondary" flexShrink={0}>
+                    <TimeAgo time={t.updated_at} />
+                  </Text>
+                </ListRow>
               ))
             )}
-          </SectionCard>
+          </Section>
 
-          {/* Documents */}
-          <SectionCard
-            title="Recent Documents"
+          {/* Recent documents */}
+          <Section
+            label="Recent documents"
             count={totalDocuments}
             action={
               documents.length > 0 ? (
                 <NavLink href="/documents">
-                  <Flex align="center" gap="2px">
-                    <Text fontSize="xs" color="primary">
-                      View all
-                    </Text>
-                    <ArrowUpRight
-                      size={10}
-                      color="var(--theme-ui-colors-primary)"
-                    />
-                  </Flex>
+                  <Text fontSize="xs" color="green.900" fontWeight="500">
+                    View all
+                  </Text>
                 </NavLink>
               ) : undefined
             }>
             {documents.length === 0 ? (
-              <EmptyBlock
-                message="No documents yet."
-                actionLabel="Create Document"
+              <Empty
+                message="No documents yet"
+                actionLabel="Create document"
                 onAction={() => router.push('/documents')}
               />
             ) : (
               documents.map((doc: any, i: number) => (
-                <Row
+                <ListRow
                   key={doc.content?.id || i}
                   isLast={i === documents.length - 1}>
                   <Flex
@@ -449,6 +403,7 @@ const VariantDetailForm = () => {
                     <Files
                       size={14}
                       color="var(--theme-ui-colors-text-secondary)"
+                      style={{ flexShrink: 0 }}
                     />
                     <Flex direction="column" style={{ minWidth: 0 }}>
                       <Text
@@ -473,59 +428,60 @@ const VariantDetailForm = () => {
                       color="text-secondary"
                       bg="background-secondary"
                       px="xs"
-                      py="2px"
+                      py="xxs"
                       borderRadius="sm">
                       {doc.state?.state || 'Draft'}
                     </Text>
-                    <TimeAgo time={doc.content?.updated_at} />
+                    <Text fontSize="xs" color="text-secondary">
+                      <TimeAgo time={doc.content?.updated_at} />
+                    </Text>
                   </Flex>
-                </Row>
+                </ListRow>
               ))
             )}
-          </SectionCard>
+          </Section>
         </Flex>
 
         {/* Right sidebar */}
-        <Flex direction="column" gap="md">
+        <Flex direction="column" gap="lg">
           {/* Configuration */}
-          <SectionCard title="Configuration">
+          <Section label="Configuration">
             <Box>
-              <KV
+              <Property
                 label="Layout"
                 value={variant.layout?.name}
                 onClick={() => setIsLayoutOpen(true)}
               />
-              <KV
+              <Property
                 label="Theme"
                 value={variant.theme?.name}
                 onClick={() => setIsThemeOpen(true)}
               />
-              <KV label="Flow" value={flowName || undefined} />
-              <KV
+              <Property label="Flow" value={flowName || undefined} />
+              <Property
                 label="Version"
                 value={versionNum ? `v${versionNum}` : undefined}
               />
-              <KV label="Color" value={variant.color || undefined} />
-              <KV label="Type" value={variant.type || undefined} />
+              <Property label="Color" value={variant.color || undefined} />
             </Box>
-          </SectionCard>
+          </Section>
 
           {/* Fields */}
-          <SectionCard title="Fields" count={fields.length}>
+          <Section label="Fields" count={fields.length}>
             {fields.length === 0 ? (
-              <EmptyBlock
-                message="No fields configured."
-                actionLabel="Edit Variant"
+              <Empty
+                message="No fields configured"
+                actionLabel="Edit variant"
                 onAction={() => setIsOpen(true)}
               />
             ) : (
               fields.map((f: any, i: number) => (
-                <Row key={f.id || i} isLast={i === fields.length - 1}>
+                <ListRow key={f.id || i} isLast={i === fields.length - 1}>
                   <Text
                     fontSize="xs"
                     fontWeight="500"
                     style={{
-                      maxWidth: 140,
+                      maxWidth: 120,
                       overflow: 'hidden',
                       textOverflow: 'ellipsis',
                       whiteSpace: 'nowrap',
@@ -535,10 +491,10 @@ const VariantDetailForm = () => {
                   <Text fontSize="xs" color="text-secondary">
                     {f.field_type?.name}
                   </Text>
-                </Row>
+                </ListRow>
               ))
             )}
-          </SectionCard>
+          </Section>
         </Flex>
       </Box>
 
