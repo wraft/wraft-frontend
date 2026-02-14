@@ -31,6 +31,7 @@ const Index: FC = () => {
         <PageHeader
           title={[{ name: 'Variants', path: '/variants' }]}
           desc="Variant configuration and field details"
+          hasBack
         />
         <Box px="xxl" py="lg">
           <VariantDetailForm />
