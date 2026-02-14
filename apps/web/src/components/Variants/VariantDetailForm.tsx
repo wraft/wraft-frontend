@@ -303,6 +303,11 @@ const VariantDetailForm = () => {
   const [activeTab, setActiveTab] = useState<
     'overview' | 'contents' | 'activities'
   >('overview');
+  const [chartInterval, setChartInterval] = useState<'month' | 'week' | 'day'>(
+    'month',
+  );
+  const [chartData, setChartData] = useState<any[]>([]);
+  const [chartLoading, setChartLoading] = useState(false);
 
   const { hasPermission } = usePermission();
   const editDrawer = useDrawer();
@@ -313,8 +318,40 @@ const VariantDetailForm = () => {
   const theme: any = useTheme();
 
   useEffect(() => {
-    if (cId) loadAllData(cId);
+    if (cId) {
+      loadAllData(cId);
+      loadChartData(cId, chartInterval);
+    }
   }, [cId, rerender]);
+
+  useEffect(() => {
+    if (cId) {
+      loadChartData(cId, chartInterval);
+    }
+  }, [chartInterval]);
+
+  const loadChartData = async (id: string, interval: string) => {
+    try {
+      setChartLoading(true);
+      const data: any = await fetchAPI(
+        `content_types/${id}/chart?period=alltime&interval=${interval}&select_by=insert`,
+      );
+      // Transform data for BarChart
+      const transformed = data.map((item: any) => ({
+        name: new Date(item.datetime).toLocaleDateString('en-US', {
+          month: 'short',
+          day: interval === 'month' ? undefined : 'numeric',
+          year: interval === 'year' ? 'numeric' : undefined,
+        }),
+        documents: item.total,
+      }));
+      setChartData(transformed);
+    } catch {
+      setChartData([]);
+    } finally {
+      setChartLoading(false);
+    }
+  };
 
   const loadAllData = async (id: string) => {
     try {
@@ -393,16 +430,6 @@ const VariantDetailForm = () => {
     setDrawerStep(step);
     setIsOpen(true);
   };
-
-  // Dummy data for charts
-  const chartData = [
-    { name: 'Jan', documents: 12 },
-    { name: 'Feb', documents: 19 },
-    { name: 'Mar', documents: 15 },
-    { name: 'Apr', documents: 22 },
-    { name: 'May', documents: 30 },
-    { name: 'Jun', documents: 25 },
-  ];
 
   const chartConfig = createChartConfig(['documents'], {
     documents: {
@@ -554,18 +581,80 @@ const VariantDetailForm = () => {
                 <Box display="grid" gridTemplateColumns="2fr 1fr" gap="lg">
                   {/* Chart Area */}
                   <Box>
-                    <BarChart
-                      title="Document Activity"
-                      description="Last 6 months"
-                      data={chartData}
-                      dataKeys={['documents']}
-                      height={240}
-                      showGrid
-                      showLegend={false}
-                      showTooltip
-                      config={chartConfig}
-                      hoverBarColor={variant.color || theme.colors.green['400']}
-                    />
+                    <Flex justify="space-between" align="center" mb="sm">
+                      <Text
+                        as="h4"
+                        fontWeight="heading"
+                        fontSize="md"
+                        color="text-secondary">
+                        Document Activity
+                      </Text>
+                      <Flex
+                        gap="xs"
+                        bg="background-secondary"
+                        p="2px"
+                        borderRadius="md">
+                        {['day', 'week', 'month'].map((interval) => (
+                          <Button
+                            key={interval}
+                            size="xs"
+                            variant={
+                              chartInterval === interval ? 'secondary' : 'ghost'
+                            }
+                            onClick={() => setChartInterval(interval as any)}
+                            style={{
+                              textTransform: 'capitalize',
+                              height: 24,
+                              boxShadow:
+                                chartInterval === interval
+                                  ? '0 1px 2px rgba(0,0,0,0.1)'
+                                  : 'none',
+                            }}>
+                            {interval}
+                          </Button>
+                        ))}
+                      </Flex>
+                    </Flex>
+                    {chartLoading ? (
+                      <Flex
+                        h={240}
+                        align="center"
+                        justify="center"
+                        border="1px solid"
+                        borderColor="border"
+                        borderRadius="md"
+                        bg="background-primary">
+                        <Spinner />
+                      </Flex>
+                    ) : chartData.length > 0 ? (
+                      <BarChart
+                        data={chartData}
+                        dataKeys={['documents']}
+                        height={240}
+                        showGrid
+                        showLegend={false}
+                        showTooltip
+                        config={chartConfig}
+                        hoverBarColor={
+                          variant.color || theme.colors.green['400']
+                        }
+                      />
+                    ) : (
+                      <Flex
+                        h={240}
+                        align="center"
+                        justify="center"
+                        border="1px solid"
+                        borderColor="border"
+                        borderRadius="md"
+                        bg="background-primary"
+                        direction="column"
+                        gap="sm">
+                        <Text color="text-secondary">
+                          No activity data available
+                        </Text>
+                      </Flex>
+                    )}
                   </Box>
 
                   {/* Stats Grid */}
