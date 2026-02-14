@@ -376,7 +376,7 @@ const VariantDetailForm = () => {
               size="xs"
               onClick={async () => {
                 try {
-                  await putAPI(`content_types/${cId}`, {
+                  await putAPI(`content_types/${cId}/upgrade_flow_version`, {
                     flow_version_id: (content as any)?.latest_flow_version?.id,
                   });
                   toast.success(
