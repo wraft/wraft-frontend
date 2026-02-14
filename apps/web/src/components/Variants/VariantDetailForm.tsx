@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import NavLink from 'next/link';
 import { useRouter } from 'next/router';
 import { Drawer, useDrawer, Button, Box, Flex, Text, Spinner } from '@wraft/ui';
 import { PencilSimple, Plus, FileText, Files } from '@phosphor-icons/react';
 import toast from 'react-hot-toast';
+import { useTheme } from '@xstyled/emotion';
 
 import Back from 'common/Back';
 import { TimeAgo } from 'common/Atoms';
+import { BarChart } from 'common/charts/BarChart';
+import { createChartConfig } from 'common/charts/ChartConfig';
 import { ContentType } from 'utils/types';
 import { fetchAPI, putAPI } from 'utils/models';
 import { usePermission } from 'utils/permissions';
@@ -171,6 +174,7 @@ const VariantDetailForm = () => {
   const themeDrawer = useDrawer();
   const router = useRouter();
   const cId: string = router.query.id as string;
+  const theme: any = useTheme();
 
   useEffect(() => {
     if (cId) loadAllData(cId);
@@ -245,7 +249,7 @@ const VariantDetailForm = () => {
   const variant = content.content_type;
   const fields = variant.fields || [];
   const totalDocuments = documentsMeta?.total_entries || 0;
-  const flowName = variant.flow?.flow?.name || variant.flow?.name;
+  const flowName = variant.flow?.flow?.name || (variant.flow as any)?.name;
   const versionNum = (content as any)?.flow_version?.version_number;
   const canManage = hasPermission('variant', 'manage');
 
@@ -253,6 +257,23 @@ const VariantDetailForm = () => {
     setDrawerStep(step);
     setIsOpen(true);
   };
+
+  // Dummy data for charts
+  const chartData = [
+    { name: 'Jan', documents: 12 },
+    { name: 'Feb', documents: 19 },
+    { name: 'Mar', documents: 15 },
+    { name: 'Apr', documents: 22 },
+    { name: 'May', documents: 30 },
+    { name: 'Jun', documents: 25 },
+  ];
+
+  const chartConfig = createChartConfig(['documents'], {
+    documents: {
+      label: 'Documents Created',
+      color: variant.color || theme.colors.green['400'],
+    },
+  });
 
   return (
     <>
@@ -290,16 +311,16 @@ const VariantDetailForm = () => {
                 {variant.prefix?.charAt(0) || 'V'}
               </Text>
             </Flex>
-            <Flex direction="column" style={{ minWidth: 0 }}>
+            <Flex direction="column" style={{ minWidth: 0 }} pl="sm">
               <Flex align="center" gap="xs">
-                <Text fontSize="base" fontWeight="heading" color="text-primary">
+                <Text fontSize="md" fontWeight="heading" color="text-primary">
                   {variant.name}
                 </Text>
                 <Text
-                  fontSize="xs"
+                  fontSize="sm"
                   fontWeight="500"
                   color="text-secondary"
-                  bg="background-secondary"
+                  bg="#eee"
                   px="xs"
                   py="xxs"
                   borderRadius="sm"
@@ -309,7 +330,7 @@ const VariantDetailForm = () => {
               </Flex>
               {variant.description && (
                 <Text
-                  fontSize="xs"
+                  fontSize="sm2"
                   color="text-secondary"
                   style={{
                     maxWidth: 480,
@@ -388,6 +409,22 @@ const VariantDetailForm = () => {
             ))}
           </Box>
 
+          {/* Charts Row - New Addition */}
+          <Box>
+            <BarChart
+              title="Document Activity"
+              description="Documents created over the last 6 months"
+              data={chartData}
+              dataKeys={['documents']}
+              height={280}
+              showGrid
+              showLegend={false}
+              showTooltip
+              config={chartConfig}
+              hoverBarColor={variant.color || theme.colors.green['400']}
+            />
+          </Box>
+
           {/* Main grid */}
           <Box display="grid" gridTemplateColumns="1fr 320px" gap="lg">
             {/* Left column */}
@@ -399,7 +436,8 @@ const VariantDetailForm = () => {
                   count={templates.length}
                   action={
                     templates.length > 0 ? (
-                      <NavLink href="/templates">
+                      <NavLink
+                        href={`/templates?content_type_id=${variant.id}`}>
                         <Text fontSize="sm" color="green.900" fontWeight="500">
                           View all
                         </Text>
@@ -450,7 +488,8 @@ const VariantDetailForm = () => {
                   count={totalDocuments}
                   action={
                     documents.length > 0 ? (
-                      <NavLink href="/documents">
+                      <NavLink
+                        href={`/documents?content_type_name=${encodeURIComponent(variant.name)}`}>
                         <Text fontSize="sm" color="green.900" fontWeight="500">
                           View all
                         </Text>
