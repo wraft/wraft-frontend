@@ -3,7 +3,14 @@ import dynamic from 'next/dynamic';
 import NavLink from 'next/link';
 import { useRouter } from 'next/router';
 import { Drawer, useDrawer, Button, Box, Flex, Text, Spinner } from '@wraft/ui';
-import { PencilSimple, Plus, FileText, Files } from '@phosphor-icons/react';
+import {
+  PencilSimple,
+  Plus,
+  FileText,
+  Files,
+  TrendUp,
+  TrendDown,
+} from '@phosphor-icons/react';
 import toast from 'react-hot-toast';
 import { useTheme } from '@xstyled/emotion';
 
@@ -110,6 +117,56 @@ const TemplateCard = ({ template }: { template: any }) => (
       </Flex>
     </Box>
   </NavLink>
+);
+
+const StatBlock = ({
+  label,
+  value,
+  trend,
+}: {
+  label: string;
+  value: number;
+  trend?: number;
+}) => (
+  <Box
+    p="lg"
+    border="1px solid"
+    borderColor="border"
+    borderRadius="md"
+    bg="background-primary"
+    flex={1}
+    display="flex"
+    flexDirection="column"
+    justifyContent="center">
+    <Text fontSize="sm" color="text-secondary" mb="xs" fontWeight="500">
+      {label}
+    </Text>
+    <Flex align="baseline" gap="sm">
+      <Text
+        fontSize="3xl"
+        fontWeight="600"
+        lineHeight="1"
+        color="text-primary"
+        style={{ fontVariantNumeric: 'tabular-nums' }}>
+        {value}
+      </Text>
+      {trend !== undefined && (
+        <Flex
+          align="center"
+          gap="xxs"
+          color={trend > 0 ? 'green.600' : 'red.600'}>
+          {trend > 0 ? (
+            <TrendUp weight="bold" size={14} />
+          ) : (
+            <TrendDown weight="bold" size={14} />
+          )}
+          <Text fontSize="xs" fontWeight="600">
+            {Math.abs(trend)}%
+          </Text>
+        </Flex>
+      )}
+    </Flex>
+  </Box>
 );
 
 const CardHeader = ({
@@ -512,32 +569,18 @@ const VariantDetailForm = () => {
                   </Box>
 
                   {/* Stats Grid */}
-                  <Box display="grid" gridTemplateColumns="1fr 1fr" gap="md">
-                    {[
-                      { label: 'Documents', value: totalDocuments },
-                      { label: 'Templates', value: templates.length },
-                      { label: 'Fields', value: fields.length },
-                      { label: 'Flow v.', value: versionNum || 0 },
-                    ].map((stat) => (
-                      <Card key={stat.label} p="md">
-                        <Flex
-                          direction="column"
-                          justify="space-between"
-                          h="100%">
-                          <Text fontSize="xs" color="text-secondary" mb="xxs">
-                            {stat.label}
-                          </Text>
-                          <Text
-                            fontSize="xl"
-                            fontWeight="600"
-                            color="text-primary"
-                            style={{ fontVariantNumeric: 'tabular-nums' }}>
-                            {stat.value}
-                          </Text>
-                        </Flex>
-                      </Card>
-                    ))}
-                  </Box>
+                  <Flex direction="column" gap="md">
+                    <StatBlock
+                      label="Total Documents"
+                      value={totalDocuments}
+                      trend={12.5}
+                    />
+                    <StatBlock
+                      label="Active Templates"
+                      value={templates.length}
+                      trend={2.4}
+                    />
+                  </Flex>
                 </Box>
 
                 {/* Recent Documents using DocumentCard */}
