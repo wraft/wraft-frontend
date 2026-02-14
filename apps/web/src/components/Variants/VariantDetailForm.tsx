@@ -3,7 +3,13 @@ import dynamic from 'next/dynamic';
 import NavLink from 'next/link';
 import { useRouter } from 'next/router';
 import { Drawer, useDrawer, Button, Box, Flex, Text, Spinner } from '@wraft/ui';
-import { PencilSimpleIcon } from '@phosphor-icons/react';
+import {
+  PencilSimpleIcon,
+  Plus,
+  FileText,
+  ListBullets,
+  Clock,
+} from '@phosphor-icons/react';
 import toast from 'react-hot-toast';
 
 import { TimeAgo } from 'common/Atoms';
@@ -20,102 +26,6 @@ const ThemeAddForm = dynamic(() => import('components/Theme/ThemeForm'), {
   loading: () => <Spinner />,
 });
 
-// --- Dummy data used when API endpoints return no results ---
-
-const DUMMY_TEMPLATES = [
-  {
-    id: 'tmpl-001',
-    title: 'Standard Offer Letter',
-    updated_at: '2025-12-18T10:30:00Z',
-  },
-  {
-    id: 'tmpl-002',
-    title: 'Executive Offer Template',
-    updated_at: '2025-12-12T14:20:00Z',
-  },
-  {
-    id: 'tmpl-003',
-    title: 'Internship Offer',
-    updated_at: '2025-11-28T09:15:00Z',
-  },
-];
-
-const DUMMY_DOCUMENTS = [
-  {
-    content: {
-      id: 'doc-001',
-      instance_id: 'OL-2025-0042',
-      updated_at: '2025-12-20T16:45:00Z',
-    },
-    creator: { name: 'Sarah Chen' },
-    state: { state: 'Published' },
-  },
-  {
-    content: {
-      id: 'doc-002',
-      instance_id: 'OL-2025-0041',
-      updated_at: '2025-12-19T11:30:00Z',
-    },
-    creator: { name: 'James Wilson' },
-    state: { state: 'Review' },
-  },
-  {
-    content: {
-      id: 'doc-003',
-      instance_id: 'OL-2025-0040',
-      updated_at: '2025-12-18T09:00:00Z',
-    },
-    creator: { name: 'Maria Garcia' },
-    state: { state: 'Draft' },
-  },
-  {
-    content: {
-      id: 'doc-004',
-      instance_id: 'OL-2025-0039',
-      updated_at: '2025-12-15T14:20:00Z',
-    },
-    creator: { name: 'David Park' },
-    state: { state: 'Published' },
-  },
-  {
-    content: {
-      id: 'doc-005',
-      instance_id: 'OL-2025-0038',
-      updated_at: '2025-12-14T10:10:00Z',
-    },
-    creator: { name: 'Aisha Patel' },
-    state: { state: 'Review' },
-  },
-];
-
-const DUMMY_ACTIVITY = [
-  {
-    id: 'act-1',
-    action: 'Document OL-2025-0042 published',
-    time: '2025-12-20T16:45:00Z',
-  },
-  {
-    id: 'act-2',
-    action: 'Template "Standard Offer Letter" updated',
-    time: '2025-12-18T10:30:00Z',
-  },
-  {
-    id: 'act-3',
-    action: 'Document OL-2025-0041 moved to Review',
-    time: '2025-12-19T11:30:00Z',
-  },
-  {
-    id: 'act-4',
-    action: 'New field "startDate" added',
-    time: '2025-12-17T08:00:00Z',
-  },
-  {
-    id: 'act-5',
-    action: 'Document OL-2025-0040 created',
-    time: '2025-12-18T09:00:00Z',
-  },
-];
-
 // --- Helper Components ---
 
 const DetailItem = ({
@@ -127,22 +37,25 @@ const DetailItem = ({
   value?: string | null;
   onClick?: () => void;
 }) => {
-  if (!value) return null;
   return (
-    <Box
+    <Flex
+      justify="space-between"
+      align="center"
+      px="lg"
+      py="sm"
       onClick={onClick}
       cursor={onClick ? 'pointer' : 'default'}
-      _hover={onClick ? { opacity: 0.8 } : undefined}>
-      <Text fontSize="sm" color="text-secondary" mb="xs">
+      _hover={onClick ? { bg: 'background-secondary' } : undefined}>
+      <Text fontSize="sm" color="text-secondary">
         {label}
       </Text>
       <Text
-        fontSize="sm2"
-        color={onClick ? 'primary' : 'text-primary'}
-        textDecoration={onClick ? 'underline' : 'none'}>
-        {value}
+        fontSize="sm"
+        fontWeight="500"
+        color={onClick ? 'primary' : 'text-primary'}>
+        {value || '—'}
       </Text>
-    </Box>
+    </Flex>
   );
 };
 
@@ -199,6 +112,37 @@ const SectionHeader = ({
   </Flex>
 );
 
+const EmptyState = ({
+  icon,
+  message,
+  actionLabel,
+  onAction,
+}: {
+  icon: React.ReactNode;
+  message: string;
+  actionLabel?: string;
+  onAction?: () => void;
+}) => (
+  <Flex
+    direction="column"
+    align="center"
+    justify="center"
+    py="xl"
+    px="lg"
+    gap="sm">
+    <Box opacity={0.4}>{icon}</Box>
+    <Text fontSize="sm" color="text-secondary" textAlign="center">
+      {message}
+    </Text>
+    {actionLabel && onAction && (
+      <Button variant="secondary" size="xs" onClick={onAction}>
+        <Plus size={12} weight="bold" />
+        {actionLabel}
+      </Button>
+    )}
+  </Flex>
+);
+
 // --- Main Component ---
 
 const VariantDetailForm = () => {
@@ -245,17 +189,17 @@ const VariantDetailForm = () => {
     try {
       const data: any = await fetchAPI(`content_types/${id}/data_templates`);
       const items = data?.data_templates || [];
-      setTemplates(items.length > 0 ? items : DUMMY_TEMPLATES);
+      setTemplates(items);
     } catch {
-      setTemplates(DUMMY_TEMPLATES);
+      setTemplates([]);
     }
   };
 
   const loadDocuments = async (variantName?: string) => {
     if (!variantName) {
-      setDocuments(DUMMY_DOCUMENTS);
-      setDocumentsMeta({ total_entries: DUMMY_DOCUMENTS.length });
-      setActivity(DUMMY_ACTIVITY);
+      setDocuments([]);
+      setDocumentsMeta({ total_entries: 0 });
+      setActivity([]);
       return;
     }
     try {
@@ -263,19 +207,13 @@ const VariantDetailForm = () => {
         `contents?sort=inserted_at_desc&page=1&content_type_name=${encodeURIComponent(variantName)}`,
       );
       const items = data?.contents || [];
-      if (items.length > 0) {
-        setDocuments(items.slice(0, 5));
-        setDocumentsMeta({ total_entries: data.total_entries || items.length });
-        setActivity(DUMMY_ACTIVITY);
-      } else {
-        setDocuments(DUMMY_DOCUMENTS);
-        setDocumentsMeta({ total_entries: DUMMY_DOCUMENTS.length });
-        setActivity(DUMMY_ACTIVITY);
-      }
+      setDocuments(items.slice(0, 5));
+      setDocumentsMeta({ total_entries: data.total_entries || items.length });
+      setActivity([]);
     } catch {
-      setDocuments(DUMMY_DOCUMENTS);
-      setDocumentsMeta({ total_entries: DUMMY_DOCUMENTS.length });
-      setActivity(DUMMY_ACTIVITY);
+      setDocuments([]);
+      setDocumentsMeta({ total_entries: 0 });
+      setActivity([]);
     }
   };
 
@@ -401,63 +339,9 @@ const VariantDetailForm = () => {
       )}
 
       {/* Main Content: Two-column layout */}
-      <Box display="grid" gridTemplateColumns="1fr 360px" gap="xl">
+      <Box display="grid" gridTemplateColumns="1fr 340px" gap="xl">
         {/* Left Column */}
         <Flex direction="column" gap="xl">
-          {/* Configuration */}
-          <Box
-            border="1px solid"
-            borderColor="border"
-            borderRadius="md"
-            bg="background-primary"
-            overflow="hidden">
-            <Box px="lg" py="sm" borderBottom="1px solid" borderColor="border">
-              <Text fontSize="sm" fontWeight="600" color="text-secondary">
-                Configuration
-              </Text>
-            </Box>
-            <Box px="lg" py="lg">
-              <Box
-                display="grid"
-                gridTemplateColumns="1fr 1fr 1fr 1fr"
-                gap="md">
-                <DetailItem
-                  label="Layout"
-                  value={variant.layout?.name}
-                  onClick={() => setIsLayoutOpen(true)}
-                />
-                <DetailItem
-                  label="Theme"
-                  value={variant.theme?.name}
-                  onClick={() => setIsThemeOpen(true)}
-                />
-                <DetailItem
-                  label="Flow Version"
-                  value={
-                    (content as any)?.flow_version
-                      ? `v${(content as any).flow_version.version_number}`
-                      : undefined
-                  }
-                />
-                <Box>
-                  <Text fontSize="sm" color="text-secondary" mb="xs">
-                    Color
-                  </Text>
-                  <Flex align="center" gap="sm">
-                    <Box
-                      w="14px"
-                      h="14px"
-                      borderRadius="sm"
-                      bg={variant.color || 'border'}
-                      flexShrink={0}
-                    />
-                    <Text fontSize="sm2">{variant.color || 'None'}</Text>
-                  </Flex>
-                </Box>
-              </Box>
-            </Box>
-          </Box>
-
           {/* Templates */}
           <Box
             border="1px solid"
@@ -469,20 +353,23 @@ const VariantDetailForm = () => {
               title="Templates"
               count={templates.length}
               action={
-                <NavLink href="/templates">
-                  <Text fontSize="sm" color="primary" cursor="pointer">
-                    View all
-                  </Text>
-                </NavLink>
+                templates.length > 0 ? (
+                  <NavLink href="/templates">
+                    <Text fontSize="sm" color="primary" cursor="pointer">
+                      View all
+                    </Text>
+                  </NavLink>
+                ) : undefined
               }
             />
             <Box>
               {templates.length === 0 ? (
-                <Box px="lg" py="md">
-                  <Text fontSize="sm" color="text-secondary">
-                    No templates yet
-                  </Text>
-                </Box>
+                <EmptyState
+                  icon={<FileText size={28} />}
+                  message="No templates created yet for this variant."
+                  actionLabel="Create Template"
+                  onAction={() => router.push('/templates')}
+                />
               ) : (
                 templates.map((t: any, index: number) => (
                   <Flex
@@ -518,20 +405,23 @@ const VariantDetailForm = () => {
               title="Recent Documents"
               count={totalDocuments}
               action={
-                <NavLink href="/documents">
-                  <Text fontSize="sm" color="primary" cursor="pointer">
-                    View all
-                  </Text>
-                </NavLink>
+                documents.length > 0 ? (
+                  <NavLink href="/documents">
+                    <Text fontSize="sm" color="primary" cursor="pointer">
+                      View all
+                    </Text>
+                  </NavLink>
+                ) : undefined
               }
             />
             <Box>
               {documents.length === 0 ? (
-                <Box px="lg" py="md">
-                  <Text fontSize="sm" color="text-secondary">
-                    No documents generated yet
-                  </Text>
-                </Box>
+                <EmptyState
+                  icon={<ListBullets size={28} />}
+                  message="No documents generated yet. Create a document from a template to get started."
+                  actionLabel="Create Document"
+                  onAction={() => router.push('/documents')}
+                />
               ) : (
                 documents.map((doc: any, index: number) => (
                   <Flex
@@ -576,6 +466,37 @@ const VariantDetailForm = () => {
 
         {/* Right Column (Sidebar) */}
         <Flex direction="column" gap="xl">
+          {/* Configuration */}
+          <Box
+            border="1px solid"
+            borderColor="border"
+            borderRadius="md"
+            bg="background-primary"
+            overflow="hidden">
+            <SectionHeader title="Configuration" />
+            <Box>
+              <DetailItem
+                label="Layout"
+                value={variant.layout?.name}
+                onClick={() => setIsLayoutOpen(true)}
+              />
+              <DetailItem
+                label="Theme"
+                value={variant.theme?.name}
+                onClick={() => setIsThemeOpen(true)}
+              />
+              <DetailItem
+                label="Flow Version"
+                value={
+                  (content as any)?.flow_version
+                    ? `v${(content as any).flow_version.version_number}`
+                    : undefined
+                }
+              />
+              <DetailItem label="Color" value={variant.color || '—'} />
+            </Box>
+          </Box>
+
           {/* Fields */}
           <Box
             border="1px solid"
@@ -586,11 +507,12 @@ const VariantDetailForm = () => {
             <SectionHeader title="Fields" count={fields.length} />
             <Box>
               {fields.length === 0 ? (
-                <Box px="lg" py="md">
-                  <Text fontSize="sm" color="text-secondary">
-                    No fields configured
-                  </Text>
-                </Box>
+                <EmptyState
+                  icon={<ListBullets size={28} />}
+                  message="No fields configured for this variant."
+                  actionLabel="Edit Variant"
+                  onAction={() => setIsOpen(true)}
+                />
               ) : (
                 fields.map((f: any, index: number) => (
                   <Flex
@@ -623,11 +545,10 @@ const VariantDetailForm = () => {
             <SectionHeader title="Recent Activity" />
             <Box>
               {activity.length === 0 ? (
-                <Box px="lg" py="md">
-                  <Text fontSize="sm" color="text-secondary">
-                    No recent activity
-                  </Text>
-                </Box>
+                <EmptyState
+                  icon={<Clock size={28} />}
+                  message="No recent activity to show."
+                />
               ) : (
                 activity.map((a: any, index: number) => (
                   <Box
