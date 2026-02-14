@@ -359,76 +359,76 @@ const VariantDetailForm = () => {
 
       {/* Page body — full width with comfortable padding */}
       <Box px="xl" py="lg" style={{ overflow: 'auto', flex: 1 }}>
-        <Flex direction="column" gap="lg" style={{ maxWidth: 1200 }}>
-          {/* Upgrade banner */}
-          {(content as any)?.flow_version_outdated && (
-            <Flex
-              bg="orange.50"
-              border="1px solid"
-              borderColor="orange.200"
-              borderRadius="md"
-              px="lg"
-              py="sm"
-              align="center"
-              justify="space-between">
-              <Text fontSize="sm" color="orange.900">
-                Using flow v{versionNum}. Version{' '}
-                {(content as any)?.latest_flow_version?.version_number} is
-                available.
-              </Text>
-              {canManage && (
-                <Button variant="secondary" size="xs" onClick={handleUpgrade}>
-                  Upgrade
-                </Button>
-              )}
-            </Flex>
-          )}
+        <Flex gap="xl" style={{ maxWidth: 1600, margin: '0 auto' }}>
+          {/* LEFT PANEL (Main Content) - 75% */}
+          <Flex direction="column" gap="lg" flex={3} style={{ minWidth: 0 }}>
+            {/* Upgrade banner */}
+            {(content as any)?.flow_version_outdated && (
+              <Flex
+                bg="orange.50"
+                border="1px solid"
+                borderColor="orange.200"
+                borderRadius="md"
+                px="lg"
+                py="sm"
+                align="center"
+                justify="space-between">
+                <Text fontSize="sm" color="orange.900">
+                  Using flow v{versionNum}. Version{' '}
+                  {(content as any)?.latest_flow_version?.version_number} is
+                  available.
+                </Text>
+                {canManage && (
+                  <Button variant="secondary" size="xs" onClick={handleUpgrade}>
+                    Upgrade
+                  </Button>
+                )}
+              </Flex>
+            )}
 
-          {/* Stats row */}
-          <Box display="grid" gridTemplateColumns="repeat(4, 1fr)" gap="md">
-            {[
-              { label: 'Documents', value: totalDocuments },
-              { label: 'Templates', value: templates.length },
-              { label: 'Fields', value: fields.length },
-              { label: 'Flow version', value: versionNum || 0 },
-            ].map((stat) => (
-              <Card key={stat.label}>
-                <Box px="lg" py="md">
-                  <Text fontSize="xs" color="text-secondary" mb="xxs">
-                    {stat.label}
-                  </Text>
-                  <Text
-                    fontSize="xl"
-                    fontWeight="600"
-                    color="text-primary"
-                    style={{ fontVariantNumeric: 'tabular-nums' }}>
-                    {stat.value}
-                  </Text>
-                </Box>
-              </Card>
-            ))}
-          </Box>
+            {/* Stats row */}
+            <Box display="grid" gridTemplateColumns="repeat(4, 1fr)" gap="md">
+              {[
+                { label: 'Documents', value: totalDocuments },
+                { label: 'Templates', value: templates.length },
+                { label: 'Fields', value: fields.length },
+                { label: 'Flow version', value: versionNum || 0 },
+              ].map((stat) => (
+                <Card key={stat.label}>
+                  <Box px="lg" py="md">
+                    <Text fontSize="xs" color="text-secondary" mb="xxs">
+                      {stat.label}
+                    </Text>
+                    <Text
+                      fontSize="xl"
+                      fontWeight="600"
+                      color="text-primary"
+                      style={{ fontVariantNumeric: 'tabular-nums' }}>
+                      {stat.value}
+                    </Text>
+                  </Box>
+                </Card>
+              ))}
+            </Box>
 
-          {/* Charts Row - New Addition */}
-          <Box>
-            <BarChart
-              title="Document Activity"
-              description="Documents created over the last 6 months"
-              data={chartData}
-              dataKeys={['documents']}
-              height={280}
-              showGrid
-              showLegend={false}
-              showTooltip
-              config={chartConfig}
-              hoverBarColor={variant.color || theme.colors.green['400']}
-            />
-          </Box>
+            {/* Charts Row */}
+            <Box>
+              <BarChart
+                title="Document Activity"
+                description="Documents created over the last 6 months"
+                data={chartData}
+                dataKeys={['documents']}
+                height={280}
+                showGrid
+                showLegend={false}
+                showTooltip
+                config={chartConfig}
+                hoverBarColor={variant.color || theme.colors.green['400']}
+              />
+            </Box>
 
-          {/* Main grid */}
-          <Box display="grid" gridTemplateColumns="1fr 320px" gap="lg">
-            {/* Left column */}
-            <Flex direction="column" gap="lg">
+            {/* Content Lists (Templates & Documents) */}
+            <Box display="grid" gridTemplateColumns="1fr 1fr" gap="lg">
               {/* Templates */}
               <Card>
                 <CardHeader
@@ -552,92 +552,92 @@ const VariantDetailForm = () => {
                   ))
                 )}
               </Card>
-            </Flex>
+            </Box>
+          </Flex>
 
-            {/* Right sidebar */}
-            <Flex direction="column" gap="lg">
-              {/* Configuration */}
-              <Card>
-                <CardHeader
-                  title="Configuration"
-                  action={
-                    canManage ? (
-                      <Text
-                        fontSize="sm"
-                        color="green.900"
-                        fontWeight="500"
-                        cursor="pointer"
-                        onClick={() => openDrawerAt(1)}>
-                        Edit
-                      </Text>
-                    ) : undefined
-                  }
-                />
-                <Property
-                  label="Layout"
-                  value={variant.layout?.name}
-                  onClick={() => setIsLayoutOpen(true)}
-                />
-                <Property
-                  label="Theme"
-                  value={variant.theme?.name}
-                  onClick={() => setIsThemeOpen(true)}
-                />
-                <Property label="Flow" value={flowName || undefined} />
-                <Property
-                  label="Version"
-                  value={versionNum ? `v${versionNum}` : undefined}
-                />
-                <Property label="Color" value={variant.color || undefined} />
-              </Card>
+          {/* RIGHT PANEL (Sidebar) - 25% */}
+          <Flex direction="column" gap="lg" flex={1} style={{ minWidth: 320 }}>
+            {/* Configuration */}
+            <Card>
+              <CardHeader
+                title="Configuration"
+                action={
+                  canManage ? (
+                    <Text
+                      fontSize="sm"
+                      color="green.900"
+                      fontWeight="500"
+                      cursor="pointer"
+                      onClick={() => openDrawerAt(1)}>
+                      Edit
+                    </Text>
+                  ) : undefined
+                }
+              />
+              <Property
+                label="Layout"
+                value={variant.layout?.name}
+                onClick={() => setIsLayoutOpen(true)}
+              />
+              <Property
+                label="Theme"
+                value={variant.theme?.name}
+                onClick={() => setIsThemeOpen(true)}
+              />
+              <Property label="Flow" value={flowName || undefined} />
+              <Property
+                label="Version"
+                value={versionNum ? `v${versionNum}` : undefined}
+              />
+              <Property label="Color" value={variant.color || undefined} />
+            </Card>
 
-              {/* Fields */}
-              <Card>
-                <CardHeader
-                  title="Fields"
-                  count={fields.length}
-                  action={
-                    canManage ? (
-                      <Text
-                        fontSize="sm"
-                        color="green.900"
-                        fontWeight="500"
-                        cursor="pointer"
-                        onClick={() => openDrawerAt(2)}>
-                        Edit
-                      </Text>
-                    ) : undefined
-                  }
+            {/* Fields */}
+            <Card>
+              <CardHeader
+                title="Fields"
+                count={fields.length}
+                action={
+                  canManage ? (
+                    <Text
+                      fontSize="sm"
+                      color="green.900"
+                      fontWeight="500"
+                      cursor="pointer"
+                      onClick={() => openDrawerAt(2)}>
+                      Edit
+                    </Text>
+                  ) : undefined
+                }
+              />
+              {fields.length === 0 ? (
+                <CardEmpty
+                  message="No fields configured"
+                  actionLabel="Add fields"
+                  onAction={() => openDrawerAt(2)}
                 />
-                {fields.length === 0 ? (
-                  <CardEmpty
-                    message="No fields configured"
-                    actionLabel="Add fields"
-                    onAction={() => openDrawerAt(2)}
-                  />
-                ) : (
-                  fields.map((f: any, i: number) => (
-                    <Row key={f.id || i} isLast={i === fields.length - 1}>
-                      <Text
-                        fontSize="sm"
-                        fontWeight="500"
-                        style={{
-                          maxWidth: 160,
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                          whiteSpace: 'nowrap',
-                        }}>
-                        {f.name}
-                      </Text>
-                      <Text fontSize="xs" color="text-secondary">
-                        {f.field_type?.name}
-                      </Text>
-                    </Row>
-                  ))
-                )}
-              </Card>
-            </Flex>
-          </Box>
+              ) : (
+                fields.map((f: any, i: number) => (
+                  <Row key={f.id || i} isLast={i === fields.length - 1}>
+                    <Text
+                      fontSize="sm"
+                      fontWeight="500"
+                      style={{
+                        maxWidth: 160,
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
+                      }}>
+                      {f.name}
+                    </Text>
+                    <Text fontSize="xs" color="text-secondary">
+                      {f.field_type?.name}
+                    </Text>
+                  </Row>
+                ))
+              )}
+            </Card>
+          </Flex>
         </Flex>
       </Box>
 
