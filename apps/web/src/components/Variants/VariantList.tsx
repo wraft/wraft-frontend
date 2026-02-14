@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { Drawer, useDrawer, Button } from '@wraft/ui';
+import { useRouter } from 'next/router';
+import { Button } from '@wraft/ui';
 import { Plus } from '@phosphor-icons/react';
 
 import PageHeader from 'common/PageHeader';
 import { PageInner } from 'common/Atoms';
 import { usePermission } from 'utils/permissions';
 
-import VariantForm from './VariantForm';
 import VariantDashboard from './VariantDashboard';
 
 export interface ILayout {
@@ -34,16 +34,18 @@ export interface IFieldItem {
 }
 
 const VariantList = () => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
   const [rerender, setRerender] = useState<boolean>(false);
-  const mobileMenuDrawer = useDrawer();
   const { hasPermission } = usePermission();
+  const router = useRouter();
 
   return (
     <>
       <PageHeader title="Variants" desc="Manage Variants">
         {hasPermission('variant', 'manage') && (
-          <Button variant="secondary" size="sm" onClick={() => setIsOpen(true)}>
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={() => router.push('/variants/new')}>
             <Plus size={12} weight="regular" />
             Add Variant
           </Button>
@@ -53,19 +55,6 @@ const VariantList = () => {
       <PageInner>
         <VariantDashboard rerender={rerender} setRerender={setRerender} />
       </PageInner>
-
-      <Drawer
-        open={isOpen}
-        store={mobileMenuDrawer}
-        aria-label="Menu backdrop"
-        withBackdrop={true}
-        onClose={() => setIsOpen(false)}>
-        {isOpen && (
-          <>
-            <VariantForm setIsOpen={setIsOpen} setRerender={setRerender} />
-          </>
-        )}
-      </Drawer>
     </>
   );
 };
