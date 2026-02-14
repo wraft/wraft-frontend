@@ -8,7 +8,7 @@ import { ThreeDotIcon } from '@wraft/icon';
 import { PencilSimple } from '@phosphor-icons/react';
 
 import FlowViewForm from 'components/Flow/FlowViewForm';
-import Page from 'common/PageFrame';
+import Page from 'common/PageFrameInner';
 import PageHeader from 'common/PageHeader';
 import DescriptionLinker from 'common/DescriptionLinker';
 import { PageInner, IconFrame } from 'common/Atoms';
@@ -130,8 +130,9 @@ const Index: FC = () => {
       <Head>
         <title>Edit Flow | Wraft</title>
       </Head>
-      <Page noSide>
+      <Page>
         <PageHeader
+          hasBack
           title={[
             {
               name: 'Manage',

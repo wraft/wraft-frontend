@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 
 import ThemeViewForm from 'components/Theme/ThemeViewForm';
 import DescriptionLinker from 'common/DescriptionLinker';
-import Page from 'common/PageFrame';
+import Page from 'common/PageFrameInner';
 import PageHeader from 'common/PageHeader';
 import { PageInner } from 'common/Atoms';
 import { fetchAPI } from 'utils/models';
@@ -27,6 +27,7 @@ const Index: FC = () => {
       </Head>
       <Page>
         <PageHeader
+          hasBack
           title={[
             { name: 'Manage', path: '/manage' },
             { name: 'Themes', path: '/manage/themes' },

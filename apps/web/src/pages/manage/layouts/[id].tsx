@@ -3,7 +3,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 
 import LayoutViewForm from 'components/Layout/LayoutViewForm';
-import Page from 'common/PageFrame';
+import Page from 'common/PageFrameInner';
 import PageHeader from 'common/PageHeader';
 import DescriptionLinker from 'common/DescriptionLinker';
 import { fetchAPI } from 'utils/models';
@@ -26,6 +26,7 @@ const Index: FC = () => {
       </Head>
       <Page>
         <PageHeader
+          hasBack
           title={[
             { name: 'Manage', path: '/manage' },
             { name: 'Layouts', path: '/manage/layouts' },
