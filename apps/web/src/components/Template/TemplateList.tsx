@@ -9,9 +9,13 @@ import { Button } from '@wraft/ui';
 
 import { IconFrame, PageInner, TimeAgo, VariantLine } from 'common/Atoms';
 import PageHeader from 'common/PageHeader';
+import { Variant } from 'schemas/template-filter';
 import { fetchAPI, postAPI } from 'utils/models';
 import { IField } from 'utils/types/content';
 import { usePermission } from 'utils/permissions';
+
+import TemplateFilterSidebar from './TemplateFilterSidebar';
+import ActiveFilterBadge from './ActiveFilterBadge';
 
 const columns = ({ onCloneTemplete, hasPermission }: any) => [
   {
@@ -91,13 +95,43 @@ const TemplateList = () => {
   const [pageMeta, setPageMeta] = useState<any>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [page, setPage] = useState<number>();
+  const [variants, setVariants] = useState<Variant[]>([]);
+  const [isVariantsLoading, setIsVariantsLoading] = useState<boolean>(false);
+  const [selectedVariantIds, setSelectedVariantIds] = useState<string[]>([]);
   const { hasPermission } = usePermission();
 
   const router: any = useRouter();
   const currentPage: any = parseInt(router.query.page) || 1;
+  const contentTypeIdFilter: any = router.query.content_type_id || '';
+
+  useEffect(() => {
+    const variantIds = contentTypeIdFilter
+      ? contentTypeIdFilter.split(',').filter((id: string) => id !== '')
+      : [];
+
+    const validIds = variantIds.filter((id: string) =>
+      variants.some((v) => v.id === id),
+    );
+
+    if (validIds.length < variantIds.length) {
+      toast.error('Filter no longer exists');
+      const newQuery = { ...router.query };
+      delete newQuery.content_type_id;
+      newQuery.page = '1';
+      router.replace(
+        { pathname: router.pathname, query: newQuery },
+        undefined,
+        { shallow: true },
+      );
+      return;
+    }
+
+    setSelectedVariantIds(validIds);
+  }, [contentTypeIdFilter, variants]);
 
   useEffect(() => {
     loadTemplates(currentPage);
+    loadVariants();
   }, []);
 
   useEffect(() => {
@@ -106,10 +140,30 @@ const TemplateList = () => {
     }
   }, [page]);
 
+  const loadVariants = async () => {
+    try {
+      setIsVariantsLoading(true);
+      const data: any = await fetchAPI('content_types');
+      setVariants(data.content_types || []);
+    } catch (error) {
+      console.error('Error fetching variants:', error);
+    } finally {
+      setIsVariantsLoading(false);
+    }
+  };
+
   const loadTemplates = async (pageNo: number) => {
     try {
       setIsLoading(true);
-      const query = `?page=${pageNo}&sort=updated_at_desc`;
+      const params = new URLSearchParams();
+      params.append('page', pageNo.toString());
+      params.append('sort', 'updated_at_desc');
+
+      if (contentTypeIdFilter) {
+        params.append('content_type_id', contentTypeIdFilter);
+      }
+
+      const query = `?${params.toString()}`;
       const data: any = await fetchAPI(`data_templates${query}`);
       setTemplates(data.data_templates || []);
       setPageMeta(data);
@@ -118,6 +172,42 @@ const TemplateList = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const onVariantToggle = (variantId: string) => {
+    const newSelection = selectedVariantIds.includes(variantId)
+      ? selectedVariantIds.filter((id) => id !== variantId)
+      : [...selectedVariantIds, variantId];
+
+    setSelectedVariantIds(newSelection);
+
+    const newQuery = { ...router.query };
+    if (newSelection.length > 0) {
+      newQuery.content_type_id = newSelection.join(',');
+    } else {
+      delete newQuery.content_type_id;
+    }
+    newQuery.page = '1';
+
+    router.push({ pathname: router.pathname, query: newQuery }, undefined, {
+      shallow: true,
+    });
+  };
+
+  const onClearAllFilters = () => {
+    setSelectedVariantIds([]);
+
+    const newQuery = { ...router.query };
+    delete newQuery.content_type_id;
+    newQuery.page = '1';
+
+    router.push({ pathname: router.pathname, query: newQuery }, undefined, {
+      shallow: true,
+    });
+  };
+
+  const onFilterDismiss = (variantId: string) => {
+    onVariantToggle(variantId);
   };
 
   const onPageChange = (newPage: any) => {
@@ -167,41 +257,75 @@ const TemplateList = () => {
         )}
       </PageHeader>
       <PageInner>
-        <Box mx={0} mb={3}>
-          <Table
-            data={templates}
-            isLoading={isLoading}
-            columns={columns({ onCloneTemplete, hasPermission })}
-            skeletonRows={10}
-            emptyMessage={
-              <Box mx="auto" gap="md">
-                <Text as="h3">No templates found</Text>
-                <Text color="text-secondary" mb="md">
-                  Create your first template to get started.
-                </Text>
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  onClick={() => router.push(`/templates/new`)}>
-                  <IconFrame color="gray.800" mr="xs">
-                    <Plus size={12} weight="bold" />
-                  </IconFrame>
-                  Add Template
-                </Button>
-              </Box>
-            }
+        <Flex gap="4">
+          <TemplateFilterSidebar
+            variants={variants}
+            selectedVariantIds={selectedVariantIds}
+            onVariantToggle={onVariantToggle}
+            onClearAll={onClearAllFilters}
+            isLoading={isVariantsLoading}
           />
-          <Box mt="16px">
-            {pageMeta && pageMeta?.total_pages > 1 && (
-              <Pagination
-                totalPage={pageMeta?.total_pages}
-                initialPage={currentPage}
-                onPageChange={onPageChange}
-                totalEntries={pageMeta?.total_entries}
-              />
+          <Box flex={1}>
+            {selectedVariantIds.length > 0 && (
+              <Box mb="md">
+                <Flex gap="xs" alignItems="center" flexWrap="wrap">
+                  <Text fontSize="sm" color="text-secondary" mr="xs">
+                    Active filters:
+                  </Text>
+                  {selectedVariantIds.map((variantId) => {
+                    const variant = variants.find((v) => v.id === variantId);
+                    return variant ? (
+                      <ActiveFilterBadge
+                        key={variant.id}
+                        variant={variant}
+                        onDismiss={() => onFilterDismiss(variant.id)}
+                      />
+                    ) : null;
+                  })}
+                </Flex>
+              </Box>
             )}
+            <Box mx={0} mb={3}>
+              <Table
+                data={templates}
+                isLoading={isLoading}
+                columns={columns({ onCloneTemplete, hasPermission })}
+                skeletonRows={10}
+                emptyMessage={
+                  <Box mx="auto" gap="md">
+                    <Text as="h3">No templates found</Text>
+                    <Text color="text-secondary" mb="md">
+                      {selectedVariantIds.length > 0
+                        ? 'No templates match your filters.'
+                        : 'Create your first template to get started.'}
+                    </Text>
+                    {selectedVariantIds.length === 0 && (
+                      <Button
+                        variant="secondary"
+                        size="sm"
+                        onClick={() => router.push(`/templates/new`)}>
+                        <IconFrame color="gray.800" mr="xs">
+                          <Plus size={12} weight="bold" />
+                        </IconFrame>
+                        Add Template
+                      </Button>
+                    )}
+                  </Box>
+                }
+              />
+              <Box mt="16px">
+                {pageMeta && pageMeta?.total_pages > 1 && (
+                  <Pagination
+                    totalPage={pageMeta?.total_pages}
+                    initialPage={currentPage}
+                    onPageChange={onPageChange}
+                    totalEntries={pageMeta?.total_entries}
+                  />
+                )}
+              </Box>
+            </Box>
           </Box>
-        </Box>
+        </Flex>
       </PageInner>
     </Box>
   );
