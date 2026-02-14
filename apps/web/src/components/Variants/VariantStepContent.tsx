@@ -1,9 +1,13 @@
 import React, { memo } from 'react';
 import { Box, Flex, Text, InputText, Textarea, Search, Select, Field } from '@wraft/ui';
 import { Controller } from 'react-hook-form';
+import { ArrowLeft } from '@phosphor-icons/react';
 import FieldColor from 'common/FieldColor';
-import FieldEditor from '../FieldEditor';
-import { TYPES } from '../../schemas/variant';
+import FieldEditor from './FieldEditor';
+const TYPES = [
+  { value: 'document', label: 'Document' },
+  { value: 'contract', label: 'Contract' },
+];
 
 interface StepContentProps {
   currentStep: number;
@@ -21,81 +25,91 @@ interface StepContentProps {
   setFieldMappings: any;
   showMappingStep: boolean;
   content: any;
+  coloeCode?: string;
+  onChangeFields?: () => void;
+  onSearchLayouts?: () => Promise<any[]>;
+  onSearchFlows?: () => Promise<any[]>;
+  onSearchThemes?: () => Promise<any[]>;
 }
 
 // Step 0: Details
-export const StepDetails: React.FC<StepContentProps> = memo(({
-  register,
-  errors,
-}) => (
-  <Flex direction="column" gap="md">
-    <Field label="Name" required error={errors?.name?.message}>
-      <InputText
-        {...register('name')}
-        placeholder="Enter a Variant Name"
-      />
-    </Field>
-
-    <Field
-      label="Description"
-      required
-      error={errors?.description?.message}>
-      <Textarea
-        {...register('description')}
-        placeholder="Enter a description"
-      />
-    </Field>
-
-    <Controller
-      name="type"
-      render={({ field }) => (
-        <Field
-          label="Document Type"
-          required
-          error={errors.type?.message}>
-          <Select
-            {...field}
-            options={TYPES}
-            placeholder="Select Document Type"
-            required
-          />
-        </Field>
-      )}
-    />
-
-    <Field
-      label="Prefix"
-      required
-      error={errors.prefix?.message}
-      hint="Enter a unique prefix for identification (e.g., SDM)">
-      <InputText {...register('prefix')} placeholder="Enter a prefix" />
-    </Field>
-  </Flex>
-));
-
-// Step 1: Configure
-export const StepConfigure: React.FC<StepContentProps> = memo(({
+export const StepDetails: React.FC<StepContentProps> = memo(function StepDetails({
   register,
   control,
   errors,
-  onSearchLayouts,
-  onSearchFlows,
-  onSearchThemes,
+}) {
+  return (
+    <Flex direction="column" gap="md">
+      <Field label="Name" required error={errors?.name?.message}>
+        <InputText
+          {...register('name')}
+          placeholder="Enter a Variant Name"
+        />
+      </Field>
+
+      <Field
+        label="Description"
+        required
+        error={errors?.description?.message}>
+        <Textarea
+          {...register('description')}
+          placeholder="Enter a description"
+        />
+      </Field>
+
+      <Controller
+        name="type"
+        control={control}
+        render={({ field }: { field: any }) => (
+          <Field
+            label="Document Type"
+            required
+            error={errors.type?.message}>
+            <Select
+              {...field}
+              options={TYPES}
+              placeholder="Select Document Type"
+              required
+            />
+          </Field>
+        )}
+      />
+
+      <Field
+        label="Prefix"
+        required
+        error={errors.prefix?.message}
+        hint="Enter a unique prefix for identification (e.g., SDM)">
+        <InputText {...register('prefix')} placeholder="Enter a prefix" />
+      </Field>
+    </Flex>
+  );
+});
+
+// Step 1: Configure
+export const StepConfigure: React.FC<StepContentProps> = memo(function StepConfigure({
+  register,
+  control,
+  errors,
+  onSearchLayouts = () => Promise.resolve([]),
+  onSearchFlows = () => Promise.resolve([]),
+  onSearchThemes = () => Promise.resolve([]),
   coloeCode,
   onChangeFields,
-  content,
-}) => (
+}) {
+  return (
   <Flex direction="column" gap="md">
-    <FieldColor
-      register={register}
-      label="Color"
-      name="color"
-      defaultValue={coloeCode}
-      onChangeColor={onChangeFields}
-    />
+      <FieldColor
+        register={register}
+        label="Color"
+        name="color"
+        defaultValue={coloeCode || '#000000'}
+        onChangeColor={onChangeFields || (() => {})}
+      />
 
     <Controller
       name="layout"
+      control={control}
       render={({ field: { onChange, name, value } }) => (
         <Field label="Layout" required error={errors?.layout?.message}>
           <Search
@@ -129,6 +143,7 @@ export const StepConfigure: React.FC<StepContentProps> = memo(({
 
     <Controller
       name="flow"
+      control={control}
       render={({ field: { onChange, name, value } }) => (
         <Field label="Flow" required error={errors?.flow?.message}>
           <Search
@@ -157,6 +172,7 @@ export const StepConfigure: React.FC<StepContentProps> = memo(({
 
     <Controller
       name="theme"
+      control={control}
       render={({ field: { onChange, name, value } }) => (
         <Field label="Theme" required error={errors?.theme?.message}>
           <Search
@@ -182,30 +198,33 @@ export const StepConfigure: React.FC<StepContentProps> = memo(({
         </Field>
       )}
     />
-  </Flex>
-));
+    </Flex>
+  );
+});
 
 // Step 2: Fields
-export const StepFields: React.FC<StepContentProps> = memo(({
+export const StepFields: React.FC<StepContentProps> = memo(function StepFields({
   control,
   register,
   errors,
   fieldtypes,
   trigger,
-}) => (
-  <Box>
-    <FieldEditor
-      control={control}
-      register={register}
-      fieldtypes={fieldtypes}
-      errors={errors}
-      trigger={trigger}
-    />
-  </Box>
-));
+}) {
+  return (
+    <Box>
+      <FieldEditor
+        control={control}
+        register={register}
+        fieldtypes={fieldtypes}
+        errors={errors}
+        trigger={trigger}
+      />
+    </Box>
+  );
+});
 
 // Step 3: Map Properties (conditional)
-export const StepMapProperties: React.FC<StepContentProps> = memo(({
+export const StepMapProperties: React.FC<StepContentProps> = memo(function StepMapProperties({
   frameFields,
   fieldMappings,
   variantFields,
@@ -213,116 +232,118 @@ export const StepMapProperties: React.FC<StepContentProps> = memo(({
   setValue,
   watch,
   errors,
-}) => (
-  <Box>
-    <Text mb="md" color="text-secondary">
-      Ensure proper mapping of variant fields to the frame field
-    </Text>
-
-    {errors.frame_mapping && (
-      <Box
-        mb="md"
-        p="sm"
-        bg="red.100"
-        color="red.700"
-        borderRadius="md">
-        <Text>Please select a content field for each frame field</Text>
-      </Box>
-    )}
-
-    {frameFields.map((frameField, index) => {
-      const contentFieldValue =
-        fieldMappings.find((m) => m.frameField === frameField.name)
-          ?.variantField || '';
-
-      return (
-        <Box key={frameField.name} mb="md">
-          <Flex alignItems="center" gap="sm">
-            <Box
-              flex={1}
-              bg="gray.400"
-              px="md"
-              py="sm"
-              borderRadius="sm">
-              <Text>{frameField.name}</Text>
-            </Box>
-
-            <ArrowLeft size={20} />
-
-            <Box flex={1}>
-              <Field
-                error={
-                  errors?.frame_mapping?.[index]?.variantField?.message
-                }>
-                <Search
-                  itemToString={(item: any) => item && item}
-                  name={`frame_mapping.${index}.variantField`}
-                  placeholder="Search content field"
-                  minChars={0}
-                  value={contentFieldValue}
-                  onChange={(selectedValue: string) => {
-                    const newMappings = [...fieldMappings];
-                    const existingIndex = newMappings.findIndex(
-                      (m) => m.frameField === frameField.name,
-                    );
-
-                    if (existingIndex >= 0) {
-                      newMappings[existingIndex] = {
-                        frameField: frameField.name,
-                        frameFieldName: frameField.name,
-                        variantField: selectedValue,
-                        variantFieldId: variantFields.find(
-                          (f) => f.name === selectedValue,
-                        )?.id,
-                        variantFieldName: selectedValue,
-                      };
-                    } else {
-                      newMappings.push({
-                        frameField: frameField.name,
-                        frameFieldName: frameField.name,
-                        variantField: selectedValue,
-                        variantFieldId: variantFields.find(
-                          (f) => f.name === selectedValue,
-                        )?.id,
-                        variantFieldName: selectedValue,
-                      });
-                    }
-
-                    setFieldMappings(newMappings);
-                    setValue(
-                      `frame_mapping.${index}.frameField`,
-                      frameField.name,
-                    );
-                    setValue(
-                      `frame_mapping.${index}.variantField`,
-                      selectedValue,
-                    );
-                  }}
-                  renderItem={(item: string) => (
-                    <Box>
-                      <Text>{item}</Text>
-                    </Box>
-                  )}
-                  search={() => {
-                    return Promise.resolve(
-                      watch('fields')?.map((field) => field.name) || [],
-                    );
-                  }}
-                />
-              </Field>
-            </Box>
-          </Flex>
-        </Box>
-      );
-    })}
-
-    {frameFields.length === 0 && (
-      <Text color="text-secondary">
-        No frame fields available for mapping
+}) {
+  return (
+    <Box>
+      <Text mb="md" color="text-secondary">
+        Ensure proper mapping of variant fields to the frame field
       </Text>
-    )}
-  </Box>
-));
+
+      {errors.frame_mapping && (
+        <Box
+          mb="md"
+          p="sm"
+          bg="red.100"
+          color="red.700"
+          borderRadius="md">
+          <Text>Please select a content field for each frame field</Text>
+        </Box>
+      )}
+
+      {frameFields.map((frameField, index) => {
+        const contentFieldValue =
+          fieldMappings.find((m) => m.frameField === frameField.name)
+            ?.variantField || '';
+
+        return (
+          <Box key={frameField.name} mb="md">
+            <Flex alignItems="center" gap="sm">
+              <Box
+                flex={1}
+                bg="gray.400"
+                px="md"
+                py="sm"
+                borderRadius="sm">
+                <Text>{frameField.name}</Text>
+              </Box>
+
+              <ArrowLeft size={20} />
+
+              <Box flex={1}>
+                <Field
+                  error={
+                    errors?.frame_mapping?.[index]?.variantField?.message
+                  }>
+                  <Search
+                    itemToString={(item: any) => item && item}
+                    name={`frame_mapping.${index}.variantField`}
+                    placeholder="Search content field"
+                    minChars={0}
+                    value={contentFieldValue}
+                    onChange={(selectedValue: string) => {
+                      const newMappings = [...fieldMappings];
+                      const existingIndex = newMappings.findIndex(
+                        (m) => m.frameField === frameField.name,
+                      );
+
+                      if (existingIndex >= 0) {
+                        newMappings[existingIndex] = {
+                          frameField: frameField.name,
+                          frameFieldName: frameField.name,
+                          variantField: selectedValue,
+                          variantFieldId: variantFields.find(
+                            (f) => f.name === selectedValue,
+                          )?.id,
+                          variantFieldName: selectedValue,
+                        };
+                      } else {
+                        newMappings.push({
+                          frameField: frameField.name,
+                          frameFieldName: frameField.name,
+                          variantField: selectedValue,
+                          variantFieldId: variantFields.find(
+                            (f) => f.name === selectedValue,
+                          )?.id,
+                          variantFieldName: selectedValue,
+                        });
+                      }
+
+                      setFieldMappings(newMappings);
+                      setValue(
+                        `frame_mapping.${index}.frameField`,
+                        frameField.name,
+                      );
+                      setValue(
+                        `frame_mapping.${index}.variantField`,
+                        selectedValue,
+                      );
+                    }}
+                    renderItem={(item: string) => (
+                      <Box>
+                        <Text>{item}</Text>
+                      </Box>
+                    )}
+                    search={() => {
+                      return Promise.resolve(
+                        watch('fields')?.map((field) => field.name) || [],
+                      );
+                    }}
+                  />
+                </Field>
+              </Box>
+            </Flex>
+          </Box>
+        );
+      })}
+
+      {frameFields.length === 0 && (
+        <Text color="text-secondary">
+          No frame fields available for mapping
+        </Text>
+      )}
+    </Box>
+  );
+});
 
 export const VariantStepContent: React.FC<StepContentProps & { currentStep: number }> = (props) => {
   switch (props.currentStep) {
