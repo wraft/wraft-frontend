@@ -1,6 +1,13 @@
 import React, { memo } from 'react';
-import { Box, Flex, Text, Button, Tooltip } from '@wraft/ui';
-import { FileText, Upload, Info, Check, ArrowLeft } from '@phosphor-icons/react';
+import { Box, Flex, Text, Button } from '@wraft/ui';
+import {
+  FileText,
+  Upload,
+  Info,
+  Check,
+  ArrowLeft,
+} from '@phosphor-icons/react';
+
 import StepsIndicator from 'common/Form/StepsIndicator';
 
 interface SidebarProps {
@@ -26,19 +33,22 @@ const SidebarTips = memo(function SidebarTips() {
         <Flex alignItems="flex-start" gap="sm">
           <Info size={16} />
           <Text fontSize="sm" color="text-secondary">
-            Use a descriptive name that clearly identifies the content type (e.g., Marketing Document).
+            Use a descriptive name that clearly identifies the content type
+            (e.g., Marketing Document).
           </Text>
         </Flex>
         <Flex alignItems="flex-start" gap="sm">
           <Info size={16} />
           <Text fontSize="sm" color="text-secondary">
-            Choose a unique 2-4 character prefix (e.g., MD, CT) for document numbering.
+            Choose a unique 2-4 character prefix (e.g., MD, CT) for document
+            numbering.
           </Text>
         </Flex>
         <Flex alignItems="flex-start" gap="sm">
           <Info size={16} />
           <Text fontSize="sm" color="text-secondary">
-            Contract types support additional features like approval workflows and signatures.
+            Contract types support additional features like approval workflows
+            and signatures.
           </Text>
         </Flex>
       </Flex>
@@ -58,13 +68,17 @@ const SidebarTips = memo(function SidebarTips() {
 });
 
 // Step 2: Configure Preview
-const SidebarPreview = memo(function SidebarPreview({ formData }: { formData: any }) {
+const SidebarPreview = memo(function SidebarPreview({
+  formData,
+}: {
+  formData: any;
+}) {
   return (
     <Box>
       <Text as="h4" fontWeight="heading" color="text-primary" mb="md">
         Selected Configuration
       </Text>
-      
+
       <Flex direction="column" gap="md">
         {formData?.color && (
           <Flex alignItems="center" gap="sm">
@@ -79,30 +93,47 @@ const SidebarPreview = memo(function SidebarPreview({ formData }: { formData: an
             <Text fontSize="sm">Color: {formData.color}</Text>
           </Flex>
         )}
-        
+
         {formData?.layout?.name && (
           <Box>
-            <Text fontSize="sm" color="text-tertiary">Layout</Text>
-            <Text fontSize="sm" fontWeight="heading">{formData.layout.name}</Text>
+            <Text fontSize="sm" color="text-tertiary">
+              Layout
+            </Text>
+            <Text fontSize="sm" fontWeight="heading">
+              {formData.layout.name}
+            </Text>
             {formData.layout.frame && (
-              <Text fontSize="xs" bg="green.400" px="xs" display="inline-block" mt="xs">
+              <Text
+                fontSize="xs"
+                bg="green.400"
+                px="xs"
+                display="inline-block"
+                mt="xs">
                 Has Frame Fields
               </Text>
             )}
           </Box>
         )}
-        
+
         {formData?.flow?.name && (
           <Box>
-            <Text fontSize="sm" color="text-tertiary">Flow</Text>
-            <Text fontSize="sm" fontWeight="heading">{formData.flow.name}</Text>
+            <Text fontSize="sm" color="text-tertiary">
+              Flow
+            </Text>
+            <Text fontSize="sm" fontWeight="heading">
+              {formData.flow.name}
+            </Text>
           </Box>
         )}
-        
+
         {formData?.theme?.name && (
           <Box>
-            <Text fontSize="sm" color="text-tertiary">Theme</Text>
-            <Text fontSize="sm" fontWeight="heading">{formData.theme.name}</Text>
+            <Text fontSize="sm" color="text-tertiary">
+              Theme
+            </Text>
+            <Text fontSize="sm" fontWeight="heading">
+              {formData.theme.name}
+            </Text>
           </Box>
         )}
       </Flex>
@@ -112,7 +143,8 @@ const SidebarPreview = memo(function SidebarPreview({ formData }: { formData: an
           Tips
         </Text>
         <Text fontSize="sm" color="text-secondary">
-          Layouts with frame fields enable automatic field mapping in the final step.
+          Layouts with frame fields enable automatic field mapping in the final
+          step.
         </Text>
       </Box>
     </Box>
@@ -126,31 +158,39 @@ const SidebarFields = memo(function SidebarFields() {
       <Text as="h4" fontWeight="heading" color="text-primary" mb="md">
         Field Types
       </Text>
-      
+
       <Flex direction="column" gap="md">
         <Box>
-          <Text fontWeight="heading" fontSize="sm">Text Fields</Text>
+          <Text fontWeight="heading" fontSize="sm">
+            Text Fields
+          </Text>
           <Text fontSize="sm" color="text-secondary">
             For short text inputs like names, titles, or identifiers.
           </Text>
         </Box>
-        
+
         <Box>
-          <Text fontWeight="heading" fontSize="sm">Long Text</Text>
+          <Text fontWeight="heading" fontSize="sm">
+            Long Text
+          </Text>
           <Text fontSize="sm" color="text-secondary">
             For descriptions, notes, or multi-line content.
           </Text>
         </Box>
-        
+
         <Box>
-          <Text fontWeight="heading" fontSize="sm">Number</Text>
+          <Text fontWeight="heading" fontSize="sm">
+            Number
+          </Text>
           <Text fontSize="sm" color="text-secondary">
             For numeric values, quantities, or calculations.
           </Text>
         </Box>
-        
+
         <Box>
-          <Text fontWeight="heading" fontSize="sm">Date</Text>
+          <Text fontWeight="heading" fontSize="sm">
+            Date
+          </Text>
           <Text fontSize="sm" color="text-secondary">
             For deadlines, start dates, or event dates.
           </Text>
@@ -173,31 +213,49 @@ const SidebarFields = memo(function SidebarFields() {
 });
 
 // Step 4: Map Properties / Summary
-const SidebarSummary = memo(function SidebarSummary({ formData }: { formData: any }) {
+const SidebarSummary = memo(function SidebarSummary({
+  formData,
+}: {
+  formData: any;
+}) {
   return (
     <Box>
       <Text as="h4" fontWeight="heading" color="text-primary" mb="md">
         Summary
       </Text>
-      
+
       <Flex direction="column" gap="md">
         <Box>
-          <Text fontSize="sm" color="text-tertiary">Name</Text>
-          <Text fontSize="sm" fontWeight="heading">{formData?.name || '-'}</Text>
+          <Text fontSize="sm" color="text-tertiary">
+            Name
+          </Text>
+          <Text fontSize="sm" fontWeight="heading">
+            {formData?.name || '-'}
+          </Text>
         </Box>
-        
+
         <Box>
-          <Text fontSize="sm" color="text-tertiary">Type</Text>
-          <Text fontSize="sm" fontWeight="heading">{formData?.type || '-'}</Text>
+          <Text fontSize="sm" color="text-tertiary">
+            Type
+          </Text>
+          <Text fontSize="sm" fontWeight="heading">
+            {formData?.type || '-'}
+          </Text>
         </Box>
-        
+
         <Box>
-          <Text fontSize="sm" color="text-tertiary">Prefix</Text>
-          <Text fontSize="sm" fontWeight="heading">{formData?.prefix || '-'}</Text>
+          <Text fontSize="sm" color="text-tertiary">
+            Prefix
+          </Text>
+          <Text fontSize="sm" fontWeight="heading">
+            {formData?.prefix || '-'}
+          </Text>
         </Box>
-        
+
         <Box>
-          <Text fontSize="sm" color="text-tertiary">Fields</Text>
+          <Text fontSize="sm" color="text-tertiary">
+            Fields
+          </Text>
           <Text fontSize="sm" fontWeight="heading">
             {formData?.fields?.length || 0} fields configured
           </Text>
@@ -249,19 +307,13 @@ const VariantSidebar: React.FC<SidebarProps> = memo(function VariantSidebar({
   const isLastStep = currentStep === displaySteps.length - 1;
 
   return (
-    <Flex
-      direction="column"
-      h="100%"
-      bg="background-secondary"
-      px="lg"
-      py="md"
-    >
+    <Flex direction="column" h="100%" bg="background-secondary" px="lg" py="md">
       {/* Progress Indicator */}
       <Box mb="xl">
         <StepsIndicator
           titles={displaySteps}
-          currentStep={currentStep + 1}
-          onStepClick={onStepChange}
+          formStep={currentStep}
+          goTo={onStepChange}
         />
       </Box>
 
@@ -274,18 +326,24 @@ const VariantSidebar: React.FC<SidebarProps> = memo(function VariantSidebar({
       <Flex direction="column" gap="sm" mt="auto" pt="md">
         {/* Import Placeholders (Future Features) */}
         <Flex gap="sm" mb="md">
-          <Tooltip content="Import from file - Coming soon">
-            <Button variant="secondary" size="xs" disabled width="100%">
-              <Upload size={14} />
-              Import File
-            </Button>
-          </Tooltip>
-          <Tooltip content="Import from document - Coming soon">
-            <Button variant="secondary" size="xs" disabled width="100%">
-              <FileText size={14} />
-              Import Doc
-            </Button>
-          </Tooltip>
+          <Button
+            variant="secondary"
+            size="xs"
+            disabled
+            width="100%"
+            title="Import from file - Coming soon">
+            <Upload size={14} />
+            Import File
+          </Button>
+          <Button
+            variant="secondary"
+            size="xs"
+            disabled
+            width="100%"
+            title="Import from document - Coming soon">
+            <FileText size={14} />
+            Import Doc
+          </Button>
         </Flex>
 
         {/* Navigation Buttons */}
@@ -294,15 +352,11 @@ const VariantSidebar: React.FC<SidebarProps> = memo(function VariantSidebar({
             onClick={onSubmit}
             disabled={isSubmitting}
             loading={isSubmitting}
-            width="100%"
-          >
+            width="100%">
             Create Variant
           </Button>
         ) : (
-          <Button
-            onClick={() => onStepChange(currentStep + 1)}
-            width="100%"
-          >
+          <Button onClick={() => onStepChange(currentStep + 1)} width="100%">
             Next Step
           </Button>
         )}
@@ -311,8 +365,7 @@ const VariantSidebar: React.FC<SidebarProps> = memo(function VariantSidebar({
           <Button
             variant="secondary"
             onClick={() => onStepChange(currentStep - 1)}
-            width="100%"
-          >
+            width="100%">
             <ArrowLeft size={14} />
             Previous
           </Button>
@@ -324,8 +377,7 @@ const VariantSidebar: React.FC<SidebarProps> = memo(function VariantSidebar({
             variant="ghost"
             onClick={onCancel}
             width="100%"
-            color="text-secondary"
-          >
+            color="text-secondary">
             Cancel
           </Button>
         )}
