@@ -348,7 +348,11 @@ const VariantDetailForm = () => {
         <StatCard label="Fields" value={fields.length} />
         <StatCard
           label="Flow"
-          value={variant.flow?.flow?.name || variant.flow?.name || 'None'}
+          value={
+            variant.flow?.flow?.name || variant.flow?.name
+              ? `${variant.flow?.flow?.name || variant.flow?.name} (v${(content as any)?.flow_version?.version_number || '?'})`
+              : 'None'
+          }
         />
       </Box>
 
@@ -413,7 +417,10 @@ const VariantDetailForm = () => {
               </Text>
             </Box>
             <Box px="lg" py="lg">
-              <Box display="grid" gridTemplateColumns="1fr 1fr 1fr" gap="md">
+              <Box
+                display="grid"
+                gridTemplateColumns="1fr 1fr 1fr 1fr"
+                gap="md">
                 <DetailItem
                   label="Layout"
                   value={variant.layout?.name}
@@ -423,6 +430,14 @@ const VariantDetailForm = () => {
                   label="Theme"
                   value={variant.theme?.name}
                   onClick={() => setIsThemeOpen(true)}
+                />
+                <DetailItem
+                  label="Flow Version"
+                  value={
+                    (content as any)?.flow_version
+                      ? `v${(content as any).flow_version.version_number}`
+                      : undefined
+                  }
                 />
                 <Box>
                   <Text fontSize="sm" color="text-secondary" mb="xs">
