@@ -198,7 +198,10 @@ export const DocumentProvider = ({
 
   useEffect(() => {
     if (flow && flow.flow) {
-      fetchStates(flow.flow.id, flowVersionId);
+      // Prefer the document's state's flow_version_id (matches the version
+      // the document was created with), fall back to the content type's version
+      const versionId = contents?.state?.flow_version_id || flowVersionId;
+      fetchStates(flow.flow.id, versionId);
     }
   }, [flow, contents, flowVersionId]);
 
