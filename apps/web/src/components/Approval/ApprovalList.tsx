@@ -42,7 +42,33 @@ export interface IPageMeta {
   contents?: any;
 }
 
-const columns = () => [
+const TabButton = ({
+  active,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}) => (
+  <Box
+    as="button"
+    onClick={onClick}
+    pb="sm"
+    px="sm"
+    borderBottom="2px solid"
+    borderColor={active ? 'green.500' : 'transparent'}
+    color={active ? 'green.900' : 'text-secondary'}
+    fontWeight={active ? '600' : '500'}
+    fontSize="sm"
+    bg="transparent"
+    cursor="pointer"
+    style={{ transition: 'all 0.2s' }}>
+    {children}
+  </Box>
+);
+
+const columns = (activeTab: string) => [
   {
     id: 'content.name',
     header: 'Name',
@@ -59,11 +85,17 @@ const columns = () => [
   },
   {
     id: 'content.updated_at',
-    header: 'Time',
+    header: activeTab === 'past' ? 'Reviewed' : 'Time',
     accessorKey: 'Time',
     cell: ({ row }: any) => (
       <Box>
-        <TimeAgo time={row.original?.content?.updated_at} />
+        <TimeAgo
+          time={
+            activeTab === 'past'
+              ? row.original?.content?.reviewed_at
+              : row.original?.content?.updated_at
+          }
+        />
       </Box>
     ),
     enableSorting: false,
@@ -83,9 +115,19 @@ const columns = () => [
   {
     header: 'Status',
     accessorKey: 'age',
-    cell: ({ row }: any) => (
-      <StateBadge name={row.original?.state?.state} color="#E2F7EA" />
-    ),
+    cell: ({ row }: any) =>
+      activeTab === 'past' ? (
+        <StateBadge
+          name={row.original?.content?.review_status}
+          color={
+            row.original?.content?.review_status === 'approved'
+              ? '#E2F7EA'
+              : '#FEE2E2'
+          }
+        />
+      ) : (
+        <StateBadge name={row.original?.state?.state} color="#E2F7EA" />
+      ),
     enableSorting: false,
     textAlign: 'right',
   },
@@ -97,7 +139,7 @@ const columns = () => [
         <Flex>
           <NextLink href={`/documents/${row.original?.content?.id}`}>
             <Button variant="secondary" size="sm">
-              Review
+              {activeTab === 'past' ? 'View' : 'Review'}
             </Button>
           </NextLink>
         </Flex>
@@ -113,21 +155,21 @@ const Approvals = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [pageMeta, setPageMeta] = useState<IPageMeta>();
   const [page, setPage] = useState<number>(1);
+  const [activeTab, setActiveTab] = useState<'active' | 'past'>('active');
 
   const router: any = useRouter();
   const currentPage: any = parseInt(router.query.page) || 1;
 
   useEffect(() => {
-    if (page) {
-      loadData();
-    }
-  }, [currentPage]);
+    loadData();
+  }, [currentPage, activeTab]);
 
   const loadData = () => {
     setLoading(true);
     const pageNo = currentPage ? `&page=${currentPage}` : '';
+    const statusParam = `&status=${activeTab}`;
 
-    const query = `sort=inserted_at_desc${pageNo}`;
+    const query = `sort=inserted_at_desc${pageNo}${statusParam}`;
 
     fetchAPI(`users/list_pending_approvals?${query}`)
       .then((data: any) => {
@@ -161,18 +203,39 @@ const Approvals = () => {
 
       <PageInner>
         <Box>
+          <Flex gap="md" borderBottom="1px solid" borderColor="border" mb="md">
+            <TabButton
+              active={activeTab === 'active'}
+              onClick={() => {
+                setActiveTab('active');
+                setPage(1);
+              }}>
+              Active Request
+            </TabButton>
+            <TabButton
+              active={activeTab === 'past'}
+              onClick={() => {
+                setActiveTab('past');
+                setPage(1);
+              }}>
+              Past Approvals
+            </TabButton>
+          </Flex>
+
           <Table
             data={contents}
             isLoading={loading}
-            columns={columns()}
+            columns={columns(activeTab)}
             skeletonRows={10}
             emptyMessage={
               <Box mx="auto" gap="md" w="60%">
                 <Text as="h3" fontSize="md">
-                  You are all caught up!
+                  No {activeTab} approvals
                 </Text>
                 <Text color="text-secondary" mb="md">
-                  There are currently no items awaiting your approval.
+                  {activeTab === 'active'
+                    ? 'You are all caught up! There are currently no items awaiting your approval.'
+                    : 'You haven’t approved or rejected any documents yet.'}
                 </Text>
               </Box>
             }
