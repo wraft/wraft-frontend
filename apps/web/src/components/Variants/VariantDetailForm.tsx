@@ -19,8 +19,8 @@ import Back from 'common/Back';
 import { TimeAgo } from 'common/Atoms';
 import { BarChart } from 'common/charts/BarChart';
 import { createChartConfig } from 'common/charts/ChartConfig';
-import { ContentType } from 'utils/types';
-import { fetchAPI, putAPI } from 'utils/models';
+import { ContentType, ContentTypeVersion } from 'utils/types';
+import { fetchAPI, putAPI, postAPI, deleteAPI } from 'utils/models';
 import { usePermission } from 'utils/permissions';
 
 import Form from './VariantForm';
@@ -294,6 +294,7 @@ const VariantDetailForm = () => {
   const [templates, setTemplates] = useState<any[]>([]);
   const [documents, setDocuments] = useState<any[]>([]);
   const [documentsMeta, setDocumentsMeta] = useState<any>(null);
+  const [versions, setVersions] = useState<ContentTypeVersion[]>([]);
   const [loading, setLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
   const [drawerStep, setDrawerStep] = useState(0);
@@ -308,6 +309,9 @@ const VariantDetailForm = () => {
   );
   const [chartData, setChartData] = useState<any[]>([]);
   const [chartLoading, setChartLoading] = useState(false);
+  const [selectedVersionId, setSelectedVersionId] = useState<string | null>(
+    null,
+  );
 
   const { hasPermission } = usePermission();
   const editDrawer = useDrawer();
@@ -319,10 +323,10 @@ const VariantDetailForm = () => {
 
   useEffect(() => {
     if (cId) {
-      loadAllData(cId);
+      loadAllData(cId, selectedVersionId);
       loadChartData(cId, chartInterval);
     }
-  }, [cId, rerender]);
+  }, [cId, selectedVersionId, rerender]);
 
   useEffect(() => {
     if (cId) {
@@ -353,13 +357,33 @@ const VariantDetailForm = () => {
     }
   };
 
-  const loadAllData = async (id: string) => {
+  const loadAllData = async (id: string, versionId: string | null = null) => {
     try {
       setLoading(true);
-      const variantData: any = await fetchAPI(`content_types/${id}`);
+      let variantData: any;
+
+      if (versionId) {
+        try {
+          const vData: any = await fetchAPI(
+            `content_type_versions/${versionId}`,
+          );
+          variantData = { content_type: vData.content_type_version };
+        } catch {
+          // Fallback to main content type if version fetch fails
+          variantData = await fetchAPI(`content_types/${id}`);
+        }
+      } else {
+        variantData = await fetchAPI(`content_types/${id}`);
+      }
+
       setContent(variantData);
       const variantName = variantData?.content_type?.name;
-      await Promise.allSettled([loadTemplates(id), loadDocuments(variantName)]);
+
+      await Promise.allSettled([
+        loadTemplates(id),
+        loadDocuments(variantName),
+        loadVersions(id),
+      ]);
     } catch {
       // variant fetch failed
     } finally {
@@ -373,6 +397,59 @@ const VariantDetailForm = () => {
       setTemplates(data?.data_templates || []);
     } catch {
       setTemplates([]);
+    }
+  };
+
+  const loadVersions = async (id: string) => {
+    try {
+      const data: any = await fetchAPI(`content_types/${id}/versions`);
+      setVersions(data?.content_type_versions || []);
+    } catch {
+      setVersions([]);
+    }
+  };
+
+  const handleCreateDraft = async () => {
+    try {
+      await postAPI(`content_types/${cId}/versions`, {});
+      toast.success('Draft version created');
+      loadVersions(cId);
+    } catch (error: any) {
+      toast.error(error?.message || 'Failed to create draft');
+    }
+  };
+
+  const handlePublish = async (versionId: string) => {
+    try {
+      await postAPI(`content_type_versions/${versionId}/publish`, {});
+      toast.success('Version published');
+      loadVersions(cId);
+    } catch (error: any) {
+      toast.error(error?.message || 'Failed to publish version');
+    }
+  };
+
+  const handleActivate = async (versionId: string) => {
+    try {
+      await postAPI(`content_type_versions/${versionId}/activate`, {});
+      toast.success('Version activated');
+      loadVersions(cId);
+      // Reload content to update active version details
+      const variantData: any = await fetchAPI(`content_types/${cId}`);
+      setContent(variantData);
+    } catch (error: any) {
+      toast.error(error?.message || 'Failed to activate version');
+    }
+  };
+
+  const handleDeleteDraft = async (versionId: string) => {
+    if (!confirm('Are you sure you want to delete this draft?')) return;
+    try {
+      await deleteAPI(`content_type_versions/${versionId}`);
+      toast.success('Draft deleted');
+      loadVersions(cId);
+    } catch (error: any) {
+      toast.error(error?.message || 'Failed to delete draft');
     }
   };
 
@@ -808,6 +885,156 @@ const VariantDetailForm = () => {
 
           {/* RIGHT PANEL (Sidebar) - 25% */}
           <Flex direction="column" gap="lg" flex={1} style={{ minWidth: 320 }}>
+            {/* Versions */}
+            <Card>
+              <CardHeader
+                title="Versions"
+                action={
+                  canManage ? (
+                    <Flex
+                      as="button"
+                      align="center"
+                      gap="xs"
+                      onClick={handleCreateDraft}
+                      style={{
+                        cursor: 'pointer',
+                        background: 'none',
+                        border: 'none',
+                      }}>
+                      <Plus
+                        size={14}
+                        weight="bold"
+                        color="var(--theme-ui-colors-green-600)"
+                      />
+                      <Text fontSize="xs" color="green.600" fontWeight="600">
+                        New Draft
+                      </Text>
+                    </Flex>
+                  ) : undefined
+                }
+              />
+              {versions.length === 0 ? (
+                <CardEmpty
+                  message="No versions found"
+                  actionLabel="Create Draft"
+                  onAction={handleCreateDraft}
+                />
+              ) : (
+                versions.map((v: ContentTypeVersion) => (
+                  <Row
+                    key={v.id}
+                    isLast={false}
+                    // highlight selected
+                    // onClick={() => setSelectedVersionId(v.id)}
+                  >
+                    <Flex
+                      direction="column"
+                      onClick={() => setSelectedVersionId(v.id)}
+                      style={{ cursor: 'pointer', flex: 1 }}>
+                      <Flex align="center" gap="xs">
+                        <Text
+                          fontSize="sm"
+                          fontWeight={
+                            selectedVersionId === v.id ? '700' : '600'
+                          }
+                          color={
+                            selectedVersionId === v.id
+                              ? 'green.900'
+                              : 'text-primary'
+                          }>
+                          v{v.version_number}
+                        </Text>
+                        {v.status === 'draft' && (
+                          <Text
+                            fontSize="xs"
+                            bg="orange.100"
+                            color="orange.800"
+                            px="xs"
+                            borderRadius="sm">
+                            Draft
+                          </Text>
+                        )}
+                        {v.status === 'published' && (
+                          <Text
+                            fontSize="xs"
+                            bg="green.100"
+                            color="green.800"
+                            px="xs"
+                            borderRadius="sm">
+                            Published
+                          </Text>
+                        )}
+                        {(content as any)?.active_version?.id === v.id && (
+                          <Text
+                            fontSize="xs"
+                            bg="blue.100"
+                            color="blue.800"
+                            px="xs"
+                            borderRadius="sm">
+                            Active
+                          </Text>
+                        )}
+                      </Flex>
+                      <Text fontSize="xs" color="text-tertiary">
+                        <TimeAgo time={v.inserted_at} />
+                      </Text>
+                    </Flex>
+                    {canManage && (
+                      <Flex gap="xs">
+                        {v.status === 'draft' && (
+                          <>
+                            <Button
+                              size="xs"
+                              variant="ghost"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handlePublish(v.id);
+                              }}>
+                              Publish
+                            </Button>
+                            <Button
+                              size="xs"
+                              variant="ghost"
+                              color="red"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleDeleteDraft(v.id);
+                              }}>
+                              Delete
+                            </Button>
+                          </>
+                        )}
+                        {v.status === 'published' &&
+                          (content as any)?.active_version?.id !== v.id && (
+                            <Button
+                              size="xs"
+                              variant="ghost"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleActivate(v.id);
+                              }}>
+                              Activate
+                            </Button>
+                          )}
+                      </Flex>
+                    )}
+                  </Row>
+                ))
+              )}
+            </Card>
+
+            {selectedVersionId && (
+              <Box mb="lg">
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  style={{ width: '100%' }}
+                  onClick={() => setSelectedVersionId(null)}>
+                  Back to Active Version
+                </Button>
+              </Box>
+            )}
+
             {/* Configuration */}
             <Card>
               <CardHeader
@@ -904,6 +1131,7 @@ const VariantDetailForm = () => {
             step={drawerStep}
             setIsOpen={setIsOpen}
             setRerender={setRerender}
+            versionId={selectedVersionId}
           />
         )}
       </Drawer>

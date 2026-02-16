@@ -72,9 +72,23 @@ export interface Creator {
   email: string;
 }
 
+export interface ContentTypeVersion {
+  id: string;
+  version_number: number;
+  status: 'draft' | 'published';
+  description: string;
+  type: string;
+  published_at: string | null;
+  creator?: Creator;
+  inserted_at: string;
+  updated_at: string;
+}
+
 export interface ContentType {
   creator: Creator;
   content_type: ContentTypeClass;
+  active_version?: ContentTypeVersion;
+  versions?: ContentTypeVersion[];
 }
 
 export interface ContentTypeClass {

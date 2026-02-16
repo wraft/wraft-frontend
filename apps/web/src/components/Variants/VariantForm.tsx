@@ -72,6 +72,7 @@ interface Props {
   step?: number;
   setIsOpen?: (e: any) => void;
   setRerender?: (e: any) => void;
+  versionId?: string | null;
 }
 
 interface FieldMapping {
@@ -97,7 +98,12 @@ const TYPES = [
   { value: 'contract', label: 'Contract' },
 ];
 
-const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
+const VariantForm = ({
+  step = 0,
+  setIsOpen,
+  setRerender,
+  versionId,
+}: Props) => {
   const [content, setContent] = useState<ContentType | undefined>(undefined);
   const [formStep, setFormStep] = useState(step);
   const [frameFields, setFrameFields] = useState<any[]>([]);
@@ -159,10 +165,12 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
   };
 
   useEffect(() => {
-    if (contentId) {
+    if (versionId) {
+      loadDataDetails(versionId);
+    } else if (contentId) {
       loadDataDetails(contentId);
     }
-  }, [contentId]);
+  }, [contentId, versionId]);
 
   useEffect(() => {
     loadFieldTypes();
@@ -348,9 +356,18 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
   };
 
   const loadDataDetails = (id: string) => {
-    fetchAPI(`content_types/${id}`).then((data: any) => {
-      setContentDetails(data);
-    });
+    if (versionId) {
+      fetchAPI(`content_type_versions/${id}`).then((data: any) => {
+        const versionData = data.content_type_version;
+        // The structure of ContentTypeVersion is mostly same as ContentType
+        // But field "fields" is present
+        setContentDetails({ content_type: versionData });
+      });
+    } else {
+      fetchAPI(`content_types/${id}`).then((data: any) => {
+        setContentDetails(data);
+      });
+    }
     return false;
   };
 
@@ -479,7 +496,12 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
     };
 
     try {
-      if (contentId) {
+      if (versionId) {
+        // For versions, we just update the payload. Field removal should be handled by backend update logic if supported.
+        // Assuming update_content_type_version handles full replacement of fields or we might need to handle deletions differently.
+        // For now, rely on putAPI with full payload.
+        await putAPI(`content_type_versions/${versionId}`, payload);
+      } else if (contentId) {
         const fieldsToRemove = getFieldsToRemove(data?.fields);
         await deleteFieldsOneByOne(fieldsToRemove);
 
