@@ -127,7 +127,8 @@ const OrganisationInfo = () => {
           direction="column"
           gap="md"
           as="form"
-          onSubmit={handleSubmit(onSubmit)}>
+          onSubmit={handleSubmit(onSubmit)}
+        >
           {formList.map((customField: any) => (
             <Box key={customField?.id}>
               <Controller

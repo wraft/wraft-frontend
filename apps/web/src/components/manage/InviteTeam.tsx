@@ -130,7 +130,8 @@ const InviteTeam = ({ setOpen, onInviteSuccess }: Props) => {
       as="form"
       h="100vh"
       direction="column"
-      onSubmit={handleSubmit(onSubmit)}>
+      onSubmit={handleSubmit(onSubmit)}
+    >
       <Box flexShrink="0" borderBottom="1px solid " borderColor="border">
         <Drawer.Header>
           <Drawer.Title>Invite people</Drawer.Title>
@@ -155,7 +156,8 @@ const InviteTeam = ({ setOpen, onInviteSuccess }: Props) => {
                 border="1px solid"
                 borderColor="border"
                 borderRadius="md"
-                bg="transparent">
+                bg="transparent"
+              >
                 <ReactMultiEmailWrapper
                   {...field}
                   emails={selectedEmails}
@@ -178,7 +180,8 @@ const InviteTeam = ({ setOpen, onInviteSuccess }: Props) => {
                       borderRadius="md"
                       mr="sm"
                       px="sm"
-                      py="xs">
+                      py="xs"
+                    >
                       <Text fontSize="sm" mr="xs">
                         {email}
                       </Text>
@@ -223,7 +226,8 @@ const InviteTeam = ({ setOpen, onInviteSuccess }: Props) => {
           borderColor="border"
           borderRadius="sm"
           maxHeight="361px"
-          overflowY="auto">
+          overflowY="auto"
+        >
           {filteredRoles.map((role: any, index: number) => {
             return (
               <Label key={index}>
@@ -238,7 +242,8 @@ const InviteTeam = ({ setOpen, onInviteSuccess }: Props) => {
                   borderBottom={
                     index !== filteredRoles.length - 1 ? '1px solid' : 'none'
                   }
-                  borderColor="border">
+                  borderColor="border"
+                >
                   <Checkbox
                     size="small"
                     {...register('role', {
@@ -269,7 +274,8 @@ const InviteTeam = ({ setOpen, onInviteSuccess }: Props) => {
         <Button
           disabled={!isValid || isLoading}
           loading={isLoading}
-          type="submit">
+          type="submit"
+        >
           Invite people
         </Button>
       </Flex>

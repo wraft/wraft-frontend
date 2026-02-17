@@ -161,7 +161,8 @@ const DocumentTypesChart: React.FC = () => {
         fontWeight="heading"
         fontSize="base"
         mb="md"
-        color="text-secondary">
+        color="text-secondary"
+      >
         Document Types Distribution
       </Text>
       {loading ? (
@@ -187,7 +188,8 @@ const DocumentTypesChart: React.FC = () => {
           borderRadius="md"
           border="1px solid"
           borderColor="border"
-          bg="gray.50">
+          bg="gray.50"
+        >
           <Text fontSize="md" fontWeight="medium">
             No document types found.
           </Text>

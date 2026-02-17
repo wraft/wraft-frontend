@@ -125,7 +125,8 @@ const ContractChart: React.FC = () => {
         fontWeight="heading"
         fontSize="md"
         mb="md"
-        color={theme.colors['text-secondary']}>
+        color={theme.colors['text-secondary']}
+      >
         Contracts Overview
       </Text>
       {loading ? (

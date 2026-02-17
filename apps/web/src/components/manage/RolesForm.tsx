@@ -323,7 +323,8 @@ const RolesForm = ({ setOpen, setRender, roleId }: RolesFormProps) => {
       as="form"
       h="100vh"
       direction="column"
-      onSubmit={handleSubmit(onSubmit)}>
+      onSubmit={handleSubmit(onSubmit)}
+    >
       <Box flexShrink="0">
         <Drawer.Header>
           <Drawer.Title>
@@ -347,7 +348,8 @@ const RolesForm = ({ setOpen, setRender, roleId }: RolesFormProps) => {
           <Field
             label="Role Name"
             required
-            error={errors?.name?.message as string}>
+            error={errors?.name?.message as string}
+          >
             <InputText
               {...register('name', { required: true })}
               placeholder="Enter a Role Name"
@@ -368,7 +370,8 @@ const RolesForm = ({ setOpen, setRender, roleId }: RolesFormProps) => {
             my="lg"
             border="1px solid"
             borderColor="border"
-            borderRadius="sm">
+            borderRadius="sm"
+          >
             {filteredPermissionKeys.map((key, index) => {
               const dropped = isExpanded === index;
               return (
@@ -378,13 +381,15 @@ const RolesForm = ({ setOpen, setRender, roleId }: RolesFormProps) => {
                       onClick={() => {
                         if (isExpanded === index) setExpanded(null);
                         else setExpanded(index);
-                      }}>
+                      }}
+                    >
                       <Flex w="100%" justify="space-between" align="center">
                         <Label
                           display="flex"
                           maxWidth="max-content"
                           alignItems="center"
-                          mb="0">
+                          mb="0"
+                        >
                           <Checkbox
                             checked={permissions[key]?.isChecked || false}
                             indeterminate={

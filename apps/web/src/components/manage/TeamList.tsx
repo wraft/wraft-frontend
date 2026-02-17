@@ -410,7 +410,8 @@ const TeamList = ({ refresh = 0 }: TeamListProps) => {
                     justify="space-between"
                     px="sm"
                     fontSize="sm"
-                    w="auto">
+                    w="auto"
+                  >
                     <Text flex="1" mr="sm" fontSize="sm">
                       {role.roleName}
                     </Text>
@@ -427,7 +428,8 @@ const TeamList = ({ refresh = 0 }: TeamListProps) => {
                           if (e.key === 'Enter' || e.key === ' ') {
                             openUnassignRoleModal(role, row.original.members);
                           }
-                        }}>
+                        }}
+                      >
                         <CloseIcon
                           width={12}
                           color="var(--theme-ui-colors-gray-1200)"
@@ -450,7 +452,8 @@ const TeamList = ({ refresh = 0 }: TeamListProps) => {
                       gap="sm"
                       px="sm"
                       py="xs"
-                      fontSize="sm">
+                      fontSize="sm"
+                    >
                       <Text>+ {totalRoles - 3} more</Text>
                     </Flex>
                   </DropdownMenu.Trigger>
@@ -474,7 +477,8 @@ const TeamList = ({ refresh = 0 }: TeamListProps) => {
                                 pt="xs"
                                 role="button"
                                 tabIndex={0}
-                                aria-label={`Remove ${role.roleName} role`}>
+                                aria-label={`Remove ${role.roleName} role`}
+                              >
                                 <CloseIcon width={16} />
                               </Box>
                             )}
@@ -546,7 +550,8 @@ const TeamList = ({ refresh = 0 }: TeamListProps) => {
             {hasPermission('members', 'manage') && (
               <DropdownMenu aria-label="member actions">
                 <DropdownMenu.Item
-                  onClick={() => openUnassignUserModal(row.original.members)}>
+                  onClick={() => openUnassignUserModal(row.original.members)}
+                >
                   <Text>Remove</Text>
                 </DropdownMenu.Item>
               </DropdownMenu>
@@ -586,7 +591,8 @@ const TeamList = ({ refresh = 0 }: TeamListProps) => {
             px="sm"
             py="xs"
             fontSize="sm"
-            w="auto">
+            w="auto"
+          >
             <Text fontSize="sm" textTransform="capitalize">
               {row.original.status}
             </Text>
@@ -616,11 +622,13 @@ const TeamList = ({ refresh = 0 }: TeamListProps) => {
             {hasPermission('members', 'manage') && (
               <DropdownMenu aria-label="invite actions">
                 <DropdownMenu.Item
-                  onClick={() => onResendInvite(row.original.id)}>
+                  onClick={() => onResendInvite(row.original.id)}
+                >
                   <Text>Resend Invite</Text>
                 </DropdownMenu.Item>
                 <DropdownMenu.Item
-                  onClick={() => onCancelInvite(row.original.id)}>
+                  onClick={() => onCancelInvite(row.original.id)}
+                >
                   <Text>Cancel Invite</Text>
                 </DropdownMenu.Item>
               </DropdownMenu>
@@ -643,7 +651,8 @@ const TeamList = ({ refresh = 0 }: TeamListProps) => {
           onClick={() => {
             refreshData();
             refreshInvitedUsers();
-          }}>
+          }}
+        >
           Retry
         </Button>
       </Flex>
@@ -676,7 +685,8 @@ const TeamList = ({ refresh = 0 }: TeamListProps) => {
       <Modal
         open={isUnassignModalOpen}
         ariaLabel="unassign role modal popup"
-        onClose={closeUnassignRoleModal}>
+        onClose={closeUnassignRoleModal}
+      >
         <Box>
           <Modal.Header>Are you sure</Modal.Header>
           <Text my="sm" color="text-secondary">
@@ -695,7 +705,8 @@ const TeamList = ({ refresh = 0 }: TeamListProps) => {
                   );
                   closeUnassignRoleModal();
                 }
-              }}>
+              }}
+            >
               Confirm
             </Button>
           </Flex>
@@ -705,7 +716,8 @@ const TeamList = ({ refresh = 0 }: TeamListProps) => {
       <Modal
         open={isOpenUnassignUserModal}
         ariaLabel="unassign user modal popup"
-        onClose={closeUnassignUserModal}>
+        onClose={closeUnassignUserModal}
+      >
         <Box>
           <Modal.Header>Are you sure</Modal.Header>
           <Text my="sm" color="text-secondary">
@@ -721,7 +733,8 @@ const TeamList = ({ refresh = 0 }: TeamListProps) => {
                   onUnassignUser(currentRole.member.memberId);
                   closeUnassignUserModal();
                 }
-              }}>
+              }}
+            >
               Confirm
             </Button>
           </Flex>

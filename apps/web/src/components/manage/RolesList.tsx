@@ -62,7 +62,8 @@ const columns = ({ openDrawer, onDeleteRole, hasPermission }: any) => [
             {hasPermission('role', 'delete') && (
               <DropdownMenu aria-label="dropdown role">
                 <DropdownMenu.Item
-                  onClick={() => onDeleteRole(row.original.id)}>
+                  onClick={() => onDeleteRole(row.original.id)}
+                >
                   <Text cursor="pointer">Delete</Text>
                 </DropdownMenu.Item>
                 <DropdownMenu.Item onClick={() => openDrawer(row.original.id)}>
@@ -147,7 +148,8 @@ const RolesList = ({
         open={isOpen}
         store={mobileMenuDrawer}
         withBackdrop={true}
-        onClose={() => setOpen(false)}>
+        onClose={() => setOpen(false)}
+      >
         {currentContent && (
           <RolesForm
             setRender={setRender}
@@ -159,7 +161,8 @@ const RolesList = ({
       <Modal
         open={isOpenDeleteModal}
         ariaLabel="delete modal"
-        onClose={() => setOpenDeleteModal(false)}>
+        onClose={() => setOpenDeleteModal(false)}
+      >
         <>
           {currentContent && currentContent.user_count > 0 && (
             <Box>
@@ -168,7 +171,8 @@ const RolesList = ({
               <Flex gap="sm">
                 <Button
                   variant="secondary"
-                  onClick={() => setOpenDeleteModal(false)}>
+                  onClick={() => setOpenDeleteModal(false)}
+                >
                   Cancel
                 </Button>
               </Flex>
@@ -181,7 +185,8 @@ const RolesList = ({
               <Flex gap="sm">
                 <Button
                   variant="secondary"
-                  onClick={() => setOpenDeleteModal(false)}>
+                  onClick={() => setOpenDeleteModal(false)}
+                >
                   Cancel
                 </Button>
                 <Button onClick={() => onDelete(currentContent.id)}>

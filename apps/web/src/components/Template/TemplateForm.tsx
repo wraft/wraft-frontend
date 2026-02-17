@@ -327,7 +327,8 @@ const TemplateEditor = () => {
             p="md"
             gap="sm"
             as="form"
-            onSubmit={handleSubmit(onSubmit)}>
+            onSubmit={handleSubmit(onSubmit)}
+          >
             <Box flex={1}>
               <Controller
                 control={control}
@@ -354,7 +355,8 @@ const TemplateEditor = () => {
             flexGrow={1}
             justify="center"
             overflowY="auto"
-            maxHeight="calc(100vh - 150px)">
+            maxHeight="calc(100vh - 150px)"
+          >
             <Box minWidth="794px" maxWidth="920px">
               <Editor
                 isReadonly={false}
@@ -369,7 +371,8 @@ const TemplateEditor = () => {
         <Modal
           open={isSetupVisible}
           ariaLabel="Create Template"
-          onClose={() => setIsSetupVisible(false)}>
+          onClose={() => setIsSetupVisible(false)}
+        >
           <Flex w="480px" direction="column">
             <Box py="md" borderBottom="solid 1px" borderColor="border">
               <Text fontSize="xl" fontWeight="heading">
@@ -380,7 +383,8 @@ const TemplateEditor = () => {
               <Field
                 label="Template Name"
                 required
-                error={errors?.title?.message}>
+                error={errors?.title?.message}
+              >
                 <InputText
                   {...register('title')}
                   placeholder="Title for your template"
@@ -397,7 +401,8 @@ const TemplateEditor = () => {
                       label="Variant"
                       hint="The variant type cannot be modified once saved. Please select the correct one."
                       required
-                      error={errors?.variant?.message}>
+                      error={errors?.variant?.message}
+                    >
                       <Search
                         itemToString={(item: any) => item && item.name}
                         name={name}
@@ -425,7 +430,8 @@ const TemplateEditor = () => {
               <Box>
                 <Field
                   label="Upload Your DOCX Template (Optional)"
-                  hint="Use an existing template by uploading a .docx file.">
+                  hint="Use an existing template by uploading a .docx file."
+                >
                   <>
                     <InputText
                       type="file"
@@ -456,7 +462,8 @@ const TemplateEditor = () => {
           w="30%"
           maxWidth="400px"
           borderLeft="solid 1px"
-          borderColor="border">
+          borderColor="border"
+        >
           {templateId && currentTemplate && (
             <Flex align="center" justify="space-between" px="md" py="lg">
               <Box>
@@ -492,7 +499,8 @@ const TemplateEditor = () => {
                       borderColor="border"
                       justify="space-between"
                       key={field.id}
-                      onClick={() => insertBlock(field)}>
+                      onClick={() => insertBlock(field)}
+                    >
                       <Text>{field.name}</Text>
                       <IconFrame color="icon">
                         <TextTIcon />
@@ -522,7 +530,8 @@ const TemplateEditor = () => {
                     }
                     borderColor="border"
                     p="sm"
-                    bg="background-secondary">
+                    bg="background-secondary"
+                  >
                     <Text>{block.title}</Text>
                   </Box>
                 ))}

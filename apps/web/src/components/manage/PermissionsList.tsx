@@ -202,7 +202,8 @@ const PermissionsList = () => {
               {...{
                 onClick: row.getToggleExpandedHandler(),
                 style: { cursor: 'pointer', width: '100%' },
-              }}>
+              }}
+            >
               <Flex gap="sm">
                 <Text color="text-primary">{getValue()}</Text>
                 <IconWrapper isExpanded={row.getIsExpanded()}>

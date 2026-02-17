@@ -91,7 +91,8 @@ const UpcomingExpiryContracts: React.FC<UpcomingExpiryContractsProps> = ({
           borderRadius="md"
           border="1px solid"
           borderColor="border"
-          bg="gray.100">
+          bg="gray.100"
+        >
           <Text fontSize="md" fontWeight="medium">
             No {status} contracts found.
           </Text>

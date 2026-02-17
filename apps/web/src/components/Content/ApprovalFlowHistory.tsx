@@ -10,14 +10,16 @@ const WorkflowStep = ({ title, description, createDate }: any) => (
     className="progress__item--completed"
     position="relative"
     gap="sm"
-    align="self-start">
+    align="self-start"
+  >
     <Box pt="xs">
       <Flex
         borderRadius="full"
         bg="gray.400"
         p="xxs"
         align="center"
-        justify="center">
+        justify="center"
+      >
         <Check size={12} weight="bold" />
       </Flex>
     </Box>

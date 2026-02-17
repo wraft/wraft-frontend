@@ -248,7 +248,8 @@ const SearchBlock: React.FC = () => {
       h="16px"
       borderColor="border"
       p="xxs"
-      bg="background-secondary">
+      bg="background-secondary"
+    >
       <Text fontSize="xs">{count}</Text>
     </Flex>
   );
@@ -268,7 +269,8 @@ const SearchBlock: React.FC = () => {
       }}
       cursor="pointer"
       transition="background-color 0.2s ease"
-      tabIndex={0}>
+      tabIndex={0}
+    >
       <Text as="h4" fontWeight="heading">
         {item.name}
       </Text>
@@ -313,7 +315,8 @@ const SearchBlock: React.FC = () => {
         w="100%"
         aria-label="Open search modal"
         color="gray.800"
-        tabIndex={-1}>
+        tabIndex={-1}
+      >
         <IconFrame color="gray.700">
           <MagnifyingGlassIcon size={14} weight="bold" />
         </IconFrame>
@@ -326,7 +329,8 @@ const SearchBlock: React.FC = () => {
           px="xs"
           py="xs"
           fontSize="xs"
-          color="text-secondary">
+          color="text-secondary"
+        >
           ⌘K
         </Text>
       </Flex>
@@ -337,7 +341,8 @@ const SearchBlock: React.FC = () => {
         onClose={() => {
           setIsModalOpen(false);
           resetSearch();
-        }}>
+        }}
+      >
         <Box>
           <Box borderBottom="1px solid" color="border" position="relative">
             <InputText
@@ -358,7 +363,8 @@ const SearchBlock: React.FC = () => {
                 top="0"
                 bottom="0"
                 alignItems="center"
-                pointerEvents="none">
+                pointerEvents="none"
+              >
                 <Spinner color="green.500" size={12} />
               </Flex>
             )}
@@ -371,7 +377,8 @@ const SearchBlock: React.FC = () => {
             minHeight="200px"
             w="630px"
             overflowY="auto"
-            bg="background-secondary">
+            bg="background-secondary"
+          >
             {filteredResults.length > 0 ? (
               <Box>
                 {filteredResults.filter(
@@ -396,7 +403,8 @@ const SearchBlock: React.FC = () => {
                     textAlign="center"
                     py="xl"
                     variant="lg"
-                    color="text-secondary">
+                    color="text-secondary"
+                  >
                     No results found.
                   </Text>
                 )}
@@ -415,7 +423,8 @@ const SearchBlock: React.FC = () => {
             py="xs"
             gap="sm"
             borderTop="1px solid"
-            borderColor="border">
+            borderColor="border"
+          >
             <Text color="text-secondary" fontSize="sm">
               ⌘K
             </Text>

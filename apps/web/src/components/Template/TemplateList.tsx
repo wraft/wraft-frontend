@@ -252,7 +252,8 @@ const TemplateList = () => {
           <Button
             onClick={() => router.push(`/templates/new`)}
             variant="secondary"
-            size="sm">
+            size="sm"
+          >
             <Plus size={12} weight="bold" />
             New Template
           </Button>

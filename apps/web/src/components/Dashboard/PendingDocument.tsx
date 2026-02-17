@@ -62,7 +62,8 @@ const PendingDocumentBlock = () => {
             borderRadius="md"
             border="1px solid"
             borderColor="border"
-            bg="gray.100">
+            bg="gray.100"
+          >
             <Text fontSize="md" fontWeight="medium">
               No documents found.
             </Text>

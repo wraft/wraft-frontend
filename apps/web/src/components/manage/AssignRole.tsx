@@ -102,7 +102,8 @@ const AssignRole = ({
       alignItems="center"
       minWidth="205px"
       maxHeight="295px"
-      overflow="hidden">
+      overflow="hidden"
+    >
       <Box p="3" borderBottom="1px solid" borderColor="neutral.200" w="100%">
         <Text fontWeight="heading" fontSize="md" py="sm" px="md">
           Choose roles
@@ -115,7 +116,8 @@ const AssignRole = ({
           align="center"
           justify="center"
           p="md"
-          color="text-secondary">
+          color="text-secondary"
+        >
           <Text>No more roles to add.</Text>
         </Flex>
       ) : (
@@ -139,7 +141,8 @@ const AssignRole = ({
                   '&:last-of-type': {
                     borderBottom: 'none',
                   },
-                }}>
+                }}
+              >
                 <Checkbox
                   size="small"
                   checked={selectedRolesId.includes(role.roleId)}
@@ -161,7 +164,8 @@ const AssignRole = ({
           variant="secondary"
           size="sm"
           onClick={handleCancel}
-          loading={isSubmitting}>
+          loading={isSubmitting}
+        >
           Cancel
         </Button>
         <Button
@@ -169,7 +173,8 @@ const AssignRole = ({
           variant="primary"
           size="sm"
           disabled={isSubmitting || selectedRolesId.length === 0}
-          aria-label={`Assign ${selectedRolesId.length} role${selectedRolesId.length !== 1 ? 's' : ''}`}>
+          aria-label={`Assign ${selectedRolesId.length} role${selectedRolesId.length !== 1 ? 's' : ''}`}
+        >
           {isSubmitting ? 'Saving...' : 'Save'}
         </Button>
       </Flex>

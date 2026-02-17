@@ -91,7 +91,8 @@ const UserSettingsMenu = ({
                 px="8px"
                 borderBottom="1px solid"
                 borderColor="border"
-                marginBottom="8px">
+                marginBottom="8px"
+              >
                 <Text as="h4">{userProfile?.name}</Text>
 
                 {userProfile?.roles?.size > 0 && (
@@ -107,7 +108,8 @@ const UserSettingsMenu = ({
                   onClick={() => {
                     const next = mode === 'dark' ? 'light' : 'dark';
                     setMode(next);
-                  }}>
+                  }}
+                >
                   <Text as="span">Theme</Text>
                   <Box ml="auto">
                     <ModeToggle sx={{ pt: 0, m: 0 }} variant="button" />
@@ -137,7 +139,8 @@ const UserSettingsMenu = ({
                       py="xs"
                       px="xs"
                       justifyContent="space-between"
-                      onClick={() => router.push('/manage/billing')}>
+                      onClick={() => router.push('/manage/billing')}
+                    >
                       <Text w="100%">Upgrade Plan</Text>
                       <LightningIcon size={16} color="#127D5D" />
                     </Flex>

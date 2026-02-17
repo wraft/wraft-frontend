@@ -327,7 +327,8 @@ export const DocumentCard: React.FC<DocumentCardProps> = ({
       position="relative"
       className={className}
       onClick={onClick}
-      cursor={onClick ? 'pointer' : 'default'}>
+      cursor={onClick ? 'pointer' : 'default'}
+    >
       <VariantLine color={content.content_type?.color} />
       <CardContainer>
         <Box>
@@ -383,7 +384,8 @@ export const DocumentCard: React.FC<DocumentCardProps> = ({
                 textTransform="uppercase"
                 fontWeight="heading"
                 color="text-secondary"
-                mb="xs">
+                mb="xs"
+              >
                 {content.state?.state || 'Unknown'}
               </Text>
               <StateProgress
