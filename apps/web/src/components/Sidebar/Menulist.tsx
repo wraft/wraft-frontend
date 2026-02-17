@@ -26,6 +26,7 @@ export const Menulist = [
         name: 'Documents',
         icon: <FileTextIcon size={defaultIcon} weight={defaultWeight} />,
         path: '/documents',
+        tourId: 'documents',
       },
       {
         name: 'Approvals',
@@ -54,6 +55,7 @@ export const Menulist = [
         icon: <ArticleIcon size={defaultIcon} weight={defaultWeight} />,
         path: '/templates',
         permissions: ['template.show', 'template.manage'],
+        tourId: 'templates',
       },
     ],
   },
@@ -65,6 +67,7 @@ export const Menulist = [
         icon: <BlueprintIcon size={defaultIcon} weight={defaultWeight} />,
         path: '/variants',
         permissions: ['variant.show', 'variant.manage'],
+        tourId: 'variants',
       },
       {
         name: 'Forms',
@@ -76,6 +79,7 @@ export const Menulist = [
         name: 'Manage',
         icon: <UserFocusIcon size={defaultIcon} weight={defaultWeight} />,
         path: '/manage',
+        tourId: 'manage',
       },
     ],
   },

@@ -6,24 +6,24 @@ import { putAPI } from 'utils/models';
 
 export const steps = [
   {
-    selector: '[data-tour="dashboard"]',
-    content:
-      'This is your dashboard. Get an overview of your documents, approvals, and activity at a glance.',
-  },
-  {
     selector: '[data-tour="documents"]',
     content:
-      'Find all your documents here. Create, edit, and manage documents from templates.',
+      'Manage all your active documents, track their status, and collaborate with your team in one place.',
+  },
+  {
+    selector: '[data-tour="variants"]',
+    content:
+      'Variants allow you to manage different versions or regional adaptations of your content efficiently.',
   },
   {
     selector: '[data-tour="templates"]',
     content:
-      'Templates let you define reusable document structures. Start with one of ours or create your own.',
+      'Create reusable document structures with templates to maintain consistency and speed up document creation.',
   },
   {
     selector: '[data-tour="manage"]',
     content:
-      'Manage your organization settings, team members, roles, and permissions here.',
+      'Configure your organization settings, invite team members, and manage roles and permissions.',
   },
 ];
 
