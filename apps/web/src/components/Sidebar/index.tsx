@@ -97,7 +97,8 @@ const Sidebar = (props: any) => {
         justify="stretch"
         borderRight="solid 1px"
         borderColor="border"
-        bg="background-primary">
+        bg="background-primary"
+      >
         <Header toggleCreateDocument={toggleCreateDocument} />
         <Flex flex={1} direction="column">
           <SearchBlock />
@@ -112,15 +113,18 @@ const Sidebar = (props: any) => {
                   opacity="0.5"
                   p="md"
                   textTransform="uppercase"
-                  fontWeight="heading">
+                  fontWeight="heading"
+                >
                   {m.section}
                 </Text>
                 <Box id="menus">
-                  {m.menus.map(({ name, icon, path }: any) => (
+                  {m.menus.map(({ name, icon, path, tourId }: any) => (
                     <DefaultMenuItem
                       href={path}
                       key={name}
-                      variant="menuWrapper">
+                      variant="menuWrapper"
+                      {...(tourId ? { 'data-tour': tourId } : {})}
+                    >
                       <Flex alignItems="center" gap="8px">
                         <Flex opacity="0.8">
                           {React.cloneElement(icon, {
@@ -140,7 +144,8 @@ const Sidebar = (props: any) => {
                             fontWeight="500"
                             fontSize="base"
                             lineHeight={1}
-                            letterSpacing="-0.25px">
+                            letterSpacing="-0.25px"
+                          >
                             {name}
                           </Text>
                         )}
@@ -169,7 +174,8 @@ const Sidebar = (props: any) => {
             py="lg"
             // borderTop="solid 1px"
             // borderColor="gray.400"
-            alignItems="center">
+            alignItems="center"
+          >
             <UserSettingsMenu compact={false} />
           </Box>
         </Box>
@@ -179,7 +185,8 @@ const Sidebar = (props: any) => {
         store={mobileMenuDrawer}
         aria-label="Menu backdrop"
         withBackdrop={true}
-        onClose={() => setIsDocumentCreatorOpen(false)}>
+        onClose={() => setIsDocumentCreatorOpen(false)}
+      >
         <CreateDocument setIsOpen={setIsDocumentCreatorOpen} />
       </Drawer>
     </>
