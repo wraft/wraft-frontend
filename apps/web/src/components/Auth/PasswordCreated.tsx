@@ -11,7 +11,8 @@ const PasswordCreated = () => {
       direction="column"
       justifyContent="center"
       mt="80px"
-      alignItems="center">
+      alignItems="center"
+    >
       <Text as="h2" fontSize="3xl" mb="md">
         Password Created
       </Text>

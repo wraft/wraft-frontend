@@ -100,7 +100,8 @@ const StatesForm = (props: StateFormProps) => {
           sx={{
             borderBottom: 'solid 1px',
             borderColor: 'border',
-          }}>
+          }}
+        >
           {props.content.map((c: StateElement, index) => (
             <Flex
               key={index + 1}
@@ -110,18 +111,21 @@ const StatesForm = (props: StateFormProps) => {
                 border: 'solid 1px',
                 borderBottom: 0,
                 borderColor: 'border',
-              }}>
+              }}
+            >
               <Text mr={2} sx={{ color: 'blue.700' }}>
                 {index + 1}
               </Text>
               <Text
                 sx={{ fontWeight: 'heading', color: 'blue.1000' }}
-                key={c.state.id}>
+                key={c.state.id}
+              >
                 {c.state.state}
               </Text>
               <Text
                 onClick={() => onDeleteFlow(c.state.id)}
-                sx={{ ml: 'auto' }}>
+                sx={{ ml: 'auto' }}
+              >
                 Delete
               </Text>
             </Flex>

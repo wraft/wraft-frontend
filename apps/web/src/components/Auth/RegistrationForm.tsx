@@ -90,7 +90,8 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ inviteToken }) => {
         p="5xl"
         bg="background-secondary"
         h="100vh"
-        align="baseline">
+        align="baseline"
+      >
         <Box position="absolute" top="80px" left="80px">
           <Link href={homePageUrl}>
             <Box color="gray.0" fill="gray.1200">
@@ -116,13 +117,15 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ inviteToken }) => {
             direction="column"
             gap="md"
             as="form"
-            onSubmit={handleSubmit(onSubmit)}>
+            onSubmit={handleSubmit(onSubmit)}
+          >
             <Flex gap="sm">
               <Box flex="1 1 264px">
                 <Field
                   label="First Name"
                   required
-                  error={errors?.firstName?.message}>
+                  error={errors?.firstName?.message}
+                >
                   <InputText
                     {...register('firstName')}
                     placeholder="Enter your first name"
@@ -133,7 +136,8 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ inviteToken }) => {
                 <Field
                   label="Last Name"
                   required
-                  error={errors?.lastName?.message}>
+                  error={errors?.lastName?.message}
+                >
                   <InputText
                     {...register('lastName')}
                     placeholder="Enter your last name"
@@ -145,7 +149,8 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ inviteToken }) => {
               label="Email"
               required
               error={errors?.email?.message}
-              disabled={true}>
+              disabled={true}
+            >
               <InputText
                 type="email"
                 value={email || ''}
@@ -156,7 +161,8 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ inviteToken }) => {
             <Field
               label="Enter New Password"
               required
-              error={errors?.password?.message}>
+              error={errors?.password?.message}
+            >
               <InputText
                 {...register('password')}
                 placeholder="Enter New Password"
@@ -168,7 +174,8 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ inviteToken }) => {
               gap="39px"
               mb="xl"
               mt="sm"
-              justifyContent="space-between">
+              justifyContent="space-between"
+            >
               <Button type="submit">Accept Invitation</Button>
               <Flex alignItems="center" color="text-secondary" gap="xs">
                 <Text>Already joined?</Text>

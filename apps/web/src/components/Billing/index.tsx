@@ -91,7 +91,8 @@ const Billing = () => {
           border="1px solid"
           borderColor="border"
           borderRadius="md"
-          textAlign="center">
+          textAlign="center"
+        >
           <Text fontSize="xl" fontWeight="bold" mb="lg">
             Self-Hosted Mode
           </Text>
@@ -114,7 +115,8 @@ const Billing = () => {
             p="xl"
             border="1px solid"
             borderColor="border"
-            borderRadius="md">
+            borderRadius="md"
+          >
             <Text fontSize="xl" fontWeight="bold" mb="lg">
               Active Subscription
             </Text>

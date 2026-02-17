@@ -117,14 +117,16 @@ const BlockTemplateListFrame: FC = () => {
                   <DropdownMenu.Item
                     onClick={() => {
                       setDeleteBlock(row.index);
-                    }}>
+                    }}
+                  >
                     <Text>Delete</Text>
                   </DropdownMenu.Item>
                 )}
                 <Modal
                   ariaLabel="Delete Variant"
                   open={deleteBlock === row.index}
-                  onClose={() => setDeleteBlock(null)}>
+                  onClose={() => setDeleteBlock(null)}
+                >
                   {
                     <ConfirmDelete
                       title="Delete Variant"

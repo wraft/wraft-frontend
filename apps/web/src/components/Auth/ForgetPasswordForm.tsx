@@ -54,7 +54,8 @@ const ForgetPasswordForm = () => {
       p="5xl"
       bg="background-secondary"
       h="100vh"
-      align="baseline">
+      align="baseline"
+    >
       <Box position="absolute" top="80px" left="80px">
         <Link href="/">
           <Box color="gray.0" fill="gray.1200">
@@ -69,7 +70,8 @@ const ForgetPasswordForm = () => {
           direction="column"
           p="0px"
           pt="103px"
-          px="140px">
+          px="140px"
+        >
           <MailIcon width={224} height={80} className="main-icon" />
           <Text as="h3" fontSize="2xl">
             Check your Mail
@@ -80,7 +82,8 @@ const ForgetPasswordForm = () => {
           <Button
             onClick={() => {
               Router.push('/');
-            }}>
+            }}
+          >
             Return to Home
           </Button>
         </Flex>

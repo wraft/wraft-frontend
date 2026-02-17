@@ -244,17 +244,20 @@ const PlanList: React.FC = () => {
           w="400px"
           border="1px solid"
           borderColor="border"
-          borderRadius="md">
+          borderRadius="md"
+        >
           <Button
             fullWidth
             variant={billingCycle === 'monthly' ? 'secondary' : 'ghost'}
-            onClick={() => setBillingCycle('monthly')}>
+            onClick={() => setBillingCycle('monthly')}
+          >
             Monthly
           </Button>
           <Button
             fullWidth
             variant={billingCycle === 'yearly' ? 'secondary' : 'ghost'}
-            onClick={() => setBillingCycle('yearly')}>
+            onClick={() => setBillingCycle('yearly')}
+          >
             Yearly (save 20%)
           </Button>
         </Flex>
@@ -288,7 +291,8 @@ const PlanList: React.FC = () => {
                         <Text
                           fontSize="md"
                           color="gray.900"
-                          textDecoration="line-through">
+                          textDecoration="line-through"
+                        >
                           {Math.round(parseFloat(plan?.plan_amount))}
                         </Text>
                       </>
@@ -314,7 +318,8 @@ const PlanList: React.FC = () => {
                     variant={isActive ? 'primary' : 'secondary'}
                     fullWidth
                     disabled={isActive || loading}
-                    onClick={() => processPaddleCheckout(plan)}>
+                    onClick={() => processPaddleCheckout(plan)}
+                  >
                     {isActive ? 'Current Plan' : 'Upgrade'}
                   </HoverableButton>
 

@@ -74,7 +74,8 @@ const ApprovalFormBase = ({
       mb={3}
       sx={{ p: 4, mt: 0, minWidth: '600px' }}
       as="form"
-      onSubmit={handleSubmit(onSubmit)}>
+      onSubmit={handleSubmit(onSubmit)}
+    >
       {isUserSearchOpen && <h1>Searching</h1>}
       {user && <h1>User</h1>}
       <Input
@@ -146,7 +147,8 @@ const ApprovalFormBase = ({
                 border: 'solid 1px',
                 borderColor: 'border',
               }}
-              onClick={() => onUserSelect(x)}>
+              onClick={() => onUserSelect(x)}
+            >
               <Text as="h4" color="text">
                 {x.name}
               </Text>
@@ -162,7 +164,8 @@ const ApprovalFormBase = ({
           onClick={(e) => {
             e.preventDefault();
             handleSubmit(onSubmit);
-          }}>
+          }}
+        >
           Save
         </Button>
         <Button
@@ -171,7 +174,8 @@ const ApprovalFormBase = ({
             closeModal();
           }}
           variant="tertiary"
-          type="submit">
+          type="submit"
+        >
           Cancel
         </Button>
       </Flex>

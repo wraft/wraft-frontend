@@ -17,7 +17,8 @@ const WaitlistPrompt: React.FC = () => {
       justifySelf="center"
       border="1px solid"
       borderColor="border"
-      alignItems="center">
+      alignItems="center"
+    >
       <Text fontWeight="heading" fontSize="3xl" mb="sm">
         Hang tight!
       </Text>

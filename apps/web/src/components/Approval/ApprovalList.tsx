@@ -63,7 +63,8 @@ const TabButton = ({
     fontSize="sm"
     bg="transparent"
     cursor="pointer"
-    style={{ transition: 'all 0.2s' }}>
+    style={{ transition: 'all 0.2s' }}
+  >
     {children}
   </Box>
 );
@@ -209,7 +210,8 @@ const Approvals = () => {
               onClick={() => {
                 setActiveTab('active');
                 setPage(1);
-              }}>
+              }}
+            >
               Active Request
             </TabButton>
             <TabButton
@@ -217,7 +219,8 @@ const Approvals = () => {
               onClick={() => {
                 setActiveTab('past');
                 setPage(1);
-              }}>
+              }}
+            >
               Past Approvals
             </TabButton>
           </Flex>

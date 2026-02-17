@@ -136,7 +136,8 @@ const TransactionList = ({
       accessorKey: '',
       cell: (info: any) => (
         <Button
-          onClick={() => onDownloadInvoice(info.row.original.transaction_id)}>
+          onClick={() => onDownloadInvoice(info.row.original.transaction_id)}
+        >
           Download
         </Button>
       ),

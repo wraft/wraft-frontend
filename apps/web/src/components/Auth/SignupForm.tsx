@@ -60,7 +60,8 @@ const SignupForm = () => {
             variant="card"
             w="500px"
             justifySelf="center"
-            direction="column">
+            direction="column"
+          >
             <Text as="h3" mb="48px" color="gray.1200" fontSize="3xl">
               Join Wraft
             </Text>
@@ -70,7 +71,8 @@ const SignupForm = () => {
                   <Field
                     label="First Name"
                     required
-                    error={errors?.first_name?.message}>
+                    error={errors?.first_name?.message}
+                  >
                     <InputText
                       {...register('first_name')}
                       placeholder="Enter your first name"
@@ -81,7 +83,8 @@ const SignupForm = () => {
                   <Field
                     label="Last Name"
                     required
-                    error={errors?.last_name?.message}>
+                    error={errors?.last_name?.message}
+                  >
                     <InputText
                       {...register('last_name')}
                       placeholder="Enter your last name"

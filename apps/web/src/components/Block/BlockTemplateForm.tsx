@@ -123,7 +123,8 @@ const Form = () => {
             <Field
               label="Title"
               required
-              error={errors?.title?.message?.toString()}>
+              error={errors?.title?.message?.toString()}
+            >
               <Box background="#fff" borderRadius="md">
                 <InputText
                   {...register('title')}
