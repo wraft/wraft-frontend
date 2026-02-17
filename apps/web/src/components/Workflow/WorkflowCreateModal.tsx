@@ -101,7 +101,8 @@ const WorkflowCreateModal: React.FC<WorkflowCreateModalProps> = ({
               p={4}
               borderRadius="md"
               border="1px solid"
-              borderColor="blue.100">
+              borderColor="blue.100"
+            >
               <Flex gap={3}>
                 <Box pt={1}>
                   <Info size={20} weight="fill" color="blue.600" />
@@ -111,7 +112,8 @@ const WorkflowCreateModal: React.FC<WorkflowCreateModalProps> = ({
                     fontSize="sm"
                     fontWeight="medium"
                     color="blue.800"
-                    mb={2}>
+                    mb={2}
+                  >
                     Next steps:
                   </Text>
                   <Text as="div" fontSize="sm" color="blue.800">
@@ -130,14 +132,16 @@ const WorkflowCreateModal: React.FC<WorkflowCreateModalProps> = ({
                 variant="secondary"
                 onClick={onClose}
                 type="button"
-                disabled={loading}>
+                disabled={loading}
+              >
                 Cancel
               </Button>
               <Button
                 variant="primary"
                 type="submit"
                 loading={loading}
-                disabled={!formData.name.trim()}>
+                disabled={!formData.name.trim()}
+              >
                 <FloppyDiskIcon size={16} weight="fill" />
                 <Text ml={1}>Create Workflow</Text>
               </Button>

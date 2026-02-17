@@ -149,7 +149,8 @@ const SimpleWebhookList: React.FC<SimpleWebhookListProps> = ({
           fontSize="sm"
           display="inline-block"
           mr="xs"
-          mb="xs">
+          mb="xs"
+        >
           {event}
         </Box>
       ));
@@ -164,7 +165,8 @@ const SimpleWebhookList: React.FC<SimpleWebhookListProps> = ({
             py="xxs"
             bg="green.400"
             borderRadius="sm"
-            fontSize="xs">
+            fontSize="xs"
+          >
             {event}
           </Box>
         ))}
@@ -174,7 +176,8 @@ const SimpleWebhookList: React.FC<SimpleWebhookListProps> = ({
           bg="gray.200"
           color="gray.800"
           borderRadius="sm"
-          fontSize="xs">
+          fontSize="xs"
+        >
           +{events.length - 2} more
         </Box>
       </Flex>
@@ -191,7 +194,8 @@ const SimpleWebhookList: React.FC<SimpleWebhookListProps> = ({
           <Text
             fontWeight="heading"
             cursor="pointer"
-            onClick={() => handleWebhookClick(row.original)}>
+            onClick={() => handleWebhookClick(row.original)}
+          >
             {row.original.name}
           </Text>
           <Text fontSize="sm" color="text.secondary" title={row.original.url}>
@@ -254,14 +258,16 @@ const SimpleWebhookList: React.FC<SimpleWebhookListProps> = ({
           <Button
             size="sm"
             variant="secondary"
-            onClick={() => handleTest(row.original)}>
+            onClick={() => handleTest(row.original)}
+          >
             <Play size={14} />
           </Button>
           {canManageWebhooks && (
             <Button
               size="sm"
               variant="secondary"
-              onClick={() => handleEditClick(row.original)}>
+              onClick={() => handleEditClick(row.original)}
+            >
               <Pencil size={14} />
             </Button>
           )}
@@ -269,7 +275,8 @@ const SimpleWebhookList: React.FC<SimpleWebhookListProps> = ({
             <Button
               size="sm"
               variant="secondary"
-              onClick={() => handleDelete(row.original)}>
+              onClick={() => handleDelete(row.original)}
+            >
               <Trash size={14} />
             </Button>
           )}
@@ -306,7 +313,8 @@ const SimpleWebhookList: React.FC<SimpleWebhookListProps> = ({
         open={isDeleteModalOpen}
         onClose={cancelDelete}
         size="sm"
-        ariaLabel="Delete Webhook Confirmation">
+        ariaLabel="Delete Webhook Confirmation"
+      >
         <Box>
           <Text fontSize="xl" fontWeight="heading" mb="md">
             Are you sure you want to delete &quot;{webhookToDelete?.name}&quot;?
@@ -319,14 +327,16 @@ const SimpleWebhookList: React.FC<SimpleWebhookListProps> = ({
             <Button
               variant="secondary"
               onClick={cancelDelete}
-              disabled={isDeleting}>
+              disabled={isDeleting}
+            >
               Cancel
             </Button>
             <Button
               variant="primary"
               onClick={confirmDelete}
               loading={isDeleting}
-              disabled={isDeleting}>
+              disabled={isDeleting}
+            >
               {isDeleting ? 'Deleting...' : 'Delete'}
             </Button>
           </Flex>

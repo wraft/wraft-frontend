@@ -76,7 +76,8 @@ const Dropzone = ({
     <Box
       border="1px dashed"
       borderColor={isDragReject ? 'error' : 'neutral.200'}
-      borderRadius="4px">
+      borderRadius="4px"
+    >
       <Box
         {...getRootProps()}
         w="100%"
@@ -88,7 +89,8 @@ const Dropzone = ({
         borderRadius="4px"
         h="100%"
         py="18px"
-        px="md">
+        px="md"
+      >
         <input
           type="file"
           name="file"
@@ -102,7 +104,8 @@ const Dropzone = ({
             display="flex"
             justifyContent="center"
             alignItems="center"
-            borderRadius="4px">
+            borderRadius="4px"
+          >
             <CloudUploadIcon width={32} height={32} />
           </Box>
         )}
@@ -112,7 +115,8 @@ const Dropzone = ({
             display="flex"
             alignItems="center"
             borderRadius="6px"
-            justifyContent="space-between">
+            justifyContent="space-between"
+          >
             <Flex as="div" alignItems="center" pl={2}>
               <Text>{assets[assets.length - 1].name}</Text>
               <Box
@@ -123,7 +127,8 @@ const Dropzone = ({
                 alignItems="center"
                 justifyContent="center"
                 borderRadius="44px"
-                ml={2}>
+                ml={2}
+              >
                 <TickIcon
                   color="white"
                   height={12}
@@ -136,13 +141,15 @@ const Dropzone = ({
               <button
                 onClick={(e) => {
                   e.preventDefault();
-                }}>
+                }}
+              >
                 Change File
               </button>
               <button
                 onClick={(e) => {
                   e.preventDefault();
-                }}>
+                }}
+              >
                 Remove
               </button>
             </Flex>
@@ -154,7 +161,8 @@ const Dropzone = ({
                 as="div"
                 flexDirection="column"
                 alignItems="center"
-                mt="12px">
+                mt="12px"
+              >
                 <Text fontWeight="bold">
                   Drag & drop or upload valid <a href="#">Wraft</a> files
                 </Text>
@@ -172,7 +180,8 @@ const Dropzone = ({
                     ml="12px"
                     justifyContent="center"
                     alignItems="center"
-                    display="flex">
+                    display="flex"
+                  >
                     <ApproveTickIcon />
                   </Box>
                 )}

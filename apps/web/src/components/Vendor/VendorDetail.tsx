@@ -244,7 +244,8 @@ const VendorDetail: React.FC<VendorDetailProps> = ({ vendorId }) => {
               variant="ghost"
               size="sm"
               onClick={() => handleEditContact(row.original)}
-              title="Edit contact">
+              title="Edit contact"
+            >
               <PencilSimpleIcon size={14} />
             </Button>
           )}
@@ -253,7 +254,8 @@ const VendorDetail: React.FC<VendorDetailProps> = ({ vendorId }) => {
               variant="ghost"
               size="sm"
               onClick={() => handleDeleteContactClick(row.original)}
-              title="Delete contact">
+              title="Delete contact"
+            >
               <TrashIcon size={14} />
             </Button>
           )}
@@ -289,7 +291,8 @@ const VendorDetail: React.FC<VendorDetailProps> = ({ vendorId }) => {
               align="center"
               justify="center"
               color="green.900"
-              flexShrink={0}>
+              flexShrink={0}
+            >
               <BuildingIcon size={20} />
             </Flex>
           )}
@@ -324,7 +327,8 @@ const VendorDetail: React.FC<VendorDetailProps> = ({ vendorId }) => {
                 borderColor="border"
                 borderRadius="md"
                 bg="background-primary"
-                overflow="hidden">
+                overflow="hidden"
+              >
                 {/* Contact Section */}
                 {hasContact && (
                   <Box>
@@ -332,7 +336,8 @@ const VendorDetail: React.FC<VendorDetailProps> = ({ vendorId }) => {
                       <Text
                         fontSize="sm"
                         fontWeight="600"
-                        color="text-secondary">
+                        color="text-secondary"
+                      >
                         Contact
                       </Text>
                     </Box>
@@ -340,7 +345,8 @@ const VendorDetail: React.FC<VendorDetailProps> = ({ vendorId }) => {
                       <Box
                         display="grid"
                         gridTemplateColumns="repeat(2, 1fr)"
-                        gap="md">
+                        gap="md"
+                      >
                         <DetailItem label="Email" value={vendor.email} />
                         <DetailItem label="Phone" value={vendor.phone} />
                         <DetailItem label="Website" value={vendor.website} />
@@ -360,7 +366,8 @@ const VendorDetail: React.FC<VendorDetailProps> = ({ vendorId }) => {
                       <Text
                         fontSize="sm"
                         fontWeight="600"
-                        color="text-secondary">
+                        color="text-secondary"
+                      >
                         Address
                       </Text>
                     </Box>
@@ -368,7 +375,8 @@ const VendorDetail: React.FC<VendorDetailProps> = ({ vendorId }) => {
                       <Box
                         display="grid"
                         gridTemplateColumns="repeat(2, 1fr)"
-                        gap="md">
+                        gap="md"
+                      >
                         <DetailItem label="Street" value={vendor.address} />
                         <DetailItem label="City" value={vendor.city} />
                         <DetailItem label="Country" value={vendor.country} />
@@ -384,7 +392,8 @@ const VendorDetail: React.FC<VendorDetailProps> = ({ vendorId }) => {
                       <Text
                         fontSize="sm"
                         fontWeight="600"
-                        color="text-secondary">
+                        color="text-secondary"
+                      >
                         Business
                       </Text>
                     </Box>
@@ -408,7 +417,8 @@ const VendorDetail: React.FC<VendorDetailProps> = ({ vendorId }) => {
                     <Box
                       display="grid"
                       gridTemplateColumns="repeat(2, 1fr)"
-                      gap="md">
+                      gap="md"
+                    >
                       <DetailItem
                         label="Created"
                         value={new Date(
@@ -445,7 +455,8 @@ const VendorDetail: React.FC<VendorDetailProps> = ({ vendorId }) => {
                 <Button
                   variant="secondary"
                   size="sm"
-                  onClick={handleAddContact}>
+                  onClick={handleAddContact}
+                >
                   <PlusIcon size={14} />
                   Add Contact
                 </Button>
@@ -455,7 +466,8 @@ const VendorDetail: React.FC<VendorDetailProps> = ({ vendorId }) => {
               border="1px solid"
               borderColor="border"
               borderRadius="md"
-              overflow="hidden">
+              overflow="hidden"
+            >
               <Table
                 data={contacts || []}
                 columns={contactColumns || []}
@@ -485,7 +497,8 @@ const VendorDetail: React.FC<VendorDetailProps> = ({ vendorId }) => {
           setDeleteContactModalOpen(false);
           setContactToDelete(null);
         }}
-        ariaLabel="Delete Contact">
+        ariaLabel="Delete Contact"
+      >
         <Box p="xl">
           <Text fontSize="base" fontWeight="600" mb="md">
             Delete Contact
@@ -504,14 +517,16 @@ const VendorDetail: React.FC<VendorDetailProps> = ({ vendorId }) => {
               onClick={() => {
                 setDeleteContactModalOpen(false);
                 setContactToDelete(null);
-              }}>
+              }}
+            >
               Cancel
             </Button>
             <Button
               variant="primary"
               size="sm"
               danger
-              onClick={handleDeleteContact}>
+              onClick={handleDeleteContact}
+            >
               Delete
             </Button>
           </Flex>
@@ -596,7 +611,8 @@ const ContactFormDrawer: React.FC<ContactFormModalProps> = ({
         as="form"
         h="100vh"
         direction="column"
-        onSubmit={handleSubmit(handleFormSubmit)}>
+        onSubmit={handleSubmit(handleFormSubmit)}
+      >
         <Box flexShrink="0">
           <Drawer.Header>
             <Drawer.Title>
@@ -613,7 +629,8 @@ const ContactFormDrawer: React.FC<ContactFormModalProps> = ({
           gap="md"
           overflowY="auto"
           px="xl"
-          py="md">
+          py="md"
+        >
           <Field label="Name" required error={errors.name?.message}>
             <InputText
               {...register('name')}

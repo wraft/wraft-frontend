@@ -22,7 +22,8 @@ const FontList = ({ assets, onDelete }: Props) => {
             alignItems="center"
             justifyContent="space-between"
             borderBottom={index < assets.length - 1 ? '1px solid' : 'none'}
-            borderColor="border">
+            borderColor="border"
+          >
             <Flex alignItems="center" justifyContent="center" gap="sm">
               <FileIcon size="18" />
               <Text>
@@ -32,7 +33,8 @@ const FontList = ({ assets, onDelete }: Props) => {
             <Flex
               alignItems="center"
               justifyContent="space-between"
-              textTransform="uppercase">
+              textTransform="uppercase"
+            >
               {item.progress ? (
                 <Flex justifyContent="center" alignItems="center">
                   <ProgressBar progress={item.progress} />
@@ -50,7 +52,8 @@ const FontList = ({ assets, onDelete }: Props) => {
                       bg="green.800"
                       borderRadius="44px"
                       w="16px"
-                      h="16px">
+                      h="16px"
+                    >
                       <CheckIcon size="12" color="#fff" />
                     </Box>
                   ) : item.success === false ? (
@@ -62,7 +65,8 @@ const FontList = ({ assets, onDelete }: Props) => {
                       borderRadius="44px"
                       color="#fff"
                       w="16px"
-                      h="16px">
+                      h="16px"
+                    >
                       <XIcon size="12" />
                     </Box>
                   ) : (

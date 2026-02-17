@@ -526,7 +526,8 @@ export const LayoutScaling: React.FC<LayoutScalingProps> = ({
         h={forceHeight ? `${forceHeight}px` : `${containerHeight + 60}px`}
         mx="auto"
         py={forceHeight ? '0' : '30px'}
-        px={forceHeight ? '0' : '40px'}>
+        px={forceHeight ? '0' : '40px'}
+      >
         {showControls && !forceHeight && (
           <>
             <EdgeValueDisplay
@@ -534,7 +535,8 @@ export const LayoutScaling: React.FC<LayoutScalingProps> = ({
               top="-8px"
               left="50%"
               transform="translateX(-50%)"
-              borderBottom="2px solid #3b82f6">
+              borderBottom="2px solid #3b82f6"
+            >
               {edgeDisplayValues.top}
             </EdgeValueDisplay>
 
@@ -543,7 +545,8 @@ export const LayoutScaling: React.FC<LayoutScalingProps> = ({
               top="50%"
               right="8px"
               transform="translateY(-50%)"
-              borderBottom="2px solid #3b82f6">
+              borderBottom="2px solid #3b82f6"
+            >
               {edgeDisplayValues.right}
             </EdgeValueDisplay>
 
@@ -552,7 +555,8 @@ export const LayoutScaling: React.FC<LayoutScalingProps> = ({
               bottom="-8px"
               left="50%"
               transform="translateX(-50%)"
-              borderBottom="2px solid #3b82f6">
+              borderBottom="2px solid #3b82f6"
+            >
               {edgeDisplayValues.bottom}
             </EdgeValueDisplay>
 
@@ -561,7 +565,8 @@ export const LayoutScaling: React.FC<LayoutScalingProps> = ({
               top="50%"
               left="34px"
               transform="translateY(-50%)"
-              borderBottom="2px solid #3b82f6">
+              borderBottom="2px solid #3b82f6"
+            >
               {edgeDisplayValues.left}
             </EdgeValueDisplay>
           </>
@@ -577,14 +582,16 @@ export const LayoutScaling: React.FC<LayoutScalingProps> = ({
           justifyContent="center"
           alignItems="center"
           overflow="hidden"
-          mx="auto">
+          mx="auto"
+        >
           <Box
             backgroundColor="white"
             boxShadow="0px 2px 8px rgba(0, 0, 0, 0.08), 0px 8px 24px rgba(0, 0, 0, 0.12), 0px 16px 48px rgba(0, 0, 0, 0.06), inset 0px 1px 0px rgba(255, 255, 255, 0.8), inset 0px -1px 0px rgba(0, 0, 0, 0.05)"
             position="relative"
             overflow="hidden"
             w={`${scaleCalculations.scaledWidth}px`}
-            h={`${scaleCalculations.scaledHeight}px`}>
+            h={`${scaleCalculations.scaledHeight}px`}
+          >
             {pdfViewerRef.current}
 
             <>
@@ -658,19 +665,22 @@ export const LayoutScaling: React.FC<LayoutScalingProps> = ({
           marginTop="xxl"
           w="100%"
           maxWidth="259"
-          mx="auto">
+          mx="auto"
+        >
           <Flex
             justifyContent="space-between"
             alignItems="center"
             mb="md"
-            gap="sm">
+            gap="sm"
+          >
             <Flex alignItems="center">
               <Text
                 fontSize="sm"
                 color="#64748b"
                 fontWeight="500"
                 minWidth="32px"
-                pr="xs">
+                pr="xs"
+              >
                 Top
               </Text>
               <MarginValue>
@@ -693,7 +703,8 @@ export const LayoutScaling: React.FC<LayoutScalingProps> = ({
                 color="#64748b"
                 fontWeight="500"
                 minWidth="32px"
-                pr="xs">
+                pr="xs"
+              >
                 Bottom
               </Text>
               <MarginValue>
@@ -715,14 +726,16 @@ export const LayoutScaling: React.FC<LayoutScalingProps> = ({
             justifyContent="space-between"
             alignItems="center"
             mb="lg"
-            gap="sm">
+            gap="sm"
+          >
             <Flex alignItems="center">
               <Text
                 fontSize="sm"
                 color="#64748b"
                 fontWeight="500"
                 minWidth="32px"
-                pr="xs">
+                pr="xs"
+              >
                 Left
               </Text>
               <MarginValue>
@@ -745,7 +758,8 @@ export const LayoutScaling: React.FC<LayoutScalingProps> = ({
                 color="#64748b"
                 fontWeight="500"
                 minWidth="32px"
-                pr="xs">
+                pr="xs"
+              >
                 Right
               </Text>
               <MarginValue>

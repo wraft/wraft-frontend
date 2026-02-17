@@ -185,7 +185,8 @@ const ThemeAddForm = ({ setIsOpen, setRerender, onUpdate, themeId }: Props) => {
         as="form"
         h="100vh"
         direction="column"
-        onSubmit={handleSubmit(onSubmit)}>
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <Box flexShrink="0">
           <Drawer.Header>
             <Drawer.Title>
@@ -207,12 +208,14 @@ const ThemeAddForm = ({ setIsOpen, setRerender, onUpdate, themeId }: Props) => {
           gap="md"
           overflowY="auto"
           px="xl"
-          py="md">
+          py="md"
+        >
           <Box>
             <Field
               label="Theme Name"
               required
-              error={errors?.name?.message as string}>
+              error={errors?.name?.message as string}
+            >
               <InputText
                 {...register('name')}
                 placeholder="Enter a Theme Name"
@@ -231,7 +234,8 @@ const ThemeAddForm = ({ setIsOpen, setRerender, onUpdate, themeId }: Props) => {
                 e.preventDefault();
                 setIsFontOpen(true);
               }}
-              variant="secondary">
+              variant="secondary"
+            >
               <PlusIcon size="16" />
               {assets.length > 0 ? 'Edit Fonts' : 'Add Fonts'}
             </Button>
@@ -298,7 +302,8 @@ const ThemeAddForm = ({ setIsOpen, setRerender, onUpdate, themeId }: Props) => {
       <Modal
         ariaLabel="Add Font"
         open={isFontOpen}
-        onClose={() => setIsFontOpen(false)}>
+        onClose={() => setIsFontOpen(false)}
+      >
         <>
           <Flex justify="space-between">
             <Modal.Header>Upload font</Modal.Header>
@@ -306,7 +311,8 @@ const ThemeAddForm = ({ setIsOpen, setRerender, onUpdate, themeId }: Props) => {
               onClick={(e) => {
                 e.preventDefault();
                 setIsFontOpen(false);
-              }}>
+              }}
+            >
               <CloseIcon color="#2C3641" />
             </Box>
           </Flex>

@@ -226,11 +226,13 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
           w="40%"
           p="xl"
           h="100%"
-          my="md">
+          my="md"
+        >
           <Flex
             display={formStep === 0 ? 'flex' : 'none'}
             gap="md"
-            direction="column">
+            direction="column"
+          >
             <Field label="Layout Name" disabled required>
               <InputText {...register('name')} />
             </Field>
@@ -276,13 +278,15 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
                 alignItems="center"
                 border="1px dotted"
                 borderRadius="sm"
-                overflow="hidden">
+                overflow="hidden"
+              >
                 <Flex
                   w="100%"
                   h={`${pdfViewerHeight}px`}
                   justify="center"
                   align="center"
-                  position="relative">
+                  position="relative"
+                >
                   <Box w="100%" h="100%" position="relative" mt="-20px">
                     <LayoutScaling
                       pdfUrl={assets[assets.length - 1].file}
@@ -344,7 +348,8 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
         store={stateDrawer}
         aria-label="field drawer"
         withBackdrop={true}
-        onClose={handleFormClose}>
+        onClose={handleFormClose}
+      >
         {isOpen && (
           <LayoutForm
             initialMargins={previewMargins}

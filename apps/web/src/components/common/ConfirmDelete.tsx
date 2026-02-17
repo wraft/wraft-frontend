@@ -34,7 +34,8 @@ const ConfirmDelete = ({
           danger
           onClick={
             inputValue ? () => onConfirmDelete(inputValue) : onConfirmDelete
-          }>
+          }
+        >
           Confirm
         </Button>
         <Button
@@ -44,7 +45,8 @@ const ConfirmDelete = ({
               setRender((prev: boolean) => prev);
             }
           }}
-          variant="tertiary">
+          variant="tertiary"
+        >
           Cancel
         </Button>
       </Flex>

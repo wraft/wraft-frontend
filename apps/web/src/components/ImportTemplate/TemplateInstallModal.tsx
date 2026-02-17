@@ -48,7 +48,8 @@ const TemplateInstallModal = ({
       open={isOpen}
       onClose={handleClose}
       ariaLabel="Template Installation"
-      size="lg">
+      size="lg"
+    >
       <Box maxWidth="800px" minWidth="600px">
         {/* Header */}
         <Flex
@@ -56,13 +57,15 @@ const TemplateInstallModal = ({
           align="center"
           p="lg"
           borderBottom="1px solid"
-          borderColor="border">
+          borderColor="border"
+        >
           <Box>
             <Text
               fontSize="xl"
               fontWeight="semibold"
               color="text-primary"
-              mb="xs">
+              mb="xs"
+            >
               Install Template
             </Text>
             <Text fontSize="sm" color="text-secondary">
@@ -74,7 +77,8 @@ const TemplateInstallModal = ({
               variant="ghost"
               size="sm"
               onClick={handleClose}
-              disabled={isInstalling}>
+              disabled={isInstalling}
+            >
               <X size={18} />
             </Button>
           )}
@@ -88,7 +92,8 @@ const TemplateInstallModal = ({
               fontSize="lg"
               fontWeight="semibold"
               color="text-primary"
-              mb="xs">
+              mb="xs"
+            >
               {template.name}
             </Text>
             <Text fontSize="md" color="text-secondary" mb="sm">
@@ -130,7 +135,8 @@ const TemplateInstallModal = ({
                     bg="gray.100"
                     borderRadius="md"
                     fontSize="xs"
-                    color="text-secondary">
+                    color="text-secondary"
+                  >
                     {tag}
                   </Box>
                 ))}
@@ -151,7 +157,8 @@ const TemplateInstallModal = ({
                 h="150px"
                 display="flex"
                 alignItems="center"
-                justifyContent="center">
+                justifyContent="center"
+              >
                 {template.thumbnail_url ? (
                   <img
                     src={template.thumbnail_url}
@@ -178,7 +185,8 @@ const TemplateInstallModal = ({
                   fontSize="xs"
                   color="text-tertiary"
                   mb="xs"
-                  fontWeight="medium">
+                  fontWeight="medium"
+                >
                   Template Details
                 </Text>
                 {template.author && (
@@ -202,7 +210,8 @@ const TemplateInstallModal = ({
                     fontSize="sm"
                     fontWeight="medium"
                     color="text-primary"
-                    mb="sm">
+                    mb="sm"
+                  >
                     Template Content
                   </Text>
                   <Box
@@ -212,12 +221,14 @@ const TemplateInstallModal = ({
                     border="1px solid"
                     borderColor="border"
                     maxHeight="200px"
-                    overflowY="auto">
+                    overflowY="auto"
+                  >
                     <Text
                       fontSize="sm"
                       color="text-secondary"
                       lineHeight="relaxed"
-                      whiteSpace="pre-wrap">
+                      whiteSpace="pre-wrap"
+                    >
                       {template.content}
                     </Text>
                   </Box>
@@ -229,7 +240,8 @@ const TemplateInstallModal = ({
                   borderRadius="md"
                   border="1px dashed"
                   borderColor="border"
-                  textAlign="center">
+                  textAlign="center"
+                >
                   <FileText size={32} color="#9CA3AF" />
                   <Text fontSize="sm" color="text-tertiary" mt="sm">
                     Template content will be available after installation
@@ -251,7 +263,8 @@ const TemplateInstallModal = ({
               bg="blue.50"
               borderRadius="md"
               border="1px solid"
-              borderColor="blue.200">
+              borderColor="blue.200"
+            >
               <Flex align="center" gap="md" mb="sm">
                 <Spinner size={20} color="blue.500" />
                 <Box>
@@ -277,7 +290,8 @@ const TemplateInstallModal = ({
                 color="blue.600"
                 mt="xs"
                 textAlign="right"
-                fontWeight="medium">
+                fontWeight="medium"
+              >
                 {Math.round(installProgress)}% complete
               </Text>
             </Box>
@@ -291,12 +305,14 @@ const TemplateInstallModal = ({
           p="lg"
           borderTop="1px solid"
           borderColor="border"
-          bg="gray.25">
+          bg="gray.25"
+        >
           <Button
             variant="tertiary"
             onClick={handleClose}
             disabled={isInstalling}
-            size="md">
+            size="md"
+          >
             Cancel
           </Button>
           <Button
@@ -304,7 +320,8 @@ const TemplateInstallModal = ({
             size="md"
             onClick={onInstall}
             disabled={isInstalling}
-            loading={isInstalling}>
+            loading={isInstalling}
+          >
             {isInstalling ? 'Installing...' : 'Install Template'}
           </Button>
         </Flex>

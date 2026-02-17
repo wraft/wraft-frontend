@@ -49,7 +49,8 @@ const ThemeBlock = ({ assets }: assetsProps) => {
                         lineHeight={1}
                         m={0}
                         mb="xs"
-                        color="gray.1100">
+                        color="gray.1100"
+                      >
                         {colorName}
                       </Text>
                       <Text fontSize="sm" lineHeight={1}>
@@ -72,7 +73,8 @@ const ThemeBlock = ({ assets }: assetsProps) => {
                 key={font.fontName}
                 px="md"
                 py="xs"
-                borderColor={'gray.500'}>
+                borderColor={'gray.500'}
+              >
                 <Box display="flex" alignItems="center">
                   <TextT
                     size={14}
@@ -113,14 +115,16 @@ const TemplatePreview = ({
       borderRadius="md"
       border="solid 1px"
       borderColor="border"
-      overflow="hidden">
+      overflow="hidden"
+    >
       <Flex
         px="md"
         py="sm"
         bg="gray.100"
         borderBottomStyle="solid"
         borderBottomColor="border"
-        borderBottomWidth={1}>
+        borderBottomWidth={1}
+      >
         <Box display="flex" alignItems="center" gap="sm">
           <FileArchive size={18} weight="thin" />
           <Text m="0">{assets[0]?.data?.file_details?.name}</Text>
@@ -165,7 +169,8 @@ const TemplatePreview = ({
                     desc="Workflow"
                     clean={true}
                   />
-                }>
+                }
+              >
                 <BlockSection data={assets[0]?.data?.meta?.items?.flow} />
               </Accordion>
             )}
@@ -179,7 +184,8 @@ const TemplatePreview = ({
                     desc="Interface"
                     clean={true}
                   />
-                }>
+                }
+              >
                 <BlockSection data={assets[0]?.data?.meta?.items?.layout} />
               </Accordion>
             )}
@@ -192,7 +198,8 @@ const TemplatePreview = ({
                     desc="Variant"
                     clean={true}
                   />
-                }>
+                }
+              >
                 <BlockSection data={assets[0]?.data?.meta?.items?.variant} />
               </Accordion>
             )}
@@ -206,7 +213,8 @@ const TemplatePreview = ({
                     desc="Theme"
                     clean={true}
                   />
-                }>
+                }
+              >
                 <ThemeBlock assets={assets} />
               </Accordion>
             )}
@@ -219,7 +227,8 @@ const TemplatePreview = ({
                     desc=""
                     clean={true}
                   />
-                }>
+                }
+              >
                 <BlockSection data={assets[0]?.data?.meta?.buildSettings} />
               </Accordion>
             )}
@@ -232,7 +241,8 @@ const TemplatePreview = ({
                     desc=""
                     clean={true}
                   />
-                }>
+                }
+              >
                 <BlockSection data={assets[0]?.data?.meta?.fields} />
               </Accordion>
             )}
@@ -245,7 +255,8 @@ const TemplatePreview = ({
                     desc=""
                     clean={true}
                   />
-                }>
+                }
+              >
                 <BlockSection data={assets[0]?.data?.meta?.packageContents} />
               </Accordion>
             )}
@@ -261,7 +272,8 @@ const TemplatePreview = ({
                     desc={`${error.length} errors found`}
                     clean={true}
                   />
-                }>
+                }
+              >
                 <BlockSection data={error} />
               </Accordion>
             </Box>

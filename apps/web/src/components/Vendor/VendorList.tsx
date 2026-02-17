@@ -188,7 +188,8 @@ const VendorList: React.FC<VendorListProps> = ({
               e.stopPropagation();
               handleVendorSelect(row.original);
             }}
-            title="View details">
+            title="View details"
+          >
             <EyeIcon size={16} />
           </Button>
           {hasPermission('vendor', 'manage') && (
@@ -199,7 +200,8 @@ const VendorList: React.FC<VendorListProps> = ({
                 e.stopPropagation();
                 handleVendorEdit(row.original);
               }}
-              title="Edit vendor">
+              title="Edit vendor"
+            >
               <PencilSimpleIcon size={16} />
             </Button>
           )}
@@ -212,7 +214,8 @@ const VendorList: React.FC<VendorListProps> = ({
                 handleVendorDelete(row.original);
               }}
               title="Delete vendor"
-              color="red">
+              color="red"
+            >
               <TrashIcon size={16} />
             </Button>
           )}
@@ -257,7 +260,8 @@ const VendorList: React.FC<VendorListProps> = ({
                 <Button
                   variant="secondary"
                   size="sm"
-                  onClick={() => router.push(`/vendors/new`)}>
+                  onClick={() => router.push(`/vendors/new`)}
+                >
                   <IconFrame color="gray.800" mr="xs">
                     <Plus size={12} weight="bold" />
                   </IconFrame>
@@ -285,7 +289,8 @@ const VendorList: React.FC<VendorListProps> = ({
       <Modal
         open={deleteModalOpen}
         onClose={() => setDeleteModalOpen(false)}
-        ariaLabel="Delete Vendor Confirmation">
+        ariaLabel="Delete Vendor Confirmation"
+      >
         <Box p="lg" w="500px">
           <Text variant="lg" fontWeight="600" mb="md">
             Delete Vendor
@@ -298,7 +303,8 @@ const VendorList: React.FC<VendorListProps> = ({
           <Flex gap="md" justify="end">
             <Button
               variant="secondary"
-              onClick={() => setDeleteModalOpen(false)}>
+              onClick={() => setDeleteModalOpen(false)}
+            >
               Cancel
             </Button>
             <Button variant="primary" danger onClick={confirmDelete}>

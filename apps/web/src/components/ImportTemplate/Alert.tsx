@@ -45,14 +45,16 @@ export const Alert: React.FC<MessageAlertProps> = ({
       borderWidth="1px"
       borderStyle="solid"
       borderRadius="3px"
-      borderColor={colorSet.borderColor}>
+      borderColor={colorSet.borderColor}
+    >
       <Text
         display="flex"
         fontSize="sm"
         fontWeight="body"
         color={colorSet.textColor}
         gap={2}
-        py={1}>
+        py={1}
+      >
         {variant === 'alert' && <Warning size={18} />}
         {variant === 'error' && <Warning size={18} />}
         {variant === 'success' && <Checks size={18} />}

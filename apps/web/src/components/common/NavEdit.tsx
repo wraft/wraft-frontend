@@ -47,7 +47,8 @@ const Nav = ({
       borderBottom="solid 1px"
       borderColor="border"
       px="sm"
-      py="xs">
+      py="xs"
+    >
       <Flex align="center" gap="sm">
         <ArrowLeftIcon
           cursor="pointer"
@@ -86,7 +87,8 @@ const Nav = ({
           borderColor="border"
           alignItems="center"
           gap="md"
-          pl="md">
+          pl="md"
+        >
           <NotificationDropdown iconSize="18" />
 
           {!accessToken && (

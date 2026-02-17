@@ -49,7 +49,8 @@ const CustomAxisTick = ({ x, y, payload }: any) => {
       transform={`translate(${x},${y})`}
       fontSize="sm"
       color="text"
-      fill={theme?.colors?.['text-secondary']}>
+      fill={theme?.colors?.['text-secondary']}
+    >
       <text x={0} y={0} dy={16} textAnchor="middle">
         {value}
       </text>
@@ -137,7 +138,8 @@ export const StackedBarChart: React.FC<StackedBarChartProps> = ({
       border="1px solid"
       borderColor="border"
       borderRadius="md"
-      overflow="hidden">
+      overflow="hidden"
+    >
       {(title || description) && (
         <BlockTitle title={title} description={description} />
       )}
@@ -151,7 +153,8 @@ export const StackedBarChart: React.FC<StackedBarChartProps> = ({
                 right: 16,
                 left: 12,
                 bottom: 8,
-              }}>
+              }}
+            >
               {showGrid && (
                 <CartesianGrid
                   strokeDasharray="3 3"
@@ -245,7 +248,8 @@ export const StackedBarChart: React.FC<StackedBarChartProps> = ({
                       borderRadius="full"
                       fontWeight="bold"
                       fontSize="sm"
-                      style={{ background: bg, color }}>
+                      style={{ background: bg, color }}
+                    >
                       {Icon && <TrendUp size={14} style={{ color }} />}
                       {percent >= 0 ? '+' : ''}
                       {percent.toFixed(2)}%
@@ -262,7 +266,8 @@ export const StackedBarChart: React.FC<StackedBarChartProps> = ({
                       as="span"
                       fontSize="sm"
                       color="text-secondary"
-                      ml="xs">
+                      ml="xs"
+                    >
                       from previous month
                     </Text>
                   </Flex>
@@ -279,14 +284,16 @@ export const StackedBarChart: React.FC<StackedBarChartProps> = ({
           borderColor="border"
           display="flex"
           flexDirection="column"
-          gap="xs">
+          gap="xs"
+        >
           {trend && (
             <Box
               display="flex"
               alignItems="center"
               gap="xs"
               fontSize="sm"
-              fontWeight="medium">
+              fontWeight="medium"
+            >
               {trend.label} <TrendUp size={16} />
             </Box>
           )}

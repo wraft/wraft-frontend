@@ -154,7 +154,8 @@ const Field: React.FC<Props> = ({
                   if (e.key === 'Enter' || e.key === ' ') {
                     toggleCalendar();
                   }
-                }}>
+                }}
+              >
                 <Calendar size={20} weight="regular" />
               </Box>
             )}
@@ -170,7 +171,8 @@ const Field: React.FC<Props> = ({
               mt="xs"
               borderRadius="sm"
               border="1px solid"
-              borderColor="border">
+              borderColor="border"
+            >
               <DayPicker
                 mode="single"
                 selected={selected}

@@ -22,7 +22,8 @@ const MenuStepsIndicator: React.FC<MenuStepsIndicatorProps> = ({
       flexShrink={0}
       w="180px"
       role="navigation"
-      aria-label="Form steps">
+      aria-label="Form steps"
+    >
       {titles.map((title: string, index: number) => {
         const isActive = formStep === index;
 
@@ -36,10 +37,12 @@ const MenuStepsIndicator: React.FC<MenuStepsIndicatorProps> = ({
             key={`step-${index}`}
             onClick={() => goTo(index)}
             role="button"
-            aria-current={isActive ? 'step' : undefined}>
+            aria-current={isActive ? 'step' : undefined}
+          >
             <Text
               fontWeight={isActive ? 'bold' : 'normal'}
-              color={isActive ? 'text.primary' : 'text.secondary'}>
+              color={isActive ? 'text.primary' : 'text.secondary'}
+            >
               {title}
             </Text>
           </Box>

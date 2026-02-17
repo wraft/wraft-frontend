@@ -128,7 +128,8 @@ export const PieChart: React.FC<PieChartProps> = ({
       border="1px solid"
       borderColor="border"
       borderRadius="md"
-      overflow="hidden">
+      overflow="hidden"
+    >
       {(title || description) && (
         <BlockTitle title={title} description={description} />
       )}
@@ -137,7 +138,8 @@ export const PieChart: React.FC<PieChartProps> = ({
           display="flex"
           alignItems="center"
           justifyContent="space-between"
-          style={{ width, height }}>
+          style={{ width, height }}
+        >
           <Box as="div" flex="1" maxWidth="60%" h="100%">
             <ResponsiveContainer width="100%" height="100%">
               <RechartsPieChart>
@@ -151,7 +153,8 @@ export const PieChart: React.FC<PieChartProps> = ({
                   paddingAngle={5}
                   dataKey="value"
                   nameKey="name"
-                  onMouseLeave={() => setActiveIndex(null)}>
+                  onMouseLeave={() => setActiveIndex(null)}
+                >
                   {data.map((entry, index) => (
                     <Cell
                       key={`cell-${index}`}
@@ -183,7 +186,8 @@ export const PieChart: React.FC<PieChartProps> = ({
               py="0"
               px="md"
               minHeight="100%"
-              overflowY="auto">
+              overflowY="auto"
+            >
               {data.map((entry, index) => (
                 <Box
                   as="div"
@@ -201,7 +205,8 @@ export const PieChart: React.FC<PieChartProps> = ({
                       activeIndex === index
                         ? theme.colors.green['200']
                         : undefined,
-                  }}>
+                  }}
+                >
                   <Box
                     as="div"
                     style={{
@@ -219,7 +224,8 @@ export const PieChart: React.FC<PieChartProps> = ({
                     fontSize="sm"
                     color="text-secondary"
                     fontWeight="regular"
-                    lineHeight="1.2">
+                    lineHeight="1.2"
+                  >
                     {entry.name}
                   </Text>
                 </Box>
@@ -235,14 +241,16 @@ export const PieChart: React.FC<PieChartProps> = ({
           borderColor="border"
           display="flex"
           flexDirection="column"
-          gap="xs">
+          gap="xs"
+        >
           {trend && (
             <Box
               display="flex"
               alignItems="center"
               gap="xs"
               fontSize="sm"
-              fontWeight="medium">
+              fontWeight="medium"
+            >
               {trend.label} <TrendUp size={16} />
             </Box>
           )}

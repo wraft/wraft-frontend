@@ -166,7 +166,8 @@ const WebhookForm: React.FC<WebhookFormProps> = ({
         alignItems="center"
         justifyContent="space-between"
         borderBottom="1px solid"
-        borderColor="gray.200">
+        borderColor="gray.200"
+      >
         <Text fontSize="lg" fontWeight="heading">
           {isEditMode ? 'Edit Webhook' : 'Create New Webhook'}
         </Text>
@@ -227,7 +228,8 @@ const WebhookForm: React.FC<WebhookFormProps> = ({
                     borderRadius="md"
                     cursor="pointer"
                     onClick={() => handleEventToggle(event)}
-                    bg={selectedEvents?.includes(event) ? 'blue.50' : 'white'}>
+                    bg={selectedEvents?.includes(event) ? 'blue.50' : 'white'}
+                  >
                     <Flex alignItems="flex-start" gap="sm">
                       <Checkbox
                         checked={selectedEvents?.includes(event) || false}
@@ -269,7 +271,8 @@ const WebhookForm: React.FC<WebhookFormProps> = ({
                 <Flex gap="md">
                   <Field
                     label="Retry Count"
-                    error={errors.retry_count?.message}>
+                    error={errors.retry_count?.message}
+                  >
                     <InputText
                       {...register('retry_count', { valueAsNumber: true })}
                       type="number"
@@ -280,7 +283,8 @@ const WebhookForm: React.FC<WebhookFormProps> = ({
 
                   <Field
                     label="Timeout (seconds)"
-                    error={errors.timeout_seconds?.message}>
+                    error={errors.timeout_seconds?.message}
+                  >
                     <InputText
                       {...register('timeout_seconds', { valueAsNumber: true })}
                       type="number"
@@ -314,7 +318,8 @@ const WebhookForm: React.FC<WebhookFormProps> = ({
                   type="button"
                   variant="secondary"
                   size="sm"
-                  onClick={addHeader}>
+                  onClick={addHeader}
+                >
                   <Plus size={16} />
                   Add Header
                 </Button>
@@ -342,7 +347,8 @@ const WebhookForm: React.FC<WebhookFormProps> = ({
                     type="button"
                     variant="secondary"
                     size="sm"
-                    onClick={() => removeHeader(index)}>
+                    onClick={() => removeHeader(index)}
+                  >
                     <Trash size={16} />
                   </Button>
                 </Flex>
@@ -358,18 +364,21 @@ const WebhookForm: React.FC<WebhookFormProps> = ({
         py="md"
         borderTop="1px solid"
         borderColor="gray.200"
-        bg="gray.50">
+        bg="gray.50"
+      >
         <Flex gap="sm" justifyContent="flex-end">
           <Button
             variant="secondary"
             onClick={onCancel}
-            disabled={isSubmitting}>
+            disabled={isSubmitting}
+          >
             Cancel
           </Button>
           <Button
             type="submit"
             onClick={handleSubmit(onSubmit)}
-            loading={isSubmitting}>
+            loading={isSubmitting}
+          >
             {isEditMode ? 'Update Webhook' : 'Create Webhook'}
           </Button>
         </Flex>

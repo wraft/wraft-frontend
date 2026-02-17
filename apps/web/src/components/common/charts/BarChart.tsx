@@ -58,7 +58,8 @@ const CustomAxisTick = ({ x, y, payload }: any) => {
       transform={`translate(${x},${y})`}
       fontSize="sm"
       color="text"
-      fill={theme.colors?.text as string}>
+      fill={theme.colors?.text as string}
+    >
       <text x={0} y={0} dy={16} textAnchor="middle">
         {value}
       </text>
@@ -141,7 +142,8 @@ export const BarChart: React.FC<BarChartProps> = ({
       border="1px solid"
       borderColor="border"
       borderRadius="md"
-      overflow="hidden">
+      overflow="hidden"
+    >
       {(title || description) &&
         !(
           dataKeys.length === 1 &&
@@ -159,7 +161,8 @@ export const BarChart: React.FC<BarChartProps> = ({
                 right: 12,
                 left: 12,
                 bottom: 12,
-              }}>
+              }}
+            >
               {showGrid && (
                 <CartesianGrid
                   strokeDasharray="3 3"
@@ -245,7 +248,8 @@ export const BarChart: React.FC<BarChartProps> = ({
                       borderRadius="full"
                       fontWeight="bold"
                       fontSize="sm"
-                      style={{ background: bg, color }}>
+                      style={{ background: bg, color }}
+                    >
                       {Icon && <TrendUp size={14} style={{ color }} />}
                       {percent >= 0 ? '+' : ''}
                       {percent.toFixed(2)}%
@@ -254,7 +258,8 @@ export const BarChart: React.FC<BarChartProps> = ({
                       as="span"
                       fontSize="sm"
                       color="text-secondary"
-                      ml="xs">
+                      ml="xs"
+                    >
                       from previous month
                     </Text>
                   </Flex>
@@ -271,14 +276,16 @@ export const BarChart: React.FC<BarChartProps> = ({
           borderColor="border"
           display="flex"
           flexDirection="column"
-          gap="xs">
+          gap="xs"
+        >
           {trend && (
             <Box
               display="flex"
               alignItems="center"
               gap="xs"
               fontSize="sm"
-              fontWeight="medium">
+              fontWeight="medium"
+            >
               {trend.label} <TrendUp size={16} />
             </Box>
           )}

@@ -77,7 +77,8 @@ const NotificationDropdown: React.FC<NotificationDropdownProps> = ({
               justifyContent="center"
               fontSize="xs"
               fontWeight="bold"
-              px="xs">
+              px="xs"
+            >
               {unreadCount > 99 ? '99+' : unreadCount}
             </Box>
           )}
@@ -91,7 +92,8 @@ const NotificationDropdown: React.FC<NotificationDropdownProps> = ({
             align="center"
             p="md"
             borderBottom="1px solid"
-            borderColor="border">
+            borderColor="border"
+          >
             <Flex align="center" gap="sm">
               <Text fontSize="base" fontWeight="bold">
                 Notifications
@@ -122,7 +124,8 @@ const NotificationDropdown: React.FC<NotificationDropdownProps> = ({
                   variant="ghost"
                   size="sm"
                   onClick={markAllAsRead}
-                  title="Mark all as read">
+                  title="Mark all as read"
+                >
                   <CheckIcon size={16} />
                 </Button>
               )}
@@ -130,7 +133,8 @@ const NotificationDropdown: React.FC<NotificationDropdownProps> = ({
                 variant="ghost"
                 size="sm"
                 onClick={handleSettingsClick}
-                title="Notification settings">
+                title="Notification settings"
+              >
                 <GearIcon size={16} />
               </Button>
             </Flex>
@@ -149,7 +153,8 @@ const NotificationDropdown: React.FC<NotificationDropdownProps> = ({
                 align="center"
                 justify="center"
                 p="xl"
-                color="text-secondary">
+                color="text-secondary"
+              >
                 <IconFrame color="icon">
                   <BellIcon size={48} weight="light" />
                 </IconFrame>
@@ -168,7 +173,8 @@ const NotificationDropdown: React.FC<NotificationDropdownProps> = ({
                   borderColor="border"
                   cursor="pointer"
                   bg={notification.read ? 'transparent' : 'green.200'}
-                  onClick={() => handleNotificationClick(notification)}>
+                  onClick={() => handleNotificationClick(notification)}
+                >
                   <Flex gap="sm" align="start">
                     {notification.actor && !notification.actor.profile_pic && (
                       <Box
@@ -180,7 +186,8 @@ const NotificationDropdown: React.FC<NotificationDropdownProps> = ({
                         fontSize="sm"
                         display="flex"
                         alignItems="center"
-                        justifyContent="center">
+                        justifyContent="center"
+                      >
                         {getNotificationIcon(notification.event_type)}
                       </Box>
                     )}
@@ -194,7 +201,8 @@ const NotificationDropdown: React.FC<NotificationDropdownProps> = ({
                         fontSize="sm"
                         display="flex"
                         alignItems="center"
-                        justifyContent="center">
+                        justifyContent="center"
+                      >
                         <Avatar
                           size="sm"
                           src={notification.actor?.profile_pic}
@@ -226,7 +234,8 @@ const NotificationDropdown: React.FC<NotificationDropdownProps> = ({
               justify="center"
               p="sm"
               borderTop="1px solid"
-              borderColor="border">
+              borderColor="border"
+            >
               <Button variant="ghost" onClick={handleViewAll}>
                 View all notifications
               </Button>

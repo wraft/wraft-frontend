@@ -46,7 +46,8 @@ const PageHeader: React.FC<PageHeaderProps> = ({
             fontSize="md"
             fontWeight="heading"
             display="flex"
-            pr="sm">
+            pr="sm"
+          >
             {item}
           </Text>
         )}
@@ -56,7 +57,8 @@ const PageHeader: React.FC<PageHeaderProps> = ({
             transform="rotate(70deg)"
             opacity="0.3"
             fill="gray.1000"
-            color="red.700">
+            color="red.700"
+          >
             <MinusIcon size={16} fill="gray.900" />
           </Box>
         )}
@@ -74,7 +76,8 @@ const PageHeader: React.FC<PageHeaderProps> = ({
       position="sticky"
       top={0}
       zIndex={10}
-      bg="background-primary">
+      bg="background-primary"
+    >
       <Flex alignItems="center">
         {hasBack && (
           <Back

@@ -25,11 +25,13 @@ const StepsIndicator = ({ goTo, formStep, titles }: Props) => {
               align="center"
               color={formStep >= index ? 'green.1200' : 'gray.900'}
               bg={formStep >= index ? 'green.600' : 'gray.400'}
-              borderRadius="xl">
+              borderRadius="xl"
+            >
               <Text
                 fontSize="xs"
                 color={formStep >= index ? 'green.1000' : 'gray.900'}
-                fontWeight="heading">
+                fontWeight="heading"
+              >
                 {index + 1}
               </Text>
             </Flex>
@@ -39,7 +41,8 @@ const StepsIndicator = ({ goTo, formStep, titles }: Props) => {
               color={formStep >= index ? 'green.900' : 'text-secondary'}
               fontWeight="heading"
               as="p"
-              onClick={() => goTo(index)}>
+              onClick={() => goTo(index)}
+            >
               {item}
             </Text>
             {titles.length !== index + 1 && (

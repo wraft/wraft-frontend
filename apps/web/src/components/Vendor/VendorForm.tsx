@@ -200,7 +200,8 @@ const VendorForm: React.FC<VendorFormProps> = ({
           borderRadius="lg"
           p="xl"
           border="1px solid"
-          borderColor="border">
+          borderColor="border"
+        >
           <Box mb="xl">
             <Text variant="lg" fontWeight="600" mb="md">
               Company Logo
@@ -227,7 +228,8 @@ const VendorForm: React.FC<VendorFormProps> = ({
                       position: 'absolute',
                       top: '-8px',
                       right: '-8px',
-                    }}>
+                    }}
+                  >
                     <X size={12} />
                   </Button>
                 </Box>
@@ -241,7 +243,8 @@ const VendorForm: React.FC<VendorFormProps> = ({
                   display="flex"
                   alignItems="center"
                   justifyContent="center"
-                  bg="background-secondary">
+                  bg="background-secondary"
+                >
                   <Upload size={24} color="gray" />
                 </Box>
               )}
@@ -272,7 +275,8 @@ const VendorForm: React.FC<VendorFormProps> = ({
                 <Field
                   label="Company Name"
                   required
-                  error={errors.name?.message}>
+                  error={errors.name?.message}
+                >
                   <InputText
                     placeholder="Enter company name"
                     {...register('name')}
@@ -283,7 +287,8 @@ const VendorForm: React.FC<VendorFormProps> = ({
               <Box flex={1}>
                 <Field
                   label="Contact Person"
-                  error={errors.contact_person?.message}>
+                  error={errors.contact_person?.message}
+                >
                   <InputText
                     placeholder="Enter contact person name"
                     {...register('contact_person')}
@@ -363,7 +368,8 @@ const VendorForm: React.FC<VendorFormProps> = ({
               <Box flex={1}>
                 <Field
                   label="Registration Number"
-                  error={errors.registration_number?.message}>
+                  error={errors.registration_number?.message}
+                >
                   <InputText
                     placeholder="Enter registration number"
                     {...register('registration_number')}
@@ -378,11 +384,13 @@ const VendorForm: React.FC<VendorFormProps> = ({
             justify="end"
             pt="lg"
             borderTop="1px solid"
-            borderColor="border">
+            borderColor="border"
+          >
             <Button
               variant="secondary"
               onClick={handleCancel}
-              disabled={isSubmitting}>
+              disabled={isSubmitting}
+            >
               Cancel
             </Button>
             <Button
@@ -393,7 +401,8 @@ const VendorForm: React.FC<VendorFormProps> = ({
                 isEdit
                   ? !hasPermission('vendor', 'manage')
                   : !hasPermission('vendor', 'manage')
-              }>
+              }
+            >
               {isSubmitting ? (
                 <>
                   <Spinner size={16} />

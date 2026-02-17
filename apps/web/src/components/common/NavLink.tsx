@@ -33,7 +33,8 @@ export const NextLinkText: React.FC<React.PropsWithChildren<AnchorType>> = memo(
         locale={locale}
         onClick={onClick}
         passHref
-        legacyBehavior>
+        legacyBehavior
+      >
         <Link variant={variant} Icon={icon} type={type}>
           {children}
         </Link>

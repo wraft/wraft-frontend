@@ -13,7 +13,8 @@ const ProgressBar = ({ progress }: Props) => {
       h="4px"
       w="48px"
       borderRadius="50px"
-      bg="neutral.200">
+      bg="neutral.200"
+    >
       <Box
         h="100%"
         w={`${progress}%`}

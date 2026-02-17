@@ -20,7 +20,8 @@ const Stepper = ({ currentStep, step, onSelect }: StepSectionProps) => {
         }}
         initial={{ scale: 0.8 }}
         animate={{ scale: currentStep === step.id ? 1 : 0.8 }}
-        transition={{ duration: 0.2 }}>
+        transition={{ duration: 0.2 }}
+      >
         {currentStep > step.id ? (
           <Circle bg="green.1000" color="green.100">
             <Check size={12} weight="bold" />
@@ -28,7 +29,8 @@ const Stepper = ({ currentStep, step, onSelect }: StepSectionProps) => {
         ) : (
           <Circle
             bg={currentStep === step.id ? '#f3922b' : 'gray.400'}
-            color={currentStep === step.id ? 'green.100' : 'gray.1100'}>
+            color={currentStep === step.id ? 'green.100' : 'gray.1100'}
+          >
             {step.id}
           </Circle>
         )}
@@ -41,7 +43,8 @@ const Stepper = ({ currentStep, step, onSelect }: StepSectionProps) => {
               fontWeight="bold"
               cursor="pointer"
               color={{ _: 'gray.400', ':hover': 'green.1200' }}
-              onClick={() => onSelect && onSelect(step)}>
+              onClick={() => onSelect && onSelect(step)}
+            >
               {step.title}
             </Text>
             <Box className="line" bg="gray.400" />

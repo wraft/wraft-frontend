@@ -88,7 +88,8 @@ const InviteAcceptBlock = ({
         p="5xl"
         bg="background-secondary"
         h="100vh"
-        align="baseline">
+        align="baseline"
+      >
         <Box position="absolute" top="80px" left="80px">
           <Link href={homePageUrl}>
             <Box color="gray.0" fill="gray.1200">
@@ -102,7 +103,8 @@ const InviteAcceptBlock = ({
           w="500px"
           justifySelf="center"
           direction="column"
-          textAlign="center">
+          textAlign="center"
+        >
           {isAuthorised && (
             <>
               <Text as="h3" mb="md" fontSize="3xl">

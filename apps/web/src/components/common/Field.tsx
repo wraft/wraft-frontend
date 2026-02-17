@@ -97,7 +97,8 @@ const Field: React.FC<Props> = ({
               setPasswordType((prev) =>
                 prev === 'password' ? 'text' : 'password',
               );
-            }}>
+            }}
+          >
             <AddIcon />
           </Box>
         )}
@@ -105,7 +106,8 @@ const Field: React.FC<Props> = ({
       {error && (
         <Text
           sx={{ position: 'absolute', bottom: '-22px', left: '4px' }}
-          variant="error">
+          variant="error"
+        >
           {error.message}
         </Text>
       )}

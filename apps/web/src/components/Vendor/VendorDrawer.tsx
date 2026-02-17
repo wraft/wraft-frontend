@@ -142,7 +142,8 @@ const VendorDrawer: React.FC<VendorDrawerProps> = ({
       as="form"
       h="100vh"
       direction="column"
-      onSubmit={handleSubmit(onSubmit)}>
+      onSubmit={handleSubmit(onSubmit)}
+    >
       <Box flexShrink="0">
         <Drawer.Header>
           <Drawer.Title>
@@ -163,7 +164,8 @@ const VendorDrawer: React.FC<VendorDrawerProps> = ({
         flex="1"
         direction="column"
         overflow="auto"
-        p="xl">
+        p="xl"
+      >
         <Box mb="lg">
           <Field label="Vendor Name" error={errors.name?.message} required>
             <InputText
@@ -236,7 +238,8 @@ const VendorDrawer: React.FC<VendorDrawerProps> = ({
 
           <Field
             label="Registration Number"
-            error={errors.registration_number?.message}>
+            error={errors.registration_number?.message}
+          >
             <InputText
               {...register('registration_number')}
               placeholder="Enter registration number"
@@ -250,7 +253,8 @@ const VendorDrawer: React.FC<VendorDrawerProps> = ({
           <Button
             variant="secondary"
             onClick={handleCancel}
-            disabled={isSubmitting}>
+            disabled={isSubmitting}
+          >
             Cancel
           </Button>
           <Button type="submit" variant="primary" disabled={isSubmitting}>

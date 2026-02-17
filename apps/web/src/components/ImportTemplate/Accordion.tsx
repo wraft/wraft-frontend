@@ -18,7 +18,8 @@ const Accordion = ({ header, children, error = false }: AccordionProps) => (
   <Box
     as="details"
     alignItems="center"
-    bg={error === true ? 'red.100' : 'gray.100'}>
+    bg={error === true ? 'red.100' : 'gray.100'}
+  >
     <Header display="flex" as="summary" borderBottom={0} cursor="pointer">
       {header}
       <Box mr="md" mt="sm">

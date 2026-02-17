@@ -84,7 +84,8 @@ const FieldColor: React.FC<FieldColorProps> = ({
       gap="sm"
       px="md"
       py="md"
-      justifyContent="space-between">
+      justifyContent="space-between"
+    >
       <Text>{label}</Text>
       <Flex gap="sm" alignItems="center">
         {readOnly ? (
@@ -134,7 +135,8 @@ const FieldColor: React.FC<FieldColorProps> = ({
                 <Box
                   borderRadius="4px"
                   display="flex"
-                  cursor={readOnly ? 'default' : 'pointer'}>
+                  cursor={readOnly ? 'default' : 'pointer'}
+                >
                   <InkIcon
                     width={16}
                     height={16}

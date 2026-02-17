@@ -74,7 +74,8 @@ const Dropzone = ({
         border: '1px dashed',
         borderColor: 'neutral.200',
         borderRadius: '4px',
-      }}>
+      }}
+    >
       {assets && assets.length > 0 && (
         <Box
           sx={{
@@ -85,7 +86,8 @@ const Dropzone = ({
             alignItems: 'center',
             bg: 'background-primary',
             py: '24px',
-          }}>
+          }}
+        >
           <Box
             onClick={() => {
               setValue('file', undefined);
@@ -97,7 +99,8 @@ const Dropzone = ({
               top: 3,
               right: 3,
               cursor: 'pointer',
-            }}>
+            }}
+          >
             <CloseIcon width={24} height={24} />
           </Box>
           <PdfViewer
@@ -120,7 +123,8 @@ const Dropzone = ({
           height: '100%',
           py: '18px',
           px: 3,
-        }}>
+        }}
+      >
         <Input
           type="file"
           name="file"
@@ -136,7 +140,8 @@ const Dropzone = ({
               justifyContent: 'center',
               alignItems: 'center',
               borderRadius: '4px',
-            }}>
+            }}
+          >
             <CloudUploadIcon width={32} height={32} />
           </Box>
         )}
@@ -147,11 +152,13 @@ const Dropzone = ({
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-            }}>
+            }}
+          >
             <Flex
               sx={{
                 alignItems: 'center',
-              }}>
+              }}
+            >
               <Text variant="pM">{assets[assets.length - 1].name}</Text>
               <Box
                 sx={{
@@ -163,7 +170,8 @@ const Dropzone = ({
                   bg: 'green.700',
                   borderRadius: '44px',
                   ml: 2,
-                }}>
+                }}
+              >
                 <TickIcon
                   color={themeui?.theme?.colors?.white as string}
                   height={12}
@@ -176,7 +184,8 @@ const Dropzone = ({
               variant="tertiary"
               onClick={(e) => {
                 e.preventDefault();
-              }}>
+              }}
+            >
               re-upload
             </Button>
           </Box>
@@ -188,7 +197,8 @@ const Dropzone = ({
                   flexDirection: 'column',
                   alignItems: 'center',
                   mt: '12px',
-                }}>
+                }}
+              >
                 <Text variant="pM" sx={{ mb: 1 }}>
                   Drag & drop or upload files
                 </Text>
@@ -208,7 +218,8 @@ const Dropzone = ({
                       justifyContent: 'center',
                       alignItems: 'center',
                       display: 'flex',
-                    }}>
+                    }}
+                  >
                     <ApproveTickIcon />
                   </Box>
                 )}

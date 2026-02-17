@@ -66,7 +66,8 @@ const PublicTemplatesTab = ({
         onMouseLeave={() => setHoveredTemplate(null)}
         onClick={() => handleTemplateClick(template)}
         position="relative"
-        overflow="hidden">
+        overflow="hidden"
+      >
         {/* Selection indicator */}
         {isSelected && (
           <Box
@@ -91,7 +92,8 @@ const PublicTemplatesTab = ({
           alignItems="center"
           justifyContent="center"
           overflow="hidden"
-          position="relative">
+          position="relative"
+        >
           {template.thumbnail_url ? (
             <img
               src={template.thumbnail_url}
@@ -120,7 +122,8 @@ const PublicTemplatesTab = ({
               display="flex"
               alignItems="center"
               justifyContent="center"
-              transition="opacity 0.2s ease-in-out">
+              transition="opacity 0.2s ease-in-out"
+            >
               <Button size="sm" variant="primary">
                 {isSelected ? 'Selected' : 'Select'}
               </Button>
@@ -134,7 +137,8 @@ const PublicTemplatesTab = ({
             fontSize="md"
             fontWeight="heading"
             color="text-primary"
-            lineHeight="tight">
+            lineHeight="tight"
+          >
             {template.name}
           </Text>
           <Text
@@ -146,7 +150,8 @@ const PublicTemplatesTab = ({
               WebkitLineClamp: 2,
               WebkitBoxOrient: 'vertical',
               overflow: 'hidden',
-            }}>
+            }}
+          >
             {template.description}
           </Text>
           <Flex justifyContent="space-between" alignItems="center" mt="xs">
@@ -176,7 +181,8 @@ const PublicTemplatesTab = ({
       borderColor="border"
       borderRadius="md"
       bg="background-primary"
-      animation="pulse 2s infinite">
+      animation="pulse 2s infinite"
+    >
       <Box w="100%" h="120px" bg="gray.200" borderRadius="sm" mb="md" />
       <Box h="16px" bg="gray.200" borderRadius="sm" mb="xs" />
       <Box h="14px" bg="gray.200" borderRadius="sm" mb="xs" w="80%" />
@@ -198,7 +204,8 @@ const PublicTemplatesTab = ({
         <Box
           display="grid"
           gridTemplateColumns="repeat(auto-fill, minmax(280px, 1fr))"
-          gap="lg">
+          gap="lg"
+        >
           {Array.from({ length: 6 }).map((_, index) => (
             <LoadingSkeleton key={index} />
           ))}
@@ -230,7 +237,8 @@ const PublicTemplatesTab = ({
         border="1px solid"
         borderColor="border"
         borderRadius="md"
-        bg="background-primary">
+        bg="background-primary"
+      >
         <Text fontSize="sm" color="text-secondary" mb="md">
           No templates available at the moment.
         </Text>
@@ -255,7 +263,8 @@ const PublicTemplatesTab = ({
       <Box
         display="grid"
         gridTemplateColumns="repeat(auto-fill, minmax(280px, 1fr))"
-        gap="lg">
+        gap="lg"
+      >
         {templates.map(renderTemplateCard)}
       </Box>
 
@@ -266,7 +275,8 @@ const PublicTemplatesTab = ({
           bg="primary.50"
           borderRadius="md"
           border="1px solid"
-          borderColor="primary.200">
+          borderColor="primary.200"
+        >
           <Flex alignItems="center" gap="md">
             <Box
               w="12px"

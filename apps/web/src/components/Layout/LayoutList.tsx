@@ -110,7 +110,8 @@ const LayoutList = ({ rerender }: Props) => {
             store={stateDrawer}
             aria-label="field drawer"
             withBackdrop={true}
-            onClose={() => setIsEdit(false)}>
+            onClose={() => setIsEdit(false)}
+          >
             <LayoutForm setOpen={setIsEdit} cId={row.original.id} />
           </Drawer>
         </>
@@ -158,7 +159,8 @@ const LayoutList = ({ rerender }: Props) => {
                   <DropdownMenu.Item
                     onClick={() => {
                       setDeleteLayout(row.index);
-                    }}>
+                    }}
+                  >
                     Delete
                   </DropdownMenu.Item>
                 </DropdownMenu>
@@ -168,7 +170,8 @@ const LayoutList = ({ rerender }: Props) => {
             <Modal
               ariaLabel="Delete Layout"
               open={deleteLayout === row.index}
-              onClose={() => setDeleteLayout(null)}>
+              onClose={() => setDeleteLayout(null)}
+            >
               {
                 <ConfirmDelete
                   title="Delete Layout"

@@ -49,7 +49,8 @@ export const TimeAgo = (props: TimeAgoProps) => {
       <Text
         fontSize={props.fontSize || 'sm2'}
         opacity="0.8"
-        color={props.color || 'text-secondary'}>
+        color={props.color || 'text-secondary'}
+      >
         -
       </Text>
     );
@@ -152,7 +153,8 @@ export const FilterBlock: FC<FilterBlockProps> = ({
       gap="sm"
       borderBottom="solid 1px"
       borderColor="border"
-      align="center">
+      align="center"
+    >
       <VariantLine bg={color || '#555'} />
       <Text>{title}</Text>
     </Flex>
@@ -184,7 +186,8 @@ export const BoxWrap: FC<BoxWrapProps> = ({ id, xid, name }) => {
           m={0}
           fontSize="sm"
           fontWeight="500"
-          cursor="pointer">
+          cursor="pointer"
+        >
           {name}
         </Text>
       </MenuItem>
@@ -235,7 +238,8 @@ export const StateBadge: FC<StateBadgeProps> = ({ color, name }) => {
           bg="orange.50"
           borderRadius="3rem"
           py="sx"
-          px="md">
+          px="md"
+        >
           <Text color="orange.600" fontSize="sm" mr="0px">
             Draft
           </Text>
@@ -276,7 +280,8 @@ export const IconWrapper = ({
         stroke="currentColor"
         fill="none"
         strokeLinecap="round"
-        strokeLinejoin="round">
+        strokeLinejoin="round"
+      >
         <>{children}</>
       </svg>
     </Box>
@@ -394,7 +399,8 @@ export const EmptyStateDocumentLifecycle: React.FC = () => {
       <StyledSvg
         viewBox="0 0 240 240"
         fill="none"
-        xmlns="http://www.w3.org/2000/svg">
+        xmlns="http://www.w3.org/2000/svg"
+      >
         {/* Background circle */}
         <circle cx="120" cy="120" r="100" fill="#E6F4EA" />
 

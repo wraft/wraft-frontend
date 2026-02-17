@@ -140,7 +140,8 @@ const ThemeList = ({ rerender }: Props) => {
             <Modal
               ariaLabel="delete theme"
               open={deleteTheme === row.index}
-              onClose={() => setDeleteTheme(null)}>
+              onClose={() => setDeleteTheme(null)}
+            >
               {
                 <ConfirmDelete
                   title="Delete Theme"

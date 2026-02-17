@@ -40,7 +40,8 @@ export const CustomEdge: FC<EdgeProps<Edge<{ label: string }>>> = ({
             fontSize: 12,
             fontWeight: 700,
           }}
-          className="nodrag nopan">
+          className="nodrag nopan"
+        >
           {data.label}
         </div>
       </EdgeLabelRenderer>

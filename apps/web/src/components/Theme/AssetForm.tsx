@@ -144,7 +144,8 @@ const AssetForm = ({
               borderWidth="1px"
               borderStyle="solid"
               borderRadius="sm"
-              borderColor="green.300">
+              borderColor="green.300"
+            >
               <Text fontSize="sm" color="green.900" alignItems="center">
                 <strong>Font naming guide:</strong>
                 <br />

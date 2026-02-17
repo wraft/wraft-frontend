@@ -139,7 +139,8 @@ const NotificationSettings: React.FC = () => {
               fontSize="md"
               fontWeight="bold"
               mb="md"
-              textTransform="capitalize">
+              textTransform="capitalize"
+            >
               {category} Notifications
             </Text>
             <Flex direction="column" bg="background-primary">
@@ -151,7 +152,8 @@ const NotificationSettings: React.FC = () => {
                   px="lg"
                   py="lg"
                   borderBottom="1px solid"
-                  borderColor="border">
+                  borderColor="border"
+                >
                   <Box flex={1}>
                     <Text fontWeight="500">{event.name}</Text>
                     <Text color="text-secondary" fontSize="sm" mt="xs">

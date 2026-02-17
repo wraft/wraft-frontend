@@ -379,7 +379,8 @@ const LayoutForm = ({
         as="form"
         h="100vh"
         direction="column"
-        onSubmit={handleSubmit(onSubmit)}>
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <Box flexShrink="0">
           <Drawer.Header>
             <Drawer.Title>
@@ -405,7 +406,8 @@ const LayoutForm = ({
           px="xl"
           py="md"
           direction="column"
-          gap="md">
+          gap="md"
+        >
           {formStep === 0 && (
             <>
               <Field label="Layout Name" required error={errors?.name?.message}>
@@ -425,7 +427,8 @@ const LayoutForm = ({
                       label="Slug"
                       required
                       hint="Slugs are layout templates used for rendering documents"
-                      error={errors?.slug?.message}>
+                      error={errors?.slug?.message}
+                    >
                       <Select {...field} options={SLUGITEMS} />
                     </Field>
                   </Box>
@@ -439,7 +442,8 @@ const LayoutForm = ({
                   <Field
                     label="Frame"
                     required={false}
-                    error={errors?.frame?.message}>
+                    error={errors?.frame?.message}
+                  >
                     <Search
                       itemToString={(item: any) => item && item.name}
                       name={name}
@@ -467,7 +471,8 @@ const LayoutForm = ({
               <Field
                 label="Description"
                 required
-                error={errors?.description?.message}>
+                error={errors?.description?.message}
+              >
                 <Textarea
                   {...register('description')}
                   placeholder="Enter a description"
@@ -489,7 +494,8 @@ const LayoutForm = ({
                       <Field
                         label="Engine"
                         required
-                        error={errors?.engine?.message}>
+                        error={errors?.engine?.message}
+                      >
                         <Search
                           itemToString={(item: any) => item && item.name}
                           name={name}
@@ -524,7 +530,8 @@ const LayoutForm = ({
                   <Field
                     label="Height"
                     required
-                    error={errors?.height?.message}>
+                    error={errors?.height?.message}
+                  >
                     <InputText value="40" {...register('height')} />
                   </Field>
                   <Field label="Unit" required error={errors?.unit?.message}>
@@ -558,7 +565,8 @@ const LayoutForm = ({
               type="button"
               variant="secondary"
               disabled={formStep === 0}
-              onClick={prevStep}>
+              onClick={prevStep}
+            >
               Previous
             </Button>
           )}
@@ -569,7 +577,8 @@ const LayoutForm = ({
               type="submit"
               variant="primary"
               loading={isLoading}
-              onClick={() => handleSubmit(onSubmit)}>
+              onClick={() => handleSubmit(onSubmit)}
+            >
               {isEdit ? 'Update' : 'Create'}
             </Button>
           )}

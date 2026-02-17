@@ -274,7 +274,8 @@ export default function ImageUploader({
               borderRadius="99rem"
               overflow="hidden"
               w="300px"
-              h="240px">
+              h="240px"
+            >
               {currentImageSrc ? (
                 <Image
                   src={currentImageSrc}
@@ -314,7 +315,8 @@ export default function ImageUploader({
 
             <Button
               variant="primary"
-              onClick={() => handleCroppedImage(croppedAreaPixels)}>
+              onClick={() => handleCroppedImage(croppedAreaPixels)}
+            >
               Save
             </Button>
           </Box>

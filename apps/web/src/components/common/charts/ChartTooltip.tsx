@@ -43,14 +43,16 @@ export const ChartTooltipContent: React.FC<ChartTooltipProps> = ({
       border={`1px solid ${theme.colors.border}`}
       borderRadius="md"
       boxShadow="0 2px 8px rgba(0,0,0,0.08)"
-      minWidth="180px">
+      minWidth="180px"
+    >
       {!hideLabel && formattedLabel && (
         <Text
           as="p"
           fontSize="sm"
           fontWeight="medium"
           mb="xs"
-          color={theme?.colors?.text}>
+          color={theme?.colors?.text}
+        >
           {formattedLabel}
         </Text>
       )}
@@ -65,7 +67,8 @@ export const ChartTooltipContent: React.FC<ChartTooltipProps> = ({
             index !== payload.length - 1
               ? `1px solid ${theme.colors.border}`
               : undefined
-          }>
+          }
+        >
           <Box display="flex" alignItems="center" gap="xs">
             <Box
               as="span"
@@ -83,14 +86,16 @@ export const ChartTooltipContent: React.FC<ChartTooltipProps> = ({
               as="span"
               fontSize="sm"
               color={theme?.colors?.text}
-              fontWeight="medium">
+              fontWeight="medium"
+            >
               {config[entry.name]?.label || entry.name}
             </Text>
           </Box>
           <Text
             as="span"
             fontSize="sm"
-            color={theme?.colors?.['text-secondary']}>
+            color={theme?.colors?.['text-secondary']}
+          >
             {valueFormatter(entry.value)}
           </Text>
         </Box>

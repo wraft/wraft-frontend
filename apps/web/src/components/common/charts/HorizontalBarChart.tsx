@@ -56,7 +56,8 @@ export const HorizontalBarChart: React.FC<HorizontalBarChartProps> = ({
       border="1px solid"
       borderColor="border"
       borderRadius="md"
-      overflow="hidden">
+      overflow="hidden"
+    >
       {(title || description) && (
         <BlockTitle title={title} description={description} />
       )}
@@ -72,7 +73,8 @@ export const HorizontalBarChart: React.FC<HorizontalBarChartProps> = ({
                 right: 16,
                 left: 12,
                 bottom: 8,
-              }}>
+              }}
+            >
               <XAxis
                 type="number"
                 dataKey={dataKey}
@@ -113,14 +115,16 @@ export const HorizontalBarChart: React.FC<HorizontalBarChartProps> = ({
           borderColor="border"
           display="flex"
           flexDirection="column"
-          gap="xs">
+          gap="xs"
+        >
           {trend && (
             <Box
               display="flex"
               alignItems="center"
               gap="xs"
               fontSize="sm"
-              fontWeight="medium">
+              fontWeight="medium"
+            >
               {trend.label} <TrendUp size={16} />
             </Box>
           )}

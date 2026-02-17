@@ -75,7 +75,8 @@ const VendorDashboard: React.FC<VendorDashboardProps> = ({ vendorId }) => {
         borderColor="border"
         borderRadius="md"
         bg="background-primary"
-        overflow="hidden">
+        overflow="hidden"
+      >
         <Box px="lg" py="sm" borderBottom="1px solid" borderColor="border">
           <Text fontSize="sm" fontWeight="600" color="text-secondary">
             Activity
@@ -90,7 +91,8 @@ const VendorDashboard: React.FC<VendorDashboardProps> = ({ vendorId }) => {
               px="lg"
               py="sm"
               borderBottom={index < statItems.length - 1 ? '1px solid' : 'none'}
-              borderColor="border">
+              borderColor="border"
+            >
               <Text fontSize="sm" color="text-secondary">
                 {item.label}
               </Text>
@@ -108,7 +110,8 @@ const VendorDashboard: React.FC<VendorDashboardProps> = ({ vendorId }) => {
           borderColor="border"
           borderRadius="md"
           bg="background-primary"
-          overflow="hidden">
+          overflow="hidden"
+        >
           <Box px="lg" py="sm" borderBottom="1px solid" borderColor="border">
             <Text fontSize="sm" fontWeight="600" color="text-secondary">
               By Country
@@ -127,7 +130,8 @@ const VendorDashboard: React.FC<VendorDashboardProps> = ({ vendorId }) => {
                     ? '1px solid'
                     : 'none'
                 }
-                borderColor="border">
+                borderColor="border"
+              >
                 <Text fontSize="sm" color="text-secondary">
                   {country.country || 'Unknown'}
                 </Text>

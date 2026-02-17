@@ -25,19 +25,22 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
         border-radius="4px"
         w="100%"
         position="relative"
-        transition="all 0.2s ease">
+        transition="all 0.2s ease"
+      >
         <Box padding="62px 92px" lineHeight="1.6" fontFamily={fontFamily}>
           <Flex
             justifyContent="space-between"
             alignItems="flex-start"
-            mb="40px">
+            mb="40px"
+          >
             <Box>
               <Text
                 fontSize="sm"
                 fontWeight="bold"
                 color={primaryColor}
                 lineHeight="1.4"
-                mb="xs">
+                mb="xs"
+              >
                 Star West International LLC
               </Text>
               <Text fontSize="xs" color={secondaryColor} lineHeight="1.4">
@@ -56,7 +59,8 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
                 fontWeight="bold"
                 color={primaryColor}
                 lineHeight="1.4"
-                mb="xs">
+                mb="xs"
+              >
                 Biltrix Enterprises Ltd.
               </Text>
               <Text fontSize="xs" color={secondaryColor} lineHeight="1.4">
@@ -75,7 +79,8 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
               fontWeight="bold"
               color={primaryColor}
               letterSpacing="0.5px"
-              textDecoration="underline">
+              textDecoration="underline"
+            >
               AGREEMENT
             </Text>
           </Box>
@@ -85,7 +90,8 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
               color={secondaryColor}
               lineHeight="1.7"
               textAlign="justify"
-              mb="md">
+              mb="md"
+            >
               This Agreement is entered into between Star West International LLC
               (&quot;Company&quot;) and Biltrix Enterprises Ltd.
               (&quot;Client&quot;) for the provision of consulting services in
@@ -96,7 +102,8 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
               color={secondaryColor}
               lineHeight="1.7"
               textAlign="justify"
-              mb="lg">
+              mb="lg"
+            >
               WHEREAS, Company provides business consulting services; and
               WHEREAS, Client desires to engage Company for such services on the
               terms specified below.
@@ -106,7 +113,8 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
               color={secondaryColor}
               lineHeight="1.7"
               textAlign="justify"
-              mb="lg">
+              mb="lg"
+            >
               <Text as="span" fontWeight="600" color={primaryColor} mb="xs">
                 1. Services
               </Text>
@@ -121,7 +129,8 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
               color={secondaryColor}
               lineHeight="1.6"
               textAlign="justify"
-              mb="md">
+              mb="md"
+            >
               <Text as="span" fontWeight="600" color={primaryColor} mb="xs">
                 2. Term &amp; Payment
               </Text>
@@ -135,7 +144,8 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
               color={secondaryColor}
               lineHeight="1.6"
               textAlign="justify"
-              mb="md">
+              mb="md"
+            >
               <Text as="span" fontWeight="600" color={primaryColor} mb="xs">
                 3. Confidentiality
               </Text>
@@ -191,7 +201,8 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
           fontSize="md"
           fontWeight="heading"
           textAlign="center"
-          color="gray.900">
+          color="gray.900"
+        >
           Document Preview
         </Text>
       </Box>

@@ -36,7 +36,8 @@ const ManageHomePage = () => {
                   borderColor="border"
                   borderRadius="md"
                   gap="md"
-                  p="md">
+                  p="md"
+                >
                   <Box>
                     <IconFrame color="gray.800">{menu.icon}</IconFrame>
                   </Box>

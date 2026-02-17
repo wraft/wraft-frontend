@@ -12,7 +12,8 @@ const Container = (props: ContainerProps) => {
       maxWidth={(props.width || '100') + 'rem'}
       mx="auto"
       px={0}
-      bg={props.bg ? props.bg : 'transparent'}>
+      bg={props.bg ? props.bg : 'transparent'}
+    >
       {props.children}
     </Box>
   );

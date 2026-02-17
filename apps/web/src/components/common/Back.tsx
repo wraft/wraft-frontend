@@ -78,7 +78,8 @@ const Back: React.FC<BackProps> = ({
       }}
       onMouseUp={(e) => {
         e.currentTarget.style.transform = 'translateX(-2px)';
-      }}>
+      }}
+    >
       <ArrowLeftIcon width={size} height={size} color="#9CA3AF" />
       {showText && (
         <span style={{ fontSize: '14px', fontWeight: 500 }}>Back</span>

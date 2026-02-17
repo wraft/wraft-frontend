@@ -22,7 +22,8 @@ export const Page = ({ children, showFull = true, noSide = true }: IPage) => {
     <Grid
       templateColumns="minmax(200px, 245px) 1fr"
       h="100vh"
-      bg="background-secondary">
+      bg="background-secondary"
+    >
       {noSide && <Sidebar showFull={shouldShow} />}
       <Box overflow="auto">{children}</Box>
     </Grid>

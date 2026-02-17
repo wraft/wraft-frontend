@@ -7,21 +7,19 @@ export interface IMenuItem {
   href: string;
   path?: string;
   variant?: string;
+  [key: string]: any;
 }
 
-const MenuItem = (props: IMenuItem) => {
+const MenuItem = ({ children, href, path, variant, ...rest }: IMenuItem) => {
   const router = useRouter();
   const isActive =
-    router.pathname === props.href ||
-    (router.pathname.startsWith(props.href) && props.href !== '/');
+    router.pathname === href ||
+    (router.pathname.startsWith(href) && href !== '/');
 
   return (
-    <Flex variant={props?.variant}>
-      <Link
-        href={props.href}
-        as={props.path}
-        className={isActive ? 'active' : ''}>
-        {props.children}
+    <Flex variant={variant} {...rest}>
+      <Link href={href} as={path} className={isActive ? 'active' : ''}>
+        {children}
       </Link>
     </Flex>
   );

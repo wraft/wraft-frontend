@@ -161,10 +161,12 @@ const ImportedList = ({ items }: ImportedListProps) => (
           display="flex"
           borderWidth={0}
           borderColor="border"
-          borderBottomWidth={1}>
+          borderBottomWidth={1}
+        >
           <Box pl={1} flex={1} display="flex">
             <Link
-              href={`/${pathMapping[item.item_type as keyof typeof pathMapping]}/${item.id}`}>
+              href={`/${pathMapping[item.item_type as keyof typeof pathMapping]}/${item.id}`}
+            >
               <Text fontSize="sm" lineHeight={1} m={0} color={'gray.1200'}>
                 {item.title || item.name}
               </Text>
@@ -175,7 +177,8 @@ const ImportedList = ({ items }: ImportedListProps) => (
               m={0}
               ml="auto"
               mr={3}
-              color={'gray.1100'}>
+              color={'gray.1100'}
+            >
               {item.item_type}
             </x.span>
           </Box>

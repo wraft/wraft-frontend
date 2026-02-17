@@ -35,7 +35,8 @@ const ManageSidebar = ({ items }: INav) => {
               flex={1}
               minWidth="150px"
               px="md"
-              py="sm">
+              py="sm"
+            >
               {item.icon && <Box color="gray.500">{item.icon}</Box>}
               <Text>{item.name}</Text>
             </Box>

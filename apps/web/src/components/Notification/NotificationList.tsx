@@ -70,7 +70,8 @@ const NotificationList = () => {
               borderColor="border"
               cursor="pointer"
               bg={notification.read ? 'background-primary' : 'green.100'}
-              onClick={() => handleNotificationClick(notification)}>
+              onClick={() => handleNotificationClick(notification)}
+            >
               <Flex gap="sm" align="start">
                 {notification.actor && !notification.actor.profile_pic && (
                   <Box
@@ -82,7 +83,8 @@ const NotificationList = () => {
                     fontSize="sm"
                     display="flex"
                     alignItems="center"
-                    justifyContent="center">
+                    justifyContent="center"
+                  >
                     {getNotificationIcon(notification.event_type)}
                   </Box>
                 )}
@@ -96,7 +98,8 @@ const NotificationList = () => {
                     fontSize="sm"
                     display="flex"
                     alignItems="center"
-                    justifyContent="center">
+                    justifyContent="center"
+                  >
                     <Avatar
                       size="sm"
                       src={notification.actor?.profile_pic}

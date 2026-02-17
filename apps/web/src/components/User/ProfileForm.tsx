@@ -162,14 +162,16 @@ const Form = () => {
       w="50%"
       maxWidth="600px"
       bg="background-primary"
-      p="xl">
+      p="xl"
+    >
       <Box>
         {profile && (
           <Flex direction="row" wrap="wrap">
             <Box position="relative">
               <AvatarContainer
                 position="relative"
-                onClick={() => setShowAvatarUploader(!showAvatarUploader)}>
+                onClick={() => setShowAvatarUploader(!showAvatarUploader)}
+              >
                 <AvatarImage
                   alt=""
                   width={120}
@@ -183,7 +185,8 @@ const Form = () => {
                   left="0"
                   right="0"
                   bottom="0"
-                  className="hover-overlay">
+                  className="hover-overlay"
+                >
                   <EditText as="div" className="edit-text">
                     Edit
                   </EditText>
@@ -213,7 +216,8 @@ const Form = () => {
         mb="md"
         mt="xl"
         as="form"
-        onSubmit={handleSubmit(onSubmit)}>
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <Field label="Name" required error={errors?.name?.message}>
           <InputText {...register('name')} placeholder="Enter your full name" />
         </Field>

@@ -4,8 +4,8 @@ import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
 import { Box, Text, Flex } from '@wraft/ui';
 import { Tab, useTab } from '@wraft/ui';
-import { useTemplateInstallation } from 'hooks/useTemplateInstallation';
 
+import { useTemplateInstallation } from 'hooks/useTemplateInstallation';
 import { fetchAPI, postAPI } from 'utils/models';
 import { Asset } from 'utils/types';
 
@@ -308,7 +308,8 @@ function ImporterApp() {
                       fontSize="xs"
                       fontWeight="medium"
                       minWidth="20px"
-                      textAlign="center">
+                      textAlign="center"
+                    >
                       {publicTemplates.length}
                     </Box>
                   )}
@@ -327,7 +328,8 @@ function ImporterApp() {
                       fontSize="xs"
                       fontWeight="medium"
                       minWidth="20px"
-                      textAlign="center">
+                      textAlign="center"
+                    >
                       {assets.length}
                     </Box>
                   )}

@@ -96,7 +96,8 @@ const StepPopoverDot = ({
           onMouseLeave={() => popover.hide()}
           onFocus={() => popover.show()}
           onBlur={() => popover.hide()}
-          style={{ display: 'flex', outline: 'none' }}>
+          style={{ display: 'flex', outline: 'none' }}
+        >
           {children}
         </span>
       </PopoverAnchor>
@@ -116,7 +117,8 @@ const StepPopoverDot = ({
           zIndex: 100,
           minWidth: 60,
           textAlign: 'left',
-        }}>
+        }}
+      >
         <Box display="flex" flexDirection="column" gap="xs">
           <Text
             as="span"
@@ -124,7 +126,8 @@ const StepPopoverDot = ({
             // borderBottom="1px solid #ddd"
             fontSize="sm"
             fontWeight="heading"
-            color="text-primary">
+            color="text-primary"
+          >
             {label}
           </Text>
           <Flex>
@@ -134,7 +137,8 @@ const StepPopoverDot = ({
                   as="span"
                   fontSize="xs"
                   color="text-secondary"
-                  fontWeight="body">
+                  fontWeight="body"
+                >
                   {approvedBy}
                 </Text>
                 <TimeAgo time={approvedAt} short />
@@ -178,7 +182,8 @@ export const StateProgress: React.FC<StateProgressProps> = ({
                 label={state.state}
                 approvedBy={approvedBy}
                 approvedAt={approvedAt}
-                extraInfo={extraInfo}>
+                extraInfo={extraInfo}
+              >
                 <div
                   style={{
                     width: 14,
@@ -188,7 +193,8 @@ export const StateProgress: React.FC<StateProgressProps> = ({
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                  }}>
+                  }}
+                >
                   <Check size={10} weight="bold" color="#127d5d" />
                 </div>
               </StepPopoverDot>
@@ -197,7 +203,8 @@ export const StateProgress: React.FC<StateProgressProps> = ({
                 label={state.state}
                 approvedBy={approvedBy}
                 approvedAt={approvedAt}
-                extraInfo={extraInfo}>
+                extraInfo={extraInfo}
+              >
                 <StateDot
                   $isActive={isActive}
                   $isCompleted={isCompleted}

@@ -208,7 +208,8 @@ const FileUploadArea = ({
     borderRadius="4px"
     h="100%"
     py="18px"
-    px="md">
+    px="md"
+  >
     <InputText type="file" name="file" display="none" {...getInputProps({})} />
 
     {!hasFile && (
@@ -219,7 +220,8 @@ const FileUploadArea = ({
           display="flex"
           justifyContent="center"
           alignItems="center"
-          borderRadius="4px">
+          borderRadius="4px"
+        >
           <CloudUploadIcon width={32} height={32} />
         </Box>
         <Flex flexDirection="column" alignItems="center" mt="12px">
@@ -243,7 +245,8 @@ const FileUploadArea = ({
           ml="12px"
           justifyContent="center"
           alignItems="center"
-          display="flex">
+          display="flex"
+        >
           <ApproveTickIcon />
         </Box>
       </Flex>
@@ -430,7 +433,8 @@ const Dropzone = React.forwardRef<any, DropzoneProps>(
             position="relative"
             display="flex"
             flexDirection="column"
-            alignItems="center">
+            alignItems="center"
+          >
             {layoutScalingComponent}
 
             <Box
@@ -439,12 +443,14 @@ const Dropzone = React.forwardRef<any, DropzoneProps>(
               flexDirection="column"
               alignItems="center"
               mt="xxl"
-              gap="md">
+              gap="md"
+            >
               <Text
                 variant="base"
                 fontWeight="heading"
                 color="#475569"
-                fontSize="12px">
+                fontSize="12px"
+              >
                 Replace the Current PDF with New PDF
               </Text>
               <ActionButtons

@@ -111,7 +111,8 @@ const VendorContactForm: React.FC<VendorContactFormProps> = ({
     <Modal
       open={open}
       onClose={handleCancel}
-      ariaLabel={contact?.id ? 'Edit Contact' : 'Add Contact'}>
+      ariaLabel={contact?.id ? 'Edit Contact' : 'Add Contact'}
+    >
       <Box p="lg">
         <Flex align="center" justify="space-between" mb="lg">
           <Text variant="lg" fontWeight="600">
@@ -121,7 +122,8 @@ const VendorContactForm: React.FC<VendorContactFormProps> = ({
             variant="ghost"
             size="sm"
             onClick={handleCancel}
-            title="Close">
+            title="Close"
+          >
             <X size={16} />
           </Button>
         </Flex>
@@ -194,11 +196,13 @@ const VendorContactForm: React.FC<VendorContactFormProps> = ({
             justify="end"
             pt="md"
             borderTop="1px solid"
-            borderColor="border">
+            borderColor="border"
+          >
             <Button
               variant="secondary"
               onClick={handleCancel}
-              disabled={loading}>
+              disabled={loading}
+            >
               Cancel
             </Button>
             <Button type="submit" variant="primary" loading={loading}>

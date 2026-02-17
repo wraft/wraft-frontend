@@ -29,7 +29,8 @@ export const Source = ({
         borderLeftWidth="3px"
         borderColor="rgb(82, 196, 26)"
         boxShadow="0 1px 3px 0 rgba(0, 20, 32, .12)"
-        justifyContent="space-between">
+        justifyContent="space-between"
+      >
         <Flex>
           <IconFrame color="icon">
             <HardDrivesIcon size={36} weight="thin" />
@@ -73,7 +74,8 @@ export const Templete = ({
         border="1px solid"
         borderLeftWidth="3px"
         borderColor="rgb(24, 144, 255)"
-        boxShadow="0 1px 3px 0 rgba(0, 20, 32, .12)">
+        boxShadow="0 1px 3px 0 rgba(0, 20, 32, .12)"
+      >
         <Flex>
           <IconFrame color="icon">
             <FilesIcon size={36} weight="thin" />
@@ -91,7 +93,8 @@ export const Templete = ({
         type="source"
         position={Position.Bottom}
         className="NodePort"
-        isConnectable={isConnectable}>
+        isConnectable={isConnectable}
+      >
         {/* <Box
           sx={{
             position: 'absolute',

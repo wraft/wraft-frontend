@@ -95,7 +95,8 @@ const CustomAxisTick = ({ x, y, payload }: any) => {
       transform={`translate(${x},${y})`}
       fontSize="sm"
       color="text"
-      fill="text-secondary">
+      fill="text-secondary"
+    >
       <text x={0} y={0} dy={16} textAnchor="middle">
         {value}
       </text>
@@ -189,7 +190,8 @@ export const LineChart: React.FC<LineChartProps> = ({
       borderColor="border"
       borderRadius="md"
       overflow="hidden"
-      className={className}>
+      className={className}
+    >
       {(title || description) && (
         <BlockTitle title={title} description={description} />
       )}
@@ -211,7 +213,8 @@ export const LineChart: React.FC<LineChartProps> = ({
               borderRadius="0"
               bg={activeChart === key ? 'primary' : 'transparent'}
               color={activeChart === key ? 'white' : 'text'}
-              cursor="pointer">
+              cursor="pointer"
+            >
               <Box display="flex" flexDirection="column" gap="xs">
                 <Text fontSize="xs" color="textMuted">
                   {chartConfig[key]?.label || key}
@@ -235,7 +238,8 @@ export const LineChart: React.FC<LineChartProps> = ({
                 right: 12,
                 left: 12,
                 bottom: 12,
-              }}>
+              }}
+            >
               {showGrid && (
                 <CartesianGrid
                   strokeDasharray="3 3"
@@ -337,14 +341,16 @@ export const LineChart: React.FC<LineChartProps> = ({
           borderColor="border"
           display="flex"
           flexDirection="column"
-          gap="xs">
+          gap="xs"
+        >
           {trend && (
             <Box
               display="flex"
               alignItems="center"
               gap="xs"
               fontSize="sm"
-              fontWeight="medium">
+              fontWeight="medium"
+            >
               {trend.label} <TrendUp size={16} />
             </Box>
           )}

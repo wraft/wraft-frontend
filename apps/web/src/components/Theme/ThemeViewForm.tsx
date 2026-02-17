@@ -94,7 +94,8 @@ const ThemeForm = () => {
                 border="solid 1px"
                 borderColor="border"
                 borderRadius="sm"
-                overflow="hidden">
+                overflow="hidden"
+              >
                 <Box borderBottom="1px solid" borderColor="border">
                   <FieldColor
                     defaultValue={theme?.primary_color || ''}
@@ -149,7 +150,8 @@ const ThemeForm = () => {
         store={drawer}
         aria-label="flow drawer"
         withBackdrop={true}
-        onClose={() => setIsOpen(false)}>
+        onClose={() => setIsOpen(false)}
+      >
         <ThemeAddForm
           setIsOpen={setIsOpen}
           onUpdate={() => loadDataDetalis(cId)}
