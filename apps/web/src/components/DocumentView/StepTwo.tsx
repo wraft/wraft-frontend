@@ -135,11 +135,13 @@ export const FlowProgressBar = ({
       // borderColor="border"
       overflow="hidden"
       // bg={activeState ? 'orange.50' : 'gray.200'}
-      theme={[]}>
+      theme={[]}
+    >
       <StepIndicator
         $isActive={activeState}
         $isCompleted={checked}
-        $isPending={!checked && !activeState}>
+        $isPending={!checked && !activeState}
+      >
         {!checked && !activeState && (
           <>
             <IconFrame color="gray.600" p="2px">
@@ -197,7 +199,8 @@ export const FlowProgressBarCard = ({
       role="button"
       tabIndex={0}
       aria-label={`Step ${num}: ${state} - ${checked ? 'completed' : activeState ? 'active' : 'pending'}`}
-      aria-current={activeState ? 'step' : undefined}>
+      aria-current={activeState ? 'step' : undefined}
+    >
       <CardStepDot $isActive={activeState} $isCompleted={checked}>
         {checked ? (
           <CheckIcon size={12} weight="bold" color="white" />
@@ -213,7 +216,8 @@ export const FlowProgressBarCard = ({
         fontSize="sm"
         fontWeight={activeState || checked ? '600' : '500'}
         color={activeState ? 'orange.700' : checked ? 'green.700' : 'gray.600'}
-        textTransform="capitalize">
+        textTransform="capitalize"
+      >
         {state}
       </Text>
     </CardStepContainer>
@@ -238,11 +242,13 @@ export const FlowProgressBarMinimal = ({
       role="button"
       tabIndex={0}
       aria-label={`Step ${num}: ${state} - ${checked ? 'completed' : activeState ? 'active' : 'pending'}`}
-      aria-current={activeState ? 'step' : undefined}>
+      aria-current={activeState ? 'step' : undefined}
+    >
       <StepIndicator
         $isActive={activeState}
         $isCompleted={checked}
-        $isPending={!checked && !activeState}>
+        $isPending={!checked && !activeState}
+      >
         {checked ? (
           <CheckIcon size={8} weight="bold" color="white" />
         ) : activeState ? (

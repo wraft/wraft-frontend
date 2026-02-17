@@ -30,14 +30,16 @@ const TemplatePreview: React.FC<TemplatePreviewProps> = ({ layout, theme }) => {
       flexShrink={0}
       borderLeft="1px solid"
       borderColor="border"
-      bg="background-primary">
+      bg="background-primary"
+    >
       {/* Header */}
       <Box px="lg" py="lg" borderBottom="1px solid" borderColor="border">
         <Text
           fontSize="xs"
           fontWeight="600"
           color="text-secondary"
-          style={{ textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+          style={{ textTransform: 'uppercase', letterSpacing: '0.05em' }}
+        >
           Preview
         </Text>
         {hasLayout && (
@@ -45,7 +47,8 @@ const TemplatePreview: React.FC<TemplatePreviewProps> = ({ layout, theme }) => {
             fontSize="sm2"
             fontWeight="heading"
             color="text-primary"
-            mt="xs">
+            mt="xs"
+          >
             {layout.name}
           </Text>
         )}
@@ -64,7 +67,8 @@ const TemplatePreview: React.FC<TemplatePreviewProps> = ({ layout, theme }) => {
               : '210 / 297',
             width: '100%',
             overflow: 'hidden',
-          }}>
+          }}
+        >
           <Box p="md" style={{ fontFamily }}>
             {/* Title block */}
             <Box
@@ -139,7 +143,8 @@ const TemplatePreview: React.FC<TemplatePreviewProps> = ({ layout, theme }) => {
                           fontSize: 7,
                           lineHeight: 1.4,
                           opacity: 0.7,
-                        }}>
+                        }}
+                      >
                         {f.name}
                       </Text>
                     </Flex>
@@ -150,7 +155,8 @@ const TemplatePreview: React.FC<TemplatePreviewProps> = ({ layout, theme }) => {
                         fontSize: 6,
                         opacity: 0.5,
                         color: 'var(--theme-ui-colors-text-secondary)',
-                      }}>
+                      }}
+                    >
                       +{frameFields.length - 5} more
                     </Text>
                   )}
@@ -182,7 +188,8 @@ const TemplatePreview: React.FC<TemplatePreviewProps> = ({ layout, theme }) => {
             fontSize="xxs"
             color="text-secondary"
             mt="sm"
-            style={{ textAlign: 'center' }}>
+            style={{ textAlign: 'center' }}
+          >
             {layout.slug.toUpperCase()} &middot; {layout.width}&times;
             {layout.height}
             {layout.unit}

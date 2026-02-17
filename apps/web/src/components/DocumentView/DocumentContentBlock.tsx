@@ -316,7 +316,8 @@ export const DocumentContentBlock = () => {
           align="center"
           justify="center"
           mt="lg"
-          className="main-content">
+          className="main-content"
+        >
           <PdfSignerViewer
             signerBoxes={signerBoxes}
             url={contents?.content?.signed_doc_url}
@@ -335,7 +336,8 @@ export const DocumentContentBlock = () => {
             flexGrow={1}
             justify="center"
             overflowY="auto"
-            maxHeight="calc(100vh - 180px)">
+            maxHeight="calc(100vh - 180px)"
+          >
             <Box minWidth="794px" maxWidth="920px">
               <PreTag pt={0} pb={6}>
                 {contentBody && isEditorMounted && (
@@ -357,7 +359,8 @@ export const DocumentContentBlock = () => {
               <TabList
                 store={tabView}
                 aria-label="Content Stages"
-                className="tabPanel tabGroup">
+                className="tabPanel tabGroup"
+              >
                 <Tab id="edit">
                   <StepBlock title="Content" desc="Draft content" />
                 </Tab>
@@ -382,7 +385,8 @@ export const DocumentContentBlock = () => {
                         loading={isBuilding}
                         disabled={isBuilding}
                         size="sm"
-                        onClick={() => doBuild()}>
+                        onClick={() => doBuild()}
+                      >
                         {!isBuilding && <Play size={12} className="action" />}
                         <Box>Generate</Box>
                       </Button>
@@ -391,7 +395,8 @@ export const DocumentContentBlock = () => {
                       <Button
                         variant="secondary"
                         size="sm"
-                        onClick={() => onSwitchEditorMode(editorMode)}>
+                        onClick={() => onSwitchEditorMode(editorMode)}
+                      >
                         {editorMode === 'edit' ? (
                           <Eye size={14} className="icon" />
                         ) : (
@@ -439,7 +444,8 @@ export const DocumentContentBlock = () => {
                     mx="md"
                     p="xl"
                     border="solid 1px"
-                    borderColor="border">
+                    borderColor="border"
+                  >
                     <Text fontSize="xl" fontWeight="heading" mb="xs">
                       Document not generated
                     </Text>
@@ -450,7 +456,8 @@ export const DocumentContentBlock = () => {
                       variant="secondary"
                       loading={isBuilding}
                       disabled={isBuilding}
-                      onClick={() => doBuild()}>
+                      onClick={() => doBuild()}
+                    >
                       <Play size={14} className="action" />
                       Generate
                     </Button>
@@ -477,7 +484,8 @@ export const DocumentContentBlock = () => {
                         size="sm"
                         onClick={() =>
                           window.open(contents.content.signed_doc_url, '_blank')
-                        }>
+                        }
+                      >
                         Download PDF
                       </Button>
                     </Flex>
@@ -492,7 +500,8 @@ export const DocumentContentBlock = () => {
                     mx="md"
                     p="xl"
                     border="solid 1px"
-                    borderColor="border">
+                    borderColor="border"
+                  >
                     <Text fontSize="xl" fontWeight="heading" mb="xs">
                       SignDocument not generated
                     </Text>
@@ -503,7 +512,8 @@ export const DocumentContentBlock = () => {
                       variant="secondary"
                       loading={isBuilding}
                       disabled={isBuilding}
-                      onClick={() => onbuildforSigning()}>
+                      onClick={() => onbuildforSigning()}
+                    >
                       <Play size={14} className="action" />
                       Generate for Signing
                     </Button>

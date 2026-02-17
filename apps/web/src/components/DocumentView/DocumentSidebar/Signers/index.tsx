@@ -104,7 +104,8 @@ const SignerAddBlock = ({
           direction="column"
           gap="sm"
           as="form"
-          onSubmit={handleSubmit(onSubmit)}>
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <Field label="Name" required error={errors?.name?.message}>
             <InputText {...register('name')} placeholder="Enter Name" />
           </Field>
@@ -290,7 +291,8 @@ const SignerBlock = () => {
               mb="md"
               border="1px solid"
               borderColor="border"
-              p="md">
+              p="md"
+            >
               <Flex
                 h="80px"
                 mb="sm"
@@ -301,7 +303,8 @@ const SignerBlock = () => {
                     ? 'background-secondary'
                     : 'green.300'
                 }
-                position="relative">
+                position="relative"
+              >
                 {signer.signature_status === 'signed' && (
                   <Text
                     fontSize="sm"
@@ -309,7 +312,8 @@ const SignerBlock = () => {
                     position="absolute"
                     right="10"
                     top="10"
-                    color="text-secondary">
+                    color="text-secondary"
+                  >
                     {signer.id}
                   </Text>
                 )}
@@ -331,7 +335,8 @@ const SignerBlock = () => {
                       onClick={() => {
                         setCurrentCounterParty(signer);
                         setIsSignatureModalOpen(true);
-                      }}>
+                      }}
+                    >
                       Click and Sign
                     </Text>
                   )}
@@ -344,7 +349,8 @@ const SignerBlock = () => {
                         onClick={() => {
                           setCurrentCounterParty(signer);
                           setIsSignatureModalOpen(true);
-                        }}>
+                        }}
+                      >
                         Click and Sign
                       </Text>
                     ))}
@@ -381,7 +387,8 @@ const SignerBlock = () => {
               variant="tertiary"
               onClick={onRequestSignature}
               size="sm"
-              loading={isRequestSignatureLoading}>
+              loading={isRequestSignatureLoading}
+            >
               Request Signature
             </Button>
           )}
@@ -391,7 +398,8 @@ const SignerBlock = () => {
       <Modal
         open={isDialogOpen}
         ariaLabel="confirm model"
-        onClose={() => setDialogOpen(false)}>
+        onClose={() => setDialogOpen(false)}
+      >
         <>
           {isDialogOpen && (
             <SignerAddBlock
@@ -408,7 +416,8 @@ const SignerBlock = () => {
       <Modal
         open={infoModalOpen}
         ariaLabel="confirm model"
-        onClose={() => setInfoModalOpen(false)}>
+        onClose={() => setInfoModalOpen(false)}
+      >
         <>
           <Modal.Header>Info</Modal.Header>
           <Box>Please assign a signer to the signature placeholder.</Box>
@@ -423,7 +432,8 @@ const SignerBlock = () => {
       <Modal
         open={isSignatureModalOpen}
         ariaLabel="signature modal"
-        onClose={() => setDialogOpen(false)}>
+        onClose={() => setDialogOpen(false)}
+      >
         <Box>
           <Flex justifyContent="space-between" align="center">
             <Text variant="lg" fontWeight="heading">
@@ -431,7 +441,8 @@ const SignerBlock = () => {
             </Text>
             <Button
               variant="ghost"
-              onClick={() => setIsSignatureModalOpen(false)}>
+              onClick={() => setIsSignatureModalOpen(false)}
+            >
               <X />
             </Button>
           </Flex>

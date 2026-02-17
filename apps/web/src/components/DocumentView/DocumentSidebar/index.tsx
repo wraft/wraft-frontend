@@ -41,7 +41,8 @@ export const DocumentSidebar = () => {
       // w="30%"
       // maxWidth="400px"
       borderLeft="solid 1px"
-      borderColor="border">
+      borderColor="border"
+    >
       <Box flexShrink="0">
         <ContentInfoBlock
           content={contents}

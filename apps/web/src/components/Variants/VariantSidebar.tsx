@@ -29,13 +29,15 @@ const VariantSidebar: React.FC<SidebarProps> = memo(function VariantSidebar({
       borderColor="border"
       bg="background-primary"
       py="xl"
-      px="lg">
+      px="lg"
+    >
       <Text
         fontSize="xs"
         fontWeight="600"
         color="text-secondary"
         mb="lg"
-        style={{ textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+        style={{ textTransform: 'uppercase', letterSpacing: '0.05em' }}
+      >
         Steps
       </Text>
 
@@ -53,13 +55,15 @@ const VariantSidebar: React.FC<SidebarProps> = memo(function VariantSidebar({
               alignItems="stretch"
               cursor="pointer"
               onClick={() => onStepChange(index)}
-              style={{ position: 'relative' }}>
+              style={{ position: 'relative' }}
+            >
               {/* Indicator column */}
               <Flex
                 direction="column"
                 alignItems="center"
                 flexShrink={0}
-                style={{ width: 24 }}>
+                style={{ width: 24 }}
+              >
                 {/* Circle */}
                 <Flex
                   w="24px"
@@ -89,7 +93,8 @@ const VariantSidebar: React.FC<SidebarProps> = memo(function VariantSidebar({
                   }
                   style={{
                     transition: 'all 150ms ease',
-                  }}>
+                  }}
+                >
                   {hasError ? (
                     <WarningCircle
                       size={14}
@@ -106,9 +111,8 @@ const VariantSidebar: React.FC<SidebarProps> = memo(function VariantSidebar({
                     <Text
                       fontSize="xs"
                       fontWeight="600"
-                      color={
-                        isActive ? 'background-primary' : 'text-secondary'
-                      }>
+                      color={isActive ? 'background-primary' : 'text-secondary'}
+                    >
                       {index + 1}
                     </Text>
                   )}
@@ -144,7 +148,8 @@ const VariantSidebar: React.FC<SidebarProps> = memo(function VariantSidebar({
                           ? 'text-primary'
                           : 'text-secondary'
                   }
-                  style={{ transition: 'color 150ms ease' }}>
+                  style={{ transition: 'color 150ms ease' }}
+                >
                   {step}
                 </Text>
               </Box>

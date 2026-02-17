@@ -173,7 +173,8 @@ const DocumentView = () => {
         <ErrorBoundary>
           <Grid
             bg="background-secondary"
-            templateColumns="1fr minmax(380px, 400px)">
+            templateColumns="1fr minmax(380px, 400px)"
+          >
             <Box w="100%">
               {canAccess('toolbar') && (
                 <Flex
@@ -184,7 +185,8 @@ const DocumentView = () => {
                   minH="40px"
                   borderBottom="solid 1px"
                   borderColor="border"
-                  bg="background-primary">
+                  bg="background-primary"
+                >
                   <FlowContainer>
                     {states &&
                       states.map((state: any, i: number) => (
@@ -240,7 +242,8 @@ const DocumentView = () => {
                         onClick={() => onSubmit()}
                         variant="primary"
                         size="sm"
-                        loading={saving}>
+                        loading={saving}
+                      >
                         Save
                       </Button>
                     </Box>
@@ -264,7 +267,8 @@ const DocumentView = () => {
       <Modal
         open={openTitleModal}
         ariaLabel="confirm model"
-        onClose={() => setOpenTitleModal(false)}>
+        onClose={() => setOpenTitleModal(false)}
+      >
         <Box as="form" onSubmit={handleSubmit(onUpdateTitle)} w="450px">
           <Modal.Header>Title</Modal.Header>
           <Box my={3}>
@@ -279,7 +283,8 @@ const DocumentView = () => {
           <Flex gap="8px">
             <Button
               variant="secondary"
-              onClick={() => setOpenTitleModal(false)}>
+              onClick={() => setOpenTitleModal(false)}
+            >
               Cancel
             </Button>
             <Button type="submit">Save</Button>

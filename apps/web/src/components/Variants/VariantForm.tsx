@@ -858,7 +858,8 @@ const VariantForm = ({
       h="100vh"
       direction="column"
       w="630px"
-      onSubmit={handleSubmit(onSubmit)}>
+      onSubmit={handleSubmit(onSubmit)}
+    >
       <Box flexShrink="0">
         <Drawer.Header>
           <Drawer.Title>
@@ -872,6 +873,32 @@ const VariantForm = ({
           />
         </Drawer.Header>
         <StepsIndicator titles={titles} formStep={formStep} goTo={goTo} />
+        {contentId && (content as any)?.active_version && (
+          <Flex
+            alignItems="center"
+            gap="sm"
+            px="xl"
+            py="xs"
+            bg="gray.50"
+            borderBottom="1px solid"
+            borderColor="border"
+          >
+            <Text fontSize="xs" color="text-secondary">
+              Editing v{(content as any).active_version.version_number}
+            </Text>
+            <Box
+              bg="green.100"
+              color="green.700"
+              px="xs"
+              py="xxs"
+              borderRadius="sm"
+            >
+              <Text fontSize="xs" fontWeight="medium">
+                Active
+              </Text>
+            </Box>
+          </Flex>
+        )}
       </Box>
 
       <Flex
@@ -880,7 +907,8 @@ const VariantForm = ({
         overflowY="auto"
         px="xl"
         py="md"
-        flex={1}>
+        flex={1}
+      >
         {formStep === 0 && (
           <>
             <Field label="Name" required error={errors?.name?.message}>
@@ -893,7 +921,8 @@ const VariantForm = ({
             <Field
               label="Description"
               required
-              error={errors?.description?.message}>
+              error={errors?.description?.message}
+            >
               <Textarea
                 {...register('description')}
                 placeholder="Enter a description"
@@ -907,7 +936,8 @@ const VariantForm = ({
                   <Field
                     label="Document Type"
                     required
-                    error={errors.type?.message}>
+                    error={errors.type?.message}
+                  >
                     <Select
                       {...field}
                       options={TYPES}
@@ -922,7 +952,8 @@ const VariantForm = ({
               label="Prefix"
               required
               error={errors.prefix?.message}
-              hint="Enter a unique prefix for identification (e.g., SDM)">
+              hint="Enter a unique prefix for identification (e.g., SDM)"
+            >
               <InputText {...register('prefix')} placeholder="Enter a prefix" />
             </Field>
           </>
@@ -1072,7 +1103,8 @@ const VariantForm = ({
                 p="sm"
                 bg="red.100"
                 color="red.700"
-                borderRadius="md">
+                borderRadius="md"
+              >
                 <Text>Please select a content field for each frame field</Text>
               </Box>
             )}
@@ -1090,7 +1122,8 @@ const VariantForm = ({
                       bg="gray.400"
                       px="md"
                       py="sm"
-                      borderRadius="sm">
+                      borderRadius="sm"
+                    >
                       <Text>{frameField.name}</Text>
                     </Box>
 
@@ -1100,7 +1133,8 @@ const VariantForm = ({
                       <Field
                         error={
                           errors?.frame_mapping?.[index]?.variantField?.message
-                        }>
+                        }
+                      >
                         <Search
                           itemToString={(item: any) => item && item}
                           name={`frame_mapping.${index}.variantField`}
@@ -1179,7 +1213,8 @@ const VariantForm = ({
             type="button"
             variant="secondary"
             disabled={formStep === 0}
-            onClick={prevStep}>
+            onClick={prevStep}
+          >
             Previous
           </Button>
         )}

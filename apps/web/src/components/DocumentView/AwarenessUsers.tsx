@@ -51,7 +51,8 @@ const AwarenessUsers = () => {
           overflow="hidden"
           bg={item?.user?.color}
           borderRadius="full"
-          data-name={item?.user?.name}>
+          data-name={item?.user?.name}
+        >
           {item?.user?.image && (
             <Image
               src={item?.user?.image}

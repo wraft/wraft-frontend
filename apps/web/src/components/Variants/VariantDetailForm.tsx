@@ -1,15 +1,25 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import NavLink from 'next/link';
 import { useRouter } from 'next/router';
-import { Drawer, useDrawer, Button, Box, Flex, Text, Spinner } from '@wraft/ui';
+import {
+  Drawer,
+  useDrawer,
+  Button,
+  Box,
+  Flex,
+  Text,
+  Spinner,
+  DropdownMenu,
+} from '@wraft/ui';
 import {
   PencilSimple,
   Plus,
   FileText,
-  Files,
   TrendUp,
   TrendDown,
+  CaretDown,
+  DotsThree,
 } from '@phosphor-icons/react';
 import toast from 'react-hot-toast';
 import { useTheme } from '@xstyled/emotion';
@@ -47,7 +57,8 @@ const Card = ({
     borderRadius="md"
     bg="background-primary"
     overflow="hidden"
-    p={p}>
+    p={p}
+  >
     {children}
   </Box>
 );
@@ -73,7 +84,8 @@ const TabButton = ({
     fontSize="sm"
     bg="transparent"
     cursor="pointer"
-    style={{ transition: 'all 0.2s' }}>
+    style={{ transition: 'all 0.2s' }}
+  >
     {children}
   </Box>
 );
@@ -86,7 +98,8 @@ const TemplateCard = ({ template }: { template: any }) => (
       borderRadius="md"
       p="md"
       bg="background-primary"
-      style={{ transition: 'all 0.2s', cursor: 'pointer' }}>
+      style={{ transition: 'all 0.2s', cursor: 'pointer' }}
+    >
       <Flex align="center" gap="sm" mb="sm">
         <FileText size={20} color="var(--theme-ui-colors-green-500)" />
         <Text fontSize="md" fontWeight="600" color="text-primary">
@@ -103,7 +116,8 @@ const TemplateCard = ({ template }: { template: any }) => (
             WebkitLineClamp: 2,
             WebkitBoxOrient: 'vertical',
             overflow: 'hidden',
-          }}>
+          }}
+        >
           {template.description}
         </Text>
       )}
@@ -137,7 +151,8 @@ const StatBlock = ({
     flex={1}
     display="flex"
     flexDirection="column"
-    justifyContent="center">
+    justifyContent="center"
+  >
     <Text fontSize="sm" color="text-secondary" mb="xs" fontWeight="500">
       {label}
     </Text>
@@ -147,14 +162,16 @@ const StatBlock = ({
         fontWeight="600"
         lineHeight="1"
         color="text-primary"
-        style={{ fontVariantNumeric: 'tabular-nums' }}>
+        style={{ fontVariantNumeric: 'tabular-nums' }}
+      >
         {value}
       </Text>
       {trend !== undefined && (
         <Flex
           align="center"
           gap="xxs"
-          color={trend > 0 ? 'green.600' : 'red.600'}>
+          color={trend > 0 ? 'green.600' : 'red.600'}
+        >
           {trend > 0 ? (
             <TrendUp weight="bold" size={14} />
           ) : (
@@ -184,7 +201,8 @@ const CardHeader = ({
     px="lg"
     py="md"
     borderBottom="1px solid"
-    borderColor="border">
+    borderColor="border"
+  >
     <Flex align="center" gap="sm">
       <Text fontSize="sm" fontWeight="600" color="text-primary">
         {title}
@@ -198,7 +216,8 @@ const CardHeader = ({
           px="xs"
           py="xxs"
           borderRadius="sm"
-          style={{ fontVariantNumeric: 'tabular-nums' }}>
+          style={{ fontVariantNumeric: 'tabular-nums' }}
+        >
           {count}
         </Text>
       )}
@@ -242,7 +261,8 @@ const Row = ({
     px="lg"
     py="sm"
     borderBottom={isLast ? 'none' : '1px solid'}
-    borderColor="border">
+    borderColor="border"
+  >
     {children}
   </Flex>
 );
@@ -267,7 +287,8 @@ const Property = ({
       cursor={interactive ? 'pointer' : 'default'}
       style={
         interactive ? { transition: 'background 120ms ease-out' } : undefined
-      }>
+      }
+    >
       <Text fontSize="sm" color="text-secondary">
         {label}
       </Text>
@@ -280,7 +301,8 @@ const Property = ({
           overflow: 'hidden',
           textOverflow: 'ellipsis',
           whiteSpace: 'nowrap',
-        }}>
+        }}
+      >
         {value || '—'}
       </Text>
     </Flex>
@@ -362,18 +384,31 @@ const VariantDetailForm = () => {
       setLoading(true);
       let variantData: any;
 
+      // Always load the main content type data first
+      variantData = await fetchAPI(`content_types/${id}`);
+
       if (versionId) {
         try {
           const vData: any = await fetchAPI(
             `content_type_versions/${versionId}`,
           );
-          variantData = { content_type: vData.content_type_version };
+          // Merge version-specific data into the expected shape
+          variantData = {
+            ...variantData,
+            content_type: {
+              ...variantData.content_type,
+              description: vData.version?.description,
+              type: vData.version?.type,
+              frame_mapping: vData.version?.frame_mapping,
+              fields: vData.fields || [],
+              layout: vData.layout,
+              flow: vData.flow,
+              theme: vData.theme,
+            },
+          };
         } catch {
-          // Fallback to main content type if version fetch fails
-          variantData = await fetchAPI(`content_types/${id}`);
+          // Fallback: keep main content type data as-is
         }
-      } else {
-        variantData = await fetchAPI(`content_types/${id}`);
       }
 
       setContent(variantData);
@@ -403,7 +438,7 @@ const VariantDetailForm = () => {
   const loadVersions = async (id: string) => {
     try {
       const data: any = await fetchAPI(`content_types/${id}/versions`);
-      setVersions(data?.content_type_versions || []);
+      setVersions(data?.versions || []);
     } catch {
       setVersions([]);
     }
@@ -411,9 +446,13 @@ const VariantDetailForm = () => {
 
   const handleCreateDraft = async () => {
     try {
-      await postAPI(`content_types/${cId}/versions`, {});
+      const response: any = await postAPI(`content_types/${cId}/versions`, {});
       toast.success('Draft version created');
-      loadVersions(cId);
+      await loadVersions(cId);
+      // Auto-switch to viewing the new draft
+      if (response?.version?.id) {
+        setSelectedVersionId(response.version.id);
+      }
     } catch (error: any) {
       toast.error(error?.message || 'Failed to create draft');
     }
@@ -423,7 +462,8 @@ const VariantDetailForm = () => {
     try {
       await postAPI(`content_type_versions/${versionId}/publish`, {});
       toast.success('Version published');
-      loadVersions(cId);
+      setSelectedVersionId(null);
+      setRerender((prev) => !prev);
     } catch (error: any) {
       toast.error(error?.message || 'Failed to publish version');
     }
@@ -433,10 +473,8 @@ const VariantDetailForm = () => {
     try {
       await postAPI(`content_type_versions/${versionId}/activate`, {});
       toast.success('Version activated');
-      loadVersions(cId);
-      // Reload content to update active version details
-      const variantData: any = await fetchAPI(`content_types/${cId}`);
-      setContent(variantData);
+      setSelectedVersionId(null);
+      setRerender((prev) => !prev);
     } catch (error: any) {
       toast.error(error?.message || 'Failed to activate version');
     }
@@ -447,7 +485,8 @@ const VariantDetailForm = () => {
     try {
       await deleteAPI(`content_type_versions/${versionId}`);
       toast.success('Draft deleted');
-      loadVersions(cId);
+      setSelectedVersionId(null);
+      setRerender((prev) => !prev);
     } catch (error: any) {
       toast.error(error?.message || 'Failed to delete draft');
     }
@@ -503,6 +542,14 @@ const VariantDetailForm = () => {
   const versionNum = (content as any)?.flow_version?.version_number;
   const canManage = hasPermission('variant', 'manage');
 
+  // Version bar derived state
+  const activeVersion = content.active_version || null;
+  const hasDraft = versions.some((v) => v.status === 'draft');
+  const draftVersion = versions.find((v) => v.status === 'draft');
+  const isViewingDraft = selectedVersionId
+    ? versions.find((v) => v.id === selectedVersionId)?.status === 'draft'
+    : false;
+
   const openDrawerAt = (step: number) => {
     setDrawerStep(step);
     setIsOpen(true);
@@ -527,7 +574,8 @@ const VariantDetailForm = () => {
         position="sticky"
         top={0}
         zIndex={10}
-        bg="background-primary">
+        bg="background-primary"
+      >
         <Flex align="center">
           <Back
             fallbackRoute={(isAuthenticated: boolean) =>
@@ -538,7 +586,8 @@ const VariantDetailForm = () => {
             align="center"
             gap="sm"
             ml="sm"
-            style={{ minWidth: 0, flex: 1 }}>
+            style={{ minWidth: 0, flex: 1 }}
+          >
             <Flex
               w="28px"
               h="28px"
@@ -546,7 +595,8 @@ const VariantDetailForm = () => {
               bg={variant.color || 'green.300'}
               align="center"
               justify="center"
-              flexShrink={0}>
+              flexShrink={0}
+            >
               <Text fontSize="xs" fontWeight="700" color="white">
                 {variant.prefix?.charAt(0) || 'V'}
               </Text>
@@ -564,7 +614,8 @@ const VariantDetailForm = () => {
                   px="xs"
                   py="xxs"
                   borderRadius="sm"
-                  style={{ fontVariantNumeric: 'tabular-nums' }}>
+                  style={{ fontVariantNumeric: 'tabular-nums' }}
+                >
                   {variant.prefix}
                 </Text>
               </Flex>
@@ -577,7 +628,8 @@ const VariantDetailForm = () => {
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
                     whiteSpace: 'nowrap',
-                  }}>
+                  }}
+                >
                   {variant.description}
                 </Text>
               )}
@@ -588,7 +640,8 @@ const VariantDetailForm = () => {
               <Button
                 variant="secondary"
                 size="sm"
-                onClick={() => openDrawerAt(0)}>
+                onClick={() => openDrawerAt(0)}
+              >
                 <PencilSimple size={14} />
                 Edit
               </Button>
@@ -607,20 +660,24 @@ const VariantDetailForm = () => {
               gap="md"
               borderBottom="1px solid"
               borderColor="border"
-              mb="md">
+              mb="md"
+            >
               <TabButton
                 active={activeTab === 'overview'}
-                onClick={() => setActiveTab('overview')}>
+                onClick={() => setActiveTab('overview')}
+              >
                 Overview
               </TabButton>
               <TabButton
                 active={activeTab === 'contents'}
-                onClick={() => setActiveTab('contents')}>
+                onClick={() => setActiveTab('contents')}
+              >
                 Contents
               </TabButton>
               <TabButton
                 active={activeTab === 'activities'}
-                onClick={() => setActiveTab('activities')}>
+                onClick={() => setActiveTab('activities')}
+              >
                 Activities
               </TabButton>
             </Flex>
@@ -637,7 +694,8 @@ const VariantDetailForm = () => {
                     px="lg"
                     py="sm"
                     align="center"
-                    justify="space-between">
+                    justify="space-between"
+                  >
                     <Text fontSize="sm" color="orange.900">
                       Using flow v{versionNum}. Version{' '}
                       {(content as any)?.latest_flow_version?.version_number} is
@@ -647,7 +705,8 @@ const VariantDetailForm = () => {
                       <Button
                         variant="secondary"
                         size="xs"
-                        onClick={handleUpgrade}>
+                        onClick={handleUpgrade}
+                      >
                         Upgrade
                       </Button>
                     )}
@@ -663,14 +722,16 @@ const VariantDetailForm = () => {
                         as="h4"
                         fontWeight="heading"
                         fontSize="md"
-                        color="text-secondary">
+                        color="text-secondary"
+                      >
                         Document Activity
                       </Text>
                       <Flex
                         gap="xs"
                         bg="background-secondary"
                         p="2px"
-                        borderRadius="md">
+                        borderRadius="md"
+                      >
                         {['day', 'week', 'month'].map((interval) => (
                           <Button
                             key={interval}
@@ -686,7 +747,8 @@ const VariantDetailForm = () => {
                                 chartInterval === interval
                                   ? '0 1px 2px rgba(0,0,0,0.1)'
                                   : 'none',
-                            }}>
+                            }}
+                          >
                             {interval}
                           </Button>
                         ))}
@@ -700,7 +762,8 @@ const VariantDetailForm = () => {
                         border="1px solid"
                         borderColor="border"
                         borderRadius="md"
-                        bg="background-primary">
+                        bg="background-primary"
+                      >
                         <Spinner />
                       </Flex>
                     ) : chartData.length > 0 ? (
@@ -726,7 +789,8 @@ const VariantDetailForm = () => {
                         borderRadius="md"
                         bg="background-primary"
                         direction="column"
-                        gap="sm">
+                        gap="sm"
+                      >
                         <Text color="text-secondary">
                           No activity data available
                         </Text>
@@ -757,7 +821,8 @@ const VariantDetailForm = () => {
                     </Text>
                     {documents.length > 0 && (
                       <NavLink
-                        href={`/documents?content_type_name=${encodeURIComponent(variant.name)}`}>
+                        href={`/documents?content_type_name=${encodeURIComponent(variant.name)}`}
+                      >
                         <Text fontSize="sm" color="green.900" fontWeight="500">
                           View all
                         </Text>
@@ -805,7 +870,8 @@ const VariantDetailForm = () => {
                     <Button
                       variant="secondary"
                       size="xs"
-                      onClick={() => router.push('/templates/new')}>
+                      onClick={() => router.push('/templates/new')}
+                    >
                       <Plus size={12} weight="bold" />
                       Create Template
                     </Button>
@@ -823,7 +889,8 @@ const VariantDetailForm = () => {
                     <Box
                       display="grid"
                       gridTemplateColumns="repeat(auto-fill, minmax(280px, 1fr))"
-                      gap="md">
+                      gap="md"
+                    >
                       {templates.map((t: any) => (
                         <TemplateCard key={t.id} template={t} />
                       ))}
@@ -839,7 +906,8 @@ const VariantDetailForm = () => {
                     </Text>
                     {documents.length > 0 && (
                       <NavLink
-                        href={`/documents?content_type_name=${encodeURIComponent(variant.name)}`}>
+                        href={`/documents?content_type_name=${encodeURIComponent(variant.name)}`}
+                      >
                         <Text fontSize="sm" color="green.900" fontWeight="500">
                           View full list
                         </Text>
@@ -885,173 +953,225 @@ const VariantDetailForm = () => {
 
           {/* RIGHT PANEL (Sidebar) - 25% */}
           <Flex direction="column" gap="lg" flex={1} style={{ minWidth: 320 }}>
-            {/* Versions */}
-            <Card>
-              <CardHeader
-                title="Versions"
-                action={
-                  canManage ? (
-                    <Flex
-                      as="button"
-                      align="center"
-                      gap="xs"
-                      onClick={handleCreateDraft}
-                      style={{
-                        cursor: 'pointer',
-                        background: 'none',
-                        border: 'none',
-                      }}>
-                      <Plus
-                        size={14}
-                        weight="bold"
-                        color="var(--theme-ui-colors-green-600)"
-                      />
-                      <Text fontSize="xs" color="green.600" fontWeight="600">
-                        New Draft
-                      </Text>
-                    </Flex>
-                  ) : undefined
-                }
-              />
-              {versions.length === 0 ? (
-                <CardEmpty
-                  message="No versions found"
-                  actionLabel="Create Draft"
-                  onAction={handleCreateDraft}
-                />
-              ) : (
-                versions.map((v: ContentTypeVersion) => (
-                  <Row
-                    key={v.id}
-                    isLast={false}
-                    // highlight selected
-                    // onClick={() => setSelectedVersionId(v.id)}
-                  >
-                    <Flex
-                      direction="column"
-                      onClick={() => setSelectedVersionId(v.id)}
-                      style={{ cursor: 'pointer', flex: 1 }}>
-                      <Flex align="center" gap="xs">
+            {/* Configuration + Fields — unified group */}
+            <Box
+              border="1px solid"
+              borderColor={isViewingDraft ? 'orange.200' : 'border'}
+              borderRadius="md"
+              bg="background-primary"
+              overflow="hidden"
+              style={{
+                borderLeft: isViewingDraft
+                  ? '3px solid var(--theme-ui-colors-orange-400)'
+                  : selectedVersionId
+                    ? '3px solid var(--theme-ui-colors-blue-300)'
+                    : undefined,
+              }}
+            >
+              {/* Version row — subtle, inline with config */}
+              {activeVersion && (
+                <Flex
+                  justify="space-between"
+                  align="center"
+                  px="lg"
+                  py="sm"
+                  borderBottom="1px solid"
+                  borderColor="border"
+                  bg={
+                    isViewingDraft
+                      ? 'orange.50'
+                      : selectedVersionId
+                        ? 'blue.50'
+                        : 'transparent'
+                  }
+                >
+                  <DropdownMenu.Provider>
+                    <DropdownMenu.Trigger>
+                      <Flex
+                        align="center"
+                        gap="xs"
+                        style={{ cursor: 'pointer' }}
+                      >
                         <Text
-                          fontSize="sm"
-                          fontWeight={
-                            selectedVersionId === v.id ? '700' : '600'
-                          }
-                          color={
-                            selectedVersionId === v.id
-                              ? 'green.900'
-                              : 'text-primary'
-                          }>
-                          v{v.version_number}
+                          fontSize="xs"
+                          fontWeight="600"
+                          color="text-primary"
+                          style={{ fontVariantNumeric: 'tabular-nums' }}
+                        >
+                          v
+                          {selectedVersionId
+                            ? versions.find((v) => v.id === selectedVersionId)
+                                ?.version_number || activeVersion.version_number
+                            : activeVersion.version_number}
                         </Text>
-                        {v.status === 'draft' && (
-                          <Text
-                            fontSize="xs"
-                            bg="orange.100"
-                            color="orange.800"
-                            px="xs"
-                            borderRadius="sm">
-                            Draft
-                          </Text>
-                        )}
-                        {v.status === 'published' && (
-                          <Text
-                            fontSize="xs"
-                            bg="green.100"
-                            color="green.800"
-                            px="xs"
-                            borderRadius="sm">
-                            Published
-                          </Text>
-                        )}
-                        {(content as any)?.active_version?.id === v.id && (
-                          <Text
-                            fontSize="xs"
-                            bg="blue.100"
-                            color="blue.800"
-                            px="xs"
-                            borderRadius="sm">
-                            Active
-                          </Text>
+                        <Text
+                          fontSize="xxs"
+                          fontWeight="500"
+                          color={isViewingDraft ? 'orange.700' : 'green.700'}
+                          bg={isViewingDraft ? 'orange.100' : 'green.100'}
+                          px="xs"
+                          py="1px"
+                          borderRadius="sm"
+                        >
+                          {isViewingDraft ? 'Draft' : 'Published'}
+                        </Text>
+                        {versions.length > 1 && (
+                          <CaretDown
+                            size={10}
+                            weight="bold"
+                            color="var(--theme-ui-colors-text-tertiary)"
+                          />
                         )}
                       </Flex>
-                      <Text fontSize="xs" color="text-tertiary">
-                        <TimeAgo time={v.inserted_at} />
-                      </Text>
-                    </Flex>
-                    {canManage && (
-                      <Flex gap="xs">
-                        {v.status === 'draft' && (
+                    </DropdownMenu.Trigger>
+                    {versions.length > 1 && (
+                      <DropdownMenu aria-label="Switch version">
+                        {[...versions]
+                          .sort(
+                            (a, b) =>
+                              (b.version_number || 0) - (a.version_number || 0),
+                          )
+                          .map((v) => (
+                            <DropdownMenu.Item
+                              key={v.id}
+                              onClick={() =>
+                                v.id === activeVersion?.id
+                                  ? setSelectedVersionId(null)
+                                  : setSelectedVersionId(v.id)
+                              }
+                            >
+                              <Flex align="center" gap="xs" w="100%">
+                                <Text fontSize="sm" fontWeight="500">
+                                  v{v.version_number}
+                                </Text>
+                                <Text fontSize="xs" color="text-secondary">
+                                  {v.status === 'draft' ? 'Draft' : 'Published'}
+                                </Text>
+                                {v.id === activeVersion?.id && (
+                                  <Text
+                                    fontSize="xxs"
+                                    color="blue.700"
+                                    fontWeight="500"
+                                  >
+                                    active
+                                  </Text>
+                                )}
+                                {(selectedVersionId === v.id ||
+                                  (!selectedVersionId &&
+                                    v.id === activeVersion?.id)) && (
+                                  <Text
+                                    fontSize="xs"
+                                    color="green.600"
+                                    ml="auto"
+                                  >
+                                    &#10003;
+                                  </Text>
+                                )}
+                              </Flex>
+                            </DropdownMenu.Item>
+                          ))}
+                      </DropdownMenu>
+                    )}
+                  </DropdownMenu.Provider>
+
+                  {/* Version actions — compact */}
+                  {canManage && (
+                    <DropdownMenu.Provider>
+                      <DropdownMenu.Trigger>
+                        <Flex
+                          align="center"
+                          justify="center"
+                          style={{
+                            cursor: 'pointer',
+                            width: 24,
+                            height: 24,
+                            borderRadius: 4,
+                          }}
+                        >
+                          <DotsThree
+                            size={16}
+                            weight="bold"
+                            color="var(--theme-ui-colors-text-tertiary)"
+                          />
+                        </Flex>
+                      </DropdownMenu.Trigger>
+                      <DropdownMenu aria-label="Version actions">
+                        {!hasDraft && !selectedVersionId && (
+                          <DropdownMenu.Item onClick={handleCreateDraft}>
+                            New draft version
+                          </DropdownMenu.Item>
+                        )}
+                        {hasDraft && !isViewingDraft && draftVersion && (
+                          <DropdownMenu.Item
+                            onClick={() =>
+                              setSelectedVersionId(draftVersion.id)
+                            }
+                          >
+                            Switch to draft
+                          </DropdownMenu.Item>
+                        )}
+                        {isViewingDraft && selectedVersionId && (
                           <>
-                            <Button
-                              size="xs"
-                              variant="ghost"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handlePublish(v.id);
-                              }}>
-                              Publish
-                            </Button>
-                            <Button
-                              size="xs"
-                              variant="ghost"
-                              color="red"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleDeleteDraft(v.id);
-                              }}>
-                              Delete
-                            </Button>
+                            <DropdownMenu.Item
+                              onClick={() => handlePublish(selectedVersionId)}
+                            >
+                              Publish this draft
+                            </DropdownMenu.Item>
+                            <DropdownMenu.Item
+                              onClick={() =>
+                                handleDeleteDraft(selectedVersionId)
+                              }
+                            >
+                              <Text color="red.600">Discard draft</Text>
+                            </DropdownMenu.Item>
                           </>
                         )}
-                        {v.status === 'published' &&
-                          (content as any)?.active_version?.id !== v.id && (
-                            <Button
-                              size="xs"
-                              variant="ghost"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleActivate(v.id);
-                              }}>
-                              Activate
-                            </Button>
+                        {!isViewingDraft &&
+                          selectedVersionId &&
+                          selectedVersionId !== activeVersion?.id && (
+                            <DropdownMenu.Item
+                              onClick={() => handleActivate(selectedVersionId)}
+                            >
+                              Set as active
+                            </DropdownMenu.Item>
                           )}
-                      </Flex>
-                    )}
-                  </Row>
-                ))
+                        {selectedVersionId && (
+                          <DropdownMenu.Item
+                            onClick={() => setSelectedVersionId(null)}
+                          >
+                            Back to active
+                          </DropdownMenu.Item>
+                        )}
+                      </DropdownMenu>
+                    </DropdownMenu.Provider>
+                  )}
+                </Flex>
               )}
-            </Card>
 
-            {selectedVersionId && (
-              <Box mb="lg">
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  style={{ width: '100%' }}
-                  onClick={() => setSelectedVersionId(null)}>
-                  Back to Active Version
-                </Button>
-              </Box>
-            )}
-
-            {/* Configuration */}
-            <Card>
-              <CardHeader
-                title="Configuration"
-                action={
-                  canManage ? (
-                    <Text
-                      fontSize="sm"
-                      color="green.900"
-                      fontWeight="500"
-                      cursor="pointer"
-                      onClick={() => openDrawerAt(1)}>
-                      Edit
-                    </Text>
-                  ) : undefined
-                }
-              />
+              {/* Configuration properties */}
+              <Flex
+                justify="space-between"
+                align="center"
+                px="lg"
+                py="md"
+                borderBottom="1px solid"
+                borderColor="border"
+              >
+                <Text fontSize="sm" fontWeight="600" color="text-primary">
+                  Configuration
+                </Text>
+                {canManage && (
+                  <Text
+                    fontSize="sm"
+                    color="green.900"
+                    fontWeight="500"
+                    cursor="pointer"
+                    onClick={() => openDrawerAt(1)}
+                  >
+                    Edit
+                  </Text>
+                )}
+              </Flex>
               <Property
                 label="Layout"
                 value={variant.layout?.name}
@@ -1063,31 +1183,50 @@ const VariantDetailForm = () => {
                 onClick={() => setIsThemeOpen(true)}
               />
               <Property label="Flow" value={flowName || undefined} />
-              <Property
-                label="Version"
-                value={versionNum ? `v${versionNum}` : undefined}
-              />
               <Property label="Color" value={variant.color || undefined} />
-            </Card>
 
-            {/* Fields */}
-            <Card>
-              <CardHeader
-                title="Fields"
-                count={fields.length}
-                action={
-                  canManage ? (
+              {/* Fields — same card, visually separated */}
+              <Flex
+                justify="space-between"
+                align="center"
+                px="lg"
+                py="md"
+                borderBottom="1px solid"
+                borderTop="1px solid"
+                borderColor="border"
+                mt="0"
+              >
+                <Flex align="center" gap="sm">
+                  <Text fontSize="sm" fontWeight="600" color="text-primary">
+                    Fields
+                  </Text>
+                  {fields.length > 0 && (
                     <Text
-                      fontSize="sm"
-                      color="green.900"
+                      fontSize="xs"
                       fontWeight="500"
-                      cursor="pointer"
-                      onClick={() => openDrawerAt(2)}>
-                      Edit
+                      color="text-secondary"
+                      bg="background-secondary"
+                      px="xs"
+                      py="xxs"
+                      borderRadius="sm"
+                      style={{ fontVariantNumeric: 'tabular-nums' }}
+                    >
+                      {fields.length}
                     </Text>
-                  ) : undefined
-                }
-              />
+                  )}
+                </Flex>
+                {canManage && (
+                  <Text
+                    fontSize="sm"
+                    color="green.900"
+                    fontWeight="500"
+                    cursor="pointer"
+                    onClick={() => openDrawerAt(2)}
+                  >
+                    Edit
+                  </Text>
+                )}
+              </Flex>
               {fields.length === 0 ? (
                 <CardEmpty
                   message="No fields configured"
@@ -1105,7 +1244,8 @@ const VariantDetailForm = () => {
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
                         whiteSpace: 'nowrap',
-                      }}>
+                      }}
+                    >
                       {f.name}
                     </Text>
                     <Text fontSize="xs" color="text-secondary">
@@ -1114,7 +1254,7 @@ const VariantDetailForm = () => {
                   </Row>
                 ))
               )}
-            </Card>
+            </Box>
           </Flex>
         </Flex>
       </Box>
@@ -1125,7 +1265,8 @@ const VariantDetailForm = () => {
         store={editDrawer}
         aria-label="Edit variant"
         withBackdrop={true}
-        onClose={() => setIsOpen(false)}>
+        onClose={() => setIsOpen(false)}
+      >
         {isOpen && (
           <Form
             step={drawerStep}
@@ -1140,7 +1281,8 @@ const VariantDetailForm = () => {
         store={layoutDrawer}
         aria-label="Edit Layout"
         withBackdrop={true}
-        onClose={() => setIsLayoutOpen(false)}>
+        onClose={() => setIsLayoutOpen(false)}
+      >
         {isLayoutOpen && variant.layout?.id && (
           <LayoutForm
             setOpen={setIsLayoutOpen}
@@ -1154,7 +1296,8 @@ const VariantDetailForm = () => {
         store={themeDrawer}
         aria-label="Edit Theme"
         withBackdrop={true}
-        onClose={() => setIsThemeOpen(false)}>
+        onClose={() => setIsThemeOpen(false)}
+      >
         {isThemeOpen && variant.theme?.id && (
           <ThemeAddForm
             setIsOpen={setIsThemeOpen}

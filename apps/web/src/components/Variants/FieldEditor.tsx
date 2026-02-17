@@ -49,7 +49,8 @@ const FieldForm = ({ fieldtypes, trigger, control, register, errors }: any) => {
               <Field
                 label="Field Name"
                 required
-                error={errors?.fields?.[index]?.name?.message}>
+                error={errors?.fields?.[index]?.name?.message}
+              >
                 <Flex gap="sm" alignItems="center">
                   <InputText
                     {...register(`fields.${index}.name`, {
@@ -70,7 +71,8 @@ const FieldForm = ({ fieldtypes, trigger, control, register, errors }: any) => {
                     <Field
                       label="Field Type"
                       required
-                      error={errors?.fields?.[index]?.type?.message}>
+                      error={errors?.fields?.[index]?.type?.message}
+                    >
                       <Select
                         name={name}
                         value={value || ''}
@@ -103,7 +105,8 @@ const FieldForm = ({ fieldtypes, trigger, control, register, errors }: any) => {
             variant="tertiary"
             type="button"
             size="sm"
-            onClick={onAddField}>
+            onClick={onAddField}
+          >
             Add Field
           </Button>
         </Box>

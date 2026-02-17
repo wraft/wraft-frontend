@@ -290,7 +290,8 @@ const PdfSignerViewer = ({ url, signerBoxes }: PdfViewerProps) => {
           if (!inviteType) {
             setIsSignatureModalOpen(true);
           }
-        }}>
+        }}
+      >
         <Flex direction="column" gap="xs" alignItems="center">
           <Flex alignItems="center" gap="xs">
             <Signature size={20} />
@@ -357,7 +358,8 @@ const PdfSignerViewer = ({ url, signerBoxes }: PdfViewerProps) => {
               <Button
                 type="submit"
                 loading={isSubmitting}
-                disabled={isSubmitting}>
+                disabled={isSubmitting}
+              >
                 Add Counterparty
               </Button>
             </Box>
@@ -380,13 +382,15 @@ const PdfSignerViewer = ({ url, signerBoxes }: PdfViewerProps) => {
           return (
             <div
               key={`page_container_${page}`}
-              style={{ position: 'relative', marginBottom: '20px' }}>
+              style={{ position: 'relative', marginBottom: '20px' }}
+            >
               <Page
                 key={`page_${page}`}
                 pageNumber={page}
                 width={renderWidth}
                 renderTextLayer={true}
-                renderAnnotationLayer={true}>
+                renderAnnotationLayer={true}
+              >
                 {signerBoxes &&
                   signerBoxes.map((signerBox: any) =>
                     renderSignatureBox(signerBox, scale, pageHeight, page),
@@ -400,7 +404,8 @@ const PdfSignerViewer = ({ url, signerBoxes }: PdfViewerProps) => {
       <Modal
         ariaLabel="Signature Options"
         open={isSignatureModalOpen}
-        onClose={() => setIsSignatureModalOpen(false)}>
+        onClose={() => setIsSignatureModalOpen(false)}
+      >
         {renderSignerModal()}
       </Modal>
     </React.Fragment>

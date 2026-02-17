@@ -79,7 +79,8 @@ export function NameVersionModal({
       open={isOpen}
       ariaLabel="Name current version"
       onClose={handleClose}
-      size="sm">
+      size="sm"
+    >
       <Box p="sm" minWidth="400px" maxWidth="500px">
         <Flex direction="column" gap="lg">
           <Box>
@@ -88,7 +89,8 @@ export function NameVersionModal({
               fontSize="xl"
               fontWeight="semibold"
               color="text-primary"
-              mb="xs">
+              mb="xs"
+            >
               Name current version
             </Text>
             <Text fontSize="sm" color="text-secondary" lineHeight="relaxed">
@@ -122,14 +124,16 @@ export function NameVersionModal({
               variant="ghost"
               onClick={handleClose}
               disabled={isSubmitting}
-              size="md">
+              size="md"
+            >
               Cancel
             </Button>
             <Button
               onClick={handleSubmit(onSubmit)}
               loading={isSubmitting}
               disabled={!isValid || !nameValue?.trim() || isSubmitting}
-              size="md">
+              size="md"
+            >
               Save
             </Button>
           </Flex>

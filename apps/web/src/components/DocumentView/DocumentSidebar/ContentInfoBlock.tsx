@@ -101,7 +101,8 @@ export const EditMenus = ({ id, nextState }: EditMenuProps) => {
             nextState.is_user_eligible &&
             hasPermission('document', 'manage') && (
               <DropdownMenu.Item
-                onClick={() => Router.push(`/documents/edit/${id}`)}>
+                onClick={() => Router.push(`/documents/edit/${id}`)}
+              >
                 Edit
               </DropdownMenu.Item>
             )}
@@ -127,7 +128,8 @@ export const EditMenus = ({ id, nextState }: EditMenuProps) => {
       <Modal
         ariaLabel="Delete Document"
         open={isDelete}
-        onClose={() => setIsDelete(false)}>
+        onClose={() => setIsDelete(false)}
+      >
         <ConfirmDelete
           onConfirmDelete={() => deleteContent(id)}
           setOpen={setIsDelete}
@@ -203,7 +205,8 @@ export const ContentInfoBlock = ({
               fontSize="sm"
               color="text-secondary"
               cursor={contentType?.layout?.id ? 'pointer' : 'default'}
-              onClick={navigateToLayout}>
+              onClick={navigateToLayout}
+            >
               {contentType.layout.name}
             </Text>
           )}
@@ -216,7 +219,8 @@ export const ContentInfoBlock = ({
                 color="text-secondary"
                 as="span"
                 cursor={contentType?.id ? 'pointer' : 'default'}
-                onClick={navigateToContentType}>
+                onClick={navigateToContentType}
+              >
                 {contentType.name}
               </Text>
             </>
@@ -241,7 +245,8 @@ export const ContentInfoBlock = ({
               fontWeight="heading"
               p="xxs"
               px="xs"
-              lineHeight="1rem">
+              lineHeight="1rem"
+            >
               {content?.state?.state}
             </Text>
           )}

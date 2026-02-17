@@ -45,7 +45,8 @@ const VariantList = () => {
           <Button
             variant="secondary"
             size="sm"
-            onClick={() => router.push('/variants/new')}>
+            onClick={() => router.push('/variants/new')}
+          >
             <Plus size={12} weight="regular" />
             Add Variant
           </Button>

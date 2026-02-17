@@ -102,7 +102,8 @@ const ResourceCard = ({
     borderColor="border"
     borderRadius="md"
     bg="background-primary"
-    p="md">
+    p="md"
+  >
     <Flex align="center" gap="sm">
       {/*<Icon size={16} color="var(--theme-ui-colors-text-secondary)" />*/}
       <Text fontSize="sm2" fontWeight="600" color="text-primary">
@@ -154,7 +155,8 @@ const LayoutPreview = ({ layout }: { layout: any }) => {
                 border="1px solid"
                 borderColor="border"
                 color="text-secondary"
-                fontWeight="500">
+                fontWeight="500"
+              >
                 {f.name}
               </Text>
             ))}
@@ -244,7 +246,8 @@ export const StepBasics: React.FC<StepContentProps> = memo(function StepBasics({
               label="Prefix"
               required
               error={errors.prefix?.message}
-              hint="2-4 chars">
+              hint="2-4 chars"
+            >
               <InputText {...register('prefix')} placeholder="e.g. MB" />
             </Field>
           </Box>
@@ -252,7 +255,8 @@ export const StepBasics: React.FC<StepContentProps> = memo(function StepBasics({
         <Field
           label="Description"
           required
-          error={errors?.description?.message}>
+          error={errors?.description?.message}
+        >
           <Textarea
             {...register('description')}
             placeholder="What is this variant used for?"
@@ -307,7 +311,8 @@ export const StepBasics: React.FC<StepContentProps> = memo(function StepBasics({
                       style={{
                         transition: 'border-color 120ms ease',
                         opacity: isDisabled ? 0.45 : 1,
-                      }}>
+                      }}
+                    >
                       <Flex align="center" gap="sm" mb="xs">
                         <Icon
                           size={18}
@@ -321,7 +326,8 @@ export const StepBasics: React.FC<StepContentProps> = memo(function StepBasics({
                         <Text
                           fontSize="sm"
                           fontWeight="600"
-                          color={selected ? 'text-primary' : 'text-secondary'}>
+                          color={selected ? 'text-primary' : 'text-secondary'}
+                        >
                           {t.label}
                         </Text>
                         {isDisabled && (
@@ -333,7 +339,8 @@ export const StepBasics: React.FC<StepContentProps> = memo(function StepBasics({
                             py="xxs"
                             borderRadius="sm"
                             fontWeight="500"
-                            style={{ marginLeft: 'auto' }}>
+                            style={{ marginLeft: 'auto' }}
+                          >
                             Soon
                           </Text>
                         )}
@@ -420,7 +427,8 @@ export const StepTemplate: React.FC<StepContentProps> = memo(
                             px="xs"
                             py="xxs"
                             borderRadius="sm"
-                            fontWeight="500">
+                            fontWeight="500"
+                          >
                             Frame
                           </Text>
                         )}
@@ -514,7 +522,8 @@ export const StepWorkflow: React.FC<StepContentProps> = memo(
                   borderColor="border"
                   borderRadius="md"
                   bg="background-primary"
-                  style={{ textAlign: 'center' }}>
+                  style={{ textAlign: 'center' }}
+                >
                   <Text fontSize="sm" color="text-secondary">
                     No workflows available
                   </Text>
@@ -537,19 +546,22 @@ export const StepWorkflow: React.FC<StepContentProps> = memo(
                         onClick={() => onChange(flow)}
                         style={{
                           transition: 'border-color 120ms ease',
-                        }}>
+                        }}
+                      >
                         <Flex
                           justify="space-between"
                           align="center"
                           px="md"
-                          py="md">
+                          py="md"
+                        >
                           <Box style={{ minWidth: 0, flex: 1 }}>
                             <Text
                               fontSize="sm2"
                               fontWeight="heading"
                               color={
                                 isSelected ? 'text-primary' : 'text-secondary'
-                              }>
+                              }
+                            >
                               {flow.name}
                             </Text>
                             {flow.states?.length > 0 && (
@@ -557,7 +569,8 @@ export const StepWorkflow: React.FC<StepContentProps> = memo(
                                 gap="sm"
                                 mt="xs"
                                 align="center"
-                                flexWrap="wrap">
+                                flexWrap="wrap"
+                              >
                                 {flow.states.map((s: any) => (
                                   <Flex key={s.id} align="center" gap="xxs">
                                     <Box
@@ -590,7 +603,8 @@ export const StepWorkflow: React.FC<StepContentProps> = memo(
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 flexShrink: 0,
-                              }}>
+                              }}
+                            >
                               <Check
                                 size={12}
                                 weight="bold"
@@ -711,13 +725,15 @@ export const StepMapping: React.FC<StepContentProps> = memo(
                 border="1px solid"
                 borderColor="border"
                 borderRadius="md"
-                bg="background-primary">
+                bg="background-primary"
+              >
                 <Box
                   flex={1}
                   bg="background-secondary"
                   px="md"
                   py="sm"
-                  borderRadius="sm">
+                  borderRadius="sm"
+                >
                   <Text fontSize="sm" fontWeight="500">
                     {frameField.name}
                   </Text>
@@ -732,7 +748,8 @@ export const StepMapping: React.FC<StepContentProps> = memo(
                   <Field
                     error={
                       errors?.frame_mapping?.[index]?.variantField?.message
-                    }>
+                    }
+                  >
                     <Search
                       itemToString={(item: any) => item && item}
                       name={`frame_mapping.${index}.variantField`}

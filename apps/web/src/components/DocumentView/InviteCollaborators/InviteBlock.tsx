@@ -92,7 +92,8 @@ export default function InviteBlock({ docId, close }: any) {
         borderColor="border"
         p="md"
         py="xl"
-        justify="space-between">
+        justify="space-between"
+      >
         <Text fontSize="xl" fontWeight="heading">
           Invite Members
         </Text>
@@ -161,7 +162,8 @@ export default function InviteBlock({ docId, close }: any) {
                 py="sm"
                 key={collaborator.id}
                 justify="space-between"
-                align="flex-start">
+                align="flex-start"
+              >
                 <Flex gap="sm" w="100%" align="center" justify="center">
                   <Avatar name={collaborator.user.name} size="sm" />
                   <Box w="45%">
@@ -181,7 +183,8 @@ export default function InviteBlock({ docId, close }: any) {
 
                 <Button
                   variant="ghost"
-                  onClick={() => removeCollaborator(collaborator.id)}>
+                  onClick={() => removeCollaborator(collaborator.id)}
+                >
                   Remove
                 </Button>
               </Flex>

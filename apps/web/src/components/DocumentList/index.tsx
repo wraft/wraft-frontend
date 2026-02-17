@@ -151,7 +151,8 @@ const columns = [
               textTransform="uppercase"
               fontWeight="heading"
               color="text-secondary"
-              mb="xs">
+              mb="xs"
+            >
               {currentState?.state || 'Unknown'}
             </Text>
             <StateProgress
@@ -286,7 +287,8 @@ const DocumentList = () => {
         <Button
           variant="secondary"
           size="sm"
-          onClick={() => setIsDocumentCreatorOpen(true)}>
+          onClick={() => setIsDocumentCreatorOpen(true)}
+        >
           Create Document
         </Button>
       </PageHeader>
@@ -335,7 +337,8 @@ const DocumentList = () => {
                 <Button
                   size="xs"
                   variant="secondary"
-                  onClick={() => handleFilter('')}>
+                  onClick={() => handleFilter('')}
+                >
                   Clear
                 </Button>
               )}
@@ -362,7 +365,8 @@ const DocumentList = () => {
         store={mobileMenuDrawer}
         aria-label="Menu backdrop"
         withBackdrop={true}
-        onClose={() => setIsDocumentCreatorOpen(false)}>
+        onClose={() => setIsDocumentCreatorOpen(false)}
+      >
         <CreateDocument setIsOpen={setIsDocumentCreatorOpen} />
       </Drawer>
     </>

@@ -191,7 +191,8 @@ export const SignatureCanvasComponent = ({
                   size="sm"
                   variant="secondary"
                   onClick={clearSignature}
-                  disabled={loading}>
+                  disabled={loading}
+                >
                   Clear
                 </Button>
               </Box>
@@ -200,14 +201,16 @@ export const SignatureCanvasComponent = ({
                   variant="secondary"
                   size="sm"
                   onClick={onCancel}
-                  disabled={loading}>
+                  disabled={loading}
+                >
                   Cancel
                 </Button>
                 <Button
                   size="sm"
                   onClick={handleSignatureSave}
                   disabled={!hasSignature || loading}
-                  loading={loading}>
+                  loading={loading}
+                >
                   Accept and sign
                 </Button>
               </Flex>
@@ -229,7 +232,8 @@ export const SignatureCanvasComponent = ({
               h="100%"
               py="lg"
               px="sm"
-              style={{ pointerEvents: loading ? 'none' : 'auto' }}>
+              style={{ pointerEvents: loading ? 'none' : 'auto' }}
+            >
               <input {...getInputProps()} disabled={loading} />
 
               {!uploadedFile && (
@@ -240,7 +244,8 @@ export const SignatureCanvasComponent = ({
                     display="flex"
                     justifyContent="center"
                     alignItems="center"
-                    borderRadius="sm">
+                    borderRadius="sm"
+                  >
                     <CloudArrowUp size={32} />
                   </Box>
                   <Flex flexDirection="column" alignItems="center" mt="md">
@@ -254,7 +259,8 @@ export const SignatureCanvasComponent = ({
                 <Box
                   display="flex"
                   alignItems="center"
-                  justifyContent="space-between">
+                  justifyContent="space-between"
+                >
                   <Flex alignItems="center">
                     <Text>{uploadedFile.name}</Text>
                     {isUploadComplete && (
@@ -266,7 +272,8 @@ export const SignatureCanvasComponent = ({
                         justifyContent="center"
                         bg="green"
                         borderRadius="4xl"
-                        ml="xss">
+                        ml="xss"
+                      >
                         <Check color="white" height={12} width={12} />
                       </Box>
                     )}
@@ -274,7 +281,8 @@ export const SignatureCanvasComponent = ({
                   <Button
                     variant="tertiary"
                     onClick={resetFileUpload}
-                    disabled={loading}>
+                    disabled={loading}
+                  >
                     Re-upload
                   </Button>
                 </Box>
@@ -287,7 +295,8 @@ export const SignatureCanvasComponent = ({
               variant="secondary"
               size="sm"
               onClick={onCancel}
-              disabled={loading}>
+              disabled={loading}
+            >
               Cancel
             </Button>
             <Button
@@ -295,7 +304,8 @@ export const SignatureCanvasComponent = ({
               size="sm"
               onClick={handleFileUpload}
               disabled={!previewUrl || loading}
-              loading={loading}>
+              loading={loading}
+            >
               Insert Signature
             </Button>
           </Flex>

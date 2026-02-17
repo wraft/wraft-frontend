@@ -536,7 +536,8 @@ export const DocumentProvider = ({
         setSignerBoxes,
         setSigners,
         setContents,
-      }}>
+      }}
+    >
       {children}
     </DocumentContext.Provider>
   );

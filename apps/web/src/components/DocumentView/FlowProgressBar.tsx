@@ -55,7 +55,8 @@ export const FlowProgressBar = ({
         h="16px"
         borderColor={activeState ? 'gray.300' : 'gray.500'}
         p="xxs"
-        bg={getBgColor()}>
+        bg={getBgColor()}
+      >
         {!checked && !activeState && (
           <Text fontSize="xs" fontWeight="heading">
             {num}

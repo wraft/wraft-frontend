@@ -18,7 +18,8 @@ const InviteFlowStateMember = () => {
       <Modal
         open={isDialogOpen}
         ariaLabel="confirm model"
-        onClose={() => setDialogOpen(false)}>
+        onClose={() => setDialogOpen(false)}
+      >
         <InviteBlock docId={cId} close={() => setDialogOpen(false)} />
       </Modal>
     </>

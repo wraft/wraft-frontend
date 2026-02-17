@@ -14,7 +14,7 @@ import {
 } from '@wraft/ui';
 import toast from 'react-hot-toast';
 import { ThreeDotIcon } from '@wraft/icon';
-import { Plus } from '@phosphor-icons/react';
+import { Plus, GitBranch, Layout, FileText } from '@phosphor-icons/react';
 
 import { IconFrame, TimeAgo } from 'common/Atoms';
 import ConfirmDelete from 'common/ConfirmDelete';
@@ -163,6 +163,7 @@ const VariantDashboard = ({ rerender, setRerender }: Props) => {
       id: 'Name',
       header: 'Name',
       accessorKey: 'name',
+      size: 300,
       cell: ({ row }: any) => (
         <NextLink href={`/variants/${row?.original?.id}`}>
           <Flex>
@@ -183,36 +184,90 @@ const VariantDashboard = ({ rerender, setRerender }: Props) => {
       ),
       enableSorting: false,
     },
-
     {
-      id: 'content.flow',
-      header: 'Flow',
-      accessorKey: 'flow',
+      id: 'content.details',
+      header: 'Details',
       cell: ({ row }: any) => (
-        <Text fontSize="sm2">{row.original?.flow?.name}</Text>
+        <Flex direction="column" gap="xxs">
+          {row.original?.flow?.name && (
+            <Flex alignItems="center" gap="xs">
+              <GitBranch
+                size={12}
+                weight="regular"
+                color="var(--color-gray-500)"
+              />
+              <Text fontSize="sm" color="text-secondary">
+                {row.original.flow.name}
+              </Text>
+            </Flex>
+          )}
+          <Flex alignItems="center" gap="xs">
+            {row.original?.layout?.name && (
+              <>
+                <Layout
+                  size={12}
+                  weight="regular"
+                  color="var(--color-gray-400)"
+                />
+                <Text fontSize="xs" color="text-secondary">
+                  {row.original.layout.name}
+                </Text>
+              </>
+            )}
+            {row.original?.layout?.name && row.original?.type && (
+              <Box w="3px" h="3px" borderRadius="100" bg="gray.300" />
+            )}
+            {row.original?.type && (
+              <>
+                <FileText
+                  size={12}
+                  weight="regular"
+                  color="var(--color-gray-400)"
+                />
+                <Text fontSize="xs" color="text-secondary">
+                  {row.original.type}
+                </Text>
+              </>
+            )}
+          </Flex>
+        </Flex>
       ),
       enableSorting: false,
     },
-    // {
-    //   id: 'content.theme',
-    //   header: 'Theme',
-    //   cell: ({ row }: any) => <Text>{row.original?.theme?.name}</Text>,
-    //   enableSorting: false,
-    // },
-
     {
-      id: 'content.layout',
-      header: 'Layout',
-      accessorKey: 'layout',
+      id: 'content.version',
+      header: 'Version',
       cell: ({ row }: any) => (
-        <Text fontSize="sm2">{row.original?.layout?.name}</Text>
+        <Flex direction="column" gap="xxs">
+          <Flex alignItems="center" gap="xs">
+            <Text fontSize="sm2" fontWeight="500">
+              v{row.original?.version_number || 1}
+            </Text>
+            <Box
+              bg={
+                row.original?.version_status === 'draft'
+                  ? 'orange.100'
+                  : 'green.100'
+              }
+              color={
+                row.original?.version_status === 'draft'
+                  ? 'orange.700'
+                  : 'green.700'
+              }
+              px="xs"
+              py="xxs"
+              borderRadius="sm"
+            >
+              <Text fontSize="xxs" fontWeight="medium">
+                {row.original?.version_status === 'draft'
+                  ? 'Draft'
+                  : 'Published'}
+              </Text>
+            </Box>
+          </Flex>
+          <TimeAgo time={row.original?.updated_at} />
+        </Flex>
       ),
-      enableSorting: false,
-    },
-    {
-      id: 'content.type',
-      header: 'Type',
-      cell: ({ row }: any) => <Text fontSize="sm2">{row.original?.type}</Text>,
       enableSorting: false,
     },
     {
@@ -233,13 +288,6 @@ const VariantDashboard = ({ rerender, setRerender }: Props) => {
       enableSorting: false,
     },
     {
-      id: 'content.updated_at',
-      header: 'Created',
-      accessorKey: 'TIME',
-      cell: ({ row }: any) => <TimeAgo time={row.original?.updated_at} />,
-      enableSorting: false,
-    },
-    {
       id: 'content.name',
       header: '',
       cell: ({ row }: any) => (
@@ -254,7 +302,8 @@ const VariantDashboard = ({ rerender, setRerender }: Props) => {
                   position="relative"
                   cursor="pointer"
                   margin="0px"
-                  padding="0px">
+                  padding="0px"
+                >
                   <ThreeDotIcon />
                 </Box>
               </DropdownMenu.Trigger>
@@ -268,7 +317,8 @@ const VariantDashboard = ({ rerender, setRerender }: Props) => {
                   <DropdownMenu.Item
                     onClick={() => {
                       setDeleteVariant(row.index);
-                    }}>
+                    }}
+                  >
                     <Text cursor="pointer" color="red.600">
                       Delete
                     </Text>
@@ -278,7 +328,8 @@ const VariantDashboard = ({ rerender, setRerender }: Props) => {
               <Modal
                 ariaLabel="Delete Variant"
                 open={deleteVariant === row.index}
-                onClose={() => setDeleteVariant(null)}>
+                onClose={() => setDeleteVariant(null)}
+              >
                 {
                   <ConfirmDelete
                     title="Delete Variant"
@@ -316,7 +367,8 @@ const VariantDashboard = ({ rerender, setRerender }: Props) => {
             <Button
               variant="secondary"
               size="sm"
-              onClick={() => router.push(`/variants/new`)}>
+              onClick={() => router.push(`/variants/new`)}
+            >
               <IconFrame color="gray.800" mr="xs">
                 <Plus size={12} weight="bold" />
               </IconFrame>

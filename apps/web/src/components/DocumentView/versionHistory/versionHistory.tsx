@@ -71,7 +71,8 @@ const VersionItem: React.FC<{
       cursor="pointer"
       bg={isSelected ? 'green.200' : 'transparent'}
       onClick={onSelect}
-      borderRadius="sm">
+      borderRadius="sm"
+    >
       <Flex justify="space-between" align="center">
         <Box flex="1">
           {isRenaming ? (
@@ -89,7 +90,8 @@ const VersionItem: React.FC<{
               <Flex justify="space-between" align="center">
                 <Text
                   color={isSelected ? 'primary.800' : 'text-primary'}
-                  lines={2}>
+                  lines={2}
+                >
                   {version.name}
                 </Text>
                 {version.isCurrentVersion && (
@@ -100,7 +102,8 @@ const VersionItem: React.FC<{
                     bg="green.50"
                     px="xs"
                     py="xxs"
-                    borderRadius="sm">
+                    borderRadius="sm"
+                  >
                     Current
                   </Text>
                 )}
@@ -306,7 +309,8 @@ export const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({
         m="-xl"
         maxH="100%"
         w="80vw"
-        h="90vh">
+        h="90vh"
+      >
         <Flex direction="column" w="calc(100% - 340px)">
           <VersionContent
             version={selectedVersion}
@@ -322,7 +326,8 @@ export const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({
           display="flex"
           flexDirection="column"
           w="340px"
-          h="100%">
+          h="100%"
+        >
           <Flex justify="space-between" align="center" py="md">
             <Text fontSize="lg" fontWeight="heading">
               All Versions ({pagination.totalEntries})

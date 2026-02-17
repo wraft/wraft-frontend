@@ -11,7 +11,8 @@ export const ApprovalAwaitingLabel = () => {
       justify="center"
       borderRadius="xl"
       color="orange.800"
-      bg="orange.100">
+      bg="orange.100"
+    >
       <Triangle size={12} />
       <Text fontSize="sm" fontWeight="heading">
         Waiting for approval

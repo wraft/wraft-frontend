@@ -30,7 +30,8 @@ const CommentCard = (comment: Comment) => {
       borderBottom="solid 1px"
       borderColor="border"
       pb="md"
-      mb="md">
+      mb="md"
+    >
       <Flex pl="0">
         <ProfileCard
           image={`${comment?.profile?.profile_pic}`}

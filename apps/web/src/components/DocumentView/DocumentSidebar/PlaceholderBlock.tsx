@@ -100,14 +100,16 @@ const PlaceholderBlock = ({
             border="1px solid"
             borderColor="border"
             borderRadius="md"
-            mt="sm">
+            mt="sm"
+          >
             {mappedFields &&
               mappedFields.map((x: any) => (
                 <Flex
                   key={x.id}
                   borderBottom="1px solid"
                   borderColor="border"
-                  p="md">
+                  p="md"
+                >
                   <Text flex="0 0 60%" fontWeight="heading">
                     {x.value}
                   </Text>
@@ -116,7 +118,8 @@ const PlaceholderBlock = ({
                     color="text-secondary"
                     fontWeight="heading"
                     textTransform="capitalize"
-                    textAlign="right">
+                    textAlign="right"
+                  >
                     {x.name}
                   </Text>
 
@@ -132,12 +135,14 @@ const PlaceholderBlock = ({
         store={mobileMenuDrawer}
         aria-label="field drawer"
         withBackdrop={true}
-        onClose={closeDrawer}>
+        onClose={closeDrawer}
+      >
         <Flex
           as="form"
           h="100vh"
           direction="column"
-          onSubmit={handleSubmit(onSubmit)}>
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <Box flexShrink="0">
             <Drawer.Header>
               <Drawer.Title>Placeholder</Drawer.Title>

@@ -95,7 +95,8 @@ export default function InviteBlock({ docId, close }: any) {
         borderColor="border"
         p="md"
         py="xl"
-        justify="space-between">
+        justify="space-between"
+      >
         <Text fontSize="xl" fontWeight="heading">
           Invite To Editor Flow
         </Text>
@@ -160,7 +161,8 @@ export default function InviteBlock({ docId, close }: any) {
                   <Button
                     variant="ghost"
                     size="xs"
-                    onClick={() => removeCollaborator(collaborator.id)}>
+                    onClick={() => removeCollaborator(collaborator.id)}
+                  >
                     <Text>Remove</Text>
                   </Button>
                 )}

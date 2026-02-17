@@ -72,7 +72,8 @@ const MetaBlock = () => {
               border="1px solid"
               borderColor="border"
               borderRadius="md"
-              mt="sm">
+              mt="sm"
+            >
               {meta &&
                 typeof meta === 'object' &&
                 orderedKeys.map((key) => {
@@ -90,7 +91,8 @@ const MetaBlock = () => {
                         key={key}
                         borderBottom="1px solid"
                         borderColor="border"
-                        p="md">
+                        p="md"
+                      >
                         <Text flex="0 0 60%" fontWeight="heading">
                           {String(value)}
                         </Text>
@@ -99,7 +101,8 @@ const MetaBlock = () => {
                           color="text-secondary"
                           fontWeight="heading"
                           textTransform="capitalize"
-                          textAlign="right">
+                          textAlign="right"
+                        >
                           {key.replace(/_/g, ' ')}
                         </Text>
                       </Flex>
@@ -116,12 +119,14 @@ const MetaBlock = () => {
         store={mobileMenuDrawer}
         aria-label="field drawer"
         withBackdrop={true}
-        onClose={closeDrawer}>
+        onClose={closeDrawer}
+      >
         <Flex
           as="form"
           h="100vh"
           direction="column"
-          onSubmit={handleSubmit(onSubmit)}>
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <Box flexShrink="0">
             <Drawer.Header>
               <Drawer.Title>Meta Info</Drawer.Title>

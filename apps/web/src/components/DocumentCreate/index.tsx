@@ -215,7 +215,8 @@ const CreateDocument = ({ setIsOpen }: { setIsOpen: any }) => {
       as="form"
       h="100vh"
       direction="column"
-      onSubmit={handleSubmit(onSubmit)}>
+      onSubmit={handleSubmit(onSubmit)}
+    >
       <Box flexShrink="0">
         <Drawer.Header>
           <Drawer.Title>Create New Document</Drawer.Title>
@@ -249,7 +250,8 @@ const CreateDocument = ({ setIsOpen }: { setIsOpen: any }) => {
                 border="solid 1px"
                 borderColor="border"
                 borderRadius="lg"
-                bg="background-secondary">
+                bg="background-secondary"
+              >
                 <Box color="text-secondary">
                   <EmptyFormIcon />
                 </Box>
@@ -269,7 +271,8 @@ const CreateDocument = ({ setIsOpen }: { setIsOpen: any }) => {
                   py="md"
                   border="solid 1px"
                   borderBottom="none"
-                  borderColor="border">
+                  borderColor="border"
+                >
                   <Box>
                     <Skeleton width="20px" height="22px" />
                   </Box>
@@ -357,7 +360,8 @@ const CreateDocument = ({ setIsOpen }: { setIsOpen: any }) => {
                           //@ts-expect-error Dynamic key access
                           errors?.contentFields?.[convertToVariableName(f.name)]
                             ?.message || ''
-                        }>
+                        }
+                      >
                         <InputText
                           placeholder={`Enter your ${f.name} `}
                           {...register(
@@ -401,7 +405,8 @@ const CreateDocument = ({ setIsOpen }: { setIsOpen: any }) => {
         <Button
           variant="ghost"
           disabled={formStep === 1}
-          onClick={() => setFormStep((pre) => pre - 1)}>
+          onClick={() => setFormStep((pre) => pre - 1)}
+        >
           Back
         </Button>
         <Button
@@ -411,7 +416,8 @@ const CreateDocument = ({ setIsOpen }: { setIsOpen: any }) => {
             vals === undefined ||
             vals === null ||
             (vals && vals.template === '')
-          }>
+          }
+        >
           {formStep === stepsIndicatorTitle.length ? 'Create' : 'Next'}
         </Button>
       </Flex>
@@ -453,7 +459,8 @@ export const BlockItem = ({ template, onChange, selected }: any) => {
       borderColor="border"
       cursor="pointer"
       align="center"
-      bg={selected.id === id && 'green.300'}>
+      bg={selected.id === id && 'green.300'}
+    >
       <Box
         w="4px"
         h="12px"
@@ -470,7 +477,8 @@ export const BlockItem = ({ template, onChange, selected }: any) => {
           overflow: 'hidden',
           textOverflow: 'ellipsis',
           maxWidth: '240px',
-        }}>
+        }}
+      >
         {title}
       </Text>
       <Text
@@ -483,7 +491,8 @@ export const BlockItem = ({ template, onChange, selected }: any) => {
           overflow: 'hidden',
           textOverflow: 'ellipsis',
           maxWidth: '80px',
-        }}>
+        }}
+      >
         {content_type.prefix}
       </Text>
     </BlockItemWrapper>

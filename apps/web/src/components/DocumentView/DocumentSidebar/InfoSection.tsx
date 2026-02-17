@@ -167,7 +167,8 @@ export const InfoSection = () => {
             justify="space-between"
             border="1px solid"
             p="md"
-            borderColor="border">
+            borderColor="border"
+          >
             <Box>
               <Text>{`${contents.content.instance_id} v${contents.versions[0]?.version_number ?? ''}`}</Text>
 
