@@ -134,7 +134,8 @@ export const Index: any = () => {
         borderBottom="solid 1px"
         borderColor="border"
         py="sm"
-        px="md">
+        px="md"
+      >
         <Box flexBasis={['auto', '100%']} order={-1}>
           <Box color="text-primary">
             <Flex alignItems="center" gap={3}>
@@ -145,7 +146,8 @@ export const Index: any = () => {
                 alignItems="center"
                 fontWeight="heading"
                 verticalAlign="middle"
-                gap={3}>
+                gap={3}
+              >
                 <Text fontSize="sm" fontWeight={500}>
                   {piplineDetails?.name}
                 </Text>
@@ -162,7 +164,8 @@ export const Index: any = () => {
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
         // onDrop={onDrop}
-        onConnect={onConnect}>
+        onConnect={onConnect}
+      >
         <Controls />
         <MiniMap />
         <Background color="#ccc" gap={12} size={1} />
@@ -171,7 +174,8 @@ export const Index: any = () => {
         open={true}
         store={mobileMenuDrawer}
         aria-label="Menu backdrop"
-        withBackdrop={false}>
+        withBackdrop={false}
+      >
         <>
           <Drawer.Header>{selectedNode?.data?.label}</Drawer.Header>
           <Text>{selectedNode && JSON.stringify(selectedNode)}</Text>

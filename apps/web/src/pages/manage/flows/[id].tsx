@@ -162,7 +162,8 @@ const Index: FC = () => {
                         e.preventDefault();
                         e.stopPropagation();
                         handleOpenEditNameModal(e);
-                      }}>
+                      }}
+                    >
                       <IconFrame color="gray.800">
                         <PencilSimple size={16} weight="regular" />
                       </IconFrame>
@@ -181,7 +182,8 @@ const Index: FC = () => {
                 { name: `${flow?.flow?.name || ''}` },
               ]}
             />
-          }>
+          }
+        >
           {hasPermission('flow', 'delete') && (
             <Flex alignItems="center" gap="sm">
               <DropdownMenu.Provider>
@@ -191,7 +193,8 @@ const Index: FC = () => {
                     justifyContent="center"
                     cursor="pointer"
                     p="xs"
-                    borderRadius="sm">
+                    borderRadius="sm"
+                  >
                     <ThreeDotIcon width={20} height={20} />
                   </Flex>
                 </DropdownMenu.Trigger>
@@ -199,7 +202,8 @@ const Index: FC = () => {
                   <DropdownMenu.Item
                     onClick={() => {
                       setDeleteOpen(true);
-                    }}>
+                    }}
+                  >
                     Delete Flow
                   </DropdownMenu.Item>
                 </DropdownMenu>
@@ -211,7 +215,8 @@ const Index: FC = () => {
         <Modal
           ariaLabel="Edit Flow Name"
           open={isEditNameModalOpen}
-          onClose={handleCloseEditNameModal}>
+          onClose={handleCloseEditNameModal}
+        >
           <Box as="form" onSubmit={handleSubmit(onSaveName)} w="450px">
             <Modal.Header>Edit Flow Name</Modal.Header>
             <Box my={3}>
@@ -229,14 +234,16 @@ const Index: FC = () => {
                 variant="secondary"
                 onClick={handleCloseEditNameModal}
                 disabled={isSavingName}
-                type="button">
+                type="button"
+              >
                 Cancel
               </Button>
               <Button
                 type="submit"
                 variant="primary"
                 loading={isSavingName}
-                disabled={isSavingName}>
+                disabled={isSavingName}
+              >
                 Save
               </Button>
             </Flex>
@@ -246,7 +253,8 @@ const Index: FC = () => {
         <Modal
           ariaLabel="Delete Flow"
           open={deleteOpen}
-          onClose={() => setDeleteOpen(false)}>
+          onClose={() => setDeleteOpen(false)}
+        >
           <ConfirmDelete
             title="Delete Flow"
             text={`Are you sure you want to delete '${flow?.flow?.name || ''}'? This action cannot be undone.`}

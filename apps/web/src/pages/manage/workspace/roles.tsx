@@ -36,7 +36,8 @@ const Index: FC = () => {
               { name: 'Manage', path: '/manage' },
               { name: 'Workspace', path: '/manage/workspace' },
               { name: 'Role', path: '' },
-            ]}>
+            ]}
+          >
             <Flex alignItems="center" gap="md">
               {hasPermission('role', 'manage') && (
                 <Box display="block">
@@ -66,7 +67,8 @@ const Index: FC = () => {
                 <Button
                   size="sm"
                   variant="secondary"
-                  onClick={() => setIsOpen(true)}>
+                  onClick={() => setIsOpen(true)}
+                >
                   <PlusIcon size={14} weight="bold" />
                   Create Role
                 </Button>
@@ -91,7 +93,8 @@ const Index: FC = () => {
           open={isOpen}
           store={roleDrawer}
           withBackdrop={true}
-          onClose={() => setIsOpen(false)}>
+          onClose={() => setIsOpen(false)}
+        >
           <RolesForm key={1} setOpen={setIsOpen} setRender={setRender} />
         </Drawer>
       </>

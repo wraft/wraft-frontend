@@ -36,7 +36,8 @@ const CompanyForm: FC = () => {
               borderColor="gray.400"
               borderRadius="lg"
               p="xl"
-              px="2xl">
+              px="2xl"
+            >
               <OrganisationInfo />
             </Flex>
           </Flex>

@@ -80,7 +80,8 @@ const Index = () => {
             p="5xl"
             bg="background-secondary"
             h="100vh"
-            align="baseline">
+            align="baseline"
+          >
             <Box position="absolute" top="80px" left="80px">
               <Link href={homePageUrl}>
                 <Box color="gray.0" fill="gray.1200">
@@ -93,7 +94,8 @@ const Index = () => {
               variant="card"
               w="500px"
               justifySelf="center"
-              direction="column">
+              direction="column"
+            >
               <Text as="h3" mb="md" fontSize="3xl">
                 New Password
               </Text>
@@ -106,11 +108,13 @@ const Index = () => {
                 direction="column"
                 as="form"
                 gap="md"
-                onSubmit={handleSubmit(onSubmit)}>
+                onSubmit={handleSubmit(onSubmit)}
+              >
                 <Field
                   label="New Password"
                   required
-                  error={errors?.newPassword?.message}>
+                  error={errors?.newPassword?.message}
+                >
                   <InputText
                     autoComplete="off"
                     {...register('newPassword')}
@@ -120,7 +124,8 @@ const Index = () => {
                 <Field
                   label="Confirm Password"
                   required
-                  error={errors?.confirmPassword?.message}>
+                  error={errors?.confirmPassword?.message}
+                >
                   <PasswordInput
                     autoComplete="off"
                     placeholder="Enter your Confirm Password"

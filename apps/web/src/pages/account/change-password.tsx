@@ -75,11 +75,13 @@ const Contents: FC = () => {
               direction="column"
               gap="md"
               as="form"
-              onSubmit={handleSubmit(onSubmit)}>
+              onSubmit={handleSubmit(onSubmit)}
+            >
               <Field
                 label="Current Password"
                 required
-                error={errors?.current_password?.message as string}>
+                error={errors?.current_password?.message as string}
+              >
                 <PasswordInput
                   placeholder="Enter your Current Password"
                   {...register('current_password')}
@@ -88,7 +90,8 @@ const Contents: FC = () => {
               <Field
                 label="New Password"
                 required
-                error={errors?.new_password?.message as string}>
+                error={errors?.new_password?.message as string}
+              >
                 <PasswordInput
                   placeholder="Enter your New Password"
                   {...register('new_password')}
@@ -97,7 +100,8 @@ const Contents: FC = () => {
               <Field
                 label="Confirm New Password"
                 required
-                error={errors?.confirm_new_password?.message as string}>
+                error={errors?.confirm_new_password?.message as string}
+              >
                 <PasswordInput
                   placeholder="Enter your Confirm New Password"
                   {...register('confirm_new_password')}

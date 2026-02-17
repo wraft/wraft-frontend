@@ -100,13 +100,15 @@ const Index: FC = () => {
               path: `/forms/${formdata?.id}`,
             },
           ]}
-          desc={`${formdata?.description || 'detatils loading...'}`}>
+          desc={`${formdata?.description || 'detatils loading...'}`}
+        >
           {hasPermission('form', 'manage') && (
             <Flex alignItems="center" gap="8px" pr={4}>
               <Button
                 variant="secondary"
                 size="sm"
-                onClick={() => setIsView((prev) => !prev)}>
+                onClick={() => setIsView((prev) => !prev)}
+              >
                 {isView ? 'Edit' : 'Preview'}
               </Button>
               <Box>
@@ -114,7 +116,8 @@ const Index: FC = () => {
                   <a
                     href={`/forms/entry/new/${cId}`}
                     target="_blank"
-                    rel="noopener noreferrer">
+                    rel="noopener noreferrer"
+                  >
                     Share
                   </a>
                 </Button>
@@ -150,7 +153,8 @@ const Index: FC = () => {
                 w="100%"
                 maxHeight="calc(100vh - 72px - 72px)"
                 maxWidth="80ch"
-                overflowY="auto">
+                overflowY="auto"
+              >
                 <FormViewForm items={items} />
               </Box>
             )}
@@ -162,7 +166,8 @@ const Index: FC = () => {
         <Modal
           ariaLabel="edit form"
           open={isOpen}
-          onClose={() => setIsOpen(false)}>
+          onClose={() => setIsOpen(false)}
+        >
           <Box as="form" onSubmit={handleSubmit(onSubmit)} minWidth="518px">
             <Box p={4} borderBottom="1px solid" borderColor="border">
               <Text as="p" variant="xl">
@@ -200,7 +205,8 @@ const Index: FC = () => {
               <Button
                 type="submit"
                 variant="primary"
-                onClick={() => handleSubmit(onSubmit)}>
+                onClick={() => handleSubmit(onSubmit)}
+              >
                 Save
               </Button>
               <Button variant="secondary" onClick={() => setIsOpen(false)}>

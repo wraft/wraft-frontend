@@ -15,7 +15,8 @@ const NotFoundPage = () => {
       alignItems="center"
       justifyContent="center"
       minHeight="100vh"
-      bg="background-primary">
+      bg="background-primary"
+    >
       <NotFoundIcon width={260} height={160} />
       <Text as="span" fontSize="2xl">
         404

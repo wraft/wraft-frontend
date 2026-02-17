@@ -63,12 +63,14 @@ const WebhooksPage = () => {
                   { name: 'Webhooks' },
                 ]}
               />
-            }>
+            }
+          >
             {canCreateWebhooks && (
               <Button
                 variant="secondary"
                 size="sm"
-                onClick={() => setIsCreateDrawerOpen(true)}>
+                onClick={() => setIsCreateDrawerOpen(true)}
+              >
                 <Plus size={16} />
                 New Webhook
               </Button>
@@ -90,7 +92,8 @@ const WebhooksPage = () => {
             open={isCreateDrawerOpen}
             store={createDrawer}
             withBackdrop={true}
-            onClose={() => setIsCreateDrawerOpen(false)}>
+            onClose={() => setIsCreateDrawerOpen(false)}
+          >
             {isCreateDrawerOpen && (
               <WebhookForm
                 onSuccess={handleCreateSuccess}
@@ -103,7 +106,8 @@ const WebhooksPage = () => {
             open={!!editingWebhookId}
             store={editDrawer}
             withBackdrop={true}
-            onClose={() => setEditingWebhookId(null)}>
+            onClose={() => setEditingWebhookId(null)}
+          >
             {editingWebhookId && (
               <WebhookForm
                 webhookId={editingWebhookId}

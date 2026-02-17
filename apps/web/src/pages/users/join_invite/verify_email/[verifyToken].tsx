@@ -34,7 +34,8 @@ const EmailVerified: React.FC = () => {
           alignItems="center"
           p="0px"
           pt="103px"
-          px="140px">
+          px="140px"
+        >
           <Image
             src={Verified}
             alt=""
@@ -47,7 +48,8 @@ const EmailVerified: React.FC = () => {
           <Button
             onClick={() => {
               Router.push('/login');
-            }}>
+            }}
+          >
             okay
           </Button>
         </Flex>

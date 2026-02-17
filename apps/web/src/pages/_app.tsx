@@ -29,7 +29,8 @@ const Badge = ({ children }: any) => {
           fontFamily: "'Poppins', sans-serif",
           fontSize: 14,
         }),
-      }}>
+      }}
+    >
       {children}
     </components.Badge>
   );

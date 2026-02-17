@@ -250,7 +250,8 @@ const Index: FC = () => {
               border="solid 1px"
               borderColor="gray.400"
               borderRadius="lg"
-              p="xl">
+              p="xl"
+            >
               <Box as="form" onSubmit={handleSubmit(onSubmit)} mb="md">
                 <Box mb="md">
                   {orgImage && (
@@ -293,7 +294,8 @@ const Index: FC = () => {
                       onClick={(e) => {
                         e.preventDefault();
                         setIsEdit(true);
-                      }}>
+                      }}
+                    >
                       Edit
                     </Button>
                   )}
@@ -303,7 +305,8 @@ const Index: FC = () => {
                     mt="xl"
                     borderTop="1px solid"
                     borderColor="border"
-                    py="md">
+                    py="md"
+                  >
                     <Text as="h5">Delete workspace</Text>
                     <Text as={'p'} color="text-secondary" mb="md">
                       This workspace will be permanently removed from Wraft
@@ -312,13 +315,15 @@ const Index: FC = () => {
                       onClick={onSendCode}
                       danger
                       type="button"
-                      variant="primary">
+                      variant="primary"
+                    >
                       Delete Workspace
                     </Button>
                     <Modal
                       ariaLabel="delete workspace"
                       open={isDelete}
-                      onClose={() => setDelete(false)}>
+                      onClose={() => setDelete(false)}
+                    >
                       <>
                         <Box mx="md">
                           <Modal.Header>
@@ -358,13 +363,15 @@ const Index: FC = () => {
                               <Button
                                 danger
                                 onClick={onConfirmDelete}
-                                variant="primary">
+                                variant="primary"
+                              >
                                 Delete workspace
                               </Button>
                             )}
                             <Button
                               onClick={() => setDelete(false)}
-                              variant="tertiary">
+                              variant="tertiary"
+                            >
                               Cancel
                             </Button>
                           </Flex>

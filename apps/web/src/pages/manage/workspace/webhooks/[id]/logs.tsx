@@ -149,7 +149,8 @@ const WebhookLogsPage: React.FC = () => {
           bg="green.400"
           borderRadius="sm"
           fontSize="xs"
-          display="inline-block">
+          display="inline-block"
+        >
           {row.original.event}
         </Box>
       ),
@@ -236,11 +237,13 @@ const WebhookLogsPage: React.FC = () => {
                 { name: webhook?.name || 'Loading...' },
               ]}
             />
-          }>
+          }
+        >
           <Button
             variant="secondary"
             size="sm"
-            onClick={() => router.push('/manage/workspace/webhooks')}>
+            onClick={() => router.push('/manage/workspace/webhooks')}
+          >
             <ArrowLeft size={16} />
             Back to Webhooks
           </Button>
@@ -276,7 +279,8 @@ const WebhookLogsPage: React.FC = () => {
                 bg="white"
                 borderRadius="md"
                 border="1px solid"
-                borderColor="gray.200">
+                borderColor="gray.200"
+              >
                 <Text fontSize="sm" color="gray.800" mb="xs">
                   Total Triggers
                 </Text>
@@ -289,7 +293,8 @@ const WebhookLogsPage: React.FC = () => {
                 bg="white"
                 borderRadius="md"
                 border="1px solid"
-                borderColor="gray.200">
+                borderColor="gray.200"
+              >
                 <Text fontSize="sm" color="gray.800" mb="xs">
                   Success Rate
                 </Text>
@@ -302,7 +307,8 @@ const WebhookLogsPage: React.FC = () => {
                 bg="white"
                 borderRadius="md"
                 border="1px solid"
-                borderColor="gray.200">
+                borderColor="gray.200"
+              >
                 <Text fontSize="sm" color="gray.800" mb="xs">
                   Failed Triggers
                 </Text>
@@ -315,7 +321,8 @@ const WebhookLogsPage: React.FC = () => {
                 bg="white"
                 borderRadius="md"
                 border="1px solid"
-                borderColor="gray.200">
+                borderColor="gray.200"
+              >
                 <Text fontSize="sm" color="gray.800" mb="xs">
                   Avg Response Time
                 </Text>
@@ -330,25 +337,29 @@ const WebhookLogsPage: React.FC = () => {
             <Button
               size="sm"
               variant={statusFilter === undefined ? 'primary' : 'secondary'}
-              onClick={() => handleStatusFilter(undefined)}>
+              onClick={() => handleStatusFilter(undefined)}
+            >
               All
             </Button>
             <Button
               size="sm"
               variant={statusFilter === 'success' ? 'primary' : 'secondary'}
-              onClick={() => handleStatusFilter('success')}>
+              onClick={() => handleStatusFilter('success')}
+            >
               Success
             </Button>
             <Button
               size="sm"
               variant={statusFilter === 'failed' ? 'primary' : 'secondary'}
-              onClick={() => handleStatusFilter('failed')}>
+              onClick={() => handleStatusFilter('failed')}
+            >
               Failed
             </Button>
             <Button
               size="sm"
               variant={statusFilter === 'pending' ? 'primary' : 'secondary'}
-              onClick={() => handleStatusFilter('pending')}>
+              onClick={() => handleStatusFilter('pending')}
+            >
               Pending
             </Button>
           </Flex>

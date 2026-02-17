@@ -38,13 +38,15 @@ const Index: FC = () => {
             <DescriptionLinker
               data={[{ name: 'Manage', path: '/manage' }, { name: 'Flows' }]}
             />
-          }>
+          }
+        >
           <Flex gap="sm">
             {hasPermission('flow', 'manage') && (
               <Button
                 variant="secondary"
                 size="sm"
-                onClick={() => setIsOpen(true)}>
+                onClick={() => setIsOpen(true)}
+              >
                 Add Flow
               </Button>
             )}
@@ -55,7 +57,8 @@ const Index: FC = () => {
           store={drawer}
           aria-label="flow drawer"
           withBackdrop={true}
-          onClose={() => setIsOpen(false)}>
+          onClose={() => setIsOpen(false)}
+        >
           {isOpen && <FlowForm setOpen={setIsOpen} setRerender={setRerender} />}
         </Drawer>
 

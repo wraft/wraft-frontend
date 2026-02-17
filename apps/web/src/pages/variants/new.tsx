@@ -441,13 +441,15 @@ const Index: FC = () => {
           borderColor="border"
           bg="background-primary"
           flexShrink={0}
-          style={{ minHeight: 48 }}>
+          style={{ minHeight: 48 }}
+        >
           <Flex align="center" gap="sm">
             <Button
               variant="ghost"
               size="sm"
               onClick={handleCancel}
-              style={{ padding: '4px 8px' }}>
+              style={{ padding: '4px 8px' }}
+            >
               <X size={16} />
             </Button>
             <Text fontSize="sm" fontWeight="600" color="text-primary">
@@ -488,14 +490,16 @@ const Index: FC = () => {
                 margin: '0 auto',
                 position: 'sticky',
                 bottom: 0,
-              }}>
+              }}
+            >
               <Flex justify="space-between" align="center">
                 <Box>
                   {currentStep > 0 ? (
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => handleStepChange(currentStep - 1)}>
+                      onClick={() => handleStepChange(currentStep - 1)}
+                    >
                       <ArrowLeft size={14} />
                       {displaySteps[currentStep - 1]}
                     </Button>
@@ -504,7 +508,8 @@ const Index: FC = () => {
                       variant="ghost"
                       size="sm"
                       onClick={handleCancel}
-                      color="text-secondary">
+                      color="text-secondary"
+                    >
                       Cancel
                     </Button>
                   )}
@@ -518,13 +523,15 @@ const Index: FC = () => {
                       size="sm"
                       onClick={handleSubmit(onSubmit)}
                       disabled={isSubmitting}
-                      loading={isSubmitting}>
+                      loading={isSubmitting}
+                    >
                       Create Variant
                     </Button>
                   ) : (
                     <Button
                       size="sm"
-                      onClick={() => handleStepChange(currentStep + 1)}>
+                      onClick={() => handleStepChange(currentStep + 1)}
+                    >
                       Continue
                       <ArrowRight size={14} />
                     </Button>
@@ -549,7 +556,8 @@ const Index: FC = () => {
       <Modal
         ariaLabel="Discard unsaved changes"
         open={showUnsavedWarning}
-        onClose={() => setShowUnsavedWarning(false)}>
+        onClose={() => setShowUnsavedWarning(false)}
+      >
         <Box w="400px">
           <Modal.Header>Discard unsaved changes?</Modal.Header>
           <Text my="md" color="text-secondary" fontSize="sm">
@@ -560,7 +568,8 @@ const Index: FC = () => {
             <Button
               variant="secondary"
               size="sm"
-              onClick={() => setShowUnsavedWarning(false)}>
+              onClick={() => setShowUnsavedWarning(false)}
+            >
               Keep editing
             </Button>
             <Button
@@ -569,7 +578,8 @@ const Index: FC = () => {
               onClick={() => {
                 setIsDirty(false);
                 router.push('/variants');
-              }}>
+              }}
+            >
               Discard changes
             </Button>
           </Flex>

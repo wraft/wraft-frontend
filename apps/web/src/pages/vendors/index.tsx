@@ -56,7 +56,8 @@ const VendorsPage: NextPage = () => {
                 { name: 'Vendors', path: '/manage/vendors' },
               ]}
             />
-          }>
+          }
+        >
           <Flex gap="md">
             {hasPermission('vendor', 'manage') && (
               <Button variant="secondary" onClick={handleAddVendor}>
@@ -77,7 +78,8 @@ const VendorsPage: NextPage = () => {
         onClose={() => {
           setIsDrawerOpen(false);
           setEditVendor(null);
-        }}>
+        }}
+      >
         {isDrawerOpen && (
           <VendorDrawer
             isOpen={isDrawerOpen}

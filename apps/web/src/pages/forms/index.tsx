@@ -78,7 +78,8 @@ const Index: FC = () => {
       <Modal
         ariaLabel="Create Form"
         open={isOpen}
-        onClose={() => setIsOpen(false)}>
+        onClose={() => setIsOpen(false)}
+      >
         <>
           <Flex justify="space-between">
             <Modal.Header>Create Form</Modal.Header>
@@ -94,7 +95,8 @@ const Index: FC = () => {
             direction="column"
             gap="md"
             py="sm"
-            onSubmit={handleSubmit(onSubmit)}>
+            onSubmit={handleSubmit(onSubmit)}
+          >
             <Field label="Name" required error={errors?.name?.message}>
               <InputText
                 {...register('name')}
@@ -104,7 +106,8 @@ const Index: FC = () => {
             <Field
               label="Description"
               required
-              error={errors?.description?.message}>
+              error={errors?.description?.message}
+            >
               <InputText
                 {...register('description')}
                 placeholder="Enter a Description"
@@ -118,7 +121,8 @@ const Index: FC = () => {
                 type="submit"
                 variant="primary"
                 loading={loading}
-                onClick={handleSubmit(onSubmit)}>
+                onClick={handleSubmit(onSubmit)}
+              >
                 Create
               </Button>
               <Button variant="secondary" onClick={() => setIsOpen(false)}>

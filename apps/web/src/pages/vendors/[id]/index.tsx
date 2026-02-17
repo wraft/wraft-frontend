@@ -73,12 +73,14 @@ const VendorDetailPage: NextPage = () => {
         <PageHeader
           title={vendor ? vendor.name : 'Loading...'}
           desc="Vendor details and contact management"
-          hasBack={true}>
+          hasBack={true}
+        >
           <Flex gap="md">
             {hasPermission('vendor', 'manage') && (
               <Button
                 variant="secondary"
-                onClick={() => setIsEditDrawerOpen(true)}>
+                onClick={() => setIsEditDrawerOpen(true)}
+              >
                 <PencilSimpleIcon size={16} />
                 Edit Vendor
               </Button>
@@ -93,7 +95,8 @@ const VendorDetailPage: NextPage = () => {
         store={drawer}
         aria-label="edit vendor drawer"
         withBackdrop={true}
-        onClose={() => setIsEditDrawerOpen(false)}>
+        onClose={() => setIsEditDrawerOpen(false)}
+      >
         {isEditDrawerOpen && (
           <VendorDrawer
             isOpen={isEditDrawerOpen}

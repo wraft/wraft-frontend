@@ -28,12 +28,14 @@ const Index: FC = () => {
           title={[
             { name: 'Manage', path: '/manage' },
             { name: 'Layouts', path: '/manage/layouts' },
-          ]}>
+          ]}
+        >
           {hasPermission('layout', 'manage') && (
             <Button
               variant="secondary"
               size="sm"
-              onClick={() => setIsOpen(true)}>
+              onClick={() => setIsOpen(true)}
+            >
               <Plus size={10} />
               Add Layout
             </Button>
@@ -44,7 +46,8 @@ const Index: FC = () => {
           store={stateDrawer}
           aria-label="field drawer"
           withBackdrop={true}
-          onClose={() => setIsOpen(false)}>
+          onClose={() => setIsOpen(false)}
+        >
           <LayoutForm setOpen={setIsOpen} setRerender={setRerender} />
         </Drawer>
 

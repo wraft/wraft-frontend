@@ -34,12 +34,14 @@ const ThemePage: FC = () => {
             <DescriptionLinker
               data={[{ name: 'Manage', path: '/manage' }, { name: 'Themes' }]}
             />
-          }>
+          }
+        >
           {hasPermission('theme', 'manage') && (
             <Button
               variant="secondary"
               size="sm"
-              onClick={() => setIsOpen(true)}>
+              onClick={() => setIsOpen(true)}
+            >
               Add Theme
             </Button>
           )}
@@ -56,7 +58,8 @@ const ThemePage: FC = () => {
         store={drawer}
         aria-label="theme drawer"
         withBackdrop={true}
-        onClose={() => setIsOpen(false)}>
+        onClose={() => setIsOpen(false)}
+      >
         {isOpen && (
           <ThemeAddForm setIsOpen={setIsOpen} setRerender={setRerender} />
         )}

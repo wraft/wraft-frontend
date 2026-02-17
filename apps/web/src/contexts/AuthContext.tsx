@@ -27,6 +27,7 @@ interface IUserContextProps {
   logout: () => void;
   setSubscription: (data: Subscription | null) => void;
   updateOrganisations: any;
+  updateUserData: (data: any) => void;
 }
 
 export const UserContext = createContext<IUserContextProps>(
@@ -176,7 +177,9 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
         logout,
         updateOrganisations,
         setSubscription,
-      }}>
+        updateUserData,
+      }}
+    >
       {children}
     </UserContext.Provider>
   );

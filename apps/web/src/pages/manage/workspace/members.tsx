@@ -42,12 +42,14 @@ const Index: FC = () => {
               { name: 'Manage', path: '/manage' },
               { name: 'Workspace', path: '/manage/workspace' },
               { name: 'Members', path: '' },
-            ]}>
+            ]}
+          >
             {hasPermission('members', 'manage') && (
               <Button
                 variant="secondary"
                 size="sm"
-                onClick={() => setIsOpen(true)}>
+                onClick={() => setIsOpen(true)}
+              >
                 <Plus size={14} />
                 Invite people
               </Button>
@@ -64,7 +66,8 @@ const Index: FC = () => {
         <Drawer
           open={isOpen}
           store={menuDrawer}
-          onClose={() => setIsOpen(false)}>
+          onClose={() => setIsOpen(false)}
+        >
           {isOpen && (
             <InviteTeam
               setOpen={setIsOpen}

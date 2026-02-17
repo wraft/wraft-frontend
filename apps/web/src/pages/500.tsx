@@ -12,7 +12,8 @@ const ServerErrorPage = () => {
       justifyContent="center"
       minHeight="100vh"
       p="lg"
-      bg="background-primary">
+      bg="background-primary"
+    >
       <InternalServerErrorIcon width={260} height={160} />
       <Text as="span" fontSize="2xl">
         500
