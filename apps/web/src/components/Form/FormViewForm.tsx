@@ -13,7 +13,8 @@ const FormViewForm = ({ items }: Props) => {
           bg="background-primary"
           mb="md"
           border="1px solid"
-          borderColor="border">
+          borderColor="border"
+        >
           <Field label={item.name} required={item.required}>
             <>
               {item.type === 'Text' && <Textarea name={item.id} />}

@@ -69,7 +69,8 @@ const FormEntryDetails = () => {
         bg="background-primary"
         w="70%"
         m="md"
-        p="lg">
+        p="lg"
+      >
         {newData &&
           newData.map((item: ContentItem, index: number) => (
             <Box key={index} mb="md" w="80%">

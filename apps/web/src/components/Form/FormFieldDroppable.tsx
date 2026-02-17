@@ -47,14 +47,16 @@ const Draggable = ({ items, handleDragEnd }: DraggableValuesProps) => {
     <DndContext
       sensors={sensors}
       collisionDetection={closestCenter}
-      onDragEnd={handleDragEnd}>
+      onDragEnd={handleDragEnd}
+    >
       <SortableContext items={items} strategy={rectSortingStrategy}>
         <Flex flexDirection="column">
           {items.map((item: any, index: number) => (
             <Box
               key={index}
               borderTop={index === 0 ? 'none' : '1px solid'}
-              borderColor="border">
+              borderColor="border"
+            >
               <SortableItem item={item} />
             </Box>
           ))}
@@ -81,13 +83,15 @@ const SortableItem = ({ item }: SortableItemProps) => {
       }}
       alignItems="center"
       bg="background-primary"
-      py={2}>
+      py={2}
+    >
       <Box
         ref={setNodeRef}
         {...attributes}
         {...listeners}
         cursor="pointer"
-        flexShrink={0}>
+        flexShrink={0}
+      >
         <Box as="div" display="flex" p="16px">
           <DragIcon
             color={theme?.colors?.gray?.[200] || ''}

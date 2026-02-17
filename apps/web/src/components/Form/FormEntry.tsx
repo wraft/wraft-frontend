@@ -139,7 +139,8 @@ const FormEntry = () => {
               p="md"
               border="1px solid"
               borderTop="none"
-              borderColor="border">
+              borderColor="border"
+            >
               <Text variant="xl" fontWeight="medium">
                 {formdata?.name || 'name'}
               </Text>
@@ -154,11 +155,13 @@ const FormEntry = () => {
                 key={item.id}
                 p="md"
                 borderBottom="1px solid"
-                borderColor="border">
+                borderColor="border"
+              >
                 <Field
                   label={item.name}
                   required={item.required}
-                  error={item.error}>
+                  error={item.error}
+                >
                   <>
                     {item.type === 'Text' && (
                       <Textarea

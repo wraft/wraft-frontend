@@ -108,7 +108,8 @@ const PipelineDetail = () => {
                 variant="secondary"
                 onClick={() => onRunClick(pipelineData?.source_id)}
                 type="button"
-                disabled={pipelineData.stages?.length == 0}>
+                disabled={pipelineData.stages?.length == 0}
+              >
                 Run
               </Button>
             )}
@@ -134,7 +135,8 @@ const PipelineDetail = () => {
             p="xl"
             h="100%"
             my="md"
-            display={formStep === 1 ? 'block' : 'none'}>
+            display={formStep === 1 ? 'block' : 'none'}
+          >
             <Flex direction="column" gap="md">
               <Field label="Pipeline Name" disabled>
                 <Input name="name" disabled value={pipelineData.name} />
@@ -170,7 +172,8 @@ const PipelineDetail = () => {
         size="md"
         ariaLabel="pipelinedelte"
         open={isDelete}
-        onClose={() => setDelete(false)}>
+        onClose={() => setDelete(false)}
+      >
         <>
           <Text padding="12px 16px" display="inline-block">
             Verify pipeline delete request
@@ -178,7 +181,8 @@ const PipelineDetail = () => {
           <Box
             padding="12px 0 16px 0"
             borderTop="1px solid"
-            borderColor="border">
+            borderColor="border"
+          >
             <Box padding="0 16px">
               <Box marginTop="24px">
                 <Label as="label" color="black.800">
@@ -208,7 +212,8 @@ const PipelineDetail = () => {
         open={isOpen}
         store={formMenuDrawer}
         withBackdrop={true}
-        onClose={() => setIsOpen(false)}>
+        onClose={() => setIsOpen(false)}
+      >
         {isOpen && (
           <>
             <PipelineFormEntry

@@ -153,7 +153,8 @@ const FormList = ({ rerender, setRerender }: Props) => {
                     <DropdownMenu.Item
                       onClick={() => {
                         setDeleteOpen(row.index);
-                      }}>
+                      }}
+                    >
                       Delete
                     </DropdownMenu.Item>
                   )}
@@ -164,7 +165,8 @@ const FormList = ({ rerender, setRerender }: Props) => {
             <Modal
               ariaLabel="Delete form"
               open={deleteOpen === row.index}
-              onClose={() => setDeleteOpen(null)}>
+              onClose={() => setDeleteOpen(null)}
+            >
               {
                 <ConfirmDelete
                   title="Delete Form"
@@ -210,7 +212,8 @@ const FormList = ({ rerender, setRerender }: Props) => {
             <Button
               variant="secondary"
               size="sm"
-              onClick={() => router.push(`/forms/new`)}>
+              onClick={() => router.push(`/forms/new`)}
+            >
               <IconFrame color="gray.800" mr="xs">
                 <Plus size={12} weight="bold" />
               </IconFrame>

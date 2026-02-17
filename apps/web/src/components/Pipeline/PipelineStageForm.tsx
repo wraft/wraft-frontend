@@ -498,7 +498,8 @@ const PipelineStageForm = ({
                         label="Choose a template"
                         required
                         disabled={selectedPipelineStageId ? true : false}
-                        error={errors?.template_id?.message as string}>
+                        error={errors?.template_id?.message as string}
+                      >
                         <Search
                           itemToString={(item: any) => item && item.title}
                           name={name}
@@ -612,7 +613,8 @@ const PipelineStageForm = ({
             type="button"
             onClick={handleNextStep}
             variant="primary"
-            loading={isLoading}>
+            loading={isLoading}
+          >
             Next
           </Button>
         ) : (
@@ -621,7 +623,8 @@ const PipelineStageForm = ({
             type="button"
             loading={isLoading}
             disabled={isLoading}
-            onClick={handleSubmitMapping}>
+            onClick={handleSubmitMapping}
+          >
             {stageMapping && stageMapping.length > 0 && isValid
               ? 'Update'
               : 'Add'}

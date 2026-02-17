@@ -46,7 +46,8 @@ const FlowStatePipeline: React.FC<FlowStatePipelineProps> = ({
             direction="column"
             align="center"
             flex={1}
-            style={{ minWidth: 0 }}>
+            style={{ minWidth: 0 }}
+          >
             {/* Circle row with connectors */}
             <Flex
               align="center"
@@ -55,7 +56,8 @@ const FlowStatePipeline: React.FC<FlowStatePipelineProps> = ({
                 width: '100%',
                 height: circleSize,
                 position: 'relative',
-              }}>
+              }}
+            >
               {/* Left connector */}
               {!isFirst && (
                 <Box
@@ -98,12 +100,14 @@ const FlowStatePipeline: React.FC<FlowStatePipelineProps> = ({
                     : 'var(--theme-ui-colors-gray-600)',
                   position: 'relative',
                   zIndex: 1,
-                }}>
+                }}
+              >
                 <Text
                   fontSize={fontSize}
                   fontWeight="heading"
                   color="text-primary"
-                  style={{ lineHeight: 1 }}>
+                  style={{ lineHeight: 1 }}
+                >
                   {index + 1}
                 </Text>
               </Flex>
@@ -119,7 +123,8 @@ const FlowStatePipeline: React.FC<FlowStatePipelineProps> = ({
                 textAlign: 'center',
                 lineHeight: 1.2,
                 wordBreak: 'break-word',
-              }}>
+              }}
+            >
               {state.state}
             </Text>
 
@@ -130,7 +135,8 @@ const FlowStatePipeline: React.FC<FlowStatePipelineProps> = ({
                 fontWeight="500"
                 color={typeConfig.color}
                 mt="xxs"
-                style={{ textAlign: 'center' }}>
+                style={{ textAlign: 'center' }}
+              >
                 {typeConfig.label}
               </Text>
             )}

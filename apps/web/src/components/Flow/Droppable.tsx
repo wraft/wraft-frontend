@@ -87,7 +87,8 @@ export function Droppable({ states, setStates, highestOrder }: Props) {
         fontSize="xs"
         fontWeight="semibold"
         textTransform="uppercase"
-        letterSpacing="0.5px">
+        letterSpacing="0.5px"
+      >
         Drag and drop to reorder states
       </Text>
 
@@ -96,14 +97,16 @@ export function Droppable({ states, setStates, highestOrder }: Props) {
         borderColor="border"
         borderRadius="md"
         overflow="hidden"
-        bg="background.primary">
+        bg="background.primary"
+      >
         {/* Table Header */}
         <Box
           bg="gray.50"
           borderBottom="1px solid"
           borderColor="border"
           px="md"
-          py="sm">
+          py="sm"
+        >
           <Flex alignItems="center">
             <Box w="50px" textAlign="center">
               <Text
@@ -111,7 +114,8 @@ export function Droppable({ states, setStates, highestOrder }: Props) {
                 fontWeight="semibold"
                 color="text.secondary"
                 textTransform="uppercase"
-                letterSpacing="0.5px">
+                letterSpacing="0.5px"
+              >
                 Drag
               </Text>
             </Box>
@@ -121,7 +125,8 @@ export function Droppable({ states, setStates, highestOrder }: Props) {
                 fontWeight="semibold"
                 color="text.secondary"
                 textTransform="uppercase"
-                letterSpacing="0.5px">
+                letterSpacing="0.5px"
+              >
                 #
               </Text>
             </Box>
@@ -131,7 +136,8 @@ export function Droppable({ states, setStates, highestOrder }: Props) {
                 fontWeight="semibold"
                 color="text.secondary"
                 textTransform="uppercase"
-                letterSpacing="0.5px">
+                letterSpacing="0.5px"
+              >
                 State Name
               </Text>
             </Box>
@@ -141,7 +147,8 @@ export function Droppable({ states, setStates, highestOrder }: Props) {
                 fontWeight="semibold"
                 color="text.secondary"
                 textTransform="uppercase"
-                letterSpacing="0.5px">
+                letterSpacing="0.5px"
+              >
                 Type
               </Text>
             </Box>
@@ -151,7 +158,8 @@ export function Droppable({ states, setStates, highestOrder }: Props) {
                 fontWeight="semibold"
                 color="text.secondary"
                 textTransform="uppercase"
-                letterSpacing="0.5px">
+                letterSpacing="0.5px"
+              >
                 Assignees
               </Text>
             </Box>
@@ -161,7 +169,8 @@ export function Droppable({ states, setStates, highestOrder }: Props) {
                 fontWeight="semibold"
                 color="text.secondary"
                 textTransform="uppercase"
-                letterSpacing="0.5px">
+                letterSpacing="0.5px"
+              >
                 Actions
               </Text>
             </Box>
@@ -172,7 +181,8 @@ export function Droppable({ states, setStates, highestOrder }: Props) {
         <DndContext
           sensors={sensors}
           collisionDetection={closestCenter}
-          onDragEnd={handleDragEnd}>
+          onDragEnd={handleDragEnd}
+        >
           <SortableContext items={items} strategy={rectSortingStrategy}>
             {items.map((state: StateState, index: number) => {
               return (
@@ -363,7 +373,8 @@ const SortableItem = ({
       bg={isEven ? 'background.primary' : 'gray.25'}
       transition="all 0.15s ease"
       opacity={isDragging ? 0.5 : 1}
-      transform={CSS.Transform.toString(transform)}>
+      transform={CSS.Transform.toString(transform)}
+    >
       <Flex alignItems="center" px="md" py="sm">
         {/* Drag Handle */}
         <Box
@@ -372,7 +383,8 @@ const SortableItem = ({
           {...listeners}
           w="50px"
           textAlign="center"
-          cursor={isDragging ? 'grabbing' : 'grab'}>
+          cursor={isDragging ? 'grabbing' : 'grab'}
+        >
           <DragIcon
             color={isDragging ? config.color : '#6B7280'}
             width={16}
@@ -392,7 +404,8 @@ const SortableItem = ({
             display="flex"
             alignItems="center"
             justifyContent="center"
-            mx="auto">
+            mx="auto"
+          >
             <Text fontSize="xs" fontWeight="bold">
               {index}
             </Text>
@@ -408,7 +421,8 @@ const SortableItem = ({
             color="text.primary"
             overflow="hidden"
             textOverflow="ellipsis"
-            whiteSpace="nowrap">
+            whiteSpace="nowrap"
+          >
             {state.state}
           </Text>
         </Box>
@@ -421,7 +435,8 @@ const SortableItem = ({
             borderRadius="sm"
             px="sm"
             py="xs"
-            display="inline-block">
+            display="inline-block"
+          >
             <Text fontSize="xs" fontWeight="medium" textTransform="capitalize">
               {config.label}
             </Text>
@@ -435,7 +450,8 @@ const SortableItem = ({
               alignItems="center"
               gap="xs"
               flexWrap="wrap"
-              justifyContent="center">
+              justifyContent="center"
+            >
               {state.approvers.slice(0, 3).map((approver: any) => (
                 <Flex key={approver.id} alignItems="center" gap="xs">
                   <Avatar
@@ -475,7 +491,8 @@ const SortableItem = ({
                 } else {
                   onExpand();
                 }
-              }}>
+              }}
+            >
               {isExpanded ? 'Cancel' : 'Edit State'}
             </Button>
             <Button
@@ -486,7 +503,8 @@ const SortableItem = ({
                 e.stopPropagation();
                 setDeleteOpen(true);
               }}
-              color="error.500">
+              color="error.500"
+            >
               <CloseIcon width={14} height={14} />
             </Button>
           </Flex>
@@ -505,7 +523,8 @@ const SortableItem = ({
         style={{
           transform: isExpanded ? 'translateY(0)' : 'translateY(-10px)',
           pointerEvents: isExpanded ? 'auto' : 'none',
-        }}>
+        }}
+      >
         {isExpanded && (
           <Box p="xl">
             <form
@@ -514,13 +533,15 @@ const SortableItem = ({
                 e.stopPropagation();
                 handleSaveEdit(e);
               }}
-              onClick={(e) => e.stopPropagation()}>
+              onClick={(e) => e.stopPropagation()}
+            >
               <Flex direction="column" gap="lg">
                 {/* State Name */}
                 <Field
                   label="State Name"
                   required
-                  error={errors?.state?.message as string}>
+                  error={errors?.state?.message as string}
+                >
                   <InputText
                     {...register('state', {
                       required: 'State name is required',
@@ -549,7 +570,8 @@ const SortableItem = ({
                         <Field
                           label="State Type"
                           required
-                          error={errors?.type?.message as string}>
+                          error={errors?.type?.message as string}
+                        >
                           <Select
                             name={name}
                             value={selectedOption || null}
@@ -615,7 +637,8 @@ const SortableItem = ({
                       borderColor="border"
                       borderRadius="md"
                       overflow="hidden"
-                      mt="sm">
+                      mt="sm"
+                    >
                       {editApprovers.map((e: any, idx: number) => (
                         <Flex
                           key={e.id}
@@ -630,7 +653,8 @@ const SortableItem = ({
                           }
                           borderBottomColor="border"
                           bg="background.primary"
-                          transition="all 0.2s ease">
+                          transition="all 0.2s ease"
+                        >
                           <Flex alignItems="center" gap="sm">
                             <Avatar
                               size="xs"
@@ -640,7 +664,8 @@ const SortableItem = ({
                             <Text
                               fontSize="md"
                               fontWeight="medium"
-                              color="text.primary">
+                              color="text.primary"
+                            >
                               {e.name}
                             </Text>
                           </Flex>
@@ -660,7 +685,8 @@ const SortableItem = ({
                                 keyEvent.preventDefault();
                                 onRemoveUser(e);
                               }
-                            }}>
+                            }}
+                          >
                             <DeleteIcon
                               width={16}
                               height={16}
@@ -678,7 +704,8 @@ const SortableItem = ({
                       p="lg"
                       textAlign="center"
                       bg="gray.50"
-                      mt="sm">
+                      mt="sm"
+                    >
                       <Text color="text.secondary" fontSize="sm">
                         No assignees added yet. Add at least one assignee.
                       </Text>
@@ -695,7 +722,8 @@ const SortableItem = ({
                       e.stopPropagation();
                       handleCancelEdit();
                     }}
-                    type="button">
+                    type="button"
+                  >
                     Cancel
                   </Button>
                   <Button
@@ -708,7 +736,8 @@ const SortableItem = ({
                     }}
                     disabled={
                       !watchedStateName?.trim() || editApprovers.length === 0
-                    }>
+                    }
+                  >
                     Save Changes
                   </Button>
                 </Flex>
@@ -721,7 +750,8 @@ const SortableItem = ({
       <Modal
         ariaLabel="Delete State"
         open={deleteOpen}
-        onClose={() => setDeleteOpen(false)}>
+        onClose={() => setDeleteOpen(false)}
+      >
         <ConfirmDelete
           setOpen={() => setDeleteOpen(false)}
           onConfirmDelete={() => onDeleteState()}

@@ -32,7 +32,8 @@ const AnimatedButton = ({
       w="100%"
       p="md"
       style={{ transition: 'all 0.3s ease' }}
-      onClick={() => !disabled && onClick()}>
+      onClick={() => !disabled && onClick()}
+    >
       <Flex className="icon" mr="sm" w="20px" h="20px" mt="2px">
         {children || <Icon size={20} />}
       </Flex>

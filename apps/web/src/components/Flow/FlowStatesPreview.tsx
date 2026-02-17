@@ -43,14 +43,16 @@ const FlowStatesPreview: React.FC<FlowStatesPreviewProps> = ({
       flexShrink={0}
       borderLeft="1px solid"
       borderColor="border"
-      bg="background-primary">
+      bg="background-primary"
+    >
       {/* Header */}
       <Box px="lg" py="lg" borderBottom="1px solid" borderColor="border">
         <Text
           fontSize="xs"
           fontWeight="600"
           color="text-secondary"
-          style={{ textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+          style={{ textTransform: 'uppercase', letterSpacing: '0.05em' }}
+        >
           Flow States
         </Text>
         {flowName && (
@@ -58,7 +60,8 @@ const FlowStatesPreview: React.FC<FlowStatesPreviewProps> = ({
             fontSize="sm2"
             fontWeight="heading"
             color="text-primary"
-            mt="xs">
+            mt="xs"
+          >
             {flowName}
           </Text>
         )}
@@ -81,13 +84,15 @@ const FlowStatesPreview: React.FC<FlowStatesPreviewProps> = ({
                 key={state.id}
                 direction="row"
                 alignItems="stretch"
-                style={{ position: 'relative' }}>
+                style={{ position: 'relative' }}
+              >
                 {/* Indicator column */}
                 <Flex
                   direction="column"
                   alignItems="center"
                   flexShrink={0}
-                  style={{ width: 24 }}>
+                  style={{ width: 24 }}
+                >
                   {/* Circle */}
                   <Flex
                     w="24px"
@@ -100,12 +105,14 @@ const FlowStatesPreview: React.FC<FlowStatesPreviewProps> = ({
                     style={{
                       border: '2px solid',
                       borderColor: typeCssColor,
-                    }}>
+                    }}
+                  >
                     <Text
                       fontSize="xs"
                       fontWeight="heading"
                       color="text-primary"
-                      style={{ lineHeight: 1 }}>
+                      style={{ lineHeight: 1 }}
+                    >
                       {index + 1}
                     </Text>
                   </Flex>
@@ -129,7 +136,8 @@ const FlowStatesPreview: React.FC<FlowStatesPreviewProps> = ({
                     fontSize="sm"
                     fontWeight="heading"
                     color="text-primary"
-                    style={{ lineHeight: 1.2 }}>
+                    style={{ lineHeight: 1.2 }}
+                  >
                     {state.state}
                   </Text>
                   {typeConfig && (
@@ -142,7 +150,8 @@ const FlowStatesPreview: React.FC<FlowStatesPreviewProps> = ({
                       py="xxs"
                       borderRadius="sm"
                       mt="xxs"
-                      style={{ display: 'inline-block' }}>
+                      style={{ display: 'inline-block' }}
+                    >
                       {typeConfig.label}
                     </Text>
                   )}

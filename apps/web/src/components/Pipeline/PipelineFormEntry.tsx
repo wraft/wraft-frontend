@@ -180,7 +180,8 @@ const PipelineFormEntry: React.FC<PipelineFormEntryProps> = ({
       <Flex
         alignItems="center"
         justifyContent="center"
-        style={{ height: '100vh' }}>
+        style={{ height: '100vh' }}
+      >
         <Spinner size={32} />
       </Flex>
     );
@@ -206,7 +207,8 @@ const PipelineFormEntry: React.FC<PipelineFormEntryProps> = ({
           justifyContent="center"
           py="xl"
           direction="column"
-          gap="md">
+          gap="md"
+        >
           <Text fontSize="lg">No form fields available</Text>
           <Text color="text-secondary">
             This form has no fields configured.
@@ -222,7 +224,8 @@ const PipelineFormEntry: React.FC<PipelineFormEntryProps> = ({
           <Field
             label={field.name}
             required={field.required}
-            error={errors[field.id]?.message as string}>
+            error={errors[field.id]?.message as string}
+          >
             <>
               {field.type === 'Text' && (
                 <Controller
@@ -285,7 +288,8 @@ const PipelineFormEntry: React.FC<PipelineFormEntryProps> = ({
       as="form"
       h="100vh"
       direction="column"
-      onSubmit={handleSubmit(handleFormSubmit)}>
+      onSubmit={handleSubmit(handleFormSubmit)}
+    >
       <Drawer.Header>
         <Drawer.Title>{formName}</Drawer.Title>
         <X
@@ -303,13 +307,15 @@ const PipelineFormEntry: React.FC<PipelineFormEntryProps> = ({
         <Button
           onClick={handleSubmit(handleFormSubmit)}
           loading={isSubmitting}
-          disabled={isFieldsLoading || fields.length === 0}>
+          disabled={isFieldsLoading || fields.length === 0}
+        >
           Run
         </Button>
         <Button
           variant="secondary"
           onClick={handleClearForm}
-          disabled={isSubmitting || isFieldsLoading || fields.length === 0}>
+          disabled={isSubmitting || isFieldsLoading || fields.length === 0}
+        >
           Clear
         </Button>
       </Flex>

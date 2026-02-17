@@ -409,7 +409,8 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
         as="form"
         h="100vh"
         direction="column"
-        onSubmit={handleSubmit(onSubmit)}>
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <Box flexShrink="0">
           <Drawer.Header>
             <Drawer.Title>
@@ -433,7 +434,8 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
             <Field
               label="Flow Name"
               required
-              error={errors?.name?.message as string}>
+              error={errors?.name?.message as string}
+            >
               <InputText
                 {...register('name')}
                 placeholder="Enter a Flow Name"
@@ -456,7 +458,8 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
                 e.preventDefault();
                 e.stopPropagation();
                 AddState();
-              }}>
+              }}
+            >
               <AddIcon width={14} height={14} />
               <Text>Add Flow Step</Text>
             </Button>
@@ -474,7 +477,8 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
                 } else {
                   next();
                 }
-              }}>
+              }}
+            >
               Next
             </Button>
           )}

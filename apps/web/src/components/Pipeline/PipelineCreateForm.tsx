@@ -106,7 +106,8 @@ const PipelineCreateForm = ({
       as="form"
       h="100vh"
       direction="column"
-      onSubmit={handleSubmit(createPipeline)}>
+      onSubmit={handleSubmit(createPipeline)}
+    >
       <Drawer.Header>
         <Drawer.Title>Create Pipeline</Drawer.Title>
         <X
@@ -122,7 +123,8 @@ const PipelineCreateForm = ({
           <Field
             label="Pipeline Name"
             required
-            error={errors.pipelinename?.message as string}>
+            error={errors.pipelinename?.message as string}
+          >
             <Input {...register('pipelinename')} placeholder="Pipeline Name" />
           </Field>
           <Box>
@@ -133,7 +135,8 @@ const PipelineCreateForm = ({
                 <Field
                   label="Source"
                   required
-                  error={errors.pipeline_source?.message as string}>
+                  error={errors.pipeline_source?.message as string}
+                >
                   <Select
                     {...field}
                     options={SOURCETYPES}
@@ -152,7 +155,8 @@ const PipelineCreateForm = ({
                 <Field
                   label="Choose Form"
                   required
-                  error={errors?.pipeline_form?.message as string}>
+                  error={errors?.pipeline_form?.message as string}
+                >
                   <Search
                     itemToString={(item: any) => item && item.name}
                     name={name}
@@ -183,7 +187,8 @@ const PipelineCreateForm = ({
           type="button"
           onClick={handleSubmit(createPipeline)}
           variant="primary"
-          loading={isLoading}>
+          loading={isLoading}
+        >
           Create
         </Button>
       </Flex>

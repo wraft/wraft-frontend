@@ -189,7 +189,8 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
                     <DropdownMenu.Item
                       onClick={() => {
                         setDeleteFlow(row.index);
-                      }}>
+                      }}
+                    >
                       Delete
                     </DropdownMenu.Item>
                   </DropdownMenu>
@@ -199,7 +200,8 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
             <Modal
               ariaLabel="Delete Flow"
               open={deleteFlow === row.index}
-              onClose={() => setDeleteFlow(null)}>
+              onClose={() => setDeleteFlow(null)}
+            >
               {
                 <ConfirmDelete
                   title="Delete Flow"

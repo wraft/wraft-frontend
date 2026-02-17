@@ -699,7 +699,8 @@ const FormsFrom: React.FC<FormsFromProps> = ({
         <DndContext
           sensors={sensors}
           collisionDetection={closestCenter}
-          onDragEnd={handleDragEnd}>
+          onDragEnd={handleDragEnd}
+        >
           {!items || items.length === 0 ? (
             <Flex
               direction="column"
@@ -710,12 +711,14 @@ const FormsFrom: React.FC<FormsFromProps> = ({
               border="1px solid"
               borderColor="border"
               borderRadius="sm"
-              h="200px">
+              h="200px"
+            >
               <Text
                 fontSize="lg"
                 fontWeight="heading"
                 mb="sm"
-                textAlign="center">
+                textAlign="center"
+              >
                 No form fields added yet
               </Text>
               <Text color="text-secondary" fontSize="sm" textAlign="center">
@@ -854,13 +857,15 @@ const FormFieldItem: React.FC<FormFieldItemDragProps> = ({
       bg="background-primary"
       border="1px solid"
       borderRadius="sm"
-      borderColor={item.error ? 'error' : 'border'}>
+      borderColor={item.error ? 'error' : 'border'}
+    >
       <Flex justify="space-between" align="center" mb="md">
         <Flex align="center" gap="sm">
           <Box
             cursor="grab"
             {...dragHandleProps.attributes}
-            {...dragHandleProps.listeners}>
+            {...dragHandleProps.listeners}
+          >
             <DotsSixVertical size={20} />
           </Box>
           <Flex align="center" gap="xs">
@@ -893,7 +898,8 @@ const FormFieldItem: React.FC<FormFieldItemDragProps> = ({
         label="Field Label"
         error={item.error}
         required={true}
-        hint="First letter must be uppercase and name must be unique">
+        hint="First letter must be uppercase and name must be unique"
+      >
         <Input
           placeholder="Enter field Label"
           value={item.name}
@@ -969,7 +975,8 @@ const OptionsSection: React.FC<OptionsSectionProps> = ({
       <Button
         variant="secondary"
         onClick={() => onAddOption(item.id)}
-        style={{ width: '100%', marginTop: '16px' }}>
+        style={{ width: '100%', marginTop: '16px' }}
+      >
         <Flex align="center">
           <Plus size={20} color="currentColor" />
           <Text ml="sm">Add Option</Text>
@@ -1056,7 +1063,8 @@ const FormElementsPanel: React.FC<FormElementsPanelProps> = ({
       w="300px"
       mr="md"
       py="lg"
-      px="lg">
+      px="lg"
+    >
       <Text fontSize="xl" fontWeight="heading">
         Form Elements
       </Text>
@@ -1125,7 +1133,8 @@ const DraggableValues: React.FC<DraggableValuesProps> = ({
     <DndContext
       sensors={sensors}
       collisionDetection={closestCenter}
-      onDragEnd={handleDragEnd}>
+      onDragEnd={handleDragEnd}
+    >
       <SortableContext items={item.values} strategy={rectSortingStrategy}>
         <Flex direction="column" gap="sm">
           {item.values.map((value) => (
@@ -1182,7 +1191,8 @@ const SortableItem = React.memo<SortableItemProps>(
         style={{
           transform: transformStyle,
           transition: transition,
-        }}>
+        }}
+      >
         <Box
           ref={setNodeRef}
           {...attributes}
@@ -1190,7 +1200,8 @@ const SortableItem = React.memo<SortableItemProps>(
           cursor="pointer"
           flexShrink={0}
           color="text-secondary"
-          p="md">
+          p="md"
+        >
           <DragIcon />
         </Box>
         <Input

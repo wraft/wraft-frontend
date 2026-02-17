@@ -138,7 +138,8 @@ const Form = () => {
                   }}
                   variant="secondary"
                   size="sm"
-                  disabled={row.original.stages_count == 0}>
+                  disabled={row.original.stages_count == 0}
+                >
                   <IconFrame color="gray.800" mr="xs">
                     {' '}
                     <PlayIcon size={12} />
@@ -160,7 +161,8 @@ const Form = () => {
           <Button
             variant="secondary"
             size="sm"
-            onClick={() => setIsCreatePipelineDrawerOpen(true)}>
+            onClick={() => setIsCreatePipelineDrawerOpen(true)}
+          >
             Add Pipeline
           </Button>
         )}
@@ -182,7 +184,8 @@ const Form = () => {
                 <Button
                   onClick={() => setIsCreatePipelineDrawerOpen(true)}
                   variant="secondary"
-                  size="sm">
+                  size="sm"
+                >
                   <IconFrame color="gray.800" mr="xs">
                     {' '}
                     <TreeStructureIcon size={12} />
@@ -209,7 +212,8 @@ const Form = () => {
         open={isCreatePipelineDrawerOpen}
         store={mobileMenuDrawer}
         withBackdrop={true}
-        onClose={() => setIsCreatePipelineDrawerOpen(false)}>
+        onClose={() => setIsCreatePipelineDrawerOpen(false)}
+      >
         {isCreatePipelineDrawerOpen && (
           <PipelineCreateForm
             setIsOpen={setIsCreatePipelineDrawerOpen}

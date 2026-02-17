@@ -195,7 +195,8 @@ const PipelineSteps: React.FC<PipelineStepsProps> = ({
             display="inline-flex"
             px="sm"
             borderRadius="sm"
-            bg={isConfigComplete ? 'primary' : '#ffcc02'}>
+            bg={isConfigComplete ? 'primary' : '#ffcc02'}
+          >
             <Text fontSize="sm" color="white">
               {isConfigComplete ? 'Complete' : 'Incomplete'}
             </Text>
@@ -218,7 +219,8 @@ const PipelineSteps: React.FC<PipelineStepsProps> = ({
                   row.original.data_template?.title || '',
                   row.original.data_template?.id || '',
                 )
-              }>
+              }
+            >
               {hasPermission('pipeline', 'manage') && (
                 <IconFrame color="gray.1100">
                   <Pencil size={18} />
@@ -267,7 +269,8 @@ const PipelineSteps: React.FC<PipelineStepsProps> = ({
         open={isStageFormOpen}
         store={stageFormDrawer}
         withBackdrop={true}
-        onClose={() => setIsStageFormOpen(false)}>
+        onClose={() => setIsStageFormOpen(false)}
+      >
         {isStageFormOpen && (
           <PipelineStageForm
             setIsOpen={setIsStageFormOpen}

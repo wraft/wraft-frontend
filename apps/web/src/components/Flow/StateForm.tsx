@@ -186,7 +186,8 @@ const StateForm = ({
           <Field
             label="State Name"
             required
-            error={errors?.state?.message as string}>
+            error={errors?.state?.message as string}
+          >
             <InputText
               {...register('state', { required: 'State name is required' })}
               placeholder="Enter state name"
@@ -212,7 +213,8 @@ const StateForm = ({
                   <Field
                     label="State Type"
                     required
-                    error={errors?.type?.message as string}>
+                    error={errors?.type?.message as string}
+                  >
                     <Select
                       name={name}
                       value={selectedOption || null}
@@ -270,7 +272,8 @@ const StateForm = ({
               border="1px solid"
               borderColor="border"
               borderRadius="md"
-              overflow="hidden">
+              overflow="hidden"
+            >
               {approvers.map((approver, idx) => (
                 <Flex
                   key={approver.id}
@@ -281,7 +284,8 @@ const StateForm = ({
                   borderBottom={
                     idx < approvers.length - 1 ? '1px solid' : 'none'
                   }
-                  borderBottomColor="border">
+                  borderBottomColor="border"
+                >
                   <Flex alignItems="center" gap="sm">
                     <Avatar
                       size="xs"
@@ -291,7 +295,8 @@ const StateForm = ({
                     <Text
                       fontSize="md"
                       fontWeight="medium"
-                      color="text.primary">
+                      color="text.primary"
+                    >
                       {approver.name}
                     </Text>
                   </Flex>
@@ -299,7 +304,8 @@ const StateForm = ({
                     onClick={() => onRemoveUser(approver)}
                     cursor="pointer"
                     p="1"
-                    borderRadius="4px">
+                    borderRadius="4px"
+                  >
                     <DeleteIcon width={16} height={16} color="error.500" />
                   </Box>
                 </Flex>
@@ -313,7 +319,8 @@ const StateForm = ({
               borderRadius="md"
               p="xl"
               textAlign="center"
-              bg="gray.50">
+              bg="gray.50"
+            >
               <Text color="text.secondary" fontSize="sm">
                 No assignees added yet
               </Text>
@@ -325,7 +332,8 @@ const StateForm = ({
               variant="secondary"
               type="button"
               onClick={onClose}
-              disabled={loading}>
+              disabled={loading}
+            >
               Cancel
             </Button>
             <Button type="submit" disabled={loading}>

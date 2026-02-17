@@ -383,7 +383,8 @@ const FlowViewForm = () => {
         display="flex"
         alignItems="center"
         justifyContent="center"
-        minH="400px">
+        minH="400px"
+      >
         <Text fontSize="lg" color="text.secondary">
           Loading flow data...
         </Text>
@@ -402,7 +403,8 @@ const FlowViewForm = () => {
         borderRadius="lg"
         border="1px solid"
         borderColor="error.200"
-        textAlign="center">
+        textAlign="center"
+      >
         <Text fontSize="lg" color="error.600" mb="md">
           {error}
         </Text>
@@ -443,7 +445,8 @@ const FlowViewForm = () => {
               borderRadius="md"
               mb="md"
               border="1px solid"
-              borderColor="border">
+              borderColor="border"
+            >
               <Flex alignItems="center" gap="sm">
                 <Text fontSize="xs" color="text.secondary" fontWeight="medium">
                   Version {activeVersion.version_number}
@@ -454,7 +457,8 @@ const FlowViewForm = () => {
                     color="orange.700"
                     px="sm"
                     py="xs"
-                    borderRadius="sm">
+                    borderRadius="sm"
+                  >
                     <Text fontSize="xs" fontWeight="medium">
                       Draft
                     </Text>
@@ -465,7 +469,8 @@ const FlowViewForm = () => {
                     color="green.700"
                     px="sm"
                     py="xs"
-                    borderRadius="sm">
+                    borderRadius="sm"
+                  >
                     <Text fontSize="xs" fontWeight="medium">
                       Published
                     </Text>
@@ -485,7 +490,8 @@ const FlowViewForm = () => {
                       {versions.map((v) => (
                         <DropdownMenu.Item
                           key={v.id}
-                          onClick={() => switchVersion(v.id)}>
+                          onClick={() => switchVersion(v.id)}
+                        >
                           v{v.version_number} — {v.status}
                           {v.id === activeVersion?.id ? ' (viewing)' : ''}
                         </DropdownMenu.Item>
@@ -498,7 +504,8 @@ const FlowViewForm = () => {
                   <Button
                     variant="secondary"
                     size="xs"
-                    onClick={handleCreateDraft}>
+                    onClick={handleCreateDraft}
+                  >
                     + New Version
                   </Button>
                 )}
@@ -529,7 +536,8 @@ const FlowViewForm = () => {
                     variant="primary"
                     size="sm"
                     onClick={handleSave}
-                    disabled={!hasChanges}>
+                    disabled={!hasChanges}
+                  >
                     Save Changes
                   </Button>
                 )}
@@ -537,7 +545,8 @@ const FlowViewForm = () => {
                   <Button
                     variant="secondary"
                     size="sm"
-                    onClick={handleEditModeToggle}>
+                    onClick={handleEditModeToggle}
+                  >
                     {isEditMode ? (
                       <>
                         <IconFrame color="gray.800" mr="xs">
@@ -571,7 +580,8 @@ const FlowViewForm = () => {
                       variant="secondary"
                       size="sm"
                       type="button"
-                      onClick={addNewState}>
+                      onClick={addNewState}
+                    >
                       + Add New State
                     </Button>
                   </Box>
@@ -582,14 +592,16 @@ const FlowViewForm = () => {
                   borderColor="border"
                   borderRadius="md"
                   overflow="hidden"
-                  bg="background-primary">
+                  bg="background-primary"
+                >
                   {/* Table Header */}
                   <Box
                     bg="gray.50"
                     borderBottom="1px solid"
                     borderColor="border"
                     px="md"
-                    py="sm">
+                    py="sm"
+                  >
                     <Flex alignItems="center" gap="md">
                       <Box w="50px" textAlign="center">
                         <Text
@@ -597,7 +609,8 @@ const FlowViewForm = () => {
                           fontWeight="semibold"
                           color="text.secondary"
                           textTransform="uppercase"
-                          letterSpacing="0.5px">
+                          letterSpacing="0.5px"
+                        >
                           #
                         </Text>
                       </Box>
@@ -607,7 +620,8 @@ const FlowViewForm = () => {
                           fontWeight="semibold"
                           color="text.secondary"
                           textTransform="uppercase"
-                          letterSpacing="0.5px">
+                          letterSpacing="0.5px"
+                        >
                           State Name
                         </Text>
                       </Box>
@@ -617,7 +631,8 @@ const FlowViewForm = () => {
                           fontWeight="semibold"
                           color="text.secondary"
                           textTransform="uppercase"
-                          letterSpacing="0.5px">
+                          letterSpacing="0.5px"
+                        >
                           Type
                         </Text>
                       </Box>
@@ -627,7 +642,8 @@ const FlowViewForm = () => {
                           fontWeight="semibold"
                           color="text.secondary"
                           textTransform="uppercase"
-                          letterSpacing="0.5px">
+                          letterSpacing="0.5px"
+                        >
                           Assignees
                         </Text>
                       </Box>
@@ -637,7 +653,8 @@ const FlowViewForm = () => {
                           fontWeight="semibold"
                           color="text.secondary"
                           textTransform="uppercase"
-                          letterSpacing="0.5px">
+                          letterSpacing="0.5px"
+                        >
                           Actions
                         </Text>
                       </Box>
@@ -681,7 +698,8 @@ const FlowViewForm = () => {
                           }
                           borderColor="border"
                           bg={isEven ? 'background-primary' : 'gray.25'}
-                          transition="all 0.15s ease">
+                          transition="all 0.15s ease"
+                        >
                           <Flex alignItems="center" gap="md" px="md" py="sm">
                             {/* Step Number */}
                             <Box w="50px" textAlign="center">
@@ -694,7 +712,8 @@ const FlowViewForm = () => {
                                 display="flex"
                                 alignItems="center"
                                 justifyContent="center"
-                                mx="auto">
+                                mx="auto"
+                              >
                                 <Text fontSize="xs" fontWeight="bold">
                                   {index + 1}
                                 </Text>
@@ -710,7 +729,8 @@ const FlowViewForm = () => {
                                 color="text.primary"
                                 overflow="hidden"
                                 textOverflow="ellipsis"
-                                whiteSpace="nowrap">
+                                whiteSpace="nowrap"
+                              >
                                 {item.state}
                               </Text>
                             </Box>
@@ -723,11 +743,13 @@ const FlowViewForm = () => {
                                 borderRadius="sm"
                                 px="sm"
                                 py="xs"
-                                display="inline-block">
+                                display="inline-block"
+                              >
                                 <Text
                                   fontSize="xs"
                                   fontWeight="medium"
-                                  textTransform="capitalize">
+                                  textTransform="capitalize"
+                                >
                                   {config.label}
                                 </Text>
                               </Box>
@@ -739,14 +761,16 @@ const FlowViewForm = () => {
                                 <Flex
                                   alignItems="center"
                                   gap="sm"
-                                  flexWrap="wrap">
+                                  flexWrap="wrap"
+                                >
                                   {item.approvers
                                     .slice(0, 3)
                                     .map((approver: any) => (
                                       <Flex
                                         key={approver.id}
                                         alignItems="center"
-                                        gap="xs">
+                                        gap="xs"
+                                      >
                                         <Avatar
                                           size="xs"
                                           src={approver.profile_pic}
@@ -767,7 +791,8 @@ const FlowViewForm = () => {
                                 <Text
                                   fontSize="xs"
                                   color="text.secondary"
-                                  fontStyle="italic">
+                                  fontStyle="italic"
+                                >
                                   Unassigned
                                 </Text>
                               )}
@@ -783,7 +808,8 @@ const FlowViewForm = () => {
                                   e.preventDefault();
                                   e.stopPropagation();
                                   editState(item);
-                                }}>
+                                }}
+                              >
                                 Edit
                               </Button>
                             </Box>
@@ -801,12 +827,14 @@ const FlowViewForm = () => {
                 p="lg"
                 textAlign="center"
                 border="1px dashed"
-                borderColor="border">
+                borderColor="border"
+              >
                 <Text
                   fontSize="sm"
                   color="text.secondary"
                   mb="xs"
-                  fontWeight="medium">
+                  fontWeight="medium"
+                >
                   No workflow states configured
                 </Text>
                 <Text fontSize="xs" color="text.secondary">
@@ -823,7 +851,8 @@ const FlowViewForm = () => {
             mt="lg"
             pt="md"
             borderTop="1px solid"
-            borderColor="border">
+            borderColor="border"
+          >
             <Text fontSize="xs" color="text.secondary">
               Last updated:{' '}
               {flow?.updated_at
@@ -839,7 +868,8 @@ const FlowViewForm = () => {
         store={stateDrawer}
         aria-label="field drawer"
         withBackdrop={true}
-        onClose={() => setIsOpen(false)}>
+        onClose={() => setIsOpen(false)}
+      >
         {isOpen && <FlowForm setOpen={setIsOpen} setRerender={setRerender} />}
       </Drawer>
 
@@ -848,7 +878,8 @@ const FlowViewForm = () => {
         store={stateFormDrawer}
         aria-label="state form drawer"
         withBackdrop={true}
-        onClose={handleCloseStateForm}>
+        onClose={handleCloseStateForm}
+      >
         {isStateFormOpen && flowId && (
           <StateForm
             flowId={flowId}
