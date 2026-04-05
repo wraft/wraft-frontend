@@ -36,6 +36,16 @@ export const InputText = styled("input")<
   ${system}
 `;
 
+export const PrefixWrapper = styled.div`
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  z-index: 1;
+`;
+
 export const Wrapper = styled.div`
   position: relative;
 `;

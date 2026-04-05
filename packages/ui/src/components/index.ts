@@ -25,3 +25,4 @@ export { Toggle } from "./Toggle";
 export { Disclosure, useDisclosure } from "./Disclosure";
 export { default as Pagination } from "./Paginate";
 export { default as ErrorBoundary } from "./ErrorBoundary";
+export { Tag } from "./Tag";

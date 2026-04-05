@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useEffect, useState } from "react";
 
 import { CreateWuiProps, forwardRef } from "@/system";
 import { DefaultFieldStylesProps, FIELD_ICON_SIZE } from "@/utils";
@@ -23,6 +23,7 @@ export interface InputTextOptions extends DefaultFieldStylesProps {
   type?: string;
   value?: string;
   transparent?: boolean;
+  prefixElement?: React.ReactNode;
 }
 
 export type InputTextProps = CreateWuiProps<"input", InputTextOptions>;
@@ -48,16 +49,31 @@ export const InputText = forwardRef<"input", InputTextProps>(
       type = "text",
       value,
       variant,
+      prefixElement,
       ...rest
     },
     ref,
   ) => {
+    const prefixRef = useRef<HTMLDivElement>(null);
+    const [prefixWidth, setPrefixWidth] = useState(0);
+
+    useEffect(() => {
+      if (prefixRef.current) {
+        setPrefixWidth(prefixRef.current.offsetWidth);
+      } else {
+        setPrefixWidth(0);
+      }
+    }, [prefixElement]);
+
     const hasClearButtonAndRightIcon = isClearable && iconPlacement === "right";
     const hasIcon = icon && iconPlacement;
     const iconSize = FIELD_ICON_SIZE[size];
 
     return (
       <S.Wrapper>
+        {prefixElement && (
+          <S.PrefixWrapper ref={prefixRef}>{prefixElement}</S.PrefixWrapper>
+        )}
         <S.InputText
           autoFocus={autoFocus}
           autoComplete={autocomplete}
@@ -73,6 +89,11 @@ export const InputText = forwardRef<"input", InputTextProps>(
           placeholder={placeholder}
           ref={ref}
           size={size}
+          style={{
+            paddingLeft:
+              prefixWidth > 0 ? `calc(${prefixWidth}px + 16px)` : undefined,
+            ...rest.style,
+          }}
           transparent={transparent}
           type={type}
           value={value}

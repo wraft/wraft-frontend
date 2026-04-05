@@ -6,7 +6,7 @@ import React, {
   useMemo,
 } from 'react';
 import { useRouter } from 'next/router';
-import { Box, Flex, Text, InputText, Spinner } from '@wraft/ui';
+import { Box, Flex, Text, InputText, Spinner, Tag } from '@wraft/ui';
 import styled from '@emotion/styled';
 import {
   MagnifyingGlassIcon,
@@ -19,6 +19,7 @@ import {
   LightningIcon,
   XIcon,
   ArrowRightIcon,
+  PlusIcon,
 } from '@phosphor-icons/react';
 
 import { fetchAPI } from 'utils/models';
@@ -41,6 +42,21 @@ interface RecentItem {
   type: string;
   updatedAt: string;
 }
+
+interface ContextOption {
+  id: string;
+  name: string;
+  type: 'module' | 'variant';
+  prefix?: string;
+  color?: string;
+}
+
+const STATIC_MODULES: ContextOption[] = [
+  { id: 'forms', name: 'Forms', type: 'module' },
+  { id: 'pipelines', name: 'Pipelines', type: 'module' },
+  { id: 'flows', name: 'Flows', type: 'module' },
+  { id: 'templates', name: 'Templates', type: 'module' },
+];
 
 interface QuickActionBarProps {
   isOpen: boolean;
@@ -126,6 +142,11 @@ const KbdKey = styled(Text)`
   line-height: 1;
 `;
 
+const InputWrapper = styled(Box)<{ isShifted?: boolean }>`
+  transition: padding-left 150ms ease-out;
+  padding-left: ${({ isShifted }) => (isShifted ? '8px' : '0')};
+`;
+
 // ─── Component ──────────────────────────────────────────────
 const QuickActionBar = ({ isOpen, onClose }: QuickActionBarProps) => {
   const [query, setQuery] = useState('');
@@ -139,12 +160,20 @@ const QuickActionBar = ({ isOpen, onClose }: QuickActionBarProps) => {
   const [recentItems, setRecentItems] = useState<RecentItem[]>([]);
   const [loadingRecent, setLoadingRecent] = useState(false);
 
+  // Context State
+  const [activeContext, setActiveContext] = useState<ContextOption | null>(
+    null,
+  );
+  const [contentTypes, setContentTypes] = useState<ContextOption[]>([]);
+  const [contextItems, setContextItems] = useState<any[]>([]);
+  const [loadingContextItems, setLoadingContextItems] = useState(false);
+
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const setNewContent = contentStore((state) => state.addNewContent);
 
-  // Select a template: store it and navigate to the editor
+  // ─── Select Template ────────────────────────────────────
   const selectTemplate = useCallback(
     (template: any) => {
       setNewContent({ id: template.id, template });
@@ -220,16 +249,25 @@ const QuickActionBar = ({ isOpen, onClose }: QuickActionBarProps) => {
     [onClose, router],
   );
 
-  // ─── Filter actions by query ────────────────────────────
-  const filteredActions = useMemo(() => {
-    if (!query.trim()) return quickActions;
-    const q = query.toLowerCase();
-    return quickActions.filter(
-      (a) =>
-        a.label.toLowerCase().includes(q) ||
-        a.description.toLowerCase().includes(q),
-    );
-  }, [query, quickActions]);
+  // ─── Load content types ──────────────────────────────────
+  const loadContentTypes = useCallback(async () => {
+    try {
+      const data: any = await fetchAPI('content_types?page=1&per_page=100');
+      if (data?.content_types) {
+        setContentTypes(
+          data.content_types.map((ct: any) => ({
+            id: ct.id,
+            name: ct.name,
+            type: 'variant',
+            prefix: ct.prefix,
+            color: ct.color,
+          })),
+        );
+      }
+    } catch {
+      setContentTypes([]);
+    }
+  }, []);
 
   // ─── Load recent documents ──────────────────────────────
   const loadRecentItems = useCallback(async () => {
@@ -292,25 +330,72 @@ const QuickActionBar = ({ isOpen, onClose }: QuickActionBarProps) => {
     }
   }, []);
 
+  // ─── Context Items Effect ───────────────────────────────
+  useEffect(() => {
+    if (!activeContext) return;
+    let isCancelled = false;
+
+    const fetchContextData = async () => {
+      setLoadingContextItems(true);
+      try {
+        if (activeContext.type === 'variant') {
+          const data: any = await fetchAPI(
+            `data_templates?page=1&sort=updated_at_desc&per_page=8&content_type_id=${activeContext.id}`,
+          );
+          if (!isCancelled && data?.data_templates) {
+            setContextItems(data.data_templates);
+          }
+        } else if (activeContext.id === 'pipelines') {
+          const data: any = await fetchAPI(
+            'pipelines?sort=inserted_at_desc&page=1',
+          );
+          if (!isCancelled && data?.pipelines) {
+            setContextItems(data.pipelines);
+          }
+        } else if (activeContext.id === 'templates') {
+          const data: any = await fetchAPI(
+            `data_templates?page=1&sort=updated_at_desc&per_page=8`,
+          );
+          if (!isCancelled && data?.data_templates) {
+            setContextItems(data.data_templates);
+          }
+        } else {
+          if (!isCancelled) setContextItems([]);
+        }
+      } catch {
+        if (!isCancelled) setContextItems([]);
+      } finally {
+        if (!isCancelled) setLoadingContextItems(false);
+      }
+    };
+
+    fetchContextData();
+    return () => {
+      isCancelled = true;
+    };
+  }, [activeContext]);
+
   // ─── Effects ────────────────────────────────────────────
   useEffect(() => {
     if (isOpen) {
       setQuery('');
+      setActiveContext(null);
       setActiveIndex(0);
       setShowTemplates(false);
       setShowPipelines(false);
       loadRecentItems();
+      loadContentTypes();
       setTimeout(() => inputRef.current?.focus(), 50);
     }
-  }, [isOpen, loadRecentItems]);
+  }, [isOpen, loadRecentItems, loadContentTypes]);
 
   // Reset active index on filter change
   useEffect(() => {
     setActiveIndex(0);
-  }, [query, showTemplates, showPipelines]);
+  }, [query, showTemplates, showPipelines, activeContext]);
 
   // ─── Subview state helpers ───────────────────────────────
-  const isSubView = showTemplates || showPipelines;
+  const isSubView = showTemplates || showPipelines || !!activeContext;
 
   const filteredPipelines = useMemo(() => {
     if (!query.trim()) return pipelines;
@@ -318,21 +403,64 @@ const QuickActionBar = ({ isOpen, onClose }: QuickActionBarProps) => {
     return pipelines.filter((p: any) => p.name?.toLowerCase().includes(q));
   }, [query, pipelines]);
 
+  // ─── Context Options ────────────────────────────────────
+  const contextOptions = useMemo(() => {
+    if (activeContext || !query.trim()) return [];
+    const q = query.toLowerCase();
+    const allContexts = [...STATIC_MODULES, ...contentTypes];
+    return allContexts.filter(
+      (c) =>
+        c.name.toLowerCase().includes(q) ||
+        (c.prefix && c.prefix.toLowerCase().includes(q)),
+    );
+  }, [query, activeContext, contentTypes]);
+
+  const filteredActions = useMemo(() => {
+    if (!query.trim()) return quickActions;
+    const q = query.toLowerCase();
+    return quickActions.filter(
+      (a) =>
+        a.label.toLowerCase().includes(q) ||
+        a.description.toLowerCase().includes(q),
+    );
+  }, [query, quickActions]);
+
+  const filteredContextItems = useMemo(() => {
+    if (!query.trim()) return contextItems;
+    const q = query.toLowerCase();
+    return contextItems.filter((item) => {
+      const title = item.title || item.name || '';
+      return title.toLowerCase().includes(q);
+    });
+  }, [query, contextItems]);
+
   // ─── Total item count for keyboard nav ──────────────────
-  const totalItems = showTemplates
-    ? templates.filter(
-        (t) =>
-          !query.trim() || t.title.toLowerCase().includes(query.toLowerCase()),
-      ).length
-    : showPipelines
-      ? filteredPipelines.length
-      : filteredActions.length + recentItems.length;
+  const totalItems = activeContext
+    ? 1 + filteredContextItems.length
+    : showTemplates
+      ? templates.filter(
+          (t) =>
+            !query.trim() ||
+            t.title.toLowerCase().includes(query.toLowerCase()),
+        ).length
+      : showPipelines
+        ? filteredPipelines.length
+        : contextOptions.length +
+          filteredActions.length +
+          (query.trim() ? 0 : recentItems.length);
 
   // ─── Keyboard navigation ────────────────────────────────
   const goBackToActions = useCallback(() => {
     setShowTemplates(false);
     setShowPipelines(false);
+    setActiveContext(null);
     setQuery('');
+  }, []);
+
+  const handleContextSelect = useCallback((context: ContextOption) => {
+    setActiveContext(context);
+    setQuery('');
+    setActiveIndex(0);
   }, []);
 
   const handleKeyDown = useCallback(
@@ -343,6 +471,12 @@ const QuickActionBar = ({ isOpen, onClose }: QuickActionBarProps) => {
         } else {
           onClose();
         }
+        return;
+      }
+
+      if (e.key === 'Backspace' && query === '' && activeContext) {
+        e.preventDefault();
+        goBackToActions();
         return;
       }
 
@@ -361,31 +495,77 @@ const QuickActionBar = ({ isOpen, onClose }: QuickActionBarProps) => {
         return;
       }
 
-      if (e.key === 'Enter') {
+      if (e.key === 'Enter' || e.key === 'Tab') {
+        if (totalItems === 0) return;
         e.preventDefault();
+
+        if (activeContext) {
+          if (activeIndex === 0) {
+            // New Action
+            onClose();
+            if (activeContext.type === 'variant') {
+              router.push(
+                `/documents?content_type_name=${encodeURIComponent(activeContext.name)}`,
+              );
+            } else if (activeContext.id === 'pipelines') {
+              router.push('/pipelines');
+            } else if (activeContext.id === 'forms') {
+              router.push('/forms');
+            } else if (activeContext.id === 'flows') {
+              router.push('/manage/flows');
+            } else if (activeContext.id === 'templates') {
+              router.push('/templates/new');
+            }
+          } else {
+            const item = filteredContextItems[activeIndex - 1];
+            if (
+              activeContext.type === 'variant' ||
+              activeContext.id === 'templates'
+            ) {
+              selectTemplate(item);
+            } else if (activeContext.id === 'pipelines') {
+              if (item.stages_count > 0) {
+                onClose();
+                router.push(`/pipelines/run/${item.id}`);
+              }
+            }
+          }
+          return;
+        }
+
         if (showTemplates && templates[activeIndex]) {
           selectTemplate(templates[activeIndex]);
+          return;
         } else if (showPipelines && filteredPipelines[activeIndex]) {
           const p = filteredPipelines[activeIndex];
           if (p.stages_count > 0) {
             onClose();
             router.push(`/pipelines/run/${p.id}`);
           }
-        } else if (activeIndex < filteredActions.length) {
-          filteredActions[activeIndex]?.onAction();
-        } else {
-          const recentIndex = activeIndex - filteredActions.length;
-          if (recentItems[recentIndex]) {
+          return;
+        }
+
+        let currentIndex = activeIndex;
+
+        if (!activeContext && !showTemplates && !showPipelines) {
+          if (currentIndex < contextOptions.length) {
+            handleContextSelect(contextOptions[currentIndex]);
+            return;
+          }
+          currentIndex -= contextOptions.length;
+
+          if (currentIndex < filteredActions.length) {
+            filteredActions[currentIndex]?.onAction();
+            return;
+          }
+          currentIndex -= filteredActions.length;
+
+          if (!query.trim() && recentItems[currentIndex]) {
             onClose();
-            router.push(`/documents/${recentItems[recentIndex].id}`);
+            router.push(`/documents/${recentItems[currentIndex].id}`);
           }
         }
         return;
-      }
-
-      // Backspace at empty query goes back
-      if (e.key === 'Backspace' && query === '' && isSubView) {
-        goBackToActions();
       }
     },
     [
@@ -403,6 +583,10 @@ const QuickActionBar = ({ isOpen, onClose }: QuickActionBarProps) => {
       query,
       router,
       selectTemplate,
+      activeContext,
+      contextOptions,
+      handleContextSelect,
+      filteredContextItems,
     ],
   );
 
@@ -429,12 +613,33 @@ const QuickActionBar = ({ isOpen, onClose }: QuickActionBarProps) => {
     return `${days}d ago`;
   };
 
+  const contextPrefix = activeContext ? (
+    <Tag
+      variant="info"
+      size="sm"
+      onRemove={goBackToActions}
+      style={{
+        animation: 'slideRight 150ms ease-out',
+        background: activeContext.color || '#e0f2fe',
+        color: activeContext.color ? '#fff' : '#0284c7',
+        fontWeight: 600,
+      }}>
+      {activeContext.prefix || activeContext.name}
+    </Tag>
+  ) : null;
+
   // ─── Render ─────────────────────────────────────────────
   return (
     <Overlay onClick={onClose}>
       <PaletteContainer
         onClick={(e: React.MouseEvent) => e.stopPropagation()}
         onKeyDown={handleKeyDown}>
+        <style>{`
+          @keyframes slideRight {
+            from { opacity: 0; transform: translateX(-4px); }
+            to { opacity: 1; transform: translateX(0); }
+          }
+        `}</style>
         {/* Search Input */}
         <Flex
           align="center"
@@ -443,19 +648,22 @@ const QuickActionBar = ({ isOpen, onClose }: QuickActionBarProps) => {
           borderBottom="1px solid"
           borderColor="border">
           <MagnifyingGlassIcon size={16} weight="bold" />
-          <Box flex={1} py="2px">
+          <InputWrapper flex={1} py="2px" isShifted={!!activeContext}>
             <InputText
               ref={inputRef}
               value={query}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 setQuery(e.target.value)
               }
+              prefixElement={contextPrefix}
               placeholder={
-                showTemplates
-                  ? 'Search templates...'
-                  : showPipelines
-                    ? 'Search pipelines...'
-                    : 'What would you like to do?'
+                activeContext
+                  ? `Search ${activeContext.name}...`
+                  : showTemplates
+                    ? 'Search templates...'
+                    : showPipelines
+                      ? 'Search pipelines...'
+                      : 'What would you like to do?'
               }
               style={{
                 border: 'none',
@@ -465,7 +673,7 @@ const QuickActionBar = ({ isOpen, onClose }: QuickActionBarProps) => {
                 background: 'transparent',
               }}
             />
-          </Box>
+          </InputWrapper>
           {query && (
             <Flex
               as="button"
@@ -485,7 +693,155 @@ const QuickActionBar = ({ isOpen, onClose }: QuickActionBarProps) => {
 
         {/* Content area */}
         <Box ref={listRef} flex={1} overflowY="auto" maxHeight="420px" py="xs">
-          {showTemplates ? (
+          {activeContext ? (
+            /* ─── Active Context View ───────────────────── */
+            <>
+              <Flex
+                align="center"
+                gap="xs"
+                px="lg"
+                py="xs"
+                mb="xxs"
+                cursor="pointer"
+                onClick={goBackToActions}
+                sx={{ '&:hover': { opacity: 0.7 } }}>
+                <Text fontSize="xs" color="text-secondary" fontWeight="500">
+                  Clear context
+                </Text>
+              </Flex>
+
+              <ActionItem
+                key="new-action"
+                isActive={0 === activeIndex}
+                data-active={0 === activeIndex}
+                align="center"
+                gap="sm"
+                px="lg"
+                py="sm"
+                mx="xs"
+                borderRadius="md"
+                onClick={() => {
+                  onClose();
+                  if (activeContext.type === 'variant') {
+                    router.push(
+                      `/documents?content_type_name=${encodeURIComponent(activeContext.name)}`,
+                    );
+                  } else if (activeContext.id === 'pipelines') {
+                    router.push('/pipelines');
+                  } else if (activeContext.id === 'forms') {
+                    router.push('/forms');
+                  } else if (activeContext.id === 'flows') {
+                    router.push('/manage/flows');
+                  } else if (activeContext.id === 'templates') {
+                    router.push('/templates/new');
+                  }
+                }}>
+                <Flex
+                  align="center"
+                  justify="center"
+                  w="32px"
+                  h="32px"
+                  borderRadius="md"
+                  bg="green.100"
+                  flexShrink={0}
+                  color="green.900">
+                  <PlusIcon size={16} weight="bold" />
+                </Flex>
+                <Flex direction="column" flex={1} gap="1px">
+                  <Text fontSize="sm2" fontWeight="500" color="text-primary">
+                    New {activeContext.name}
+                  </Text>
+                  <Text fontSize="xs" color="text-secondary">
+                    Create a new {activeContext.name}
+                  </Text>
+                </Flex>
+                <KbdKey>↵</KbdKey>
+              </ActionItem>
+
+              {loadingContextItems ? (
+                <Flex justify="center" py="xl">
+                  <Spinner size={16} />
+                </Flex>
+              ) : (
+                filteredContextItems.map((item, i) => {
+                  const idx = i + 1;
+                  const isTemplate =
+                    activeContext.type === 'variant' ||
+                    activeContext.id === 'templates';
+                  const isPipeline = activeContext.id === 'pipelines';
+                  const title = item.title || item.name;
+
+                  return (
+                    <ActionItem
+                      key={item.id}
+                      isActive={idx === activeIndex}
+                      data-active={idx === activeIndex}
+                      align="center"
+                      gap="sm"
+                      px="lg"
+                      py="sm"
+                      mx="xs"
+                      mt={i === 0 ? 'xs' : 0}
+                      borderRadius="md"
+                      onClick={() => {
+                        if (isTemplate) {
+                          selectTemplate(item);
+                        } else if (isPipeline) {
+                          if (item.stages_count > 0) {
+                            onClose();
+                            router.push(`/pipelines/run/${item.id}`);
+                          }
+                        }
+                      }}>
+                      <Box
+                        w="4px"
+                        h="16px"
+                        borderRadius="sm"
+                        bg={
+                          item.content_type?.color ||
+                          activeContext.color ||
+                          'green.600'
+                        }
+                        flexShrink={0}
+                      />
+                      <Flex direction="column" flex={1} gap="2px">
+                        <Text
+                          fontSize="sm2"
+                          fontWeight="500"
+                          color="text-primary"
+                          style={{
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                          }}>
+                          {title}
+                        </Text>
+                        <Text fontSize="xs" color="text-secondary">
+                          {item.content_type?.name || activeContext.name}
+                        </Text>
+                      </Flex>
+                      {isPipeline && item.stages_count > 0 && (
+                        <Flex
+                          align="center"
+                          gap="xxs"
+                          px="sm"
+                          py="xxs"
+                          borderRadius="md"
+                          bg="green.200"
+                          color="green.1100">
+                          <LightningIcon size={12} weight="fill" />
+                          <Text fontSize="xs" fontWeight="600">
+                            Run
+                          </Text>
+                        </Flex>
+                      )}
+                      {isTemplate && <ArrowRightIcon size={12} />}
+                    </ActionItem>
+                  );
+                })
+              )}
+            </>
+          ) : showTemplates ? (
             /* ─── Template Picker View ───────────────────── */
             <>
               <Flex
@@ -651,7 +1007,7 @@ const QuickActionBar = ({ isOpen, onClose }: QuickActionBarProps) => {
                           router.push(`/pipelines/run/${pipeline.id}`);
                         }
                       }}
-                      sx={
+                      style={
                         !hasStages
                           ? { opacity: 0.5, cursor: 'not-allowed' }
                           : {}
@@ -712,8 +1068,8 @@ const QuickActionBar = ({ isOpen, onClose }: QuickActionBarProps) => {
           ) : (
             /* ─── Main Actions View ──────────────────────── */
             <>
-              {/* Quick Actions */}
-              {filteredActions.length > 0 && (
+              {/* Context Matches */}
+              {contextOptions.length > 0 && (
                 <>
                   <Flex px="lg" py="xs" mb="xxs">
                     <Text
@@ -722,12 +1078,12 @@ const QuickActionBar = ({ isOpen, onClose }: QuickActionBarProps) => {
                       color="text-secondary"
                       textTransform="uppercase"
                       letterSpacing="0.5px">
-                      Actions
+                      Contexts
                     </Text>
                   </Flex>
-                  {filteredActions.map((action, i) => (
+                  {contextOptions.map((ctx, i) => (
                     <ActionItem
-                      key={action.id}
+                      key={ctx.id}
                       isActive={i === activeIndex}
                       data-active={i === activeIndex}
                       align="center"
@@ -736,7 +1092,7 @@ const QuickActionBar = ({ isOpen, onClose }: QuickActionBarProps) => {
                       py="sm"
                       mx="xs"
                       borderRadius="md"
-                      onClick={() => action.onAction()}>
+                      onClick={() => handleContextSelect(ctx)}>
                       <Flex
                         align="center"
                         justify="center"
@@ -746,22 +1102,83 @@ const QuickActionBar = ({ isOpen, onClose }: QuickActionBarProps) => {
                         bg="background-secondary"
                         flexShrink={0}
                         color="green.900">
-                        {action.icon}
+                        <MagnifyingGlassIcon size={16} weight="bold" />
                       </Flex>
                       <Flex direction="column" flex={1} gap="1px">
                         <Text
                           fontSize="sm2"
                           fontWeight="500"
                           color="text-primary">
-                          {action.label}
+                          {ctx.name}
                         </Text>
                         <Text fontSize="xs" color="text-secondary">
-                          {action.description}
+                          Filter by {ctx.name} context
                         </Text>
                       </Flex>
-                      {action.shortcut && <KbdKey>{action.shortcut}</KbdKey>}
+                      {ctx.prefix && <KbdKey>{ctx.prefix}</KbdKey>}
+                      <KbdKey>tab</KbdKey>
                     </ActionItem>
                   ))}
+                </>
+              )}
+
+              {/* Quick Actions */}
+              {filteredActions.length > 0 && (
+                <>
+                  <Flex
+                    px="lg"
+                    py="xs"
+                    mt={contextOptions.length > 0 ? 'sm' : 0}
+                    mb="xxs">
+                    <Text
+                      fontSize="xs"
+                      fontWeight="600"
+                      color="text-secondary"
+                      textTransform="uppercase"
+                      letterSpacing="0.5px">
+                      Actions
+                    </Text>
+                  </Flex>
+                  {filteredActions.map((action, i) => {
+                    const idx = contextOptions.length + i;
+                    return (
+                      <ActionItem
+                        key={action.id}
+                        isActive={idx === activeIndex}
+                        data-active={idx === activeIndex}
+                        align="center"
+                        gap="sm"
+                        px="lg"
+                        py="sm"
+                        mx="xs"
+                        borderRadius="md"
+                        onClick={() => action.onAction()}>
+                        <Flex
+                          align="center"
+                          justify="center"
+                          w="32px"
+                          h="32px"
+                          borderRadius="md"
+                          bg="background-secondary"
+                          flexShrink={0}
+                          color="green.900">
+                          {action.icon}
+                        </Flex>
+                        <Flex direction="column" flex={1} gap="1px">
+                          <Text
+                            fontSize="sm2"
+                            fontWeight="500"
+                            color="text-primary">
+                            {action.label}
+                          </Text>
+                          <Text fontSize="xs" color="text-secondary">
+                            {action.description}
+                          </Text>
+                        </Flex>
+                        {action.shortcut && <KbdKey>{action.shortcut}</KbdKey>}
+                      </ActionItem>
+                    );
+                  })}
                 </>
               )}
 
@@ -787,7 +1204,8 @@ const QuickActionBar = ({ isOpen, onClose }: QuickActionBarProps) => {
                     </Flex>
                   ) : (
                     recentItems.map((item, i) => {
-                      const idx = filteredActions.length + i;
+                      const idx =
+                        contextOptions.length + filteredActions.length + i;
                       return (
                         <ActionItem
                           key={item.id}
@@ -842,18 +1260,20 @@ const QuickActionBar = ({ isOpen, onClose }: QuickActionBarProps) => {
               )}
 
               {/* Empty state */}
-              {filteredActions.length === 0 && query.trim() && (
-                <Flex
-                  direction="column"
-                  align="center"
-                  justify="center"
-                  py="xxl"
-                  gap="sm">
-                  <Text fontSize="sm" color="text-secondary">
-                    No actions match &ldquo;{query}&rdquo;
-                  </Text>
-                </Flex>
-              )}
+              {contextOptions.length === 0 &&
+                filteredActions.length === 0 &&
+                query.trim() && (
+                  <Flex
+                    direction="column"
+                    align="center"
+                    justify="center"
+                    py="xxl"
+                    gap="sm">
+                    <Text fontSize="sm" color="text-secondary">
+                      No actions match &ldquo;{query}&rdquo;
+                    </Text>
+                  </Flex>
+                )}
             </>
           )}
         </Box>
