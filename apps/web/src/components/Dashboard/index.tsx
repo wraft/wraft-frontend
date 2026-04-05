@@ -130,6 +130,7 @@ const Dashboard = () => {
   const [templates, setTemplates] = useState<Template[]>([]);
   const [templatesLoading, setTemplatesLoading] = useState(false);
   const [templatesError, setTemplatesError] = useState<string | null>(null);
+  const [expiringContractsCount, setExpiringContractsCount] = useState(0);
 
   // Template installation hook
   const {
@@ -155,6 +156,20 @@ const Dashboard = () => {
 
   useEffect(() => {
     getDashboardStats();
+  }, [userProfile?.organisation_id]);
+
+  useEffect(() => {
+    const fetchExpiringCount = async () => {
+      try {
+        const data: any = await fetchAPI(
+          'contents?sort=inserted_at_desc&page_size=1&type=contract&status=upcoming',
+        );
+        setExpiringContractsCount(data.total_entries || 0);
+      } catch (error) {
+        console.error('Failed to fetch expiring contracts count:', error);
+      }
+    };
+    fetchExpiringCount();
   }, [userProfile?.organisation_id]);
 
   useEffect(() => {
@@ -380,12 +395,14 @@ const Dashboard = () => {
               </Box>
             </Box>
             <Flex direction="column" w="50%" gap="lg">
-              <Box>
-                <Text fontWeight="600" fontSize="md" mb="md">
-                  Expiring Contracts
-                </Text>
-                <UpcomingExpiryContracts status="upcoming" />
-              </Box>
+              {expiringContractsCount > 0 && (
+                <Box>
+                  <Text fontWeight="600" fontSize="md" mb="md">
+                    Expiring Contracts
+                  </Text>
+                  <UpcomingExpiryContracts status="upcoming" />
+                </Box>
+              )}
               <ContractChart />
               <DocumentTypesChart />
             </Flex>

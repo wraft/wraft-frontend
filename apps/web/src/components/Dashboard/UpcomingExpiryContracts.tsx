@@ -56,7 +56,7 @@ const UpcomingExpiryContracts: React.FC<UpcomingExpiryContractsProps> = ({
   };
 
   return (
-    <Box px="lg">
+    <>
       {loading ? (
         // Show skeletons while loading
         <>
@@ -81,38 +81,22 @@ const UpcomingExpiryContracts: React.FC<UpcomingExpiryContractsProps> = ({
             </Box>
           ))}
         </>
-      ) : (
-        // Empty state
-        <Box
-          w="100%"
-          p="xl"
-          textAlign="center"
-          color="text-secondary"
-          borderRadius="md"
-          border="1px solid"
-          borderColor="border"
-          bg="gray.100"
-        >
-          <Text fontSize="md" fontWeight="medium">
-            No {status} contracts found.
-          </Text>
-          <Text fontSize="sm" mt="xs">
-            You have no {status} contracts to display.
-          </Text>
-        </Box>
-      )}
+      ) : null}
 
-      <Box mt="md">
-        {pageMeta && pageMeta?.total_pages > 1 && (
-          <Pagination
-            totalPage={pageMeta.total_pages}
-            initialPage={currentPage}
-            onPageChange={handlePageChange}
-            totalEntries={pageMeta.total_entries}
-          />
+      {contents &&
+        contents.length > 0 &&
+        pageMeta &&
+        pageMeta?.total_pages > 1 && (
+          <Box mt="md">
+            <Pagination
+              totalPage={pageMeta.total_pages}
+              initialPage={currentPage}
+              onPageChange={handlePageChange}
+              totalEntries={pageMeta.total_entries}
+            />
+          </Box>
         )}
-      </Box>
-    </Box>
+    </>
   );
 };
 
