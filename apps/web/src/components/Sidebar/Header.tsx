@@ -13,11 +13,7 @@ import { postAPI } from 'utils/models';
 
 import WorkspaceCreate from '../manage/WorkspaceCreate';
 
-const Header = ({
-  toggleCreateDocument,
-}: {
-  toggleCreateDocument: () => void;
-}) => {
+const Header = ({ toggleActionBar }: { toggleActionBar: () => void }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [createdId, setCreatedId] = useState<string>();
 
@@ -66,8 +62,7 @@ const Header = ({
                         fontWeight="bold"
                         color="text-primary"
                         fontSize="sm2"
-                        lines={1}
-                      >
+                        lines={1}>
                         {userProfile?.currentOrganisation?.name}
                       </Text>
                       <CaretDown size={12} />
@@ -83,8 +78,7 @@ const Header = ({
                 px="8px"
                 cursor="pointer"
                 minWidth="200px"
-                justifyContent="space-between"
-              >
+                justifyContent="space-between">
                 {userProfile?.currentOrganisation && (
                   <>
                     <Flex align="center">
@@ -120,8 +114,7 @@ const Header = ({
                     .map((org: any) => (
                       <DropdownMenu.Item
                         key={org.id}
-                        onClick={() => onSwitchOrganization(org?.id)}
-                      >
+                        onClick={() => onSwitchOrganization(org?.id)}>
                         <Flex gap="sm" align="center">
                           <DefaultAvatar
                             url={org?.logo}
@@ -153,8 +146,7 @@ const Header = ({
             shape="circle"
             variant="ghost"
             size="xs"
-            onClick={toggleCreateDocument}
-          >
+            onClick={toggleActionBar}>
             <IconFrame color="icon">
               <Plus size={14} />
             </IconFrame>
@@ -164,8 +156,7 @@ const Header = ({
       <Modal
         open={isOpen}
         onClose={() => setIsOpen(false)}
-        ariaLabel="create workspace"
-      >
+        ariaLabel="create workspace">
         <WorkspaceCreate setOpen={setIsOpen} setCreatedId={setCreatedId} />
       </Modal>
     </>

@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form';
 import Field from 'common/Field';
 import Nav from 'common/NavEdit';
 import { postAPI } from 'utils/models';
+import contentStore from 'store/content.store';
 
 import { ApprovalAwaitingLabel } from './ApprovalAwaitingLabel';
 import { ApprovalHandler } from './ApprovalHandler';
@@ -15,6 +16,7 @@ import { DocumentSidebar } from './DocumentSidebar';
 import { useDocument } from './DocumentContext';
 import { ApprovalUpdateModal } from './ApprovalUpdateModal';
 import { DocumentContentBlock } from './DocumentContentBlock';
+import DocumentFieldsDrawer from './DocumentFieldsDrawer';
 import { usePermissions } from './usePermissions';
 import apiService from './APIModel';
 import FlowProgressBar, { FlowContainer } from './StepTwo';
@@ -24,6 +26,7 @@ const DocumentView = () => {
   const [openTitleModal, setOpenTitleModal] = useState<boolean>(false);
   const [modalAction, setModalAction] = useState<'next' | 'prev' | null>(null);
   const [saving, setSaving] = useState<boolean>(false);
+  const [fieldsDrawerOpen, setFieldsDrawerOpen] = useState<boolean>(false);
 
   const {
     contents,
@@ -43,6 +46,7 @@ const DocumentView = () => {
     meta,
     token,
     vendorId,
+    selectedTemplate,
     states,
     setPageTitle,
     setContentBody,
@@ -54,8 +58,20 @@ const DocumentView = () => {
 
   const router = useRouter();
   const { register, handleSubmit, setValue } = useForm();
+  const newContent = contentStore((state: any) => state.newContents);
 
   const cId: string = router.query.id as string;
+
+  // Auto-open fields drawer when entering new doc mode with a template but no field data
+  useEffect(() => {
+    if (
+      editorMode === 'new' &&
+      newContent?.template &&
+      !newContent?.contentFields
+    ) {
+      setFieldsDrawerOpen(true);
+    }
+  }, [editorMode, newContent]);
 
   useEffect(() => {
     if (pageTitle) {
@@ -173,8 +189,7 @@ const DocumentView = () => {
         <ErrorBoundary>
           <Grid
             bg="background-secondary"
-            templateColumns="1fr minmax(380px, 400px)"
-          >
+            templateColumns="1fr minmax(380px, 400px)">
             <Box w="100%">
               {canAccess('toolbar') && (
                 <Flex
@@ -185,8 +200,7 @@ const DocumentView = () => {
                   minH="40px"
                   borderBottom="solid 1px"
                   borderColor="border"
-                  bg="background-primary"
-                >
+                  bg="background-primary">
                   <FlowContainer>
                     {states &&
                       states.map((state: any, i: number) => (
@@ -242,8 +256,7 @@ const DocumentView = () => {
                         onClick={() => onSubmit()}
                         variant="primary"
                         size="sm"
-                        loading={saving}
-                      >
+                        loading={saving}>
                         Save
                       </Button>
                     </Box>
@@ -267,8 +280,7 @@ const DocumentView = () => {
       <Modal
         open={openTitleModal}
         ariaLabel="confirm model"
-        onClose={() => setOpenTitleModal(false)}
-      >
+        onClose={() => setOpenTitleModal(false)}>
         <Box as="form" onSubmit={handleSubmit(onUpdateTitle)} w="450px">
           <Modal.Header>Title</Modal.Header>
           <Box my={3}>
@@ -283,14 +295,20 @@ const DocumentView = () => {
           <Flex gap="8px">
             <Button
               variant="secondary"
-              onClick={() => setOpenTitleModal(false)}
-            >
+              onClick={() => setOpenTitleModal(false)}>
               Cancel
             </Button>
             <Button type="submit">Save</Button>
           </Flex>
         </Box>
       </Modal>
+
+      {/* Fields drawer for new documents */}
+      <DocumentFieldsDrawer
+        isOpen={fieldsDrawerOpen}
+        onClose={() => setFieldsDrawerOpen(false)}
+        template={newContent?.template || selectedTemplate}
+      />
     </>
   );
 };

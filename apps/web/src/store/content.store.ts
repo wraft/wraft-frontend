@@ -5,6 +5,8 @@ interface Content {
   id: any;
   contentFields?: any;
   template?: any;
+  meta?: any;
+  vendor_id?: string;
 }
 
 interface ContentState {

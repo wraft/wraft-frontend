@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { Drawer, useDrawer, Text, Box, Flex } from '@wraft/ui';
+import { Text, Box, Flex } from '@wraft/ui';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { useThemeUI } from 'theme-ui';
 import { CaretRight, List, SidebarSimple, X } from '@phosphor-icons/react';
 
-import CreateDocument from 'components/DocumentCreate';
+import QuickActionBar from 'components/QuickActionBar';
 import DefaultMenuItem from 'common/MenuItem';
 import { useAuth } from 'contexts/AuthContext';
 import { useSidebar } from 'contexts/SidebarContext';
@@ -308,9 +308,8 @@ const MenuContent = ({
 
 // ─── Sidebar ────────────────────────────────────────────────
 const Sidebar = () => {
-  const [isDocumentCreatorOpen, setIsDocumentCreatorOpen] = useState(false);
+  const [isActionBarOpen, setIsActionBarOpen] = useState(false);
   const router = useRouter();
-  const mobileMenuDrawer = useDrawer();
   const { permissions } = useAuth();
   const { mode, mobileOpen, isCollapsed, toggle, closeMobile } = useSidebar();
 
@@ -334,11 +333,11 @@ const Sidebar = () => {
     );
   };
 
-  const toggleCreateDocument = () => {
-    setIsDocumentCreatorOpen(!isDocumentCreatorOpen);
+  const toggleActionBar = () => {
+    setIsActionBarOpen((prev) => !prev);
   };
 
-  useHotkeys('/', () => toggleCreateDocument());
+  useHotkeys('/', () => toggleActionBar());
 
   const collapsed = isCollapsed && mode !== 'hidden';
 
@@ -418,7 +417,7 @@ const Sidebar = () => {
                 py="sm"
                 borderBottom="1px solid"
                 borderColor="border">
-                <Header toggleCreateDocument={toggleCreateDocument} />
+                <Header toggleActionBar={toggleActionBar} />
                 <Flex
                   as="button"
                   align="center"
@@ -456,15 +455,11 @@ const Sidebar = () => {
           </>
         )}
 
-        {/* Document creator drawer */}
-        <Drawer
-          open={isDocumentCreatorOpen}
-          store={mobileMenuDrawer}
-          aria-label="Menu backdrop"
-          withBackdrop={true}
-          onClose={() => setIsDocumentCreatorOpen(false)}>
-          <CreateDocument setIsOpen={setIsDocumentCreatorOpen} />
-        </Drawer>
+        {/* Quick Action Bar */}
+        <QuickActionBar
+          isOpen={isActionBarOpen}
+          onClose={() => setIsActionBarOpen(false)}
+        />
       </>
     );
   }
@@ -506,7 +501,7 @@ const Sidebar = () => {
         ) : (
           <Flex align="center">
             <Box flex={1}>
-              <Header toggleCreateDocument={toggleCreateDocument} />
+              <Header toggleActionBar={toggleActionBar} />
             </Box>
           </Flex>
         )}
@@ -561,14 +556,10 @@ const Sidebar = () => {
         </Box>
       </Flex>
 
-      <Drawer
-        open={isDocumentCreatorOpen}
-        store={mobileMenuDrawer}
-        aria-label="Menu backdrop"
-        withBackdrop={true}
-        onClose={() => setIsDocumentCreatorOpen(false)}>
-        <CreateDocument setIsOpen={setIsDocumentCreatorOpen} />
-      </Drawer>
+      <QuickActionBar
+        isOpen={isActionBarOpen}
+        onClose={() => setIsActionBarOpen(false)}
+      />
     </>
   );
 };
