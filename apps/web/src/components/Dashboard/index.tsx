@@ -364,14 +364,6 @@ const Dashboard = () => {
                 desc={dashboardStatus.daily_documents}
               />
             )}
-            <BlockCard
-              title="Total Documents"
-              desc={dashboardStatus.total_documents}
-            />
-            <BlockCard
-              title="Pending Approvals"
-              desc={dashboardStatus.pending_approvals}
-            />
           </Grid>
 
           <Flex mt="xl" gap="lg">
@@ -395,6 +387,16 @@ const Dashboard = () => {
               </Box>
             </Box>
             <Flex direction="column" w="50%" gap="lg">
+              <Grid gap="md" templateColumns="repeat(2, 1fr)">
+                <BlockCard
+                  title="Total Documents"
+                  desc={dashboardStatus.total_documents}
+                />
+                <BlockCard
+                  title="Pending Approvals"
+                  desc={dashboardStatus.pending_approvals}
+                />
+              </Grid>
               {expiringContractsCount > 0 && (
                 <Box>
                   <Text fontWeight="600" fontSize="md" mb="md">
