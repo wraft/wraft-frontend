@@ -1,6 +1,6 @@
 import App from 'next/app';
 import type { AppProps, AppContext } from 'next/app';
-import { TourProvider, components } from '@reactour/tour';
+import { TourProvider } from '@reactour/tour';
 import { theme, GlobalStyle } from '@wraft/ui';
 import { getSession } from 'next-auth/react';
 import { ThemeUIProvider } from 'theme-ui';
@@ -8,6 +8,7 @@ import 'core-js/full/promise/with-resolvers.js';
 
 import Analytics from 'components/common/Analytics';
 import GoogleTagManager from 'components/common/GoogleTagManager';
+import OnboardingWizard from 'components/Onboarding/OnboardingWizard';
 import { UserProvider } from 'contexts/AuthContext';
 import SocketProvider from 'contexts/SocketContext';
 import ToasterNewProvider from 'contexts/ToasterProvider';
@@ -19,30 +20,12 @@ interface AppPropsWithRedux extends AppProps {
   reduxStore: any;
 }
 
-const Badge = ({ children }: any) => {
-  return (
-    <components.Badge
-      styles={{
-        badge: (base) => ({
-          ...base,
-          backgroundColor: '#BF3088',
-          fontFamily: "'Poppins', sans-serif",
-          fontSize: 14,
-        }),
-      }}
-    >
-      {children}
-    </components.Badge>
-  );
-};
-
 const MyApp = ({
   Component,
   pageProps: { session, ...pageProps },
 }: AppPropsWithRedux) => {
   return (
-    // <TourProvider steps={steps}>
-    <TourProvider steps={[]} components={{ Badge }} padding={{ mask: 0 }}>
+    <TourProvider steps={[]}>
       <Analytics />
       <GoogleTagManager />
       <GlobalStyle />
@@ -52,6 +35,7 @@ const MyApp = ({
           <UserProvider>
             <SocketProvider>
               <Component {...pageProps} />
+              <OnboardingWizard />
             </SocketProvider>
           </UserProvider>
         </ThemeUIProvider>

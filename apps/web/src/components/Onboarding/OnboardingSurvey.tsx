@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Box, Text, Button, Flex, Select } from '@wraft/ui';
 
 import { useAuth } from 'contexts/AuthContext';
@@ -38,6 +38,32 @@ const OnboardingSurvey = () => {
   const [loading, setLoading] = useState(false);
   const [isDismissed, setIsDismissed] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    const checkDarkMode = () => {
+      const dark =
+        document.documentElement.classList.contains('dark') ||
+        window.matchMedia('(prefers-color-scheme: dark)').matches;
+      setIsDarkMode(dark);
+    };
+
+    checkDarkMode();
+
+    const observer = new MutationObserver(checkDarkMode);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class'],
+    });
+
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    mediaQuery.addEventListener('change', checkDarkMode);
+
+    return () => {
+      observer.disconnect();
+      mediaQuery.removeEventListener('change', checkDarkMode);
+    };
+  }, []);
 
   const shouldShow =
     !isDismissed && userProfile?.onboarding_status === 'not_started';
@@ -60,7 +86,7 @@ const OnboardingSurvey = () => {
       updateUserData({
         ...userProfile,
         onboarding_status: 'survey_completed',
-        profile: { ...userProfile.profile, onboarding_data: data },
+        profile: { ...userProfile?.profile, onboarding_data: data },
       });
       dismiss();
     } catch (e) {
@@ -101,6 +127,16 @@ const OnboardingSurvey = () => {
 
   if (!shouldShow) return null;
 
+  const colors = {
+    background: isDarkMode ? '#1a1a2e' : '#ffffff',
+    text: isDarkMode ? '#e4e4e7' : '#18181b',
+    textSecondary: isDarkMode ? '#a1a1aa' : '#71717a',
+    border: isDarkMode ? '#3f3f46' : '#e4e4e7',
+    primary: '#2563EB',
+    primaryHover: '#1d4ed8',
+    inputBg: isDarkMode ? '#27272a' : '#f4f4f5',
+  };
+
   const stepContent = [
     {
       title: 'Welcome to Wraft',
@@ -108,7 +144,11 @@ const OnboardingSurvey = () => {
         'Tell us a bit about yourself so we can personalize your experience.',
       field: (
         <Box>
-          <Text fontWeight="bold" mb="xs" fontSize="sm">
+          <Text
+            fontWeight="bold"
+            mb="xs"
+            fontSize="sm"
+            style={{ color: colors.text }}>
             What is your role?
           </Text>
           <Select
@@ -126,7 +166,11 @@ const OnboardingSurvey = () => {
       subtitle: 'How many people are in your organization?',
       field: (
         <Box>
-          <Text fontWeight="bold" mb="xs" fontSize="sm">
+          <Text
+            fontWeight="bold"
+            mb="xs"
+            fontSize="sm"
+            style={{ color: colors.text }}>
             Company Size
           </Text>
           <Select
@@ -144,7 +188,11 @@ const OnboardingSurvey = () => {
       subtitle: "We'll help you get started with the right templates.",
       field: (
         <Box>
-          <Text fontWeight="bold" mb="xs" fontSize="sm">
+          <Text
+            fontWeight="bold"
+            mb="xs"
+            fontSize="sm"
+            style={{ color: colors.text }}>
             Primary Goal
           </Text>
           <Select
@@ -171,12 +219,13 @@ const OnboardingSurvey = () => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'rgba(255, 255, 255, 0.97)',
+        backgroundColor: isDarkMode
+          ? 'rgba(0, 0, 0, 0.9)'
+          : 'rgba(255, 255, 255, 0.97)',
         backdropFilter: 'blur(8px)',
         opacity: isExiting ? 0 : 1,
         transition: 'opacity 0.3s ease',
-      }}
-    >
+      }}>
       <Box
         style={{
           width: '100%',
@@ -184,8 +233,7 @@ const OnboardingSurvey = () => {
           opacity: isExiting ? 0 : 1,
           transform: isExiting ? 'translateY(8px)' : 'translateY(0)',
           transition: 'opacity 0.3s ease, transform 0.3s ease',
-        }}
-      >
+        }}>
         {/* Step indicator */}
         <Flex justify="center" mb="lg" gap="sm">
           {stepContent.map((_, i) => (
@@ -195,7 +243,7 @@ const OnboardingSurvey = () => {
                 width: i === step ? '24px' : '8px',
                 height: '8px',
                 borderRadius: '4px',
-                backgroundColor: i === step ? '#2563EB' : '#D1D5DB',
+                backgroundColor: i === step ? colors.primary : colors.border,
                 transition: 'all 0.2s ease',
               }}
             />
@@ -211,12 +259,21 @@ const OnboardingSurvey = () => {
           p="xl"
           style={{
             boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)',
-          }}
-        >
-          <Text fontSize="xl" fontWeight="heading" mb="xs">
+            backgroundColor: colors.background,
+            borderColor: colors.border,
+          }}>
+          <Text
+            fontSize="xl"
+            fontWeight="heading"
+            mb="xs"
+            style={{ color: colors.text }}>
             {current.title}
           </Text>
-          <Text color="text-secondary" mb="lg" fontSize="sm">
+          <Text
+            color="text-secondary"
+            mb="lg"
+            fontSize="sm"
+            style={{ color: colors.textSecondary }}>
             {current.subtitle}
           </Text>
 
@@ -224,7 +281,11 @@ const OnboardingSurvey = () => {
 
           <Flex justify="space-between" alignItems="center">
             {step > 0 ? (
-              <Button variant="ghost" onClick={handleBack} size="sm">
+              <Button
+                variant="ghost"
+                onClick={handleBack}
+                size="sm"
+                style={{ color: colors.textSecondary }}>
                 Back
               </Button>
             ) : (
@@ -233,7 +294,7 @@ const OnboardingSurvey = () => {
                 onClick={handleSkip}
                 size="sm"
                 disabled={loading}
-              >
+                style={{ color: colors.textSecondary }}>
                 Skip
               </Button>
             )}
@@ -244,7 +305,10 @@ const OnboardingSurvey = () => {
                 loading={loading}
                 disabled={!current.canProceed || loading}
                 size="sm"
-              >
+                style={{
+                  backgroundColor: colors.primary,
+                  color: '#ffffff',
+                }}>
                 Get Started
               </Button>
             ) : (
@@ -252,7 +316,10 @@ const OnboardingSurvey = () => {
                 onClick={handleNext}
                 disabled={!current.canProceed}
                 size="sm"
-              >
+                style={{
+                  backgroundColor: colors.primary,
+                  color: '#ffffff',
+                }}>
                 Next
               </Button>
             )}
