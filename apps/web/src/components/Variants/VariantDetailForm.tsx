@@ -57,8 +57,7 @@ const Card = ({
     borderRadius="md"
     bg="background-primary"
     overflow="hidden"
-    p={p}
-  >
+    p={p}>
     {children}
   </Box>
 );
@@ -75,17 +74,18 @@ const TabButton = ({
   <Box
     as="button"
     onClick={onClick}
-    pb="sm"
-    px="sm"
-    borderBottom="2px solid"
-    borderColor={active ? 'green.500' : 'transparent'}
-    color={active ? 'green.900' : 'text-secondary'}
-    fontWeight={active ? '600' : '500'}
+    py="6px"
+    px="16px"
+    borderRadius="md"
+    bg={active ? 'background-primary' : 'transparent'}
+    color={active ? 'text-primary' : 'text-secondary'}
+    fontWeight={active ? '500' : '500'}
     fontSize="sm"
-    bg="transparent"
     cursor="pointer"
-    style={{ transition: 'all 0.2s' }}
-  >
+    border="1px solid"
+    borderColor={active ? 'border' : 'transparent'}
+    boxShadow={active ? '0 1px 2px rgba(0,0,0,0.05)' : 'none'}
+    style={{ transition: 'all 0.2s' }}>
     {children}
   </Box>
 );
@@ -98,8 +98,7 @@ const TemplateCard = ({ template }: { template: any }) => (
       borderRadius="md"
       p="md"
       bg="background-primary"
-      style={{ transition: 'all 0.2s', cursor: 'pointer' }}
-    >
+      style={{ transition: 'all 0.2s', cursor: 'pointer' }}>
       <Flex align="center" gap="sm" mb="sm">
         <FileText size={20} color="var(--theme-ui-colors-green-500)" />
         <Text fontSize="md" fontWeight="600" color="text-primary">
@@ -116,8 +115,7 @@ const TemplateCard = ({ template }: { template: any }) => (
             WebkitLineClamp: 2,
             WebkitBoxOrient: 'vertical',
             overflow: 'hidden',
-          }}
-        >
+          }}>
           {template.description}
         </Text>
       )}
@@ -151,8 +149,7 @@ const StatBlock = ({
     flex={1}
     display="flex"
     flexDirection="column"
-    justifyContent="center"
-  >
+    justifyContent="center">
     <Text fontSize="sm" color="text-secondary" mb="xs" fontWeight="500">
       {label}
     </Text>
@@ -162,16 +159,14 @@ const StatBlock = ({
         fontWeight="600"
         lineHeight="1"
         color="text-primary"
-        style={{ fontVariantNumeric: 'tabular-nums' }}
-      >
+        style={{ fontVariantNumeric: 'tabular-nums' }}>
         {value}
       </Text>
       {trend !== undefined && (
         <Flex
           align="center"
           gap="xxs"
-          color={trend > 0 ? 'green.600' : 'red.600'}
-        >
+          color={trend > 0 ? 'green.600' : 'red.600'}>
           {trend > 0 ? (
             <TrendUp weight="bold" size={14} />
           ) : (
@@ -201,8 +196,7 @@ const CardHeader = ({
     px="lg"
     py="md"
     borderBottom="1px solid"
-    borderColor="border"
-  >
+    borderColor="border">
     <Flex align="center" gap="sm">
       <Text fontSize="sm" fontWeight="600" color="text-primary">
         {title}
@@ -216,8 +210,7 @@ const CardHeader = ({
           px="xs"
           py="xxs"
           borderRadius="sm"
-          style={{ fontVariantNumeric: 'tabular-nums' }}
-        >
+          style={{ fontVariantNumeric: 'tabular-nums' }}>
           {count}
         </Text>
       )}
@@ -248,21 +241,8 @@ const CardEmpty = ({
   </Flex>
 );
 
-const Row = ({
-  children,
-  isLast,
-}: {
-  children: React.ReactNode;
-  isLast?: boolean;
-}) => (
-  <Flex
-    justify="space-between"
-    align="center"
-    px="lg"
-    py="sm"
-    borderBottom={isLast ? 'none' : '1px solid'}
-    borderColor="border"
-  >
+const Row = ({ children }: { children: React.ReactNode }) => (
+  <Flex justify="space-between" align="center" px="lg" py="sm">
     {children}
   </Flex>
 );
@@ -287,8 +267,7 @@ const Property = ({
       cursor={interactive ? 'pointer' : 'default'}
       style={
         interactive ? { transition: 'background 120ms ease-out' } : undefined
-      }
-    >
+      }>
       <Text fontSize="sm" color="text-secondary">
         {label}
       </Text>
@@ -301,8 +280,7 @@ const Property = ({
           overflow: 'hidden',
           textOverflow: 'ellipsis',
           whiteSpace: 'nowrap',
-        }}
-      >
+        }}>
         {value || '—'}
       </Text>
     </Flex>
@@ -574,8 +552,7 @@ const VariantDetailForm = () => {
         position="sticky"
         top={0}
         zIndex={10}
-        bg="background-primary"
-      >
+        bg="background-primary">
         <Flex align="center">
           <Back
             fallbackRoute={(isAuthenticated: boolean) =>
@@ -586,8 +563,7 @@ const VariantDetailForm = () => {
             align="center"
             gap="sm"
             ml="sm"
-            style={{ minWidth: 0, flex: 1 }}
-          >
+            style={{ minWidth: 0, flex: 1 }}>
             <Flex
               w="28px"
               h="28px"
@@ -595,8 +571,7 @@ const VariantDetailForm = () => {
               bg={variant.color || 'green.300'}
               align="center"
               justify="center"
-              flexShrink={0}
-            >
+              flexShrink={0}>
               <Text fontSize="xs" fontWeight="700" color="white">
                 {variant.prefix?.charAt(0) || 'V'}
               </Text>
@@ -614,8 +589,7 @@ const VariantDetailForm = () => {
                   px="xs"
                   py="xxs"
                   borderRadius="sm"
-                  style={{ fontVariantNumeric: 'tabular-nums' }}
-                >
+                  style={{ fontVariantNumeric: 'tabular-nums' }}>
                   {variant.prefix}
                 </Text>
               </Flex>
@@ -628,8 +602,7 @@ const VariantDetailForm = () => {
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
                     whiteSpace: 'nowrap',
-                  }}
-                >
+                  }}>
                   {variant.description}
                 </Text>
               )}
@@ -640,8 +613,7 @@ const VariantDetailForm = () => {
               <Button
                 variant="secondary"
                 size="sm"
-                onClick={() => openDrawerAt(0)}
-              >
+                onClick={() => openDrawerAt(0)}>
                 <PencilSimple size={14} />
                 Edit
               </Button>
@@ -657,27 +629,27 @@ const VariantDetailForm = () => {
           <Flex direction="column" gap="lg" flex={3} style={{ minWidth: 0 }}>
             {/* Tabs */}
             <Flex
-              gap="md"
-              borderBottom="1px solid"
+              gap="2px"
+              mb="xl"
+              p="4px"
+              bg="background-secondary"
+              borderRadius="lg"
+              border="1px solid"
               borderColor="border"
-              mb="md"
-            >
+              w="fit-content">
               <TabButton
                 active={activeTab === 'overview'}
-                onClick={() => setActiveTab('overview')}
-              >
+                onClick={() => setActiveTab('overview')}>
                 Overview
               </TabButton>
               <TabButton
                 active={activeTab === 'contents'}
-                onClick={() => setActiveTab('contents')}
-              >
+                onClick={() => setActiveTab('contents')}>
                 Contents
               </TabButton>
               <TabButton
                 active={activeTab === 'activities'}
-                onClick={() => setActiveTab('activities')}
-              >
+                onClick={() => setActiveTab('activities')}>
                 Activities
               </TabButton>
             </Flex>
@@ -694,8 +666,7 @@ const VariantDetailForm = () => {
                     px="lg"
                     py="sm"
                     align="center"
-                    justify="space-between"
-                  >
+                    justify="space-between">
                     <Text fontSize="sm" color="orange.900">
                       Using flow v{versionNum}. Version{' '}
                       {(content as any)?.latest_flow_version?.version_number} is
@@ -705,8 +676,7 @@ const VariantDetailForm = () => {
                       <Button
                         variant="secondary"
                         size="xs"
-                        onClick={handleUpgrade}
-                      >
+                        onClick={handleUpgrade}>
                         Upgrade
                       </Button>
                     )}
@@ -722,16 +692,14 @@ const VariantDetailForm = () => {
                         as="h4"
                         fontWeight="heading"
                         fontSize="md"
-                        color="text-secondary"
-                      >
+                        color="text-secondary">
                         Document Activity
                       </Text>
                       <Flex
                         gap="xs"
                         bg="background-secondary"
                         p="2px"
-                        borderRadius="md"
-                      >
+                        borderRadius="md">
                         {['day', 'week', 'month'].map((interval) => (
                           <Button
                             key={interval}
@@ -747,8 +715,7 @@ const VariantDetailForm = () => {
                                 chartInterval === interval
                                   ? '0 1px 2px rgba(0,0,0,0.1)'
                                   : 'none',
-                            }}
-                          >
+                            }}>
                             {interval}
                           </Button>
                         ))}
@@ -762,8 +729,7 @@ const VariantDetailForm = () => {
                         border="1px solid"
                         borderColor="border"
                         borderRadius="md"
-                        bg="background-primary"
-                      >
+                        bg="background-primary">
                         <Spinner />
                       </Flex>
                     ) : chartData.length > 0 ? (
@@ -789,8 +755,7 @@ const VariantDetailForm = () => {
                         borderRadius="md"
                         bg="background-primary"
                         direction="column"
-                        gap="sm"
-                      >
+                        gap="sm">
                         <Text color="text-secondary">
                           No activity data available
                         </Text>
@@ -821,8 +786,7 @@ const VariantDetailForm = () => {
                     </Text>
                     {documents.length > 0 && (
                       <NavLink
-                        href={`/documents?content_type_name=${encodeURIComponent(variant.name)}`}
-                      >
+                        href={`/documents?content_type_name=${encodeURIComponent(variant.name)}`}>
                         <Text fontSize="sm" color="green.900" fontWeight="500">
                           View all
                         </Text>
@@ -870,8 +834,7 @@ const VariantDetailForm = () => {
                     <Button
                       variant="secondary"
                       size="xs"
-                      onClick={() => router.push('/templates/new')}
-                    >
+                      onClick={() => router.push('/templates/new')}>
                       <Plus size={12} weight="bold" />
                       Create Template
                     </Button>
@@ -889,8 +852,7 @@ const VariantDetailForm = () => {
                     <Box
                       display="grid"
                       gridTemplateColumns="repeat(auto-fill, minmax(280px, 1fr))"
-                      gap="md"
-                    >
+                      gap="md">
                       {templates.map((t: any) => (
                         <TemplateCard key={t.id} template={t} />
                       ))}
@@ -906,8 +868,7 @@ const VariantDetailForm = () => {
                     </Text>
                     {documents.length > 0 && (
                       <NavLink
-                        href={`/documents?content_type_name=${encodeURIComponent(variant.name)}`}
-                      >
+                        href={`/documents?content_type_name=${encodeURIComponent(variant.name)}`}>
                         <Text fontSize="sm" color="green.900" fontWeight="500">
                           View full list
                         </Text>
@@ -966,38 +927,32 @@ const VariantDetailForm = () => {
                   : selectedVersionId
                     ? '3px solid var(--theme-ui-colors-blue-300)'
                     : undefined,
-              }}
-            >
+              }}>
               {/* Version row — subtle, inline with config */}
               {activeVersion && (
                 <Flex
                   justify="space-between"
                   align="center"
                   px="lg"
-                  py="sm"
-                  borderBottom="1px solid"
-                  borderColor="border"
+                  py="md"
                   bg={
                     isViewingDraft
                       ? 'orange.50'
                       : selectedVersionId
                         ? 'blue.50'
                         : 'transparent'
-                  }
-                >
+                  }>
                   <DropdownMenu.Provider>
                     <DropdownMenu.Trigger>
                       <Flex
                         align="center"
                         gap="xs"
-                        style={{ cursor: 'pointer' }}
-                      >
+                        style={{ cursor: 'pointer' }}>
                         <Text
                           fontSize="xs"
                           fontWeight="600"
                           color="text-primary"
-                          style={{ fontVariantNumeric: 'tabular-nums' }}
-                        >
+                          style={{ fontVariantNumeric: 'tabular-nums' }}>
                           v
                           {selectedVersionId
                             ? versions.find((v) => v.id === selectedVersionId)
@@ -1011,8 +966,7 @@ const VariantDetailForm = () => {
                           bg={isViewingDraft ? 'orange.100' : 'green.100'}
                           px="xs"
                           py="1px"
-                          borderRadius="sm"
-                        >
+                          borderRadius="sm">
                           {isViewingDraft ? 'Draft' : 'Published'}
                         </Text>
                         {versions.length > 1 && (
@@ -1038,8 +992,7 @@ const VariantDetailForm = () => {
                                 v.id === activeVersion?.id
                                   ? setSelectedVersionId(null)
                                   : setSelectedVersionId(v.id)
-                              }
-                            >
+                              }>
                               <Flex align="center" gap="xs" w="100%">
                                 <Text fontSize="sm" fontWeight="500">
                                   v{v.version_number}
@@ -1051,8 +1004,7 @@ const VariantDetailForm = () => {
                                   <Text
                                     fontSize="xxs"
                                     color="blue.700"
-                                    fontWeight="500"
-                                  >
+                                    fontWeight="500">
                                     active
                                   </Text>
                                 )}
@@ -1062,8 +1014,7 @@ const VariantDetailForm = () => {
                                   <Text
                                     fontSize="xs"
                                     color="green.600"
-                                    ml="auto"
-                                  >
+                                    ml="auto">
                                     &#10003;
                                   </Text>
                                 )}
@@ -1086,8 +1037,7 @@ const VariantDetailForm = () => {
                             width: 24,
                             height: 24,
                             borderRadius: 4,
-                          }}
-                        >
+                          }}>
                           <DotsThree
                             size={16}
                             weight="bold"
@@ -1105,23 +1055,20 @@ const VariantDetailForm = () => {
                           <DropdownMenu.Item
                             onClick={() =>
                               setSelectedVersionId(draftVersion.id)
-                            }
-                          >
+                            }>
                             Switch to draft
                           </DropdownMenu.Item>
                         )}
                         {isViewingDraft && selectedVersionId && (
                           <>
                             <DropdownMenu.Item
-                              onClick={() => handlePublish(selectedVersionId)}
-                            >
+                              onClick={() => handlePublish(selectedVersionId)}>
                               Publish this draft
                             </DropdownMenu.Item>
                             <DropdownMenu.Item
                               onClick={() =>
                                 handleDeleteDraft(selectedVersionId)
-                              }
-                            >
+                              }>
                               <Text color="red.600">Discard draft</Text>
                             </DropdownMenu.Item>
                           </>
@@ -1130,15 +1077,13 @@ const VariantDetailForm = () => {
                           selectedVersionId &&
                           selectedVersionId !== activeVersion?.id && (
                             <DropdownMenu.Item
-                              onClick={() => handleActivate(selectedVersionId)}
-                            >
+                              onClick={() => handleActivate(selectedVersionId)}>
                               Set as active
                             </DropdownMenu.Item>
                           )}
                         {selectedVersionId && (
                           <DropdownMenu.Item
-                            onClick={() => setSelectedVersionId(null)}
-                          >
+                            onClick={() => setSelectedVersionId(null)}>
                             Back to active
                           </DropdownMenu.Item>
                         )}
@@ -1153,10 +1098,8 @@ const VariantDetailForm = () => {
                 justify="space-between"
                 align="center"
                 px="lg"
-                py="md"
-                borderBottom="1px solid"
-                borderColor="border"
-              >
+                pt="lg"
+                pb="sm">
                 <Text fontSize="sm" fontWeight="600" color="text-primary">
                   Configuration
                 </Text>
@@ -1166,8 +1109,7 @@ const VariantDetailForm = () => {
                     color="green.900"
                     fontWeight="500"
                     cursor="pointer"
-                    onClick={() => openDrawerAt(1)}
-                  >
+                    onClick={() => openDrawerAt(1)}>
                     Edit
                   </Text>
                 )}
@@ -1190,12 +1132,11 @@ const VariantDetailForm = () => {
                 justify="space-between"
                 align="center"
                 px="lg"
-                py="md"
-                borderBottom="1px solid"
+                pt="lg"
+                pb="sm"
                 borderTop="1px solid"
                 borderColor="border"
-                mt="0"
-              >
+                mt="sm">
                 <Flex align="center" gap="sm">
                   <Text fontSize="sm" fontWeight="600" color="text-primary">
                     Fields
@@ -1209,8 +1150,7 @@ const VariantDetailForm = () => {
                       px="xs"
                       py="xxs"
                       borderRadius="sm"
-                      style={{ fontVariantNumeric: 'tabular-nums' }}
-                    >
+                      style={{ fontVariantNumeric: 'tabular-nums' }}>
                       {fields.length}
                     </Text>
                   )}
@@ -1221,8 +1161,7 @@ const VariantDetailForm = () => {
                     color="green.900"
                     fontWeight="500"
                     cursor="pointer"
-                    onClick={() => openDrawerAt(2)}
-                  >
+                    onClick={() => openDrawerAt(2)}>
                     Edit
                   </Text>
                 )}
@@ -1235,7 +1174,7 @@ const VariantDetailForm = () => {
                 />
               ) : (
                 fields.map((f: any, i: number) => (
-                  <Row key={f.id || i} isLast={i === fields.length - 1}>
+                  <Row key={f.id || i}>
                     <Text
                       fontSize="sm"
                       fontWeight="500"
@@ -1244,8 +1183,7 @@ const VariantDetailForm = () => {
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
                         whiteSpace: 'nowrap',
-                      }}
-                    >
+                      }}>
                       {f.name}
                     </Text>
                     <Text fontSize="xs" color="text-secondary">
@@ -1265,8 +1203,7 @@ const VariantDetailForm = () => {
         store={editDrawer}
         aria-label="Edit variant"
         withBackdrop={true}
-        onClose={() => setIsOpen(false)}
-      >
+        onClose={() => setIsOpen(false)}>
         {isOpen && (
           <Form
             step={drawerStep}
@@ -1281,8 +1218,7 @@ const VariantDetailForm = () => {
         store={layoutDrawer}
         aria-label="Edit Layout"
         withBackdrop={true}
-        onClose={() => setIsLayoutOpen(false)}
-      >
+        onClose={() => setIsLayoutOpen(false)}>
         {isLayoutOpen && variant.layout?.id && (
           <LayoutForm
             setOpen={setIsLayoutOpen}
@@ -1296,8 +1232,7 @@ const VariantDetailForm = () => {
         store={themeDrawer}
         aria-label="Edit Theme"
         withBackdrop={true}
-        onClose={() => setIsThemeOpen(false)}
-      >
+        onClose={() => setIsThemeOpen(false)}>
         {isThemeOpen && variant.theme?.id && (
           <ThemeAddForm
             setIsOpen={setIsThemeOpen}
