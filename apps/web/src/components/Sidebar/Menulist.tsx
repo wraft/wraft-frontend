@@ -8,12 +8,36 @@ import {
   HouseIcon,
   // FolderIcon,
   LayoutIcon,
+  IntersectSquareIcon,
+  GearSixIcon,
 } from '@phosphor-icons/react';
 
 const defaultIcon = 16;
 const defaultWeight = 'regular';
 
-export const Menulist = [
+export interface MenuChild {
+  name: string;
+  icon: React.ReactElement;
+  path: string;
+  permissions?: string[];
+  tourId?: string;
+}
+
+export interface MenuItem {
+  name: string;
+  icon: React.ReactElement;
+  path: string;
+  permissions?: string[];
+  tourId?: string;
+  children?: MenuChild[];
+}
+
+export interface MenuSection {
+  section: string;
+  menus: MenuItem[];
+}
+
+export const Menulist: MenuSection[] = [
   {
     section: 'content',
     menus: [
@@ -33,12 +57,6 @@ export const Menulist = [
         icon: <ThumbsUpIcon size={defaultIcon} weight={defaultWeight} />,
         path: '/approvals',
       },
-      // {
-      //   name: 'Repository',
-      //   icon: <FolderIcon size={defaultIcon} weight={defaultWeight} />,
-      //   permissions: ['repository.show', 'repository.manage'],
-      //   path: '/repository',
-      // },
     ],
   },
   {
@@ -63,23 +81,44 @@ export const Menulist = [
     section: 'manage',
     menus: [
       {
-        name: 'Variants',
-        icon: <BlueprintIcon size={defaultIcon} weight={defaultWeight} />,
-        path: '/variants',
-        permissions: ['variant.show', 'variant.manage'],
-        tourId: 'variants',
-      },
-      {
-        name: 'Forms',
-        icon: <LayoutIcon size={defaultIcon} weight={defaultWeight} />,
-        path: '/forms',
-        permissions: ['layout.show', 'layout.manage'],
-      },
-      {
         name: 'Manage',
         icon: <UserFocusIcon size={defaultIcon} weight={defaultWeight} />,
         path: '/manage',
         tourId: 'manage',
+        children: [
+          {
+            name: 'Flows',
+            icon: (
+              <IntersectSquareIcon size={defaultIcon} weight={defaultWeight} />
+            ),
+            path: '/manage/flows',
+            permissions: ['flow.show', 'flow.manage'],
+          },
+          {
+            name: 'Variants',
+            icon: <BlueprintIcon size={defaultIcon} weight={defaultWeight} />,
+            path: '/variants',
+            permissions: ['variant.show', 'variant.manage'],
+            tourId: 'variants',
+          },
+          {
+            name: 'Forms',
+            icon: <LayoutIcon size={defaultIcon} weight={defaultWeight} />,
+            path: '/forms',
+            permissions: ['layout.show', 'layout.manage'],
+          },
+          {
+            name: 'Layouts',
+            icon: <LayoutIcon size={defaultIcon} weight={defaultWeight} />,
+            path: '/manage/layouts',
+            permissions: ['layout.show', 'layout.manage'],
+          },
+          {
+            name: 'Settings',
+            icon: <GearSixIcon size={defaultIcon} weight={defaultWeight} />,
+            path: '/manage/workspace',
+          },
+        ],
       },
     ],
   },

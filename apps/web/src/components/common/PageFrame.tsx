@@ -1,7 +1,8 @@
 import React from 'react';
-import { Box, Grid } from '@wraft/ui';
+import { Box, Flex } from '@wraft/ui';
 
 import Sidebar from 'components/Sidebar';
+import { SidebarProvider, useSidebar } from 'contexts/SidebarContext';
 
 export interface IPage {
   showFull?: boolean;
@@ -15,18 +16,26 @@ export interface IAlert {
   children: any;
 }
 
-export const Page = ({ children, showFull = true, noSide = true }: IPage) => {
-  const shouldShow: boolean = showFull ? true : false;
+const PageLayout = ({ children, noSide = true }: IPage) => {
+  const { mode, isCollapsed } = useSidebar();
+  const isMobile = mode === 'hidden';
 
   return (
-    <Grid
-      templateColumns="minmax(200px, 245px) 1fr"
-      h="100vh"
-      bg="background-secondary"
-    >
-      {noSide && <Sidebar showFull={shouldShow} />}
-      <Box overflow="auto">{children}</Box>
-    </Grid>
+    <Flex h="100vh" bg="background-secondary">
+      {noSide && !isMobile && <Sidebar />}
+      {isMobile && noSide && <Sidebar />}
+      <Box flex={1} overflow="auto" pt={isMobile ? '48px' : 0} minWidth={0}>
+        {children}
+      </Box>
+    </Flex>
+  );
+};
+
+export const Page = ({ children, noSide = true }: IPage) => {
+  return (
+    <SidebarProvider>
+      <PageLayout noSide={noSide}>{children}</PageLayout>
+    </SidebarProvider>
   );
 };
 
