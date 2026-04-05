@@ -1,11 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import dynamic from 'next/dynamic';
 import { Text, Box, Flex } from '@wraft/ui';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { useThemeUI } from 'theme-ui';
 import { CaretRight, List, SidebarSimple, X } from '@phosphor-icons/react';
 
-import QuickActionBar from 'components/QuickActionBar';
+const QuickActionBar = dynamic(() => import('components/QuickActionBar'), {
+  ssr: false,
+});
 import DefaultMenuItem from 'common/MenuItem';
 import { useAuth } from 'contexts/AuthContext';
 import { useSidebar } from 'contexts/SidebarContext';

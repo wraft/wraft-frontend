@@ -99,8 +99,7 @@ export const BlockCard = ({
       px={currentSize.px}
       py={currentSize.py}
       w={w}
-      {...currentVariant}
-    >
+      {...currentVariant}>
       {icon && <IconFrame color="gray.800">{icon}</IconFrame>}
       <Flex flex={1} gap="xs">
         <Text
@@ -109,8 +108,7 @@ export const BlockCard = ({
           fontSize={currentSize.fontSize}
           fontWeight="heading"
           mb={1}
-          color="gray.1100"
-        >
+          color="gray.1100">
           {title}
         </Text>
         <Text ml="auto" fontWeight="normal" fontSize="lg">
@@ -244,8 +242,7 @@ const Dashboard = () => {
         p="xl"
         borderRadius="lg"
         bg="background-primary"
-        overflow="hidden"
-      >
+        overflow="hidden">
         <Flex alignItems="center" p="lg">
           <Image
             src="/static/images/dashboardone.png"
@@ -267,8 +264,7 @@ const Dashboard = () => {
               <Button
                 size="sm"
                 variant="primary"
-                onClick={handleOpenTemplateDrawer}
-              >
+                onClick={handleOpenTemplateDrawer}>
                 <IconFrame color="gray.800" mr="xs">
                   <MagicWandIcon size={16} />
                 </IconFrame>
@@ -282,8 +278,7 @@ const Dashboard = () => {
                     'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
                     '_blank',
                   );
-                }}
-              >
+                }}>
                 <IconFrame color="gray.800" mr="xs">
                   <YoutubeLogoIcon size={16} />
                 </IconFrame>
@@ -295,8 +290,7 @@ const Dashboard = () => {
                 variant="secondary"
                 onClick={() => {
                   window.open('https://www.wraft.ai/docs', '_blank');
-                }}
-              >
+                }}>
                 <IconFrame color="gray.800" mr="xs">
                   <BookOpenIcon size={16} />
                 </IconFrame>
@@ -373,33 +367,25 @@ const Dashboard = () => {
               w="50%"
               p="lg"
               pt="0"
-              pl="xs"
-              // bg="background-primary"
-            >
+              pl="xs">
               <Tab.List aria-label="Content Tab" store={tab}>
                 <Tab id="recent_documents" store={tab}>
                   Recent Documents
                 </Tab>
-                <Tab id="upcoming" store={tab}>
-                  Expiring Contracts
-                </Tab>
-                {/* <Tab id="expired" store={tab}>
-                  Expired Contracts
-                </Tab> */}
               </Tab.List>
               <Box mt="lg">
                 <Tab.Panel tabId="recent_documents" store={tab}>
                   <PendingDocumentBlock />
                 </Tab.Panel>
-                <Tab.Panel tabId="upcoming" store={tab}>
-                  <UpcomingExpiryContracts status="upcoming" />
-                </Tab.Panel>
-                {/* <Tab.Panel tabId="expired" store={tab}>
-                  <UpcomingExpiryContracts status="expired" />
-                </Tab.Panel> */}
               </Box>
             </Box>
             <Flex direction="column" w="50%" gap="lg">
+              <Box>
+                <Text fontWeight="600" fontSize="md" mb="md">
+                  Expiring Contracts
+                </Text>
+                <UpcomingExpiryContracts status="upcoming" />
+              </Box>
               <ContractChart />
               <DocumentTypesChart />
             </Flex>
@@ -413,16 +399,14 @@ const Dashboard = () => {
         placement="right"
         withBackdrop={true}
         hideOnInteractOutside={true}
-        open={templateDrawer.useState().open}
-      >
+        open={templateDrawer.useState().open}>
         <Drawer.Header>
           <Drawer.Title>Choose a Template</Drawer.Title>
           <Button
             variant="ghost"
             size="sm"
             onClick={templateDrawer.hide}
-            style={{ padding: '4px' }}
-          >
+            style={{ padding: '4px' }}>
             <XIcon size={14} weight="bold" />
           </Button>
         </Drawer.Header>
@@ -450,8 +434,7 @@ const Dashboard = () => {
               borderRadius="md"
               p="md"
               bg="red.50"
-              mb="lg"
-            >
+              mb="lg">
               <Text fontSize="sm" color="red.600">
                 {templatesError}
               </Text>
@@ -459,8 +442,7 @@ const Dashboard = () => {
                 size="sm"
                 variant="secondary"
                 onClick={fetchPublicTemplates}
-                style={{ marginTop: '8px' }}
-              >
+                style={{ marginTop: '8px' }}>
                 Try Again
               </Button>
             </Box>
@@ -473,8 +455,7 @@ const Dashboard = () => {
                 fontSize="sm"
                 fontWeight="heading"
                 mb="md"
-                color="text-primary"
-              >
+                color="text-primary">
                 Available Templates ({templates.length})
               </Text>
               <Flex direction="column" gap="md">
@@ -487,8 +468,7 @@ const Dashboard = () => {
                     p="md"
                     bg="background-primary"
                     alignItems="center"
-                    gap="md"
-                  >
+                    gap="md">
                     {/* Template Thumbnail */}
                     <Box
                       w="60px"
@@ -500,8 +480,7 @@ const Dashboard = () => {
                       display="flex"
                       alignItems="center"
                       justifyContent="center"
-                      bg="gray.50"
-                    >
+                      bg="gray.50">
                       {template.thumbnail_url ? (
                         <Image
                           src={template.thumbnail_url}
@@ -522,8 +501,7 @@ const Dashboard = () => {
                       <Text
                         fontSize="sm"
                         fontWeight="heading"
-                        color="text-primary"
-                      >
+                        color="text-primary">
                         {template.name}
                       </Text>
                       <Text fontSize="sm" color="text-secondary">
@@ -538,8 +516,7 @@ const Dashboard = () => {
                     <Button
                       size="sm"
                       variant="secondary"
-                      onClick={() => handleTemplateSelect(template)}
-                    >
+                      onClick={() => handleTemplateSelect(template)}>
                       Install
                     </Button>
                   </Flex>
@@ -556,16 +533,14 @@ const Dashboard = () => {
               border="1px solid"
               borderColor="border"
               borderRadius="md"
-              bg="background-primary"
-            >
+              bg="background-primary">
               <Text fontSize="sm" color="text-secondary" mb="md">
                 No templates available at the moment.
               </Text>
               <Button
                 size="sm"
                 variant="secondary"
-                onClick={fetchPublicTemplates}
-              >
+                onClick={fetchPublicTemplates}>
                 Refresh
               </Button>
             </Box>

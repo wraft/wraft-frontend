@@ -6,6 +6,7 @@ import React, {
   useMemo,
 } from 'react';
 import { useRouter } from 'next/router';
+import { useTheme } from '@emotion/react';
 import { Box, Flex, Text, InputText, Spinner, Tag } from '@wraft/ui';
 import styled from '@emotion/styled';
 import {
@@ -21,9 +22,12 @@ import {
   ArrowRightIcon,
   PlusIcon,
 } from '@phosphor-icons/react';
+import { AnimatePresence } from 'framer-motion';
 
 import { fetchAPI } from 'utils/models';
 import contentStore from 'store/content.store';
+
+import { ContextBadge } from './ContextBadge';
 
 // ─── Types ──────────────────────────────────────────────────
 interface QuickAction {
@@ -142,9 +146,35 @@ const KbdKey = styled(Text)`
   line-height: 1;
 `;
 
-const InputWrapper = styled(Box)<{ isShifted?: boolean }>`
+const InputWrapper = styled(Box)`
   transition: padding-left 150ms ease-out;
-  padding-left: ${({ isShifted }) => (isShifted ? '8px' : '0')};
+`;
+
+const IconButton = styled(Flex)`
+  transition: background 150ms ease;
+  &:hover {
+    background: ${({ theme }: any) =>
+      theme.colors?.['background-secondary'] || '#f5f5f5'};
+  }
+`;
+
+const ClearContextButton = styled(Flex)`
+  transition: opacity 150ms ease;
+  &:hover {
+    opacity: 0.7;
+  }
+`;
+
+const FooterBox = styled(Flex)`
+  border-radius: 0 0 12px 12px;
+`;
+
+const PipelineGoButton = styled(Flex)`
+  transition: background 150ms ease;
+  &:hover {
+    background: ${({ theme }: any) =>
+      theme.colors?.green?.['200'] || '#f0f9f0'};
+  }
 `;
 
 // ─── Component ──────────────────────────────────────────────
@@ -171,6 +201,11 @@ const QuickActionBar = ({ isOpen, onClose }: QuickActionBarProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+  const theme = useTheme() as any;
+  const textColor =
+    theme.colors?.text || theme.colors?.gray?.[900] || '#1a1a1a';
+  const placeholderColor =
+    theme.colors?.['text-secondary'] || theme.colors?.gray?.[500] || '#888';
   const setNewContent = contentStore((state) => state.addNewContent);
 
   // ─── Select Template ────────────────────────────────────
@@ -613,20 +648,17 @@ const QuickActionBar = ({ isOpen, onClose }: QuickActionBarProps) => {
     return `${days}d ago`;
   };
 
-  const contextPrefix = activeContext ? (
-    <Tag
-      variant="info"
-      size="sm"
-      onRemove={goBackToActions}
-      style={{
-        animation: 'slideRight 150ms ease-out',
-        background: activeContext.color || '#e0f2fe',
-        color: activeContext.color ? '#fff' : '#0284c7',
-        fontWeight: 600,
-      }}>
-      {activeContext.prefix || activeContext.name}
-    </Tag>
-  ) : null;
+  const contextPrefix = (
+    <AnimatePresence mode="popLayout">
+      {activeContext && (
+        <ContextBadge
+          key="context-badge"
+          context={activeContext}
+          onRemove={goBackToActions}
+        />
+      )}
+    </AnimatePresence>
+  );
 
   // ─── Render ─────────────────────────────────────────────
   return (
@@ -634,12 +666,6 @@ const QuickActionBar = ({ isOpen, onClose }: QuickActionBarProps) => {
       <PaletteContainer
         onClick={(e: React.MouseEvent) => e.stopPropagation()}
         onKeyDown={handleKeyDown}>
-        <style>{`
-          @keyframes slideRight {
-            from { opacity: 0; transform: translateX(-4px); }
-            to { opacity: 1; transform: translateX(0); }
-          }
-        `}</style>
         {/* Search Input */}
         <Flex
           align="center"
@@ -648,14 +674,19 @@ const QuickActionBar = ({ isOpen, onClose }: QuickActionBarProps) => {
           borderBottom="1px solid"
           borderColor="border">
           <MagnifyingGlassIcon size={16} weight="bold" />
-          <InputWrapper flex={1} py="2px" isShifted={!!activeContext}>
-            <InputText
+          <Flex
+            flex={1}
+            py="2px"
+            align="center"
+            gap="xxs"
+            style={{ minWidth: 0 }}>
+            {contextPrefix}
+            <input
               ref={inputRef}
               value={query}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 setQuery(e.target.value)
               }
-              prefixElement={contextPrefix}
               placeholder={
                 activeContext
                   ? `Search ${activeContext.name}...`
@@ -667,15 +698,18 @@ const QuickActionBar = ({ isOpen, onClose }: QuickActionBarProps) => {
               }
               style={{
                 border: 'none',
-                boxShadow: 'none',
-                fontSize: '15px',
-                padding: '12px 0',
                 background: 'transparent',
+                outline: 'none',
+                fontSize: '15px',
+                color: textColor,
+                flex: 1,
+                minWidth: 0,
+                padding: '10px 0',
               }}
             />
-          </InputWrapper>
+          </Flex>
           {query && (
-            <Flex
+            <IconButton
               as="button"
               align="center"
               justify="center"
@@ -684,10 +718,9 @@ const QuickActionBar = ({ isOpen, onClose }: QuickActionBarProps) => {
               p="xxs"
               borderRadius="sm"
               border="none"
-              bg="transparent"
-              sx={{ '&:hover': { bg: 'background-secondary' } }}>
+              bg="transparent">
               <XIcon size={14} />
-            </Flex>
+            </IconButton>
           )}
         </Flex>
 
@@ -696,19 +729,18 @@ const QuickActionBar = ({ isOpen, onClose }: QuickActionBarProps) => {
           {activeContext ? (
             /* ─── Active Context View ───────────────────── */
             <>
-              <Flex
+              <ClearContextButton
                 align="center"
                 gap="xs"
                 px="lg"
                 py="xs"
                 mb="xxs"
                 cursor="pointer"
-                onClick={goBackToActions}
-                sx={{ '&:hover': { opacity: 0.7 } }}>
+                onClick={goBackToActions}>
                 <Text fontSize="xs" color="text-secondary" fontWeight="500">
                   Clear context
                 </Text>
-              </Flex>
+              </ClearContextButton>
 
               <ActionItem
                 key="new-action"
@@ -844,19 +876,18 @@ const QuickActionBar = ({ isOpen, onClose }: QuickActionBarProps) => {
           ) : showTemplates ? (
             /* ─── Template Picker View ───────────────────── */
             <>
-              <Flex
+              <ClearContextButton
                 align="center"
                 gap="xs"
                 px="lg"
                 py="xs"
                 mb="xxs"
                 cursor="pointer"
-                onClick={goBackToActions}
-                sx={{ '&:hover': { opacity: 0.7 } }}>
+                onClick={goBackToActions}>
                 <Text fontSize="xs" color="text-secondary" fontWeight="500">
                   Back to actions
                 </Text>
-              </Flex>
+              </ClearContextButton>
 
               {loadingTemplates ? (
                 <Flex justify="center" py="xl">
@@ -921,19 +952,18 @@ const QuickActionBar = ({ isOpen, onClose }: QuickActionBarProps) => {
           ) : showPipelines ? (
             /* ─── Pipeline Picker View ──────────────────── */
             <>
-              <Flex
+              <ClearContextButton
                 align="center"
                 gap="xs"
                 px="lg"
                 py="xs"
                 mb="xxs"
                 cursor="pointer"
-                onClick={goBackToActions}
-                sx={{ '&:hover': { opacity: 0.7 } }}>
+                onClick={goBackToActions}>
                 <Text fontSize="xs" color="text-secondary" fontWeight="500">
                   Back to actions
                 </Text>
-              </Flex>
+              </ClearContextButton>
 
               {loadingPipelines ? (
                 <Flex justify="center" py="xl">
@@ -962,9 +992,7 @@ const QuickActionBar = ({ isOpen, onClose }: QuickActionBarProps) => {
                       : 'Create a pipeline to automate document workflows like employee exit, onboarding, and more.'}
                   </Text>
                   {!query.trim() && (
-                    <Flex
-                      as="button"
-                      type="button"
+                    <PipelineGoButton
                       align="center"
                       gap="xs"
                       mt="xs"
@@ -978,13 +1006,12 @@ const QuickActionBar = ({ isOpen, onClose }: QuickActionBarProps) => {
                       onClick={() => {
                         onClose();
                         router.push('/pipelines');
-                      }}
-                      sx={{ '&:hover': { bg: 'green.200' } }}>
+                      }}>
                       <Text fontSize="sm" fontWeight="500">
                         Go to Pipelines
                       </Text>
                       <ArrowRightIcon size={12} />
-                    </Flex>
+                    </PipelineGoButton>
                   )}
                 </Flex>
               ) : (
@@ -1279,15 +1306,14 @@ const QuickActionBar = ({ isOpen, onClose }: QuickActionBarProps) => {
         </Box>
 
         {/* Footer */}
-        <Flex
+        <FooterBox
           px="lg"
           py="sm"
           gap="md"
           borderTop="1px solid"
           borderColor="border"
           align="center"
-          bg="background-secondary"
-          sx={{ borderRadius: '0 0 12px 12px' }}>
+          bg="background-secondary">
           <Flex align="center" gap="xxs">
             <KbdKey>↑</KbdKey>
             <KbdKey>↓</KbdKey>
@@ -1310,7 +1336,7 @@ const QuickActionBar = ({ isOpen, onClose }: QuickActionBarProps) => {
           <Text fontSize="xs" color="text-secondary" ml="auto">
             /
           </Text>
-        </Flex>
+        </FooterBox>
       </PaletteContainer>
     </Overlay>
   );

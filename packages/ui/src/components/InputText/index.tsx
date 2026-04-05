@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 
 import { CreateWuiProps, forwardRef } from "@/system";
 import { DefaultFieldStylesProps, FIELD_ICON_SIZE } from "@/utils";
@@ -54,15 +54,26 @@ export const InputText = forwardRef<"input", InputTextProps>(
     },
     ref,
   ) => {
-    const prefixRef = useRef<HTMLDivElement>(null);
     const [prefixWidth, setPrefixWidth] = useState(0);
+    const prefixRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-      if (prefixRef.current) {
-        setPrefixWidth(prefixRef.current.offsetWidth);
-      } else {
+      const element = prefixRef.current;
+      if (!element) {
         setPrefixWidth(0);
+        return;
       }
+
+      const observer = new ResizeObserver((entries) => {
+        for (let entry of entries) {
+          setPrefixWidth(entry.contentRect.width || 0);
+        }
+      });
+
+      observer.observe(element);
+      return () => {
+        observer.disconnect();
+      };
     }, [prefixElement]);
 
     const hasClearButtonAndRightIcon = isClearable && iconPlacement === "right";
@@ -91,7 +102,8 @@ export const InputText = forwardRef<"input", InputTextProps>(
           size={size}
           style={{
             paddingLeft:
-              prefixWidth > 0 ? `calc(${prefixWidth}px + 16px)` : undefined,
+              prefixWidth > 0 ? `calc(${prefixWidth}px + 20px)` : undefined,
+            transition: "padding-left 200ms cubic-bezier(0.4, 0, 0.2, 1)",
             ...rest.style,
           }}
           transparent={transparent}
