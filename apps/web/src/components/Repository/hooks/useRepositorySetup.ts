@@ -92,7 +92,7 @@ export const useRepositorySetup = () => {
         await putAPI('repository/setup', data);
         setIsSetup(true);
         setStoreIsSetup(true);
-        hasCheckedRef.current = true;
+        hasCheckedRef.current = false;
 
         // Refresh the repository list after setup
         await checkSetup();
@@ -114,7 +114,10 @@ export const useRepositorySetup = () => {
     setIsSetup(false);
     setError(null);
     setRepositories([]);
-  }, []);
+    setStoreIsSetup(false);
+    setStoreError(null);
+    setStoreRepositories([]);
+  }, [setStoreError, setStoreIsSetup, setStoreRepositories]);
 
   // Use useEffect with proper dependency management to prevent infinite loops
   useEffect(() => {

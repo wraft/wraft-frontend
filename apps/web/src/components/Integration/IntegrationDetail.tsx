@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Box, Text, Flex, Toggle, Button } from '@wraft/ui';
 import { toast } from 'react-hot-toast';
@@ -21,6 +21,13 @@ export const IntegrationDetail: FC<IntegrationDetailProps> = ({
   const [loading, setLoading] = useState(true);
   const [toggleLoading, setToggleLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const popupCloseIntervalRef = useRef<ReturnType<typeof setInterval> | null>(
+    null,
+  );
+  const oauthTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const messageListenerRef = useRef<((event: MessageEvent) => void) | null>(
+    null,
+  );
 
   useEffect(() => {
     fetchIntegration();
@@ -84,139 +91,108 @@ export const IntegrationDetail: FC<IntegrationDetailProps> = ({
     setIntegration(updatedIntegration);
   };
 
+  const cleanupOAuthListeners = () => {
+    if (messageListenerRef.current) {
+      window.removeEventListener('message', messageListenerRef.current);
+      messageListenerRef.current = null;
+    }
+    if (popupCloseIntervalRef.current) {
+      clearInterval(popupCloseIntervalRef.current);
+      popupCloseIntervalRef.current = null;
+    }
+    if (oauthTimeoutRef.current) {
+      clearTimeout(oauthTimeoutRef.current);
+      oauthTimeoutRef.current = null;
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      cleanupOAuthListeners();
+    };
+  }, []);
+
   const handleConnect = async () => {
     setToggleLoading(true);
 
     try {
-      fetchAPI('auth/google_drive').then((res: any) => {
-        const { redirect_url } = res;
+      cleanupOAuthListeners();
+      const res = (await fetchAPI('auth/google_drive')) as {
+        redirect_url: string;
+      };
+      const { redirect_url } = res;
 
-        const popup = window.open(
-          redirect_url,
-          'google-drive-auth',
-          'width=500,height=600,scrollbars=yes,resizable=yes',
-        );
+      const popup = window.open(
+        redirect_url,
+        'google-drive-auth',
+        'width=500,height=600,scrollbars=yes,resizable=yes',
+      );
 
-        // Listen for popup messages
-        const messageListener = async (event: MessageEvent) => {
-          console.log('GOOGLE_DRIVE_AUTH_SUCCESS', event);
-          console.log('GOOGLE_DRIVE_AUTH_SUCCESS[origin]', event.origin);
-          console.log(
-            'GOOGLE_DRIVE_AUTH_SUCCESS[window.location]',
-            window.location.origin,
-          );
-          if (event.origin !== window.location.origin) {
+      if (!popup) {
+        toast.error('Popup was blocked. Please allow popups and try again.');
+        setToggleLoading(false);
+        return;
+      }
+
+      const messageListener = async (event: MessageEvent) => {
+        if (event.origin !== window.location.origin || event.source !== popup) {
+          return;
+        }
+
+        if (event.data.type === 'GOOGLE_DRIVE_AUTH_SUCCESS') {
+          const code =
+            typeof event.data.code === 'string' ? event.data.code : '';
+          const state =
+            typeof event.data.state === 'string' ? event.data.state : '';
+
+          if (!code) {
+            toast.error('Missing authorization code from Google Drive');
+            cleanupOAuthListeners();
+            setToggleLoading(false);
+            popup.close();
             return;
           }
 
-          if (event.data.type === 'GOOGLE_DRIVE_AUTH_SUCCESS') {
-            const { code, state } = event.data;
-
-            console.log('GOOGLE_DRIVE_AUTH_SUCCESS');
-
-            try {
-              await fetchAPI(
-                `googledrive/callback?code=${code}&state=${state}`,
-              );
-
-              toast.success('Successfully connected to Google Drive!');
-              popup?.close();
-            } catch (error) {
-              console.error('Error handling OAuth callback:', error);
-              toast.error('Failed to connect to Google Drive');
-            }
-          } else if (event.data.type === 'GOOGLE_DRIVE_AUTH_ERROR') {
-            toast.error('Authentication was cancelled or failed');
-            popup?.close();
+          try {
+            const params = new URLSearchParams({ code, state });
+            await fetchAPI(`googledrive/callback?${params.toString()}`);
+            toast.success('Successfully connected to Google Drive!');
+          } catch (authError) {
+            console.error('Error handling OAuth callback:', authError);
+            toast.error('Failed to connect to Google Drive');
           }
+        } else if (event.data.type === 'GOOGLE_DRIVE_AUTH_ERROR') {
+          toast.error('Authentication was cancelled or failed');
+        }
 
-          window.removeEventListener('message', messageListener);
+        cleanupOAuthListeners();
+        setToggleLoading(false);
+        popup.close();
+      };
+
+      messageListenerRef.current = messageListener;
+      window.addEventListener('message', messageListener);
+
+      popupCloseIntervalRef.current = setInterval(() => {
+        if (popup.closed) {
+          cleanupOAuthListeners();
           setToggleLoading(false);
-        };
-
-        window.addEventListener('message', messageListener);
-
-        // Handle popup blocked or closed
-        const checkClosed = setInterval(() => {
-          if (popup?.closed) {
-            clearInterval(checkClosed);
-            window.removeEventListener('message', messageListener);
-            setToggleLoading(false);
-          }
-        }, 1000);
-        console.log(res);
-      });
-    } catch (error: any) {
-      console.error('Error initiating OAuth:', error);
+        }
+      }, 1000);
+      oauthTimeoutRef.current = setTimeout(() => {
+        cleanupOAuthListeners();
+        if (!popup.closed) {
+          popup.close();
+        }
+        setToggleLoading(false);
+        toast.error('Google Drive authentication timed out. Please try again.');
+      }, 120000);
+    } catch (initError: any) {
+      console.error('Error initiating OAuth:', initError);
       toast.error('Failed to initiate Google Drive authentication');
+      cleanupOAuthListeners();
       setToggleLoading(false);
     }
-
-    // try {
-    //   const authUrl = await driveService.getAuthorizationUrl();
-
-    //   // Open popup window for OAuth
-    //   const popup = window.open(
-    //     authUrl,
-    //     'google-drive-auth',
-    //     'width=500,height=600,scrollbars=yes,resizable=yes',
-    //   );
-
-    //   // Listen for popup messages
-    //   const messageListener = async (event: MessageEvent) => {
-    //     if (event.origin !== window.location.origin) {
-    //       return;
-    //     }
-
-    //     if (event.data.type === 'GOOGLE_DRIVE_AUTH_SUCCESS') {
-    //       const { code } = event.data;
-
-    //       try {
-    //         const result = await driveService.exchangeCodeForTokens(code);
-    //         const config: GoogleDriveIntegrationConfig = {
-    //           access_token: result.tokens.access_token,
-    //           refresh_token: result.tokens.refresh_token,
-    //           user_email: result.userInfo.email,
-    //           user_name: result.userInfo.name,
-    //           expires_at: result.tokens.expiry_date,
-    //         };
-
-    //         setEnabled(true);
-    //         setUserInfo({
-    //           email: config.user_email,
-    //           name: config.user_name,
-    //         });
-
-    //         toast.success('Successfully connected to Google Drive!');
-    //         popup?.close();
-    //       } catch (error) {
-    //         console.error('Error handling OAuth callback:', error);
-    //         toast.error('Failed to connect to Google Drive');
-    //       }
-    //     } else if (event.data.type === 'GOOGLE_DRIVE_AUTH_ERROR') {
-    //       toast.error('Authentication was cancelled or failed');
-    //       popup?.close();
-    //     }
-
-    //     window.removeEventListener('message', messageListener);
-    //     setToggleLoading(false);
-    //   };
-
-    //   window.addEventListener('message', messageListener);
-
-    //   // Handle popup blocked or closed
-    //   const checkClosed = setInterval(() => {
-    //     if (popup?.closed) {
-    //       clearInterval(checkClosed);
-    //       window.removeEventListener('message', messageListener);
-    //       setToggleLoading(false);
-    //     }
-    //   }, 1000);
-    // } catch (error) {
-    //   console.error('Error initiating OAuth:', error);
-    //   toast.error('Failed to initiate Google Drive authentication');
-    //   setToggleLoading(false);
-    // }
   };
 
   if (loading) {

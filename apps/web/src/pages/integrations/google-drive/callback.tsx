@@ -2,18 +2,12 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Flex, Spinner, Text } from '@wraft/ui';
 
-import { fetchAPI } from 'utils/models';
-
 const GoogleDriveCallback = () => {
   const router = useRouter();
-
-  console.log('GoogleDriveCallback');
 
   useEffect(() => {
     const handleCallback = () => {
       const urlParams = new URLSearchParams(window.location.search);
-
-      console.log('window.location.search', window);
       const code = urlParams.get('code');
       const error = urlParams.get('error');
       const state = urlParams.get('state');
@@ -40,9 +34,6 @@ const GoogleDriveCallback = () => {
       if (code) {
         // Send success message with code to parent window
         if (window.opener) {
-          console.log('GOOGLE_DRIVE_AUTH_SUCCESS', code, state);
-          console.log('GOOGLE_DRIVE_AUTH_SUCCESS[b]', window.opener);
-          fetchAPI(`googledrive/callback?code=${code}&state=${state}`);
           window.opener.postMessage(
             {
               type: 'GOOGLE_DRIVE_AUTH_SUCCESS',
@@ -53,7 +44,7 @@ const GoogleDriveCallback = () => {
           );
         }
 
-        // window.close();
+        window.close();
         return;
       }
 
@@ -70,7 +61,7 @@ const GoogleDriveCallback = () => {
         );
       }
 
-      // window.close();
+      window.close();
     };
 
     // Handle callback when component mounts
