@@ -26,6 +26,13 @@ module.exports = {
     removeConsole: process.env.NODE_ENV === 'production',
   },
   output: 'standalone',
+  outputFileTracingIncludes: {
+    // Ensure RTK ESM bundles are present in standalone output for runtime resolution.
+    '/*': [
+      './node_modules/@reduxjs/toolkit/**/*',
+      '../../node_modules/@reduxjs/toolkit/**/*',
+    ],
+  },
   images: {
     unoptimized: true,
   },

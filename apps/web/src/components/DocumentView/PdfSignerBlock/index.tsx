@@ -46,29 +46,28 @@ interface AnnotationDetailsType {
   originalPageHeight: number;
 }
 
-const getTrustedOrigins = () => {
-  const trustedOrigins = new Set<string>();
+const getTrustedHosts = () => {
+  const trustedHosts = new Set<string>();
 
   if (typeof window !== 'undefined') {
-    trustedOrigins.add(window.location.origin);
+    trustedHosts.add(window.location.host);
   }
 
   const apiHost = process.env.NEXT_PUBLIC_API_HOST;
   if (apiHost) {
     try {
-      const defaultProtocol =
-        typeof window !== 'undefined' ? window.location.protocol : 'https:';
-      const normalizedApiHost =
-        apiHost.startsWith('http://') || apiHost.startsWith('https://')
-          ? apiHost
-          : `${defaultProtocol}//${apiHost}`;
-      trustedOrigins.add(new URL(normalizedApiHost).origin);
+      if (apiHost.startsWith('http://') || apiHost.startsWith('https://')) {
+        trustedHosts.add(new URL(apiHost).host);
+      } else {
+        trustedHosts.add(new URL(`http://${apiHost}`).host);
+        trustedHosts.add(new URL(`https://${apiHost}`).host);
+      }
     } catch (error) {
       console.error('Invalid NEXT_PUBLIC_API_HOST:', error);
     }
   }
 
-  return trustedOrigins;
+  return trustedHosts;
 };
 
 const shouldAttachAuthHeader = (requestUrl: string) => {
@@ -76,7 +75,7 @@ const shouldAttachAuthHeader = (requestUrl: string) => {
 
   try {
     const parsedUrl = new URL(requestUrl, window.location.origin);
-    return getTrustedOrigins().has(parsedUrl.origin);
+    return getTrustedHosts().has(parsedUrl.host);
   } catch (error) {
     console.error('Invalid PDF URL:', error);
     return false;
@@ -181,27 +180,42 @@ const PdfSignerViewer = ({ url, signerBoxes }: PdfViewerProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const currentPdfObjectUrlRef = useRef<string | null>(null);
 
-  const { signers, cId: contentId, inviteType, setSignerBoxes } = useDocument();
+  const {
+    signers,
+    cId: contentId,
+    inviteType,
+    setSignerBoxes,
+    token,
+  } = useDocument();
   const renderWidth = 760;
 
   useEffect(() => {
     if (!url) return;
+    const controller = new AbortController();
+    let disposed = false;
+
+    setPdfUrl(null);
+    setAnnotationDetails(null);
 
     const modifyPdf = async () => {
       try {
-        const token = cookie.get('token');
+        const authToken = token || cookie.get('token');
         const canAttachAuthHeader = shouldAttachAuthHeader(url);
         const response = await axios.get(url, {
+          signal: controller.signal,
+          timeout: 30000,
           responseType: 'arraybuffer',
           headers:
-            token && canAttachAuthHeader
+            authToken && canAttachAuthHeader
               ? {
-                  Authorization: `Bearer ${token}`,
+                  Authorization: `Bearer ${authToken}`,
                 }
               : undefined,
         });
+        if (disposed || controller.signal.aborted) return;
         const existingPdfBytes = response.data;
         const pdfDoc = await PDFDocument.load(existingPdfBytes);
+        if (disposed || controller.signal.aborted) return;
 
         const page = pdfDoc.getPages()[0];
         const pageHeight = page.getHeight();
@@ -233,6 +247,7 @@ const PdfSignerViewer = ({ url, signerBoxes }: PdfViewerProps) => {
         }
 
         const modifiedPdfBytes = await pdfDoc.save();
+        if (disposed || controller.signal.aborted) return;
         const safePdfBuffer = new Uint8Array(modifiedPdfBytes).buffer;
         const blob = new Blob([safePdfBuffer], { type: 'application/pdf' });
         const pdfObjectUrl = URL.createObjectURL(blob);
@@ -243,6 +258,9 @@ const PdfSignerViewer = ({ url, signerBoxes }: PdfViewerProps) => {
         currentPdfObjectUrlRef.current = pdfObjectUrl;
         setPdfUrl(pdfObjectUrl);
       } catch (error) {
+        if (axios.isCancel(error)) return;
+        setPdfUrl(null);
+        setAnnotationDetails(null);
         console.error('Error loading or modifying PDF:', error);
         toast.error('Failed to load PDF for signing');
       }
@@ -251,12 +269,14 @@ const PdfSignerViewer = ({ url, signerBoxes }: PdfViewerProps) => {
     modifyPdf();
 
     return () => {
+      disposed = true;
+      controller.abort();
       if (currentPdfObjectUrlRef.current) {
         URL.revokeObjectURL(currentPdfObjectUrlRef.current);
         currentPdfObjectUrlRef.current = null;
       }
     };
-  }, [url]);
+  }, [url, token]);
 
   const onDocumentLoadSuccess = ({
     numPages: nextNumPages,

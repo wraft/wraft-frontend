@@ -5,6 +5,22 @@ log() {
   echo "[INFO] $1"
 }
 
+required_paths="
+/app/node_modules/@reduxjs/toolkit/dist/redux-toolkit.modern.mjs
+/app/node_modules/redux/package.json
+/app/node_modules/redux-thunk/package.json
+/app/node_modules/immer/package.json
+/app/node_modules/reselect/package.json
+"
+
+for path in $required_paths; do
+  if [ ! -f "$path" ]; then
+    echo "[ERROR] Missing runtime dependency artifact: $path"
+    echo "[ERROR] Rebuild image with updated standalone dependency copy rules."
+    exit 1
+  fi
+done
+
 if ! printenv | grep -q NEXT_PUBLIC_; then
   log "No NEXT_PUBLIC_ environment variables found. Skipping replacement."
 else

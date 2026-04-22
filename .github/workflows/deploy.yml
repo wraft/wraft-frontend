@@ -29,6 +29,24 @@ jobs:
         id: version
         run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
 
+      - name: Smoke test runtime dependencies in runner image
+        run: |
+          docker buildx build --target runner --load -t wraft-frontend-smoke -f docker/Dockerfile .
+          docker run --rm wraft-frontend-smoke sh -c "test -f /app/node_modules/@reduxjs/toolkit/dist/redux-toolkit.modern.mjs"
+          docker run --rm wraft-frontend-smoke sh -c "test -f /app/node_modules/redux/package.json"
+          docker run --rm wraft-frontend-smoke sh -c "test -f /app/node_modules/redux-thunk/package.json"
+          docker run --rm wraft-frontend-smoke sh -c "test -f /app/node_modules/immer/package.json"
+          docker run --rm wraft-frontend-smoke sh -c "test -f /app/node_modules/reselect/package.json"
+          CONTAINER_ID=$(docker run -d wraft-frontend-smoke)
+          sleep 8
+          docker logs "$CONTAINER_ID"
+          RUNNING=$(docker inspect -f '{{.State.Running}}' "$CONTAINER_ID")
+          docker rm -f "$CONTAINER_ID" >/dev/null 2>&1 || true
+          if [ "$RUNNING" != "true" ]; then
+            echo "Runner container exited during smoke startup check."
+            exit 1
+          fi
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
