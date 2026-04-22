@@ -3,8 +3,6 @@ import { Flex, Button, Text } from '@wraft/ui';
 
 import Link from 'common/NavLink';
 
-import CheckSuccess from '../../../public/check-success.svg';
-
 const PasswordCreated = () => {
   return (
     <Flex
@@ -16,7 +14,13 @@ const PasswordCreated = () => {
         Password Created
       </Text>
 
-      <Image alt="" src={CheckSuccess} className="" width={32} height={32} />
+      <Image
+        alt=""
+        src="/check-success.svg"
+        className=""
+        width={32}
+        height={32}
+      />
       <Text py="md" fontWeight="heading">
         Awesome! You are ready to access your Wraft account Login your account
         and enjoy your workplace

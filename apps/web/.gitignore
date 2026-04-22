@@ -12,3 +12,4 @@ out
 .env.production
 .env
 .vercel
+next-env.d.ts

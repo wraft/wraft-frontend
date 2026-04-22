@@ -5,6 +5,7 @@ import { theme, GlobalStyle } from '@wraft/ui';
 import { getSession } from 'next-auth/react';
 import { ThemeUIProvider } from 'theme-ui';
 import 'core-js/full/promise/with-resolvers.js';
+import '@wraft/editor/style.css';
 
 import Analytics from 'components/common/Analytics';
 import GoogleTagManager from 'components/common/GoogleTagManager';

@@ -3,8 +3,6 @@ import { Button, Flex, Box, Text } from '@wraft/ui';
 
 import Link from 'common/NavLink';
 
-import MailSend from '../../../public/Group 164.svg';
-
 const WaitlistPrompt: React.FC = () => {
   return (
     <Flex
@@ -26,7 +24,7 @@ const WaitlistPrompt: React.FC = () => {
       </Text>
       <Box>
         <Image
-          src={MailSend}
+          src="/check-success.svg"
           alt=""
           className=""
           width={146}

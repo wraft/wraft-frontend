@@ -2,7 +2,6 @@ import { forwardRef } from 'react';
 import { Editor } from '@wraft/editor';
 import type { NodeJSON } from '@wraft/editor';
 
-import '@wraft/editor/style.css';
 import { envConfig } from 'utils/env';
 
 type EditorProps = {

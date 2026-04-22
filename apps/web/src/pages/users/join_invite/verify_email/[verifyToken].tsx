@@ -6,8 +6,6 @@ import { Flex, Text, Button } from '@wraft/ui';
 
 import { fetchAPI } from 'utils/models';
 
-import Verified from '../../../../../public/social-handoff.svg';
-
 const EmailVerified: React.FC = () => {
   const router = useRouter();
 
@@ -36,7 +34,7 @@ const EmailVerified: React.FC = () => {
           pt="103px"
           px="140px">
           <Image
-            src={Verified}
+            src="/check-success.svg"
             alt=""
             width={224}
             height={224}

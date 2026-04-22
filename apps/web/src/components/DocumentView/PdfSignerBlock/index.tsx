@@ -1,4 +1,5 @@
-import React, { useEffect, useState, CSSProperties } from 'react';
+import React, { useEffect, useRef, useState, CSSProperties } from 'react';
+import axios from 'axios';
 import {
   PDFDocument,
   PDFRef,
@@ -19,6 +20,7 @@ import { Document, Page, pdfjs } from 'react-pdf';
 import { Box, Flex, Text, Button, Modal, Select } from '@wraft/ui';
 import { Signature, X } from '@phosphor-icons/react';
 import toast from 'react-hot-toast';
+import cookie from 'js-cookie';
 
 import { postAPI } from 'utils/models';
 
@@ -43,6 +45,43 @@ interface AnnotationDetailsType {
   originalPageWidth: number;
   originalPageHeight: number;
 }
+
+const getTrustedOrigins = () => {
+  const trustedOrigins = new Set<string>();
+
+  if (typeof window !== 'undefined') {
+    trustedOrigins.add(window.location.origin);
+  }
+
+  const apiHost = process.env.NEXT_PUBLIC_API_HOST;
+  if (apiHost) {
+    try {
+      const defaultProtocol =
+        typeof window !== 'undefined' ? window.location.protocol : 'https:';
+      const normalizedApiHost =
+        apiHost.startsWith('http://') || apiHost.startsWith('https://')
+          ? apiHost
+          : `${defaultProtocol}//${apiHost}`;
+      trustedOrigins.add(new URL(normalizedApiHost).origin);
+    } catch (error) {
+      console.error('Invalid NEXT_PUBLIC_API_HOST:', error);
+    }
+  }
+
+  return trustedOrigins;
+};
+
+const shouldAttachAuthHeader = (requestUrl: string) => {
+  if (typeof window === 'undefined') return false;
+
+  try {
+    const parsedUrl = new URL(requestUrl, window.location.origin);
+    return getTrustedOrigins().has(parsedUrl.origin);
+  } catch (error) {
+    console.error('Invalid PDF URL:', error);
+    return false;
+  }
+};
 
 // PDF utility functions
 const _flattenWidget = (
@@ -140,6 +179,7 @@ const PdfSignerViewer = ({ url, signerBoxes }: PdfViewerProps) => {
   const [annotationDetails, setAnnotationDetails] =
     useState<AnnotationDetailsType | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const currentPdfObjectUrlRef = useRef<string | null>(null);
 
   const { signers, cId: contentId, inviteType, setSignerBoxes } = useDocument();
   const renderWidth = 760;
@@ -149,12 +189,18 @@ const PdfSignerViewer = ({ url, signerBoxes }: PdfViewerProps) => {
 
     const modifyPdf = async () => {
       try {
-        const response = await fetch(url);
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const existingPdfBytes = await response.arrayBuffer();
+        const token = cookie.get('token');
+        const canAttachAuthHeader = shouldAttachAuthHeader(url);
+        const response = await axios.get(url, {
+          responseType: 'arraybuffer',
+          headers:
+            token && canAttachAuthHeader
+              ? {
+                  Authorization: `Bearer ${token}`,
+                }
+              : undefined,
+        });
+        const existingPdfBytes = response.data;
         const pdfDoc = await PDFDocument.load(existingPdfBytes);
 
         const page = pdfDoc.getPages()[0];
@@ -187,16 +233,29 @@ const PdfSignerViewer = ({ url, signerBoxes }: PdfViewerProps) => {
         }
 
         const modifiedPdfBytes = await pdfDoc.save();
-        const blob = new Blob([modifiedPdfBytes], { type: 'application/pdf' });
+        const safePdfBuffer = new Uint8Array(modifiedPdfBytes).buffer;
+        const blob = new Blob([safePdfBuffer], { type: 'application/pdf' });
         const pdfObjectUrl = URL.createObjectURL(blob);
 
+        if (currentPdfObjectUrlRef.current) {
+          URL.revokeObjectURL(currentPdfObjectUrlRef.current);
+        }
+        currentPdfObjectUrlRef.current = pdfObjectUrl;
         setPdfUrl(pdfObjectUrl);
       } catch (error) {
         console.error('Error loading or modifying PDF:', error);
+        toast.error('Failed to load PDF for signing');
       }
     };
 
     modifyPdf();
+
+    return () => {
+      if (currentPdfObjectUrlRef.current) {
+        URL.revokeObjectURL(currentPdfObjectUrlRef.current);
+        currentPdfObjectUrlRef.current = null;
+      }
+    };
   }, [url]);
 
   const onDocumentLoadSuccess = ({
