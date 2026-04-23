@@ -7,7 +7,7 @@ log() {
 
 required_paths="
 /app/node_modules/@reduxjs/toolkit/dist/redux-toolkit.modern.mjs
-/app/node_modules/redux/package.json
+/app/node_modules/redux/dist/redux.mjs
 /app/node_modules/redux-thunk/package.json
 /app/node_modules/immer/package.json
 /app/node_modules/reselect/package.json

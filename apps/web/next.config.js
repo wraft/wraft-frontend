@@ -1,8 +1,9 @@
 const HOST = process.env.NEXT_PUBLIC_API_HOST || 'http://localhost:4000';
 
-const apiHost = HOST.startsWith('http://') || HOST.startsWith('https://') 
-  ? HOST 
-  : `http://${HOST}`;
+const apiHost =
+  HOST.startsWith('http://') || HOST.startsWith('https://')
+    ? HOST
+    : `http://${HOST}`;
 
 module.exports = {
   env: {
@@ -27,10 +28,18 @@ module.exports = {
   },
   output: 'standalone',
   outputFileTracingIncludes: {
-    // Ensure RTK ESM bundles are present in standalone output for runtime resolution.
+    // Ensure RTK and Redux ESM bundles are present in standalone output.
     '/*': [
       './node_modules/@reduxjs/toolkit/**/*',
       '../../node_modules/@reduxjs/toolkit/**/*',
+      './node_modules/redux/**/*',
+      '../../node_modules/redux/**/*',
+      './node_modules/redux-thunk/**/*',
+      '../../node_modules/redux-thunk/**/*',
+      './node_modules/immer/**/*',
+      '../../node_modules/immer/**/*',
+      './node_modules/reselect/**/*',
+      '../../node_modules/reselect/**/*',
     ],
   },
   images: {
@@ -38,10 +47,10 @@ module.exports = {
   },
   experimental: {
     optimizePackageImports: ['@phosphor-icons/react'],
-    turbo: {
-      resolveAlias: {
-        canvas: './empty-module.ts',
-      },
+  },
+  turbopack: {
+    resolveAlias: {
+      canvas: './empty-module.ts',
     },
   },
   transpilePackages: ['prosemirror-view', 'prosemirror-state'],

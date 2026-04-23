@@ -237,7 +237,7 @@ export const LiveEditor = forwardRef(
       <EditorConfigProvider config={{ apiHost }} tokens={tokens}>
         <S.EditorWrapper className={`wraft-editor ${className}`}>
           {isLoading && editor && (
-            <ProseKit editor={editor}>
+            <ProseKit editor={editor as any}>
               {!isReadonly && <Toolbar />}
 
               <S.EditorContainer>

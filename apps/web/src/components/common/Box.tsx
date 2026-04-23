@@ -4,10 +4,10 @@ import { SystemProps, x } from '@xstyled/emotion';
 interface IProps {
   className?: string;
 }
-export interface BoxProps
-  extends SystemProps,
-    IProps,
-    Omit<React.HTMLProps<HTMLDivElement>, 'color' | 'as'> {}
+
+export type BoxProps = SystemProps &
+  IProps &
+  Omit<React.HTMLProps<HTMLDivElement>, 'color' | 'as'>;
 
 export const Box = forwardRef(
   ({ className, ...rest }: BoxProps, ref: Ref<HTMLDivElement>) => {

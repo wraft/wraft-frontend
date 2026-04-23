@@ -22,7 +22,7 @@ export const ProseKitDiffViewer: React.FC<ProseKitDiffViewerProps> = ({
 
   return (
     <>
-      <ProseKit editor={editor}>
+      <ProseKit editor={editor as any}>
         <S.EditorContainer type="editerdiffview">
           <S.EditorContent>
             <S.EditorContentInput ref={editor.mount} />

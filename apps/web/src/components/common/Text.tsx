@@ -4,10 +4,10 @@ import { SystemProps, x } from '@xstyled/emotion';
 interface IProps {
   className?: string;
 }
-export interface TextProps
-  extends SystemProps,
-    IProps,
-    Omit<React.HTMLProps<HTMLParagraphElement>, 'color' | 'as'> {}
+
+export type TextProps = SystemProps &
+  IProps &
+  Omit<React.HTMLProps<HTMLParagraphElement>, 'color' | 'as'>;
 
 export const Text = forwardRef(
   ({ className, ...rest }: TextProps, ref: Ref<HTMLParagraphElement>) => {

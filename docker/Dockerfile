@@ -61,8 +61,12 @@ COPY --from=builder /app/apps/web/package.json .
 COPY --from=builder --chown=nextjs:nodejs /app/apps/web/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/apps/web/.next/static ./apps/web/.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/apps/web/public ./apps/web/public
-# Defensive copy: keep RTK ESM runtime files available at /app/node_modules.
+# Defensive copy: keep RTK and its Redux runtime dependencies available.
 COPY --from=builder --chown=nextjs:nodejs /app/node_modules/@reduxjs/toolkit ./node_modules/@reduxjs/toolkit
+COPY --from=builder --chown=nextjs:nodejs /app/node_modules/redux ./node_modules/redux
+COPY --from=builder --chown=nextjs:nodejs /app/node_modules/redux-thunk ./node_modules/redux-thunk
+COPY --from=builder --chown=nextjs:nodejs /app/node_modules/immer ./node_modules/immer
+COPY --from=builder --chown=nextjs:nodejs /app/node_modules/reselect ./node_modules/reselect
 
 COPY --chown=nextjs:nodejs docker/entrypoint.sh ./entrypoint.sh
 RUN chmod +x ./entrypoint.sh

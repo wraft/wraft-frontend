@@ -37,6 +37,23 @@ const config: StorybookConfig = {
     return {
       ...config,
       define: { "process.env": {} },
+      build: {
+        ...config.build,
+        rollupOptions: {
+          ...config.build?.rollupOptions,
+          onwarn(warning, warn) {
+            const isStorybookEvalWarning =
+              warning.code === "EVAL" &&
+              warning.id?.includes("@storybook/core/dist/preview/runtime.js");
+
+            if (isStorybookEvalWarning) {
+              return;
+            }
+
+            warn(warning);
+          },
+        },
+      },
       resolve: {
         alias: [
           {

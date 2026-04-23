@@ -88,7 +88,7 @@ export const Editor = forwardRef<EditorRef, EditorProps>(
     return (
       <EditorConfigProvider config={{ apiHost }} tokens={tokens}>
         <div className={`wraft-editor ${className}`}>
-          <ProseKit editor={editor}>
+          <ProseKit editor={editor as any}>
             <S.EditorContainer>
               {!isReadonly && <Toolbar />}
               <S.EditorContent>
