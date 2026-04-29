@@ -87,6 +87,22 @@ After building, run the application in development mode.
 
 The app should now be running locally, and you can access it at http://localhost:3000.
 
+## Dependency Security
+
+- Run a high/critical vulnerability check:
+
+```sh
+pnpm security:audit
+```
+
+- For machine-readable output:
+
+```sh
+pnpm security:audit:json
+```
+
+- CI runs the same high/critical gate on pull requests and pushes to `main` via `.github/workflows/dependency-audit.yml`.
+
 ## 📄 License
 
 Wraft is open-source software licensed under the [AGPLv3](LICENSE).

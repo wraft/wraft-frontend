@@ -1,12 +1,11 @@
-const withImages = require('next-images');
-
 const HOST = process.env.NEXT_PUBLIC_API_HOST || 'http://localhost:4000';
 
-const apiHost = HOST.startsWith('http://') || HOST.startsWith('https://') 
-  ? HOST 
-  : `http://${HOST}`;
+const apiHost =
+  HOST.startsWith('http://') || HOST.startsWith('https://')
+    ? HOST
+    : `http://${HOST}`;
 
-module.exports = withImages({
+module.exports = {
   env: {
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
@@ -45,4 +44,4 @@ module.exports = withImages({
     config.resolve.alias.canvas = false;
     return config;
   },
-});
+};

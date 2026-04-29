@@ -30,7 +30,6 @@ module.exports = {
         'eslint:recommended',
         'plugin:@typescript-eslint/recommended', // TypeScript rules
         'plugin:react/recommended', // React rules
-        'plugin:react-hooks/recommended', // React hooks rules
         'plugin:jsx-a11y/recommended', // Accessibility rules
         'plugin:prettier/recommended', // Prettier plugin
       ],
@@ -69,8 +68,7 @@ module.exports = {
         'import/order': [
           'error',
           {
-            groups: ['builtin', 'external','internal'],
-            // "alphabetize": { "order": "asc", "caseInsensitive": true },
+            groups: ['builtin', 'external', 'internal'],
             pathGroups: [
               {
                 pattern: 'react',
@@ -86,7 +84,6 @@ module.exports = {
                 pattern: '@wraft-ui/**',
                 group: 'external',
               },
-          
               {
                 pattern: 'components/**',
                 group: 'internal',
@@ -141,7 +138,6 @@ module.exports = {
             pathGroupsExcludedImportTypes: ['builtin'],
             'newlines-between': 'always',
             distinctGroup: false,
-            // pathGroupsExcludedImportTypes: ["react", "next", "next/*"],
           },
         ],
       },

@@ -7,4 +7,12 @@ module.exports = {
   parserOptions: {
     project: true,
   },
+  overrides: [
+    {
+      files: [".eslintrc.js"],
+      parserOptions: {
+        project: null,
+      },
+    },
+  ],
 };

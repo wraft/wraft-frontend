@@ -1,7 +1,10 @@
 import type { StorybookConfig } from "@storybook/react-vite";
 import react from "@vitejs/plugin-react";
+import { createRequire } from "module";
 
 import { dirname, join, resolve } from "path";
+
+const require = createRequire(import.meta.url);
 
 function getAbsolutePath(value: string): any {
   return dirname(require.resolve(join(value, "package.json")));
