@@ -39,8 +39,6 @@ ENV NEXT_PUBLIC_WEBSOCKET_URL=BAKED_NEXT_PUBLIC_WEBSOCKET_URL
 ENV NEXT_PUBLIC_API_HOST=BAKED_NEXT_PUBLIC_API_HOST
 
 RUN turbo build --filter=@wraft/web
-RUN rm -rf node_modules
-RUN --mount=type=cache,id=pnpm,target=~/.pnpm-store CI=true pnpm install --prod --no-optional --ignore-scripts
 RUN rm -rf ./services/*/src
 RUN rm -rf ./libs/*/src
 
@@ -60,6 +58,8 @@ COPY --from=builder /app/apps/web/package.json .
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
 COPY --from=builder --chown=nextjs:nodejs /app/apps/web/.next/standalone ./
+# Ensure pnpm symlink targets from standalone node_modules exist at runtime.
+COPY --from=builder --chown=nextjs:nodejs /app/node_modules ./node_modules
 COPY --from=builder --chown=nextjs:nodejs /app/apps/web/.next/static ./apps/web/.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/apps/web/public ./apps/web/public
 
