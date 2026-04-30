@@ -6,7 +6,7 @@ RUN apk add --no-cache libc6-compat
 
 # Setup pnpm and turbo on the alpine base
 FROM alpine AS base
-RUN npm install pnpm@9.15.9 turbo --global
+RUN npm install pnpm@10.33.2 turbo@2.5.5 --global
 RUN pnpm config set store-dir ~/.pnpm-store
 
 # Prune projects
@@ -39,7 +39,8 @@ ENV NEXT_PUBLIC_WEBSOCKET_URL=BAKED_NEXT_PUBLIC_WEBSOCKET_URL
 ENV NEXT_PUBLIC_API_HOST=BAKED_NEXT_PUBLIC_API_HOST
 
 RUN turbo build --filter=@wraft/web
-RUN --mount=type=cache,id=pnpm,target=~/.pnpm-store pnpm prune --prod --no-optional
+RUN rm -rf node_modules
+RUN --mount=type=cache,id=pnpm,target=~/.pnpm-store CI=true pnpm install --prod --no-optional --ignore-scripts
 RUN rm -rf ./services/*/src
 RUN rm -rf ./libs/*/src
 
