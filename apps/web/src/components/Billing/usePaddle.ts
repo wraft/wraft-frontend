@@ -30,7 +30,6 @@ export const usePaddle = ({
 
     script.onload = () => {
       try {
-        // eslint-disable-next-line @typescript-eslint/no-shadow
         const Paddle = (window as any).Paddle;
         if (!Paddle) throw new Error('Paddle SDK not available');
 

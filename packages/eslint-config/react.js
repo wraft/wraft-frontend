@@ -13,10 +13,14 @@ const project = resolve(process.cwd(), "tsconfig.json");
 
 module.exports = {
   extends: [
-    "@vercel/style-guide/eslint/browser",
-    "@vercel/style-guide/eslint/typescript",
-    "@vercel/style-guide/eslint/react",
-  ].map(require.resolve),
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:jsx-a11y/recommended",
+    "prettier",
+  ],
+  parser: "@typescript-eslint/parser",
   parserOptions: {
     project,
   },
@@ -25,6 +29,9 @@ module.exports = {
     JSX: true,
   },
   settings: {
+    react: {
+      version: "detect",
+    },
     "import/resolver": {
       typescript: {
         project,
@@ -35,16 +42,24 @@ module.exports = {
   // add rules configurations here
   rules: {
     "import/no-default-export": "off",
-    "turbo/no-undeclared-env-vars": 'warn',
-    '@typescript-eslint/no-unused-vars': 'warn',
+    "@typescript-eslint/no-unused-vars": "warn",
     "import/order": [
       "error",
       {
-        "groups": ["builtin", "external", "internal", "parent", "sibling", "index", "object", "type"],
+        groups: [
+          "builtin",
+          "external",
+          "internal",
+          "parent",
+          "sibling",
+          "index",
+          "object",
+          "type",
+        ],
         "newlines-between": "always",
-        "alphabetize": { "order": "asc", "caseInsensitive": true },
-        "pathGroupsExcludedImportTypes": ["react"]
-      }
-    ]
+        alphabetize: { order: "asc", caseInsensitive: true },
+        pathGroupsExcludedImportTypes: ["react"],
+      },
+    ],
   },
 };

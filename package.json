@@ -31,7 +31,7 @@
     "@changesets/cli": "^2.31.0",
     "@wraft/eslint-config": "^0.0.0",
     "@wraft/typescript-config": "^0.0.0",
-    "eslint": "^8.57.0",
+    "eslint": "^9.39.4",
     "husky": "^9.1.7",
     "lint-staged": "^16.4.0",
     "prettier": "^3.5.3",

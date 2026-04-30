@@ -23,7 +23,7 @@
     "@types/react-dom": "^18.3.0",
     "@wraft/eslint-config": "*",
     "@wraft/typescript-config": "*",
-    "eslint": "^8.57.0",
+    "eslint": "^9.39.4",
     "react": "^18.2.0",
     "tsup": "^8.5.0",
     "typescript": "^5.3.3"

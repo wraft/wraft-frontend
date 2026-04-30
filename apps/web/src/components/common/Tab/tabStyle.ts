@@ -3,7 +3,6 @@
  */
 import * as Ariakit from '@ariakit/react';
 import styled from '@emotion/styled';
-// eslint-disable-next-line no-restricted-imports
 
 /**
  * Internal dependencies

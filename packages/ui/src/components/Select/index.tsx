@@ -90,7 +90,6 @@ export type SelectProps = CreateWuiProps<
 >;
 
 // because of this issue: https://github.com/downshift-js/downshift/issues/1505
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 
 const Downshift: typeof DownshiftImport =
   // @ts-ignore
@@ -405,7 +404,6 @@ export const Select = forwardRef<"input", SelectProps>(
                       ) => {
                         if (groupsEnabled && "options" in result) {
                           acc.itemsToRender.push(
-                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                             // @ts-ignore
                             <Fragment key={result.label}>
                               {renderGroupHeader(result)}

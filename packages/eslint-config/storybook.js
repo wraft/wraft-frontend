@@ -13,15 +13,16 @@ const project = resolve(process.cwd(), "tsconfig.json");
 
 module.exports = {
   extends: [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:jsx-a11y/recommended",
     "plugin:storybook/recommended",
     "plugin:mdx/recommended",
-    ...[
-      "@vercel/style-guide/eslint/node",
-      "@vercel/style-guide/eslint/typescript",
-      "@vercel/style-guide/eslint/browser",
-      "@vercel/style-guide/eslint/react",
-    ].map(require.resolve),
+    "prettier",
   ],
+  parser: "@typescript-eslint/parser",
   parserOptions: {
     project,
   },
@@ -31,6 +32,9 @@ module.exports = {
     JSX: true,
   },
   settings: {
+    react: {
+      version: "detect",
+    },
     "import/resolver": {
       typescript: {
         project,
