@@ -30,14 +30,13 @@ module.exports = {
   images: {
     unoptimized: true,
   },
-  experimental: {
-    esmExternals: 'loose',
-    optimizePackageImports: ['@phosphor-icons/react'],
-    turbo: {
-      resolveAlias: {
-        canvas: './empty-module.ts',
-      },
+  turbopack: {
+    resolveAlias: {
+      canvas: './empty-module.ts',
     },
+  },
+  experimental: {
+    optimizePackageImports: ['@phosphor-icons/react'],
   },
   transpilePackages: ['prosemirror-view', 'prosemirror-state'],
   webpack: (config) => {

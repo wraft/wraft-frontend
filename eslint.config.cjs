@@ -9,7 +9,15 @@ const compat = new FlatCompat({
 
 module.exports = [
   {
-    ignores: ["eslint.config.cjs"],
+    ignores: [
+      "eslint.config.cjs",
+      "**/node_modules/**",
+      "**/.next/**",
+      "**/public/**",
+      "**/next.config.js",
+      "**/next.config.mjs",
+      "**/next.config.ts",
+    ],
   },
   ...compat.config({
     extends: ["@wraft/eslint-config/library.js"],

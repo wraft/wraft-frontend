@@ -8,7 +8,16 @@ const compat = new FlatCompat({
 });
 
 module.exports = [
-  { ignores: ["eslint.config.cjs", ".eslintrc.js", ".eslintrc.cjs"] },
+  {
+    ignores: [
+      "eslint.config.cjs",
+      ".eslintrc.js",
+      ".eslintrc.cjs",
+      "next.config.js",
+      "next.config.mjs",
+      "next.config.ts",
+    ],
+  },
   ...compat.config({
     root: true,
     env: {
