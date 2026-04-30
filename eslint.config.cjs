@@ -9,7 +9,7 @@ const compat = new FlatCompat({
 
 module.exports = [
   {
-    ignores: ["apps/**", "packages/**", "eslint.config.cjs"],
+    ignores: ["eslint.config.cjs"],
   },
   ...compat.config({
     extends: ["@wraft/eslint-config/library.js"],
