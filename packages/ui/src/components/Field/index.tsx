@@ -80,7 +80,7 @@ export const Field = forwardRef<HTMLDivElement, FieldOptions>(
       Object.keys(children.props).forEach((prop) => {
         if (forwardedProps.includes(prop)) {
           const element = document.getElementById(htmlFor);
-          // eslint-disable-next-line no-console
+
           console.warn(
             `You must pass the "${prop}" prop to the <Field /> instead of`,
             element,

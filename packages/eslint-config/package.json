@@ -5,17 +5,38 @@
   "files": [
     "library.js",
     "react.js",
+    "next.js",
     "storybook.js",
     "react-internal.js"
   ],
+  "scripts": {
+    "lint": "eslint --print-config library.js"
+  },
+  "peerDependencies": {
+    "eslint": "^9.0.0",
+    "eslint-config-next": "^15.0.0 || ^16.0.0",
+    "next": "^15.0.0 || ^16.0.0"
+  },
+  "peerDependenciesMeta": {
+    "eslint-config-next": {
+      "optional": true
+    },
+    "next": {
+      "optional": true
+    }
+  },
   "devDependencies": {
-    "@vercel/style-guide": "^5.2.0",
-    "eslint": "^8.57.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-config-turbo": "^1.11.3",
-    "eslint-plugin-mdx": "^2.3.2",
+    "@typescript-eslint/eslint-plugin": "^8.59.1",
+    "@typescript-eslint/parser": "^8.59.1",
+    "eslint": "^9.39.4",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-mdx": "^3.7.0",
     "eslint-plugin-only-warn": "^1.1.0",
-    "eslint-plugin-prettier": "^5.1.3",
+    "eslint-plugin-prettier": "^5.5.5",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-storybook": "^0.6.15",
     "prettier": "3.2.5",
     "typescript": "5.3.3"

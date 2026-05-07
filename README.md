@@ -31,7 +31,7 @@ Wraft focuses on efficiency, security, and flexibility, making it ideal for busi
 To run **wraft.co**, you’ll need:
 
 - **Node.js** (Version: >=20.x)
-- **pnpm** (Version: >=9.x)
+- **pnpm** (Version: >=10.x)
 
 ---
 
@@ -86,6 +86,22 @@ After building, run the application in development mode.
 ```
 
 The app should now be running locally, and you can access it at http://localhost:3000.
+
+## Dependency Security
+
+- Run a high/critical vulnerability check:
+
+```sh
+pnpm security:audit
+```
+
+- For machine-readable output:
+
+```sh
+pnpm security:audit:json
+```
+
+- CI runs the same high/critical gate on pull requests and pushes to `main` via `.github/workflows/dependency-audit.yml`.
 
 ## 📄 License
 

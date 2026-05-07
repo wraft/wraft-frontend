@@ -6,7 +6,7 @@ RUN apk add --no-cache libc6-compat
 
 # Setup pnpm and turbo on the alpine base
 FROM alpine AS base
-RUN npm install pnpm@9.15.9 turbo --global
+RUN npm install pnpm@10.33.2 turbo@2.5.5 --global
 RUN pnpm config set store-dir ~/.pnpm-store
 
 # Prune projects
@@ -39,7 +39,6 @@ ENV NEXT_PUBLIC_WEBSOCKET_URL=BAKED_NEXT_PUBLIC_WEBSOCKET_URL
 ENV NEXT_PUBLIC_API_HOST=BAKED_NEXT_PUBLIC_API_HOST
 
 RUN turbo build --filter=@wraft/web
-RUN --mount=type=cache,id=pnpm,target=~/.pnpm-store pnpm prune --prod --no-optional
 RUN rm -rf ./services/*/src
 RUN rm -rf ./libs/*/src
 
@@ -59,6 +58,8 @@ COPY --from=builder /app/apps/web/package.json .
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
 COPY --from=builder --chown=nextjs:nodejs /app/apps/web/.next/standalone ./
+# Ensure pnpm symlink targets from standalone node_modules exist at runtime.
+COPY --from=builder --chown=nextjs:nodejs /app/node_modules ./node_modules
 COPY --from=builder --chown=nextjs:nodejs /app/apps/web/.next/static ./apps/web/.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/apps/web/public ./apps/web/public
 
